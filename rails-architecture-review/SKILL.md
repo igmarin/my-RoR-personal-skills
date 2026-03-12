@@ -42,6 +42,38 @@ Prioritize boundary problems over style. Prefer simple objects and explicit flow
 - service objects wrapping trivial one-liners
 - concerns combining unrelated responsibilities
 
+## Examples
+
+**High-severity finding (controller doing too much):**
+
+```ruby
+# Bad: domain workflow in controller
+class OrdersController < ApplicationController
+  def create
+    order = Order.new(order_params)
+    Inventory.check!(order.line_items)  # domain rule
+    Pricing.apply_promotions!(order)    # domain rule
+    order.save!
+    NotifyWarehouseJob.perform_later(order.id)  # orchestration
+    redirect_to order
+  end
+end
+```
+
+- **Severity:** High. **Area:** `OrdersController#create`. **Risk:** Controllers should coordinate, not run multi-step domain workflows. **Improvement:** Extract to `Orders::CreateOrder.call(params)` and have the controller call it and handle response/redirect.
+
+**Good (single responsibility):**
+
+```ruby
+# Good: controller delegates to service
+class OrdersController < ApplicationController
+  def create
+    result = Orders::CreateOrder.call(order_params)
+    result[:success] ? redirect_to(result[:order]) : render(:new, status: :unprocessable_entity)
+  end
+end
+```
+
 ## Output Style
 
 Write findings first.

@@ -44,6 +44,40 @@ Engine docs should optimize for host-app adoption. Readers need to know what the
 - migrations are required but not documented
 - examples rely on host app context the reader cannot infer
 
+## Examples
+
+**README snippet (install + mount):**
+
+```markdown
+## Installation
+
+Add to your Gemfile:
+
+    gem 'my_engine'
+
+Run:
+
+    bundle install
+    rails generate my_engine:install
+
+This creates `config/initializers/my_engine.rb`. Mount the engine in `config/routes.rb`:
+
+    mount MyEngine::Engine, at: '/admin'
+```
+
+**Configuration section:**
+
+```markdown
+## Configuration
+
+In `config/initializers/my_engine.rb`:
+
+    MyEngine.configure do |config|
+      config.user_class = "User"       # required: host model for current user
+      config.widget_count = 10         # optional, default 10
+    end
+```
+
 ## Output Style
 
 When asked to write docs:

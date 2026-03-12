@@ -120,6 +120,34 @@ Minimum coverage:
 
 Use the dummy app to verify real integration, not just isolated classes.
 
+## Examples
+
+**Minimal mountable engine class:**
+
+```ruby
+# lib/my_engine/engine.rb
+module MyEngine
+  class Engine < ::Rails::Engine
+    isolate_namespace MyEngine
+
+    config.generators do |g|
+      g.test_framework :rspec
+      g.fixture_replacement :factory_bot
+    end
+  end
+end
+```
+
+**Routes namespaced under engine:**
+
+```ruby
+# config/routes.rb
+MyEngine::Engine.routes.draw do
+  root to: 'dashboard#index'
+  resources :widgets, only: %i[index show]
+end
+```
+
 ## Output Style
 
 When asked to create or refactor an engine:

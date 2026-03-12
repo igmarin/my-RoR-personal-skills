@@ -41,6 +41,42 @@ Compatibility work should reduce surprises for host applications. Prefer explici
 - assumptions tied to a single asset stack
 - tests only on one Rails version while README claims many
 
+## Examples
+
+**Gemspec version bounds (honest, testable):**
+
+```ruby
+# Good: narrow and tested
+spec.add_dependency "rails", ">= 7.0", "< 8.0"
+spec.required_ruby_version = ">= 3.0"
+
+# Bad: claims support without CI
+# spec.add_dependency "rails", ">= 5.2"  # untested on 5.2/6.x
+```
+
+**Zeitwerk: file and constant must match:**
+
+```ruby
+# File: lib/my_engine/widget_policy.rb
+# Good: constant matches path
+module MyEngine
+  class WidgetPolicy
+  end
+end
+
+# Bad: will break with Zeitwerk
+# class WidgetPolicy  # expected in widget_policy.rb at root
+```
+
+**Reload-safe hook:**
+
+```ruby
+# In engine.rb
+config.to_prepare do
+  MyEngine::Decorator.apply  # runs on each reload in dev
+end
+```
+
 ## Output Style
 
 When asked to improve compatibility:

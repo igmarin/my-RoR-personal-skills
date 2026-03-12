@@ -75,3 +75,29 @@ If no meaningful findings exist, say so explicitly and mention any residual test
 - Move reload-sensitive hooks into `config.to_prepare`.
 - Add install generators for migrations or initializer setup.
 - Add dummy-app request/integration coverage.
+
+## Examples
+
+**High-severity finding (engine reaching into host):**
+
+```ruby
+# Bad: engine assumes host model
+class MyEngine::SomeService
+  def call
+    User.find(current_user_id)  # User is host app; engine is coupled
+  end
+end
+```
+
+- **Severity:** High. **Area:** `MyEngine::SomeService`. **Risk:** Engine depends on host `User`; breaks when used in another app. **Fix:** Introduce config: `MyEngine.config.user_finder = ->(id) { User.find(id) }` (or an adapter), and use that in the engine.
+
+**Good (configuration seam):**
+
+```ruby
+# Good: engine uses configured dependency
+class MyEngine::SomeService
+  def call
+    MyEngine.config.user_finder.call(current_user_id)
+  end
+end
+```

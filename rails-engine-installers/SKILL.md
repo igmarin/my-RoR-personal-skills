@@ -55,6 +55,46 @@ Flag these problems:
 - generators that assume a specific host app layout without checks
 - install docs that do not match the generator behavior
 
+## Examples
+
+**Idempotent install generator (only inject once):**
+
+```ruby
+# lib/generators/my_engine/install/install_generator.rb
+module MyEngine
+  class InstallGenerator < Rails::Generators::Base
+    def inject_initializer
+      return if initializer_already_present?
+      create_file 'config/initializers/my_engine.rb', <<~RUBY
+        MyEngine.configure do |config|
+          config.user_class = "User"
+        end
+      RUBY
+    end
+
+    def inject_routes
+      route "mount MyEngine::Engine, at: '/admin'"
+    end
+
+    private
+
+    def initializer_already_present?
+      File.exist?(File.join(destination_root, 'config/initializers/my_engine.rb'))
+    end
+  end
+end
+```
+
+**Generator test (idempotency):**
+
+```ruby
+it 'does not duplicate route on second run' do
+  run_generator
+  run_generator
+  expect(File.read('config/routes.rb')).to have_content('mount MyEngine::Engine', 1)
+end
+```
+
 ## Output Style
 
 When asked to implement setup flow:

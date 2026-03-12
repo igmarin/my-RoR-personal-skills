@@ -34,6 +34,47 @@ If the project uses `strong_migrations`, follow it. If it does not, apply the sa
 - foreign key or unique constraint added before cleaning existing data
 - destructive remove or drop in the same deploy as the replacement path
 
+## Examples
+
+**Risky (avoid):**
+
+```ruby
+# One migration: add column with default and backfill in same transaction
+add_column :orders, :status, :string, default: 'pending', null: false
+Order.update_all("status = 'pending'")  # long lock on large table
+```
+
+- **Risk:** Long lock; table rewrite if default is applied. **Safer:** (1) Add column nullable, (2) Backfill in batches in a separate migration or job, (3) Add `NOT NULL` and default in a later migration after backfill.
+
+**Safe pattern:**
+
+```ruby
+# Step 1: add nullable column
+add_column :orders, :status, :string
+
+# Step 2 (separate deploy): backfill in batches outside migration
+# Step 3 (after backfill): add constraint
+change_column_null :orders, :status, false
+change_column_default :orders, :status, from: nil, to: 'pending'
+```
+
+**Index on large tables (avoid long locks):**
+
+- **PostgreSQL:** use `algorithm: :concurrent` so the index is built without blocking writes. It must run outside a transaction:
+
+```ruby
+disable_ddl_transaction!
+add_index :orders, :processed_at, algorithm: :concurrent
+```
+
+- **MySQL:** use `algorithm: :inplace` so the index is built with online DDL where supported (reduces lock time):
+
+```ruby
+add_index :orders, :processed_at, algorithm: :inplace
+```
+
+Without `algorithm: :concurrent` (PostgreSQL) or `algorithm: :inplace` (MySQL), adding an index on a large table can hold an exclusive lock and block writes.
+
 ## Output Style
 
 List risks first.

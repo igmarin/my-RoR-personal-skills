@@ -40,6 +40,19 @@ Prefer small, reversible steps over large rewrites. Separate design improvement 
 - old and new paths diverge without a migration plan
 - new abstractions exist only to satisfy a pattern, not a real boundary
 
+## Examples
+
+**Stable behavior to preserve:** "Creating an order validates line items, applies pricing, persists the order, and enqueues NotifyWarehouseJob."
+
+**Smallest safe sequence (extract service):**
+
+1. Add a characterization test (request or service spec) that covers the current `OrdersController#create` flow.
+2. Extract `Orders::CreateOrder` with the same behavior; call it from the controller; keep controller response/redirect logic. Verify tests pass.
+3. Remove duplicated logic from the controller. No behavior change.
+4. (Later) Improve the service internals if needed; the refactor is done.
+
+**Red-flag refactor (avoid):** "Rename `Order` to `Purchase` and update all 50 call sites in one PR" — too many touchpoints; do renames in small steps with find/replace and tests after each commit.
+
 ## Output Style
 
 When asked to refactor:

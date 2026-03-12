@@ -40,6 +40,12 @@ Preferred order for new features:
 | [rails-stack-conventions](rails-stack-conventions/) | Conventions for **writing** Rails code: Ruby 3.x, PostgreSQL, Hotwire (Turbo/Stimulus), Tailwind CSS, style, structure, and security. |
 | [rails-code-review](rails-code-review/)             | Checklist for **reviewing** Rails code (routing, controllers, models, migrations, queries, security, etc.) based on "The Rails Way." |
 
+### Rails Background Jobs
+
+| Skill                                    | Purpose |
+|------------------------------------------|---------|
+| [rails-background-jobs](rails-background-jobs/) | Active Job, Solid Queue (Rails 8), Sidekiq; idempotency, retries, recurring jobs; Rails 8 vs 7; PostgreSQL/MySQL. |
+
 ### Ruby Patterns
 
 | Skill                                          | Purpose |
@@ -89,6 +95,7 @@ Preferred order for new features:
 
 - **Planning:** create-prd → generate-tasks (then implement using the skills below).
 - **Rails:** rails-stack-conventions = *writing* code; rails-code-review = *reviewing* code. Use both for the same codebase.
+- **Background jobs:** rails-background-jobs = designing and implementing jobs (Solid Queue in Rails 8, Sidekiq, idempotency, retries, recurring). Use when adding or reviewing job classes and queue configuration.
 - **Ruby patterns:** ruby-service-objects is the base; ruby-api-client-integration and strategy-factory-null-calculator are specific patterns (API layers, variant calculators). Each references the others where they overlap.
 - **Testing:** rspec-best-practices = general RSpec (any spec type, design, flaky fixes, refactor); rspec-service-testing = specs for services (templates, instance_double, shared_examples); rails-engine-testing = engine coverage with dummy app. Use rspec-best-practices for any spec; add rspec-service-testing when writing service specs; use rails-engine-testing for engine test setup and integration.
 - **Engines:** rails-engine-author to create; rails-engine-testing to test; rails-engine-reviewer to review; rails-engine-release, -docs, -installers, -extraction, -compatibility for release, docs, install flow, extraction, and version compatibility.
@@ -108,6 +115,7 @@ Preferred order for new features:
 | Review an engine (coupling, integration)                         | [rails-engine-reviewer](rails-engine-reviewer/) |
 | Review security (auth, params, XSS, etc.)                       | [rails-security-review](rails-security-review/) |
 | Production-safe migrations                                       | [rails-migration-safety](rails-migration-safety/) |
+| Add or configure background jobs (Solid Queue, Sidekiq, recurring) | [rails-background-jobs](rails-background-jobs/) |
 | Create or refactor an engine                                     | [rails-engine-author](rails-engine-author/) |
 | Refactor code without breaking behavior                          | [refactor-safely](refactor-safely/) |
 

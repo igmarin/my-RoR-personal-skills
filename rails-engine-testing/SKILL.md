@@ -64,6 +64,40 @@ Do not rely only on isolated unit tests when the behavior depends on Rails integ
 - Install generators exist without file or route assertions.
 - Dummy app exists only as scaffolding and is not used in meaningful specs.
 
+## Examples
+
+**Minimal dummy-app request spec (engine mounted):**
+
+```ruby
+# spec/requests/my_engine/root_spec.rb or spec/integration/engine_mount_spec.rb
+require 'rails_helper'
+
+RSpec.describe 'MyEngine mount', type: :request do
+  it 'mounts the engine and returns success for the engine root' do
+    get my_engine.root_path
+    expect(response).to have_http_status(:ok)
+  end
+end
+```
+
+**Configuration spec (engine respects host config):**
+
+```ruby
+# spec/my_engine/configuration_spec.rb
+RSpec.describe MyEngine::Configuration do
+  around do |example|
+    original = MyEngine.config.widget_count
+    MyEngine.config.widget_count = 3
+    example.run
+    MyEngine.config.widget_count = original
+  end
+
+  it 'uses configured value' do
+    expect(MyEngine.config.widget_count).to eq(3)
+  end
+end
+```
+
 ## Output Style
 
 When asked to help with tests:

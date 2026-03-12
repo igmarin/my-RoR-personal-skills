@@ -59,6 +59,23 @@ Do not move code into an engine if it still depends on many private host interna
 - initialization order becomes fragile
 - the dummy app passes but the real host app contract is still implicit
 
+## Examples
+
+**First slice (move PORO, no host model yet):**
+
+Extract `Pricing::Calculator` from `app/services/pricing/calculator.rb` into the engine. It only depends on `LineItem` and `Discount` — move those to the engine as engine models in the same slice, or keep them in the host and inject via an adapter in a later slice.
+
+**Adapter for host dependency:**
+
+```ruby
+# In engine: use config instead of hardcoded User
+# Before (in app): OrderCreator.new(current_user).call
+# After (in engine): OrderCreator.new(MyEngine.config.current_user_provider.call(request)).call
+# Host sets in initializer: MyEngine.config.current_user_provider = ->(req) { req.env["current_user"] }
+```
+
+**Red flag:** Extracting `OrdersController` in the first slice while it still calls `User`, `Tenant`, and `AuditLog` — too many host ties. Extract the service/PORO first and introduce adapters, then move the controller.
+
 ## Output Style
 
 When asked to extract code:

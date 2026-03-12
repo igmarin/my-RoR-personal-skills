@@ -40,6 +40,28 @@ Prioritize exploitable issues over style. Assume any untrusted input can be abus
 - Are secrets stored and logged safely?
 - Are security assumptions explicit and testable?
 
+## Examples
+
+**High-severity (unscoped redirect):**
+
+```ruby
+# Bad: user-controlled redirect
+redirect_to params[:return_to]
+```
+
+- **Severity:** High. **Attack path:** Attacker sets `return_to=https://evil.com` to redirect victims. **Mitigation:** Redirect only to relative paths or an allowlist: `redirect_to safe_redirect_path(params[:return_to])` and validate against allowed origins/paths.
+
+**Medium-severity (mass assignment):**
+
+```ruby
+# Bad: permit too much
+params.require(:user).permit!
+# or
+params.require(:user).permit(:name, :email, :role, :admin)
+```
+
+- **Severity:** Medium. **Risk:** `permit!` or permitting `:role`/`:admin` allows privilege escalation. **Mitigation:** Permit only safe attributes; never permit `role`, `admin`, or other privilege fields from request params.
+
 ## Output Style
 
 Write findings first.

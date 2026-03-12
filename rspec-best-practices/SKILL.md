@@ -1,11 +1,32 @@
 ---
 name: rspec-best-practices
-description: Apply RSpec best practices when generating tests. Use when writing or generating RSpec tests for models, requests, features, services, or when the user asks for tests, specs, or test coverage.
+description: Write and review maintainable, deterministic RSpec tests for Ruby and Rails codebases. Use when designing specs, choosing spec types, fixing flaky tests, improving factories, or refactoring test suites for clarity, speed, and confidence.
 ---
 
 # RSpec Best Practices
 
-When **generating RSpec tests**, follow these practices so specs are comprehensive, readable, and maintainable.
+Use this skill when the task is to write, review, or clean up RSpec tests.
+
+Prefer behavioral confidence over implementation coupling. Good specs are readable, deterministic, and cheap to maintain.
+
+## Core Rules
+
+- Test observable behavior, not private method structure.
+- Use the highest-value spec type for the behavior under test.
+- Prefer request specs over controller specs for Rails endpoints.
+- Keep factories minimal and explicit.
+- Stub external boundaries, not internal code paths, unless isolation is the goal.
+- Avoid time, randomness, and global state leaks between examples.
+
+## Spec Selection
+
+- **model or unit specs** for cohesive domain objects
+- **request specs** for controller and API behavior
+- **system specs** only for critical end-to-end UI flows
+- **job specs** for enqueue and execution behavior
+- **feature-specific integration specs** when wiring matters more than isolation
+
+**Monolith vs engine:** For a normal Rails app (monolith), this skill applies as-is. When the project under test is a **Rails engine**, use the **rails-engine-testing** skill for dummy-app setup, engine request/routing/generator specs, and host integration; keep using this skill for general RSpec style and structure.
 
 ## Coverage
 
@@ -38,6 +59,31 @@ When **generating RSpec tests**, follow these practices so specs are comprehensi
 
 - Use **shared_examples** / **shared_context** for behavior repeated across contexts.
 - Extract repeated setup or expectations into helpers or custom matchers when it improves clarity.
+
+## Common Smells
+
+- brittle assertions on internal calls instead of outcomes
+- excessive `let!`, nested contexts, or shared state (prefer `let` over `let!` when the value isn’t needed for setup; this aligns with common RuboCop-RSpec style)
+- factories creating large graphs by default
+- time-sensitive tests without clock control
+- broad stubbing that hides real regressions
+- examples that cover multiple behaviors and fail ambiguously
+
+## Review Checklist
+
+- Is the spec type appropriate for the risk?
+- Would the test still pass if the implementation changed but behavior stayed correct?
+- Are setup and assertions easy to read?
+- Is the factory data minimal?
+- Is flakiness risk controlled?
+
+## Output Style
+
+When asked to improve tests:
+
+1. Identify the most important missing behavioral coverage.
+2. Reduce brittleness before adding more assertions.
+3. Prefer simpler setup over clever RSpec abstractions.
 
 ## For New Developers
 

@@ -2,6 +2,64 @@
 
 A curated library of AI agent skills for **Ruby on Rails** development. These skills provide specialized knowledge, conventions, and workflow patterns that AI coding assistants use to deliver higher-quality code.
 
+## Methodology
+
+This skill library is built on three core principles that shape how every skill operates.
+
+### 1. Tests Gate Implementation
+
+The central methodology of this project. Tests are not a phase that happens "after" or "alongside" development — they are a **gate** that must be passed before any implementation code can be written.
+
+```
+PRD → Tasks → [GATE] → Implementation
+                 │
+                 ├── 1. Test EXISTS (written and saved)
+                 ├── 2. Test has been RUN
+                 └── 3. Test FAILS for the correct reason
+                        (feature missing, not a typo)
+
+        Only after all 3 conditions are met
+        can implementation code be written.
+```
+
+This applies to every skill that produces code: service objects, background jobs, API integrations, engine components, refactoring, and bug fixes. Every implementation skill in this library includes a **HARD-GATE: Tests Gate Implementation** section enforcing this discipline.
+
+Why this matters:
+- A test that passes immediately proves nothing — you don't know if it tests the right thing
+- A test you never saw fail could be testing existing behavior, not the new feature
+- Implementation code written before the test is biased by what you built, not what's required
+
+### 2. Structured Skill Design
+
+Each skill follows a consistent structure inspired by [superpowers](https://github.com/obra/superpowers) best practices:
+
+| Section | Purpose |
+|---------|---------|
+| **YAML Frontmatter** | Discovery triggers ("Use when...") — helps AI agents find the right skill |
+| **Quick Reference** | Scannable table for fast lookup |
+| **HARD-GATE** | Non-negotiable rules that cannot be skipped |
+| **Common Mistakes** | "Mistake vs Reality" table that prevents rationalizations |
+| **Red Flags** | Signals that the skill is being violated |
+| **Integration** | Related skills and when to chain them |
+
+HARD-GATEs use explicit blocking language ("DO NOT", "CANNOT", "ONLY THEN") because AI agents are susceptible to rationalization — vague guidelines get optimized away under pressure.
+
+### 3. Workflow Chaining
+
+Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The typical flow is:
+
+```
+Planning (create-prd, generate-tasks)
+    ↓
+Testing (rspec-best-practices — write and validate tests)
+    ↓
+Implementation (ruby-service-objects, rails-*, etc.)
+    ↓
+Review (rails-code-review, rails-security-review)
+```
+
+See [docs/workflow-guide.md](docs/workflow-guide.md) for detailed workflow diagrams.
+
 ## Platforms
 
 Works with **Cursor**, **Codex**, and **Claude Code**.
@@ -106,7 +164,8 @@ ln -s ~/.codex/my-cursor-skills ~/.agents/skills/my-cursor-skills
 ```mermaid
 flowchart TD
     createPRD[create-prd] --> generateTasks[generate-tasks]
-    generateTasks --> stackConventions[rails-stack-conventions]
+    generateTasks --> testGate["GATE: Write tests, run, verify failure"]
+    testGate --> stackConventions[rails-stack-conventions]
     stackConventions --> codeReview[rails-code-review]
 
     codeReview --> archReview[rails-architecture-review]
@@ -119,10 +178,11 @@ flowchart TD
     serviceObjects --> apiClient[ruby-api-client-integration]
     serviceObjects --> strategyFactory[strategy-factory-null-calculator]
 
-    serviceObjects --> rspecService[rspec-service-testing]
-    rspecService --> rspecBest[rspec-best-practices]
+    rspecBest[rspec-best-practices] --> testGate
+    rspecService[rspec-service-testing] --> testGate
 
-    engineAuthor[rails-engine-author] --> engineTesting[rails-engine-testing]
+    engineAuthor[rails-engine-author] --> engineTestGate["GATE: Write engine specs, verify failure"]
+    engineTestGate --> engineTesting[rails-engine-testing]
     engineAuthor --> engineDocs[rails-engine-docs]
     engineAuthor --> engineInstallers[rails-engine-installers]
     engineTesting --> engineReviewer[rails-engine-reviewer]
@@ -147,14 +207,17 @@ See [docs/architecture.md](docs/architecture.md) for the full conventions spec.
 
 ## Typical Workflows
 
+Tests are a **gate** between planning and implementation. See [docs/workflow-guide.md](docs/workflow-guide.md).
+
 | Workflow | Skill Chain |
 |----------|-------------|
-| **New feature** | create-prd -> generate-tasks -> rails-stack-conventions -> rspec-best-practices -> rails-code-review |
+| **New feature** | create-prd -> generate-tasks -> **[write tests, verify failure]** -> implement -> rails-code-review |
 | **Code review** | rails-code-review + rails-security-review + rails-architecture-review |
-| **New engine** | rails-engine-author -> rails-engine-testing -> rails-engine-docs -> rails-engine-installers |
-| **Refactoring** | refactor-safely -> rspec-best-practices -> rails-code-review |
-| **New service** | ruby-service-objects -> rspec-service-testing |
-| **API integration** | ruby-api-client-integration -> rspec-service-testing |
+| **New engine** | rails-engine-author -> **[write specs, verify failure]** -> implement -> rails-engine-docs |
+| **Refactoring** | refactor-safely -> **[characterization tests]** -> refactor -> verify tests pass |
+| **New service** | **[write .call spec, verify failure]** -> ruby-service-objects -> verify passes |
+| **API integration** | **[write layer specs, verify failure]** -> ruby-api-client-integration -> verify passes |
+| **Bug fix** | **[write test reproducing bug, verify failure]** -> fix -> verify passes |
 
 ## Creating New Skills
 

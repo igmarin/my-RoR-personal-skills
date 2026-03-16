@@ -11,6 +11,18 @@ description: >
 
 Follow **ruby-service-objects** for shared conventions (YARD, constants, response format, `app/services/` layout). This skill adds the layered Auth -> Client -> Fetcher -> Builder -> Domain Entity pattern for external APIs.
 
+## HARD-GATE: Tests Gate Implementation
+
+```
+EVERY layer (Auth, Client, Fetcher, Builder, Entity) MUST have its test
+written and validated BEFORE implementation.
+  1. Write the spec for the layer (instance_double for unit, hash factories for API responses)
+  2. Run the spec — verify it fails because the layer does not exist yet
+  3. ONLY THEN write the layer implementation
+  4. Repeat for each layer in order: Auth → Client → Fetcher → Builder → Entity
+See rspec-best-practices for the full gate cycle.
+```
+
 ## Quick Reference
 
 | Layer | Responsibility | File |

@@ -13,6 +13,18 @@ Implements a **variant-based calculator** system with a single entry point, conc
 
 **Core principle:** One API for the client: `Calculator::Factory.for(entity).calculate`. The factory picks the strategy; NullService handles unknown variants safely.
 
+## HARD-GATE: Tests Gate Implementation
+
+```
+EVERY component (Factory, BaseService, NullService, concrete services) MUST have
+its test written and validated BEFORE implementation.
+  1. Write the spec for the component (contexts per variant)
+  2. Run the spec — verify it fails because the component does not exist yet
+  3. ONLY THEN write the component implementation
+  4. Repeat for each component: Factory → BaseService → NullService → Concrete
+See rspec-best-practices for the full gate cycle.
+```
+
 ## Quick Reference
 
 | Component | Responsibility |

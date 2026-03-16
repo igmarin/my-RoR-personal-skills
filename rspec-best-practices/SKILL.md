@@ -25,10 +25,18 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 | Naming | `describe` for class/method, `context` for scenario |
 | TDD | Write test first, watch it fail, then implement |
 
-## HARD-GATE: Test-Driven Development
+## HARD-GATE: Tests Gate Implementation
 
 ```
-NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
+THE WORKFLOW IS: PRD → TASKS → TESTS → IMPLEMENTATION
+
+Tests are a GATE between planning and code.
+NO implementation code may be written until:
+  1. The test EXISTS
+  2. The test has been RUN
+  3. The test FAILS for the correct reason (feature missing, not typo)
+
+ONLY AFTER the test is validated can implementation begin.
 ```
 
 Write code before the test? Delete it. Start over.
@@ -36,16 +44,18 @@ Write code before the test? Delete it. Start over.
 **No exceptions:**
 - Don't keep it as "reference"
 - Don't "adapt" it while writing tests
+- Don't write "just a little" implementation first
 - Delete means delete
 
-**Red-Green-Refactor cycle:**
-1. **RED:** Write one minimal test showing what should happen
-2. **Verify RED:** Run test — confirm it fails for the expected reason (feature missing, not typo)
-3. **GREEN:** Write simplest code to pass the test
-4. **Verify GREEN:** Run test — confirm it passes and no other tests break
-5. **REFACTOR:** Clean up (remove duplication, improve names, extract helpers)
-6. **Verify still GREEN:** Run tests again after refactoring
-7. **Repeat** for next behavior
+**The gate cycle for each behavior:**
+1. **Write test:** One minimal test showing what the behavior should do
+2. **Run test:** Execute it — this is mandatory, not optional
+3. **Validate failure:** Confirm it fails because the feature is missing (not a typo or import error)
+4. **GATE PASSED** — you may now write implementation code
+5. **Write minimal code:** Simplest implementation to make the test pass
+6. **Run test again:** Confirm it passes and no other tests break
+7. **Refactor:** Clean up (remove duplication, improve names, extract helpers) — tests must stay green
+8. **Next behavior:** Return to step 1
 
 ## Core Rules
 

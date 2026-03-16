@@ -13,6 +13,16 @@ When **writing or generating** code for this project, follow these conventions. 
 
 **Core principle:** Follow Rails conventions. When in doubt, check the official Rails guides.
 
+## HARD-GATE: Tests Gate Implementation
+
+```
+ALL new code MUST have its test written and validated BEFORE implementation.
+  1. Write the spec for the behavior
+  2. Run the spec — verify it fails because the feature does not exist yet
+  3. ONLY THEN write the implementation code
+See rspec-best-practices for the full gate cycle.
+```
+
 ## Quick Reference
 
 | Aspect | Convention |

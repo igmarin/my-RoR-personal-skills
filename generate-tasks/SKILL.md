@@ -33,6 +33,21 @@ Task 0.0 is ALWAYS "Create feature branch" unless user explicitly says otherwise
 Each sub-task MUST be a single, clear action completable in 2-5 minutes.
 Sub-tasks MUST include exact file paths, not vague references.
 DO NOT skip the verification step after saving.
+
+TESTS GATE IMPLEMENTATION:
+  The test is a GATE — implementation CANNOT proceed until the test:
+    1. EXISTS (written and saved)
+    2. Has been RUN
+    3. FAILS for the correct reason (feature missing)
+
+  Structure sub-tasks as:
+    a) "Write spec for X" (with exact file path)
+    b) "Run spec — verify it fails because X does not exist yet"
+    c) "Implement X to pass spec" (with exact file path)
+    d) "Run spec — verify it passes"
+
+  NEVER generate a task that writes implementation before its test.
+  NEVER skip the "run and verify failure" step between test and implementation.
 ```
 
 ## When to Use
@@ -83,10 +98,15 @@ Check off each task when done: change `- [ ]` to `- [x]`. Update the file after 
 - [ ] 0.0 Create feature branch
   - [ ] 0.1 Create and checkout branch (e.g. `git checkout -b feature/[feature-name]`)
 - [ ] 1.0 [Parent task title]
-  - [ ] 1.1 [Concrete sub-task with exact file path]
-  - [ ] 1.2 [Concrete sub-task with exact file path]
+  - [ ] 1.1 Write spec for [behavior] (`spec/path/to/spec.rb`)
+  - [ ] 1.2 Run spec — verify it fails (feature does not exist yet)
+  - [ ] 1.3 Implement [behavior] to pass spec (`app/path/to/file.rb`)
+  - [ ] 1.4 Run spec — verify it passes and no other tests break
 - [ ] 2.0 [Parent task title]
-  - [ ] 2.1 [Concrete sub-task]
+  - [ ] 2.1 Write spec for [behavior] (`spec/path/to/spec.rb`)
+  - [ ] 2.2 Run spec — verify it fails (feature does not exist yet)
+  - [ ] 2.3 Implement [behavior] to pass spec (`app/path/to/file.rb`)
+  - [ ] 2.4 Run spec — verify it passes
 ```
 
 ## Interaction Model

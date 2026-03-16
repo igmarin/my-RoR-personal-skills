@@ -9,6 +9,16 @@ description: >
 
 # Ruby Service Objects
 
+## HARD-GATE: Tests Gate Implementation
+
+```
+EVERY service object MUST have its test written and validated BEFORE implementation.
+  1. Write the spec for .call (with contexts for success, error, edge cases)
+  2. Run the spec — verify it fails because the service does not exist yet
+  3. ONLY THEN write the service implementation
+See rspec-best-practices for the full gate cycle.
+```
+
 ## Quick Reference
 
 | Convention | Rule |

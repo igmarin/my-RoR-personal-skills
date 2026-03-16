@@ -2,6 +2,21 @@
 
 How to use skills in typical Rails development workflows.
 
+## Cross-Cutting Rule: Tests Gate Implementation
+
+**Tests are a gate between planning and code.** Once a PRD and tasks exist, the test for each behavior must be written, run, and validated as failing BEFORE any implementation code is written.
+
+```
+PRD → Tasks → [GATE: Write test → Run test → Verify it fails] → Implementation → Verify it passes
+```
+
+The gate is non-negotiable. Implementation code cannot exist before its test has been:
+1. Written and saved
+2. Executed
+3. Confirmed failing because the feature does not exist yet
+
+See **rspec-best-practices** for the full gate cycle.
+
 ## Planning a New Feature
 
 ```mermaid

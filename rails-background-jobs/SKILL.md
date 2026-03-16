@@ -13,6 +13,16 @@ Use this skill when the task is to add, configure, or review background jobs in 
 
 **Core principle:** Design jobs for idempotency and safe retries. Prefer Active Job's unified API; choose backend based on Rails version and scale.
 
+## HARD-GATE: Tests Gate Implementation
+
+```
+EVERY job MUST have its test written and validated BEFORE implementation.
+  1. Write the job spec (idempotency, retry, error handling)
+  2. Run the spec — verify it fails because the job does not exist yet
+  3. ONLY THEN write the job class
+See rspec-best-practices for the full gate cycle.
+```
+
 ## Quick Reference
 
 | Aspect | Rule |

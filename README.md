@@ -1,150 +1,161 @@
-# Cursor Agent Skills
+# My Best Practices Skills (Rails Edition)
 
-Personal [Cursor](https://cursor.com) agent skills for a **software engineer** working with **Ruby on Rails**. The focus is **best practices** and a **clear order of work**: from product requirements and task breakdown to implementation, testing, and code review.
+A curated library of AI agent skills for **Ruby on Rails** development. These skills provide specialized knowledge, conventions, and workflow patterns that AI coding assistants use to deliver higher-quality code.
 
-These skills are used by Cursor's AI to keep responses aligned with Rails conventions, structured workflows, and consistent quality.
+## Platforms
 
----
+Works with **Cursor**, **Codex**, and **Claude Code**.
 
-## How skills work
+| Platform | Installation |
+|----------|-------------|
+| **Cursor** | Symlink or clone to `~/.cursor/skills/` |
+| **Codex** | See [`.codex/INSTALL.md`](.codex/INSTALL.md) |
+| **Claude Code** | Install as plugin via `.claude-plugin/` |
 
-- **Where they live:** Cursor loads skills from `~/.cursor/skills/`. Each subfolder that contains a `SKILL.md` file is one skill (see [Setup](#setup-sync-across-machines) below to point that path to this repo).
-- **When they’re used:** The AI may apply a skill automatically when your request matches the skill’s description (e.g. “write RSpec tests” → rspec-best-practices). You can also **@-mention** a skill by name in the chat to force its use.
-- **After setup:** Once the repo is linked (or copied) to `~/.cursor/skills`, the skills are available in Cursor. If you don’t see them, try restarting Cursor.
+See [docs/implementation-guide.md](docs/implementation-guide.md) for detailed setup instructions.
 
----
+## Quick Start
 
-## Workflow: Planning → Tasks → Implementation
+### Cursor
 
-Preferred order for new features:
+```bash
+# Option A: Symlink (if you already have the repo cloned)
+ln -s /path/to/my-cursor-skills ~/.cursor/skills-cursor/my-cursor-skills
 
-1. **Define requirements** — [create-prd](create-prd/) turns a feature idea into a Product Requirements Document (goals, user stories, functional requirements, non-goals).
-2. **Break down work** — [generate-tasks](generate-tasks/) turns the PRD (or a feature description) into a step-by-step task list with relevant files and checkboxes.
-3. **Implement** — Use the task list and the Rails/stack skills below so code and tests follow the same standards.
+# Option B: Clone directly
+git clone <your-repo-url> ~/.cursor/skills-cursor/my-cursor-skills
+```
 
----
+### Codex
 
-## Skills Overview
+```bash
+git clone <your-repo-url> ~/.codex/my-cursor-skills
+mkdir -p ~/.agents/skills
+ln -s ~/.codex/my-cursor-skills ~/.agents/skills/my-cursor-skills
+```
+
+### Claude Code
+
+```bash
+# From the Claude Code interface, add as a plugin:
+/add-plugin /path/to/my-cursor-skills
+```
+
+## Skills Catalog
 
 ### Planning & Tasks
 
-| Skill                              | Purpose |
-|------------------------------------|---------|
-| [create-prd](create-prd/)          | Generate a PRD from a feature description (with optional clarifying questions). |
-| [generate-tasks](generate-tasks/)   | Generate an implementation task list from a PRD or feature description; supports phased (parent → sub-tasks) or one-shot output. |
+| Skill | Description |
+|-------|-------------|
+| [create-prd](create-prd/) | Generate Product Requirements Documents from feature descriptions |
+| [generate-tasks](generate-tasks/) | Break down PRDs into step-by-step implementation task lists |
 
-### Rails Conventions & Code Quality
+### Rails Code Quality
 
-| Skill                              | Purpose |
-|------------------------------------|---------|
-| [rails-stack-conventions](rails-stack-conventions/) | Conventions for **writing** Rails code: Ruby 3.x, PostgreSQL, Hotwire (Turbo/Stimulus), Tailwind CSS, style, structure, and security. |
-| [rails-code-review](rails-code-review/)             | Checklist for **reviewing** Rails code (routing, controllers, models, migrations, queries, security, etc.) based on "The Rails Way." |
-
-### Rails Background Jobs
-
-| Skill                                    | Purpose |
-|------------------------------------------|---------|
-| [rails-background-jobs](rails-background-jobs/) | Active Job, Solid Queue (Rails 8), Sidekiq; idempotency, retries, recurring jobs; Rails 8 vs 7; PostgreSQL/MySQL. |
+| Skill | Description |
+|-------|-------------|
+| [rails-code-review](rails-code-review/) | Review Rails code following The Rails Way conventions |
+| [rails-architecture-review](rails-architecture-review/) | Review application structure, boundaries, and responsibilities |
+| [rails-security-review](rails-security-review/) | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities |
+| [rails-migration-safety](rails-migration-safety/) | Plan production-safe database migrations |
+| [rails-stack-conventions](rails-stack-conventions/) | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions |
+| [rails-background-jobs](rails-background-jobs/) | Design idempotent background jobs with Active Job / Solid Queue |
 
 ### Ruby Patterns
 
-| Skill                                          | Purpose |
-|------------------------------------------------|---------|
-| [ruby-service-objects](ruby-service-objects/) | How to structure and document service objects (namespacing, `.call`, responses, transactions). |
-| [ruby-api-client-integration](ruby-api-client-integration/) | Layered API client pattern: Auth, Client, Fetcher, Builder, domain entities. |
-| [strategy-factory-null-calculator](strategy-factory-null-calculator/) | Variant-based calculators: Strategy + Factory + Null Object (single entry point, safe fallback). |
+| Skill | Description |
+|-------|-------------|
+| [ruby-service-objects](ruby-service-objects/) | Build service objects with .call, standardized responses, transactions |
+| [ruby-api-client-integration](ruby-api-client-integration/) | Integrate external APIs with the layered Auth/Client/Fetcher/Builder pattern |
+| [strategy-factory-null-calculator](strategy-factory-null-calculator/) | Implement variant-based calculators with Strategy + Factory + Null Object |
 
-### Testing (RSpec)
+### Testing
 
-| Skill                              | Purpose |
-|------------------------------------|---------|
-| [rspec-best-practices](rspec-best-practices/)   | Write and review maintainable, deterministic RSpec tests; design specs, choose spec types, fix flaky tests, improve factories, refactor suites for clarity, speed, and confidence. |
-| [rspec-service-testing](rspec-service-testing/) | RSpec patterns for **service objects**: `instance_double`, FactoryBot, shared examples, matchers, `spec/services/` layout. |
-| [rails-engine-testing](rails-engine-testing/)   | Design and implement tests for Rails engines: dummy app, request/routing/generator specs, reload-safety, host integration. |
+| Skill | Description |
+|-------|-------------|
+| [rspec-best-practices](rspec-best-practices/) | Write maintainable, deterministic RSpec tests with TDD discipline |
+| [rspec-service-testing](rspec-service-testing/) | Test service objects with instance_double, hash factories, shared_examples |
 
 ### Rails Engines
 
-| Skill                                      | Purpose |
-|--------------------------------------------|---------|
-| [rails-engine-author](rails-engine-author/) | Design and create Rails engines: scaffolding, mountable engine, engine.rb, namespaces, file layout, host-app contract. |
-| [rails-engine-testing](rails-engine-testing/) | Test coverage for engines (dummy app, request specs, routing, generators, integration). |
-| [rails-engine-reviewer](rails-engine-reviewer/) | Review engines for architecture, coupling, host integration, install flow, dummy-app coverage. |
-| [rails-engine-release](rails-engine-release/) | Prepare engines for release: gemspec, changelog, deprecations, semantic versioning, migration notes. |
-| [rails-engine-docs](rails-engine-docs/)   | Documentation for engines: README, installation, configuration, host integration examples, mount instructions. |
-| [rails-engine-installers](rails-engine-installers/) | Install and setup flows: generators, migrations, initializers, route mount, idempotent install tasks. |
-| [rails-engine-extraction](rails-engine-extraction/) | Extract app code into an engine incrementally: adapters, preserving behavior, safe extraction slices. |
-| [rails-engine-compatibility](rails-engine-compatibility/) | Compatibility across Rails/Ruby versions: Zeitwerk, autoloading, upgrades, dependency bounds, assets, jobs. |
-
-### Review & Safety
-
-| Skill                                          | Purpose |
-|------------------------------------------------|---------|
-| [rails-architecture-review](rails-architecture-review/) | Review application architecture: boundaries, fat models/controllers, callbacks, concerns, service extraction. |
-| [rails-security-review](rails-security-review/)         | Review for security risks: auth, params, redirects, file uploads, secrets, XSS, CSRF, injection. |
-| [rails-migration-safety](rails-migration-safety/)       | Plan and review production-safe migrations: columns, indexes, backfills, renames, concurrent ops, rollout. |
+| Skill | Description |
+|-------|-------------|
+| [rails-engine-author](rails-engine-author/) | Design and scaffold Rails engines with proper namespace isolation |
+| [rails-engine-testing](rails-engine-testing/) | Set up dummy apps and engine-specific specs |
+| [rails-engine-reviewer](rails-engine-reviewer/) | Review engine architecture, coupling, and maintainability |
+| [rails-engine-release](rails-engine-release/) | Prepare versioned releases with changelogs and upgrade notes |
+| [rails-engine-docs](rails-engine-docs/) | Write comprehensive engine documentation |
+| [rails-engine-installers](rails-engine-installers/) | Create idempotent install generators |
+| [rails-engine-extraction](rails-engine-extraction/) | Extract host app code into engines incrementally |
+| [rails-engine-compatibility](rails-engine-compatibility/) | Maintain cross-version compatibility |
 
 ### Refactoring
 
-| Skill                          | Purpose |
-|--------------------------------|---------|
-| [refactor-safely](refactor-safely/) | Plan and execute low-risk refactors: restructuring, renaming, extracting services/modules, preserving behavior. |
+| Skill | Description |
+|-------|-------------|
+| [refactor-safely](refactor-safely/) | Restructure code with characterization tests and safe extraction |
 
----
+### Meta
 
-## How skills relate
+| Skill | Description |
+|-------|-------------|
+| [using-my-skills](using-my-skills/) | Discover and invoke the right skill for the current task |
 
-- **Planning:** create-prd → generate-tasks (then implement using the skills below).
-- **Rails:** rails-stack-conventions = *writing* code; rails-code-review = *reviewing* code. Use both for the same codebase.
-- **Background jobs:** rails-background-jobs = designing and implementing jobs (Solid Queue in Rails 8, Sidekiq, idempotency, retries, recurring). Use when adding or reviewing job classes and queue configuration.
-- **Ruby patterns:** ruby-service-objects is the base; ruby-api-client-integration and strategy-factory-null-calculator are specific patterns (API layers, variant calculators). Each references the others where they overlap.
-- **Testing:** rspec-best-practices = general RSpec (any spec type, design, flaky fixes, refactor); rspec-service-testing = specs for services (templates, instance_double, shared_examples); rails-engine-testing = engine coverage with dummy app. Use rspec-best-practices for any spec; add rspec-service-testing when writing service specs; use rails-engine-testing for engine test setup and integration.
-- **Engines:** rails-engine-author to create; rails-engine-testing to test; rails-engine-reviewer to review; rails-engine-release, -docs, -installers, -extraction, -compatibility for release, docs, install flow, extraction, and version compatibility.
-- **Review:** rails-code-review for general Rails PRs; rails-architecture-review for structure and boundaries; rails-security-review for security; rails-engine-reviewer for engine-specific review; rails-migration-safety for schema changes.
+## Skill Relationships
 
----
+```mermaid
+flowchart TD
+    createPRD[create-prd] --> generateTasks[generate-tasks]
+    generateTasks --> stackConventions[rails-stack-conventions]
+    stackConventions --> codeReview[rails-code-review]
 
-## When to use which (Quick reference)
+    codeReview --> archReview[rails-architecture-review]
+    codeReview --> secReview[rails-security-review]
+    codeReview --> migrationSafety[rails-migration-safety]
 
-| If you want to…                                                   | Use |
-|-------------------------------------------------------------------|-----|
-| Write or review specs (models, requests, features, jobs)         | [rspec-best-practices](rspec-best-practices/) |
-| Write service object specs                                       | [rspec-best-practices](rspec-best-practices/) + [rspec-service-testing](rspec-service-testing/) |
-| Test a Rails engine (dummy app, integration)                     | [rails-engine-testing](rails-engine-testing/) |
-| Review Rails code (PR, conventions)                              | [rails-code-review](rails-code-review/) |
-| Review architecture / boundaries / fat models                     | [rails-architecture-review](rails-architecture-review/) |
-| Review an engine (coupling, integration)                         | [rails-engine-reviewer](rails-engine-reviewer/) |
-| Review security (auth, params, XSS, etc.)                       | [rails-security-review](rails-security-review/) |
-| Production-safe migrations                                       | [rails-migration-safety](rails-migration-safety/) |
-| Add or configure background jobs (Solid Queue, Sidekiq, recurring) | [rails-background-jobs](rails-background-jobs/) |
-| Create or refactor an engine                                     | [rails-engine-author](rails-engine-author/) |
-| Refactor code without breaking behavior                          | [refactor-safely](refactor-safely/) |
+    archReview --> refactorSafely[refactor-safely]
+    refactorSafely --> serviceObjects[ruby-service-objects]
 
----
+    serviceObjects --> apiClient[ruby-api-client-integration]
+    serviceObjects --> strategyFactory[strategy-factory-null-calculator]
 
-## Setup (Sync Across Machines)
+    serviceObjects --> rspecService[rspec-service-testing]
+    rspecService --> rspecBest[rspec-best-practices]
 
-To use these skills in Cursor (and keep them in sync across machines):
-
-```bash
-# Clone this repo where you prefer (e.g. ~/repos/cursor-skills)
-git clone https://github.com/YOUR_USERNAME/cursor-skills.git ~/repos/cursor-skills
-
-# Link Cursor's skills directory to this repo
-rm -rf ~/.cursor/skills
-ln -s ~/repos/cursor-skills ~/.cursor/skills
+    engineAuthor[rails-engine-author] --> engineTesting[rails-engine-testing]
+    engineAuthor --> engineDocs[rails-engine-docs]
+    engineAuthor --> engineInstallers[rails-engine-installers]
+    engineTesting --> engineReviewer[rails-engine-reviewer]
+    engineReviewer --> engineRelease[rails-engine-release]
+    engineRelease --> engineCompat[rails-engine-compatibility]
+    engineExtraction[rails-engine-extraction] --> engineAuthor
 ```
 
-After that, `git pull` on each machine keeps skills in sync; changes in `~/.cursor/skills` are changes in the repo.
+## How Skills Work
 
----
+Each skill is a `SKILL.md` file in its own directory. Skills follow a consistent structure:
 
-## Public vs private repo
+1. **YAML Frontmatter** — `name` and `description` (triggers for skill discovery)
+2. **Quick Reference** — Scannable table at the top
+3. **Core Rules / Process** — The main instructions
+4. **HARD-GATE** — Non-negotiable blockers (where applicable)
+5. **Common Mistakes** — "Mistake vs Reality" table
+6. **Red Flags** — Signals something is going wrong
+7. **Integration** — Related skills and when to chain them
 
-- **Public:** Anyone can see and clone your skills. Useful if you want to share conventions or use the same repo from multiple machines without auth. No secrets are stored here (only Markdown), so making it public is safe.
-- **Private:** Only you (and collaborators you add) can access it. You'll need SSH keys or a personal access token to clone on each machine.
+See [docs/architecture.md](docs/architecture.md) for the full conventions spec.
 
-Choose whichever fits how you work. The skills themselves behave the same either way.
+## Typical Workflows
 
-## License
+| Workflow | Skill Chain |
+|----------|-------------|
+| **New feature** | create-prd -> generate-tasks -> rails-stack-conventions -> rspec-best-practices -> rails-code-review |
+| **Code review** | rails-code-review + rails-security-review + rails-architecture-review |
+| **New engine** | rails-engine-author -> rails-engine-testing -> rails-engine-docs -> rails-engine-installers |
+| **Refactoring** | refactor-safely -> rspec-best-practices -> rails-code-review |
+| **New service** | ruby-service-objects -> rspec-service-testing |
+| **API integration** | ruby-api-client-integration -> rspec-service-testing |
 
-Use and adapt as you like. If the repo is public, others can reuse or fork these skills.
+## Creating New Skills
+
+See [docs/skill-template.md](docs/skill-template.md) for the template and conventions.

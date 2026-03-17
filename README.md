@@ -44,6 +44,8 @@ Each skill follows a consistent structure inspired by [superpowers](https://gith
 
 HARD-GATEs use explicit blocking language ("DO NOT", "CANNOT", "ONLY THEN") because AI agents are susceptible to rationalization — vague guidelines get optimized away under pressure.
 
+**Generated output:** All generated artifacts (documentation, YARD comments, Postman collections, examples) must be in **English** unless the user explicitly requests another language. This is reflected in the skill template and in yard-documentation and api-postman-collection.
+
 ### 3. Workflow Chaining
 
 Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The typical flow is:
@@ -120,6 +122,7 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 | [rails-migration-safety](rails-migration-safety/) | Plan production-safe database migrations |
 | [rails-stack-conventions](rails-stack-conventions/) | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions |
 | [rails-background-jobs](rails-background-jobs/) | Design idempotent background jobs with Active Job / Solid Queue |
+| [api-postman-collection](api-postman-collection/) | Generate or update Postman Collection (JSON v2.1) when creating or modifying API endpoints |
 
 ### Ruby Patterns
 
@@ -128,6 +131,7 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 | [ruby-service-objects](ruby-service-objects/) | Build service objects with .call, standardized responses, transactions |
 | [ruby-api-client-integration](ruby-api-client-integration/) | Integrate external APIs with the layered Auth/Client/Fetcher/Builder pattern |
 | [strategy-factory-null-calculator](strategy-factory-null-calculator/) | Implement variant-based calculators with Strategy + Factory + Null Object |
+| [yard-documentation](yard-documentation/) | Write YARD docs for Ruby classes and public methods (all output in English) |
 
 ### Testing
 
@@ -179,6 +183,10 @@ flowchart TD
 
     serviceObjects --> apiClient[ruby-api-client-integration]
     serviceObjects --> strategyFactory[strategy-factory-null-calculator]
+    serviceObjects --> yardDoc[yard-documentation]
+    apiClient --> yardDoc
+    engineAuthor --> postman[api-postman-collection]
+    engineDocs[rails-engine-docs] --> postman
 
     rspecBest[rspec-best-practices] --> testGate
     rspecService[rspec-service-testing] --> testGate

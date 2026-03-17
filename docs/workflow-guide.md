@@ -106,10 +106,20 @@ flowchart TD
 
 1. **rails-engine-author**: Choose engine type, set up namespace isolation, define host contract.
 2. **rails-engine-testing**: Create dummy app, add request/routing/generator specs.
-3. **rails-engine-docs**: Write README with installation, mounting, configuration, usage.
+3. **rails-engine-docs**: Write README with installation, mounting, configuration, usage (all in English).
 4. **rails-engine-installers**: Create idempotent install generators.
-5. **rails-engine-reviewer**: Review the complete engine for quality.
-6. **rails-engine-release**: Prepare versioned release with changelog.
+5. When the engine exposes HTTP endpoints, use **api-postman-collection** to generate or update a Postman Collection (JSON v2.1) for testing.
+6. **rails-engine-reviewer**: Review the complete engine for quality.
+7. **rails-engine-release**: Prepare versioned release with changelog.
+
+---
+
+## Documentation and API Testing
+
+**Generated output:** All documentation, YARD comments, Postman collections, and examples must be in **English** unless the user explicitly requests another language.
+
+1. **yard-documentation**: Use when writing or reviewing inline docs for Ruby classes and public methods. Apply YARD tags (`@param`, `@option`, `@return`, `@raise`, `@example`) on every public method; keep all text in English.
+2. **api-postman-collection**: Use when creating or modifying API endpoints (Rails controllers, engine routes). Generate or update a Postman Collection JSON (v2.1) so the flow can be tested; store it in e.g. `docs/postman/` or `spec/fixtures/postman/`. Request names and descriptions in English.
 
 ---
 
@@ -137,10 +147,10 @@ flowchart LR
 
 ## Creating Service Objects
 
-1. **ruby-service-objects**: Follow `.call` pattern, standardized responses, YARD docs, transaction wrapping.
+1. **ruby-service-objects**: Follow `.call` pattern, standardized responses, YARD docs (see **yard-documentation**), transaction wrapping.
 2. **rspec-service-testing**: Test with subject/let, instance_double, change matchers, error scenarios.
 
-For external API integrations, add **ruby-api-client-integration** (Auth/Client/Fetcher/Builder layers).
+For inline documentation standards, use **yard-documentation**. For external API integrations, add **ruby-api-client-integration** (Auth/Client/Fetcher/Builder layers).
 
 For variant-based calculators, add **strategy-factory-null-calculator** (Factory + Strategy + Null Object).
 

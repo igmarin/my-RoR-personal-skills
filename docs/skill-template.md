@@ -107,6 +107,7 @@ ALWAYS [required action that must always happen].
 
 ### Content
 - Write in English
+- **Generated output** (documentation, YARD comments, Postman collections, examples) must be in **English** unless the user explicitly requests another language
 - Use numbered steps for processes
 - Use tables for structured comparisons
 - Use code blocks for examples

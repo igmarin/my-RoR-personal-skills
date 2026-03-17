@@ -67,6 +67,7 @@ ONLY THEN can implementation code be written.
 | **ruby-service-objects** | Creating service classes with .call pattern |
 | **ruby-api-client-integration** | Integrating external APIs (Auth/Client/Fetcher/Builder) |
 | **strategy-factory-null-calculator** | Building variant-based calculators |
+| **yard-documentation** | Writing or reviewing YARD docs for Ruby classes and public methods |
 
 ### Testing
 
@@ -87,6 +88,7 @@ ONLY THEN can implementation code be written.
 | **rails-engine-installers** | Creating install generators |
 | **rails-engine-extraction** | Extracting code from host app to engine |
 | **rails-engine-compatibility** | Ensuring cross-version compatibility |
+| **api-postman-collection** | Creating or modifying API endpoints (generate/update Postman collection) |
 
 ### Refactoring
 
@@ -111,6 +113,7 @@ When multiple skills could apply:
 4. Skills override default behavior but **user instructions always take priority**.
 5. If a skill has a HARD-GATE, you must not skip it.
 6. When done with a task, check the skill's Integration table for follow-up skills.
+7. **Generated artifacts** (documentation, YARD comments, Postman collections, README, examples) must be in **English** unless the user explicitly requests another language.
 
 ## Typical Workflows
 

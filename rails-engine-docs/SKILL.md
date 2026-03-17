@@ -6,7 +6,7 @@ description: Use when writing or maintaining documentation for Rails engines. Tr
 
 Use this skill when the task is to write or improve documentation for a Rails engine.
 
-Engine docs should optimize for host-app adoption. Readers need to know what the engine does, how to install it, how to configure it, and where the boundaries are.
+Engine docs should optimize for host-app adoption. Readers need to know what the engine does, how to install it, how to configure it, and where the boundaries are. All generated documentation (README, guides, examples) must be in **English** unless the user explicitly requests another language.
 
 ## Quick Reference
 
@@ -121,3 +121,4 @@ When asked to write docs:
 | rails-engine-author | Host-app contract, structure, extension points to document |
 | rails-engine-installers | Install generators, setup steps to document |
 | rails-engine-release | Changelog, upgrade notes, version documentation |
+| api-postman-collection | When documenting or adding API endpoints (keep Postman collection in sync) |

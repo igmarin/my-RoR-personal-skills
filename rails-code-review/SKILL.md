@@ -109,6 +109,7 @@ WHEN receiving code review feedback:
 
 | Skill | When to chain |
 |-------|---------------|
+| **api-postman-collection** | When reviewing API or endpoint changes (ensure Postman collection is updated) |
 | **rails-stack-conventions** | When writing new code (not reviewing) |
 | **rails-architecture-review** | When review reveals structural problems |
 | **rails-security-review** | When review reveals security concerns |

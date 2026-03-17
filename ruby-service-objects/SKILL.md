@@ -27,7 +27,7 @@ See rspec-best-practices for the full gate cycle.
 | Response format | `{ success: true/false, response: { ... } }` |
 | File location | `app/services/module_name/service_name.rb` |
 | Pragma | `frozen_string_literal: true` in every file |
-| Docs | YARD on every public method |
+| Docs | YARD on every public method (see **yard-documentation**) |
 | Validation | Raise early on invalid input |
 | Errors | Rescue, log, return error hash — don't leak exceptions |
 | Transactions | Wrap multi-step DB operations |
@@ -270,6 +270,7 @@ end
 
 | Skill | When to chain |
 |-------|---------------|
+| **yard-documentation** | When writing or reviewing inline docs for classes and public methods |
 | **ruby-api-client-integration** | For external API integrations (Auth, Client, Fetcher, Builder layers) |
 | **strategy-factory-null-calculator** | For variant-based calculators (Factory + Strategy + Null Object) |
 | **rspec-service-testing** | For testing service objects |

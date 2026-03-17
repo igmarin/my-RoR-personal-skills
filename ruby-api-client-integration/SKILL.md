@@ -9,7 +9,7 @@ description: >
 
 # Ruby API Client Integration
 
-Follow **ruby-service-objects** for shared conventions (YARD, constants, response format, `app/services/` layout). This skill adds the layered Auth -> Client -> Fetcher -> Builder -> Domain Entity pattern for external APIs.
+Follow **ruby-service-objects** for shared conventions (YARD via **yard-documentation**, constants, response format, `app/services/` layout). This skill adds the layered Auth -> Client -> Fetcher -> Builder -> Domain Entity pattern for external APIs.
 
 ## HARD-GATE: Tests Gate Implementation
 
@@ -222,6 +222,7 @@ end
 
 | Skill | When to chain |
 |-------|---------------|
+| **yard-documentation** | When writing or reviewing inline docs for API client layers |
 | **ruby-service-objects** | Base conventions (.call, responses, transactions, README) |
 | **rspec-service-testing** | For testing all layers with instance_double and hash factories |
 | **rspec-best-practices** | For general RSpec structure |

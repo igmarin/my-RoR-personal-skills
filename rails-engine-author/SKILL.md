@@ -195,3 +195,4 @@ For a reusable starter layout and file stubs, read [reference.md](reference.md).
 | rails-engine-reviewer | Findings-first audits, structural review |
 | rails-engine-docs | README, installation guide, host-app contract documentation |
 | rails-engine-installers | Generator-heavy setup, install scripts, copy migrations |
+| api-postman-collection | When the engine exposes HTTP endpoints (generate/update Postman collection) |

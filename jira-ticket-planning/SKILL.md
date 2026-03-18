@@ -57,9 +57,11 @@ Use the classification to decide sequence and sprint placement. Backend/API enab
 
 Use these prefixes:
 
-- `BE | ` for backend / mob-api
-- `FE | ` for web / frontend
-- `Mobile | ` for mobile
+- `BE |` for backend
+- `FE |` for web / frontend
+- `Mobile |` for mobile
+
+When writing the Jira title, leave a space after the `|`.
 
 Do **not** add those prefixes to tickets that are not owned by those areas unless the user explicitly wants that.
 

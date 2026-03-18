@@ -2,7 +2,7 @@
 name: rails-principles-and-boundaries
 description: >
   Applies DRY, YAGNI, PORO, Convention over Configuration, and KISS to Rails code;
-  defers style to RuboCop. Covers structured logging, comment discipline, and
+  defers style to the project's linter(s). Covers structured logging, comment discipline, and
   path-specific rules (models, workers, services, controllers, repositories, serializers,
   RSpec, raw SQL). Use when designing or reviewing Rails structure, avoiding over-engineering,
   or aligning code with team boundaries by directory.
@@ -12,13 +12,20 @@ description: >
 
 Use this skill when **writing or reviewing** Rails application code where **design principles** and **per-area rules** matter more than stack-specific UI choices (see **rails-stack-conventions** for Hotwire + Tailwind).
 
-**Style source of truth:** All style and formatting rules live in **RuboCop** (project config). This skill adds **non-style behavior** and **architecture guidance** only.
+**Style source of truth:** Style and formatting follow whatever **linter(s)** the project configures (see **Linter — initial analysis** below). This skill adds **non-style behavior** and **architecture guidance** only.
+
+## Linter — initial analysis
+
+Before recommending style fixes or contradicting formatting rules:
+
+1. **Detect** which linter(s) the repo uses — e.g. RuboCop (`.rubocop.yml`, `rubocop` in `Gemfile`), Standard Ruby (`standardrb`, `standard` gem), frontend linters (`eslint.config.*`, `.eslintrc*`, `biome.json`, etc.), or scripts in `package.json` / `bin/` (`lint`, `rubocop`, `standardrb`).
+2. **Run** the command the project documents or that matches the config (e.g. `bundle exec rubocop`, `bundle exec standardrb`, `npm run lint`). Do **not** assume RuboCop if the project uses Standard or another stack.
 
 ## Quick Reference
 
 | Topic | Rule |
 |-------|------|
-| Style/format | RuboCop — do not contradict project cops here |
+| Style/format | Project linter(s) — detect and run as above; do not invent style rules here |
 | Principles | DRY, YAGNI, PORO where it helps, CoC, KISS |
 | Comments | Explain **why**, not **what**; use tagged notes with context |
 | Logging | First arg string, second arg hash; no string interpolation; `event:` when useful for dashboards |
@@ -63,16 +70,16 @@ Rules below apply **when those paths exist** in the project. If a path is absent
 | **Service objects** | `app/services/**/*.rb` | Single responsibility; class methods for stateless entry points, instance API when dependencies are injected; public methods first; bang (`!`) / predicate (`?`) naming as appropriate (see **ruby-service-objects**) |
 | **SQL security** | Raw SQL anywhere | No string interpolation of user input; use `sanitize_sql_array` / bound parameters; whitelist dynamic ORDER BY; document **why** raw SQL is needed |
 
-## RSpec and `shared_let`
+## RSpec and `let_it_be` (test-prof)
 
-- **Only use `shared_let` if the project already defines or depends on it** (e.g. gem in `Gemfile`, helper in `spec/support`). Search the codebase before recommending it.
-- If **`shared_let` is not present**, follow **rspec-best-practices** with **`let` as the default**; use **`let!` only when lazy evaluation would break the example** (e.g. callbacks, DB constraints that must exist before the action). Explicit setup is fine when clearer. Do **not** require adding `shared_let` unless the user asks to introduce it.
+- **Only use `let_it_be` if the project already depends on the `test-prof` gem** (check `Gemfile` / `Gemfile.lock`). Search before recommending it.
+- If **`test-prof` is not present**, follow **rspec-best-practices** with **`let` as the default**; use **`let!` only when lazy evaluation would break the example** (e.g. callbacks, DB constraints that must exist before the action). Explicit setup is fine when clearer. Do **not** require adding `test-prof` / `let_it_be` unless the user asks to introduce it.
 
 ## HARD-GATE: Tests Gate Implementation
 
 When this skill guides **new behavior**, the test gate still applies:
 
-```
+```text
 PRD → TASKS → TEST (write, run, fail) → IMPLEMENTATION → …
 ```
 
@@ -82,8 +89,9 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 
 | Mistake | Reality |
 |---------|---------|
-| Duplicate RuboCop rules in prose | RuboCop is authoritative for style; this skill is for behavior and boundaries |
-| `shared_let` in every project | Use only when the repo already supports it |
+| Duplicate linter rules in prose | The project's configured linter(s) are authoritative for style; this skill is for behavior and boundaries |
+| Assuming RuboCop without checking | Detect and run the linter the repo actually uses |
+| `let_it_be` in every project | Use only when `test-prof` is already a dependency |
 | Defaulting to `let!` everywhere | Prefer lazy `let`; reserve `let!` for cases that need eager setup |
 | New `app/repositories` for every query | ActiveRecord is the default data boundary unless there's a documented reason |
 | Interpolated log messages | Loses structure; use hash payload |

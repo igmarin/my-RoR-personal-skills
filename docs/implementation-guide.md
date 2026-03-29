@@ -75,47 +75,65 @@ cd ~/.codex/skills/rails-agent-skills && git pull
 
 ## Claude Code
 
-Claude Code uses a plugin system. Skills are loaded from plugin directories.
+Claude Code uses a plugin system. Skills are loaded from plugin directories and `CLAUDE.md` is automatically included in every session as additional context.
 
 ### Claude Code Installation
 
 ```bash
-# From Claude Code CLI:
-/add-plugin /path/to/rails-agent-skills
+# From the Claude Code CLI (modern command):
+/plugin install /path/to/rails-agent-skills
 ```
 
-Or manually reference the plugin in your Claude Code configuration.
+> **Note:** `/add-plugin` is the legacy command. Use `/plugin install` instead.
+
+### Testing locally without installing
+
+```bash
+claude --plugin-dir /path/to/rails-agent-skills
+```
+
+This loads the plugin for that session only, without permanently installing it. Useful for testing changes.
 
 ### Claude Code How It Works
 
-- `.claude-plugin/plugin.json` declares the plugin metadata
-- Skill directories with `SKILL.md` files are discovered
-- The `hooks/session-start` script injects skill awareness at session start
+Two complementary layers provide skill awareness:
+
+1. **`CLAUDE.md`** (root of this repo) — Loaded automatically by Claude Code in every session. Contains the full skills catalog and TDD mandate. Works without any hook configuration.
+2. **`hooks/session-start`** — Injects the bootstrap `SKILL.md` as additional context at session start (requires plugin installation).
+
+The `CLAUDE.md` is the primary fallback and ensures skills are always available even if the hook does not fire.
 
 ### Claude Code Verification
 
-Start a new Claude Code session. The session-start hook should load the `rails-agent-skills` bootstrap skill automatically.
+Start a new Claude Code session. Claude should mention available Rails skills or respond to skill-related prompts without explicit instruction.
 
 ---
 
 ## Session Start Hook
 
-All platforms support a session-start hook that automatically injects the `rails-agent-skills` bootstrap skill at the beginning of each session. This helps the AI agent discover available skills without manual intervention.
-
-The hook is defined in `hooks/hooks.json` and executed by `hooks/session-start`.
+The session-start hook automatically injects the `rails-agent-skills` bootstrap skill at the beginning of each session. Defined in `hooks/hooks.json`, executed by `hooks/session-start`.
 
 ### Session Hook Mechanics
 
 1. When a session starts, the hook reads `rails-agent-skills/SKILL.md`
-2. The content is injected as additional context
-3. The AI agent now knows which skills are available and when to invoke them
+2. The content is escaped and injected as additional context
+3. The AI agent knows which skills are available and when to invoke them
 
 ### Platform Differences
 
 | Platform | Context injection field |
-|----------|----------------------|
+|----------|------------------------|
 | Claude Code | `hookSpecificOutput.additionalContext` |
 | Cursor / Others | `additional_context` |
+
+### Claude Code — CLAUDE.md Fallback
+
+Claude Code also loads `CLAUDE.md` automatically in every session, independently of the hook. This means skills are always available even if:
+- The plugin has not been installed yet
+- The hook fails to execute
+- The session does not trigger `SessionStart`
+
+Both mechanisms work together: `CLAUDE.md` provides baseline context; the hook injects the full bootstrap skill for richer discovery.
 
 ---
 
@@ -123,7 +141,9 @@ The hook is defined in `hooks/hooks.json` and executed by `hooks/session-start`.
 
 | Issue | Solution |
 |-------|---------|
-| Skills not discovered | Check symlink path and restart the platform |
-| Hook not firing | Verify `hooks/session-start` is executable (`chmod +x`) |
-| Skills not invoked | Check that `rails-agent-skills` is loaded at session start |
-| Wrong platform behavior | Verify the correct plugin config for your platform |
+| Skills not discovered (Claude Code) | `CLAUDE.md` should still provide context — verify it is present at the repo root |
+| Skills not discovered (Cursor/Codex) | Check symlink path and restart the platform |
+| Hook not firing | Verify `hooks/session-start` is executable: `chmod +x hooks/session-start` |
+| Plugin not recognized (Claude Code) | Use `/plugin install` (not `/add-plugin`); verify `.claude-plugin/plugin.json` has `"hooks"` and `"skills"` fields |
+| Skills not invoked | Start a new session after installation; check `CLAUDE.md` is present |
+| Wrong platform behavior | Verify the correct plugin config for your platform (`.claude-plugin/` vs `.cursor-plugin/`) |

@@ -131,9 +131,11 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 ### Claude Code
 
 ```bash
-# From the Claude Code interface, add as a plugin:
-/add-plugin /path/to/rails-agent-skills
+# Install as a plugin (modern command):
+/plugin install /path/to/rails-agent-skills
 ```
+
+`CLAUDE.md` at the repo root is also loaded automatically in every Claude Code session, providing skill context without requiring plugin installation.
 
 ## Skills Catalog
 

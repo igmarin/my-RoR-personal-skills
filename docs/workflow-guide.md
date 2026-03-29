@@ -2,6 +2,86 @@
 
 Companion to the [README](../README.md): **how to chain skills** in typical Rails workflows. For install paths and hooks, see [implementation-guide.md](implementation-guide.md). For `SKILL.md` structure and frontmatter rules, see [architecture.md](architecture.md).
 
+---
+
+## How to Invoke a Skill or Workflow (Claude Code)
+
+Skills and workflows are not slash commands or buttons — you invoke them through natural conversation. Claude reads `CLAUDE.md` at the start of each session and knows which skills exist and when to apply them. The key is to **describe what you want to do**, and Claude will load the right skill.
+
+### Patterns that work
+
+**Be explicit about the task type:**
+```
+"I want to add a GraphQL mutation for creating orders"
+→ Claude loads rails-graphql-best-practices + TDD Feature Loop
+
+"Review this PR diff for me"
+→ Claude loads rails-code-review
+
+"I got feedback on my PR, help me respond"
+→ Claude loads rails-review-response
+
+"I need to extract this fat controller into a service"
+→ Claude loads refactor-safely
+
+"There's a bug where orders are showing the wrong total"
+→ Claude loads rails-bug-triage
+```
+
+**Name the workflow directly** when you want the full chain:
+```
+"Run the TDD Feature Loop for this task"
+"Start with rails-tdd-slices, I need to add a new endpoint"
+"Follow the Bug Fix workflow for this issue"
+"Do a DDD-first design for this feature"
+```
+
+**Start a planning session:**
+```
+"Create a PRD for [feature]"           → create-prd
+"Break this PRD into tasks"            → generate-tasks
+"Turn these tasks into Jira tickets"   → jira-ticket-planning
+```
+
+### What the checkpoints look like in practice
+
+The TDD Feature Loop has two explicit pause points where Claude will wait for your response before continuing:
+
+**Test Feedback Checkpoint** — Claude writes and runs the failing test, then stops and asks:
+> "Here's the failing spec I wrote. Does this test the right behavior? Is the boundary correct? Any edge cases I'm missing?"
+
+You respond with approval or corrections. Only then does Claude propose an implementation.
+
+**Implementation Proposal Checkpoint** — Before writing any code, Claude stops and says:
+> "Here's how I'd implement this: [plain language description of classes, methods, structure]. Does this approach make sense?"
+
+You respond with approval or redirections. Only then does Claude write the implementation code.
+
+**If you want to skip a checkpoint** (e.g. you already know the approach), just say so:
+```
+"Skip the proposal, go ahead and implement"
+"The test looks fine, proceed with implementation"
+```
+
+### Tips for better results
+
+| Situation | What to say |
+|-----------|-------------|
+| You want a full workflow, not just one step | "Follow the TDD Feature Loop for this" |
+| You want to start from planning | "Start with a PRD for this feature" |
+| You want only the review, not the full workflow | "Do a code review on this file / PR" |
+| You want a security-focused review | "Run a security review on these changes" |
+| You received PR feedback and need help | "Help me respond to this review feedback" |
+| You want to check GraphQL conventions | "Review this resolver for best practices" |
+| Claude is going too fast | "Stop after each checkpoint and wait for my approval" |
+| Claude missed a skill | "You should be using rails-tdd-slices here" |
+
+### Across tools
+
+These skills work the same way in **Cursor**, **Codex**, and **Claude Code** — describe the task in natural language and the right skill is loaded from the catalog. The difference is only in how the plugin is installed (see [implementation-guide.md](implementation-guide.md)).
+
+---
+
 ## Cross-Cutting Rule: Tests Gate Implementation
 
 **Tests are a gate between planning and code.** Once a PRD and tasks exist, the test for each behavior must be written, run, and validated as failing BEFORE any implementation code is written.

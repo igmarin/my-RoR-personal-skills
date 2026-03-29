@@ -131,11 +131,23 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 ### Claude Code
 
 ```bash
-# Install as a plugin (modern command):
-/plugin install /path/to/rails-agent-skills
+# 1. Clone the repo (once per machine)
+git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
+
+# 2. Install as a plugin (registers the path globally — no copy, no reinstall needed)
+/plugin install ~/skills/rails-agent-skills
 ```
 
-`CLAUDE.md` at the repo root is also loaded automatically in every Claude Code session, providing skill context without requiring plugin installation.
+**Updating:** just pull and open a new session — no reinstall required.
+
+```bash
+cd ~/skills/rails-agent-skills && git pull
+# → open a new Claude Code session, changes are picked up automatically
+```
+
+**New machine:** clone again and run `/plugin install` once.
+
+> `CLAUDE.md` at the repo root is also loaded automatically in every Claude Code session, providing skill context as a fallback even before the plugin is installed.
 
 ## Skills Catalog
 

@@ -75,37 +75,44 @@ cd ~/.codex/skills/rails-agent-skills && git pull
 
 ## Claude Code
 
-Claude Code uses a plugin system. Skills are loaded from plugin directories and `CLAUDE.md` is automatically included in every session as additional context.
+Claude Code loads `~/.claude/CLAUDE.md` automatically in **every session, across all projects**. A symlink from that path to the `CLAUDE.md` in this repo is all that is needed — no plugin commands required.
 
 ### Claude Code Installation
 
 ```bash
-# Install from a local path (registers globally — no copy, no reinstall needed):
-/add-plugin ~/skills/rails-agent-skills
+# 1. Clone the repo (once per machine)
+git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
+
+# 2. Symlink CLAUDE.md to the Claude Code global config directory
+ln -s ~/skills/rails-agent-skills/CLAUDE.md ~/.claude/CLAUDE.md
 ```
 
-> **Note:** `/plugin install <name>` is for marketplace plugins only. For local paths, use `/add-plugin`.
+That's it. Open a new Claude Code session and the skills are available in any project.
 
-### Testing locally without installing
+### Claude Code Updating
+
+```bash
+cd ~/skills/rails-agent-skills && git pull
+# → open a new session, changes are picked up automatically via the symlink
+```
+
+### New machine
+
+Repeat the two steps above: `git clone` + `ln -s`.
+
+### Session testing (optional)
+
+To test changes without touching the global config:
 
 ```bash
 claude --plugin-dir ~/skills/rails-agent-skills
 ```
 
-This loads the plugin for that session only, without permanently installing it. Useful for testing changes.
+This loads the plugin for that session only.
 
 ### Claude Code How It Works
 
-Two complementary layers provide skill awareness:
-
-1. **`CLAUDE.md`** (root of this repo) — Loaded automatically by Claude Code in every session. Contains the full skills catalog and TDD mandate. Works without any hook configuration.
-2. **`hooks/session-start`** — Injects the bootstrap `SKILL.md` as additional context at session start (requires plugin installation).
-
-The `CLAUDE.md` is the primary fallback and ensures skills are always available even if the hook does not fire.
-
-### Claude Code Verification
-
-Start a new Claude Code session. Claude should mention available Rails skills or respond to skill-related prompts without explicit instruction.
+`~/.claude/CLAUDE.md` is Claude Code's global memory file — it is injected into every session before the conversation starts, regardless of the current project directory. The symlink means the skills catalog and TDD mandate are always present without any manual step per project or per session.
 
 ---
 
@@ -126,14 +133,9 @@ The session-start hook automatically injects the `rails-agent-skills` bootstrap 
 | Claude Code | `hookSpecificOutput.additionalContext` |
 | Cursor / Others | `additional_context` |
 
-### Claude Code — CLAUDE.md Fallback
+### Claude Code — CLAUDE.md as Primary Mechanism
 
-Claude Code also loads `CLAUDE.md` automatically in every session, independently of the hook. This means skills are always available even if:
-- The plugin has not been installed yet
-- The hook fails to execute
-- The session does not trigger `SessionStart`
-
-Both mechanisms work together: `CLAUDE.md` provides baseline context; the hook injects the full bootstrap skill for richer discovery.
+For Claude Code, `~/.claude/CLAUDE.md` (symlinked from this repo) is the primary and recommended mechanism. The session-start hook is retained in the repo for completeness and future marketplace support, but is not required for local installs.
 
 ---
 
@@ -141,9 +143,9 @@ Both mechanisms work together: `CLAUDE.md` provides baseline context; the hook i
 
 | Issue | Solution |
 |-------|---------|
-| Skills not discovered (Claude Code) | `CLAUDE.md` should still provide context — verify it is present at the repo root |
-| Skills not discovered (Cursor/Codex) | Check symlink path and restart the platform |
+| Skills not available (Claude Code) | Verify `~/.claude/CLAUDE.md` is a valid symlink: `ls -la ~/.claude/CLAUDE.md` |
+| Skills not discovered (Cursor/Codex) | Check symlink/path and restart the platform |
 | Hook not firing | Verify `hooks/session-start` is executable: `chmod +x hooks/session-start` |
-| Plugin not recognized (Claude Code) | Use `/plugin install` (not `/add-plugin`); verify `.claude-plugin/plugin.json` has `"hooks"` and `"skills"` fields |
-| Skills not invoked | Start a new session after installation; check `CLAUDE.md` is present |
+| Changes not picked up (Claude Code) | Run `git pull` in the repo and start a new session |
+| Changes not picked up (Cursor) | Run `git pull` in the repo; symlinks reflect changes immediately |
 | Wrong platform behavior | Verify the correct plugin config for your platform (`.claude-plugin/` vs `.cursor-plugin/`) |

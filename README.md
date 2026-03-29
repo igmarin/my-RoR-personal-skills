@@ -102,7 +102,7 @@ Works with **Cursor**, **Codex**, and **Claude Code**.
 |----------|-------------|
 | **Cursor** | Symlink or clone to `~/.cursor/skills/` |
 | **Codex** | [`.codex/INSTALL.md`](.codex/INSTALL.md) and [docs/implementation-guide.md](docs/implementation-guide.md) |
-| **Claude Code** | Install as plugin via `.claude-plugin/` |
+| **Claude Code** | Symlink `CLAUDE.md` to `~/.claude/CLAUDE.md` |
 
 See [docs/implementation-guide.md](docs/implementation-guide.md) for detailed setup instructions.
 
@@ -134,20 +134,15 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 # 1. Clone the repo (once per machine)
 git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
 
-# 2. Install as a plugin (registers the path globally — no copy, no reinstall needed)
-/add-plugin ~/skills/rails-agent-skills
+# 2. Symlink CLAUDE.md to the Claude Code global config directory
+ln -s ~/skills/rails-agent-skills/CLAUDE.md ~/.claude/CLAUDE.md
 ```
 
-**Updating:** just pull and open a new session — no reinstall required.
+Open a new session — skills are available in every project automatically.
 
-```bash
-cd ~/skills/rails-agent-skills && git pull
-# → open a new Claude Code session, changes are picked up automatically
-```
+**Updating:** `git pull` in the repo + new session. The symlink always points to the latest version.
 
-**New machine:** clone again and run `/plugin install` once.
-
-> `CLAUDE.md` at the repo root is also loaded automatically in every Claude Code session, providing skill context as a fallback even before the plugin is installed.
+**New machine:** repeat the two steps above.
 
 ## Skills Catalog
 

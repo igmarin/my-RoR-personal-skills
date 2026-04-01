@@ -14,7 +14,18 @@
       "description": "Curated library of AI agent skills for Ruby on Rails development. Includes code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
       "version": "1.0.0",
       "source": "./",
-      "keywords": ["rails", "ruby", "skills", "rspec", "code-review", "architecture", "security", "engines", "ddd", "testing"]
+      "keywords": [
+        "rails",
+        "ruby",
+        "skills",
+        "rspec",
+        "code-review",
+        "architecture",
+        "security",
+        "engines",
+        "ddd",
+        "testing"
+      ]
     }
   ]
 }

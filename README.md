@@ -105,7 +105,7 @@ Works with **Cursor**, **Codex**, and **Claude Code**.
 |----------|-------------|
 | **Cursor** | Symlink or clone to `~/.cursor/skills/` |
 | **Codex** | [`.codex/INSTALL.md`](.codex/INSTALL.md) and [docs/implementation-guide.md](docs/implementation-guide.md) |
-| **Claude Code** | Symlink `CLAUDE.md` to `~/.claude/CLAUDE.md` |
+| **Claude Code** | Shell function with `--plugin-dir` in `~/.zshrc` / `~/.bashrc` |
 
 See [docs/implementation-guide.md](docs/implementation-guide.md) for detailed setup instructions.
 
@@ -137,15 +137,21 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 # 1. Clone the repo (once per machine)
 git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
 
-# 2. Symlink CLAUDE.md to the Claude Code global config directory
-ln -s ~/skills/rails-agent-skills/CLAUDE.md ~/.claude/CLAUDE.md
+# 2. Add a shell function to your ~/.zshrc (or ~/.bashrc)
+echo '
+claude() {
+  command claude --plugin-dir ~/skills/rails-agent-skills "$@"
+}' >> ~/.zshrc
+
+# 3. Reload your shell
+source ~/.zshrc
 ```
 
-Open a new session — skills are available in every project automatically.
+Skills are now available automatically in every project, including `claude resume <id>` and any other subcommand.
 
-**Updating:** `git pull` in the repo + new session. The symlink always points to the latest version.
+**Updating:** `git pull` inside `~/skills/rails-agent-skills` — no restart needed, the function always loads the latest version.
 
-**New machine:** repeat the two steps above.
+**New machine:** repeat the three steps above.
 
 ## Skills Catalog
 

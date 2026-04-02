@@ -5,6 +5,7 @@ require 'minitest/mock'
 require_relative '../lib/mcp/request_handler'
 require_relative '../lib/mcp/response'
 
+# Integration tests for {MCP::RequestHandler} (ListResources, ReadResource, errors).
 class MCPRequestHandlerTest < Minitest::Test
   def setup
     @mock_resource_locator = Minitest::Mock.new
@@ -46,14 +47,18 @@ class MCPRequestHandlerTest < Minitest::Test
 
   def test_handle_read_resource_request_file_not_found
     mock_uri = 'file:///non/existent/path/skill.md'
-    @mock_resource_locator.expect(:read_resource, ->(_) { raise Errno::ENOENT, 'No such file or directory' }, [mock_uri])
+    # Minitest::Mock returns the second argument as-is; a Proc is not invoked, so use a real stub.
+    failing_locator = Object.new
+    failing_locator.define_singleton_method(:read_resource) do |_uri|
+      raise Errno::ENOENT # bare errno => message "No such file or directory" (no duplicate)
+    end
+    handler = MCP::RequestHandler.new(resource_locator: failing_locator)
 
     request = { 'method' => 'ReadResource', 'requestId' => 'req4', 'params' => { 'uri' => mock_uri } }
-    response = @handler.handle(request)
+    response = handler.handle(request)
 
     expected_response = MCP::Response.error('No such file or directory', code: 400, request_id: 'req4')
     assert_equal expected_response, response
-    @mock_resource_locator.verify
   end
 
   def test_handle_unknown_method
@@ -74,7 +79,8 @@ class MCPRequestHandlerTest < Minitest::Test
     request = 'not valid json'
     response = @handler.handle(request) # This will raise if JSON.parse isn't in handler.handle
 
-    expected_response = MCP::Response.error('JSON Parse Error: (original exception message not captured here)', code: 400)
+    expected_response = MCP::Response.error('JSON Parse Error: (original exception message not captured here)',
+                                            code: 400)
     assert_equal expected_response[:error][:code], response[:error][:code]
     assert_includes response[:error][:message], 'JSON Parse Error'
     assert_nil response[:requestId]

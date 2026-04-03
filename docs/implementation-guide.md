@@ -83,18 +83,9 @@ Gemini CLI loads `GEMINI.md` automatically if it exists in the workspace or via 
 # 1. Clone the repo (once per machine)
 git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
 
-# 2. Symlink GEMINI.md to the Gemini CLI global config directory
+# 2. Symlink GEMINI.md to the Gemini CLI global config directory, or update
 # (Note: path may vary depending on your OS and Gemini CLI version)
-ln -s ~/skills/rails-agent-skills/GEMINI.md ~/.gemini/GEMINI.md
-```
-
-Open a new Gemini CLI session and the skills are available in any project.
-
-### Gemini CLI Updating
-
-```bash
-cd ~/skills/rails-agent-skills && git pull
-# → open a new session, changes are picked up automatically via the symlink
+gemini skills link ~/skills/rails-agent-skills
 ```
 
 ---

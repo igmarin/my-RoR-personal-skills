@@ -102,7 +102,9 @@ Many CLIs can load skills from a designated directory.
         ln -sf ~/skills/rails-agent-skills/CLAUDE.md ~/.claude/CLAUDE.md
 
         # 2. Skills directory (makes skills appear in /skills)
-        ln -sf ~/skills/rails-agent-skills ~/.claude/skills
+        # Remove first if Claude Code already created it as a real directory
+        rm -rf ~/.claude/skills
+        ln -s ~/skills/rails-agent-skills ~/.claude/skills
         ```
         Open a new session and run `/skills` — all skills will appear.
     *   **Codex:** Clone or symlink directly into its skills directory:

@@ -2,7 +2,7 @@
 
 **Rails Agent Skills** is a curated library of AI agent skills for **Ruby on Rails** development. Skills encode specialized knowledge, conventions, and workflow patterns so assistants deliver higher-quality code.
 
-- **Repository / install path:** `rails-agent-skills` (see [Quick Start](#quick-start) and [docs/implementation-guide.md](docs/implementation-guide.md))
+- **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
 - **Bootstrap discovery skill:** [`rails-agent-skills`](rails-agent-skills/) (session hook loads `rails-agent-skills/SKILL.md` where applicable)
 - **Workflows:** [docs/workflow-guide.md](docs/workflow-guide.md) — **Skill structure:** [docs/architecture.md](docs/architecture.md)
 - **How to invoke a skill or workflow:** [docs/workflow-guide.md#how-to-invoke](docs/workflow-guide.md#how-to-invoke-a-skill-or-workflow-claude-code)

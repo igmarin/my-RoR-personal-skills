@@ -54,13 +54,13 @@ Not sure?                → rails-skills-orchestrator
 flowchart TD
     START([What do you need?]) --> DECISION{What stage?}
 
-    DECISION -->|Discovery| D00[00-discovery]
-    DECISION -->|Planning| D10[10-planning]
-    DECISION -->|Setup| D20[20-setup]
-    DECISION -->|Develop| D30[30-development]
-    DECISION -->|Quality| D40[40-quality]
-    DECISION -->|Review| D50[50-review]
-    DECISION -->|Engines| D60[60-engines]
+    DECISION -->|Discovery| D00[discovery]
+    DECISION -->|Planning| D10[planning]
+    DECISION -->|Setup| D20[setup]
+    DECISION -->|Develop| D30[development]
+    DECISION -->|Quality| D40[quality]
+    DECISION -->|Review| D50[review]
+    DECISION -->|Engines| D60[engines]
 
     D00 --> NEXT
     D10 --> NEXT

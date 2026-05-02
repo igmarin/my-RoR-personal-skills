@@ -2,15 +2,10 @@
 name: rails-skills-orchestrator
 license: MIT
 description: >
-  Use as the entry point when the task scope is unclear or spans multiple concerns —
-  this skill routes and gates only; it does not implement anything itself. Identifies
-  which specialized skill to invoke next (rspec-best-practices, rails-code-review,
-  rails-tdd-slices, rails-migration-safety, rails-engine-author, ruby-service-objects,
-  etc.) and enforces the Tests Gate Implementation mandate across all code-producing
-  tasks. Select this INSTEAD of individual Rails skills when you don't yet know which
-  specialist applies. Trigger words: where do I start, not sure how to approach this,
-  don't know which skill to use, multi-step Rails task, unclear scope, spans multiple
-  concerns, new complex Rails feature, how do I begin, what should I do first.
+  Entry point for Rails tasks. Routes to specialized skills (testing, code review,
+  engines, DDD, patterns) and enforces TDD discipline. Use when scope is unclear.
+  Trigger: where do I start, not sure how to approach this, multi-step Rails task.
+keywords: rails, ruby, tdd, testing, code-review, engines, ddd, orchestration, entry-point
 ---
 
 # Rails Skills Orchestrator

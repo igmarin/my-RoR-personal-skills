@@ -107,7 +107,7 @@ This library intentionally reuses proven patterns from broader agent-skill libra
 
 
 | Reused pattern                         | Rails-first destination in this repo                                       |
-| -------------------------------------- | -------------------------------------------------------------------------- |
+| ----------------------------------------| ----------------------------------------------------------------------------|
 | PRD interview + scope control          | `create-prd`                                                               |
 | Planning from requirements             | `generate-tasks`                                                           |
 | TDD loop and smallest safe slice       | `rspec-best-practices` + `rails-tdd-slices`                                |

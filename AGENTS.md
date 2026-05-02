@@ -24,18 +24,22 @@ Read `SKILL.md` first. Load supporting files only when the skill links to them a
 
 ## Skill Selection
 
-Load the skill that best matches the current task. The bootstrap skill `rails-agent-skills/SKILL.md` maps tasks to skill names. Skills are grouped into:
+Load the skill that best matches the current task. The bootstrap skill `rails-skills-orchestrator` routes to specialized skills. Skills are organized by category in `skills/<category>/` with frequent entry points at root:
 
-| Group | Skills |
-|-------|--------|
-| Planning | `create-prd`, `generate-tasks`, `ticket-planning` |
-| Rails code quality | `rails-code-review`, `rails-review-response`, `rails-architecture-review`, `rails-security-review`, `rails-migration-safety`, `rails-stack-conventions`, `rails-code-conventions`, `rails-background-jobs`, `rails-graphql-best-practices`, `rails-authorization-policies`, `rails-performance-optimization`, `rails-api-versioning`, `rails-database-seeding`, `rails-frontend-hotwire`, `api-rest-collection` |
-| DDD | `ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling` |
-| Ruby patterns | `ruby-service-objects`, `ruby-api-client-integration`, `strategy-factory-null-calculator`, `yard-documentation` |
-| Context & Setup | `rails-context-engineering`, `rails-project-onboarding` |
-| Testing | `rspec-best-practices`, `rails-tdd-slices`, `rails-bug-triage`, `rspec-service-testing` |
-| Rails engines | `rails-engine-author`, `rails-engine-testing`, `rails-engine-reviewer`, `rails-engine-release`, `rails-engine-docs`, `rails-engine-installers`, `rails-engine-extraction`, `rails-engine-compatibility` |
-| Refactoring | `refactor-safely` |
+| Category | Path | Skills |
+|----------|------|--------|
+| **Planning** | `skills/planning/` | `create-prd`*, `generate-tasks`*, `ticket-planning` |
+| **Testing** | `skills/testing/` | `rspec-best-practices`, `rspec-service-testing`, `rails-tdd-slices`, `rails-bug-triage` |
+| **Code Quality** | `skills/code-quality/` | `rails-code-review`*, `rails-review-response`, `rails-architecture-review`, `rails-security-review`, `rails-stack-conventions`, `rails-code-conventions`, `rails-authorization-policies`, `refactor-safely` |
+| **DDD** | `skills/ddd/` | `ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling` |
+| **Engines** | `skills/engines/` | `rails-engine-author`, `rails-engine-testing`, `rails-engine-reviewer`, `rails-engine-release`, `rails-engine-docs`, `rails-engine-installers`, `rails-engine-extraction`, `rails-engine-compatibility` |
+| **Infrastructure** | `skills/infrastructure/` | `rails-migration-safety`, `rails-background-jobs`, `rails-database-seeding`, `rails-performance-optimization`, `rails-api-versioning`, `rails-frontend-hotwire` |
+| **API** | `skills/api/` | `api-rest-collection`, `rails-graphql-best-practices`, `ruby-api-client-integration` |
+| **Patterns** | `skills/patterns/` | `ruby-service-objects`, `strategy-factory-null-calculator`, `yard-documentation` |
+| **Context** | `skills/context/` | `rails-context-engineering`, `rails-project-onboarding` |
+| **Orchestration** | `skills/orchestration/` | `rails-skills-orchestrator`* |
+
+\* **Root-level skills** — frequent entry points kept at repository root for easy discovery
 
 ## Non-Negotiable Workflow Rule
 
@@ -52,19 +56,19 @@ Do not write implementation code before the test exists and fails. Every skill t
 The default daily workflow for a Rails feature:
 
 ```
-rails-context-engineering → post Context Summary
-  → rails-tdd-slices → write failing test
+skills/context/rails-context-engineering → post Context Summary
+  → skills/testing/rails-tdd-slices → write failing test
   → [CHECKPOINT: confirm test boundary and behavior]
   → [CHECKPOINT: confirm implementation approach]
   → implement (minimal code to pass test)
   → [GATE: linters + full test suite]
-  → yard-documentation
+  → skills/patterns/yard-documentation
   → rails-code-review
-  → rails-review-response (when feedback is received)
+  → skills/code-quality/rails-review-response (when feedback is received)
   → PR
 ```
 
-For a full feature from scratch: `rails-context-engineering` → `create-prd` → `generate-tasks` → TDD Feature Loop above.
+For a full feature from scratch: `skills/context/rails-context-engineering` → `create-prd` → `generate-tasks` → TDD Feature Loop above.
 
 See `docs/workflow-guide.md` for all workflow variants (bug fix, GraphQL, engine, migration, refactor, etc.).
 

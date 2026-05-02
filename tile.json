@@ -1,131 +1,131 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "3.1.4",
-  "summary": "Curated library of AI agent skills for Ruby on Rails development. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
+  "version": "3.2.0",
+  "summary": "Curated library of AI agent skills for Ruby on Rails development. Organized by category: planning, testing, code-quality, ddd, engines, infrastructure, api, patterns, context, and orchestration. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
   "docs": "docs/index.md",
   "skills": {
     "api-rest-collection": {
-      "path": "api-rest-collection/SKILL.md"
+      "path": "skills/api/api-rest-collection/SKILL.md"
     },
     "create-prd": {
       "path": "create-prd/SKILL.md"
     },
     "ddd-boundaries-review": {
-      "path": "ddd-boundaries-review/SKILL.md"
+      "path": "skills/ddd/ddd-boundaries-review/SKILL.md"
     },
     "ddd-rails-modeling": {
-      "path": "ddd-rails-modeling/SKILL.md"
+      "path": "skills/ddd/ddd-rails-modeling/SKILL.md"
     },
     "ddd-ubiquitous-language": {
-      "path": "ddd-ubiquitous-language/SKILL.md"
+      "path": "skills/ddd/ddd-ubiquitous-language/SKILL.md"
     },
     "generate-tasks": {
       "path": "generate-tasks/SKILL.md"
     },
     "rails-skills-orchestrator": {
-      "path": "rails-skills-orchestrator/SKILL.md"
+      "path": "skills/orchestration/rails-skills-orchestrator/SKILL.md"
     },
     "rails-api-versioning": {
-      "path": "rails-api-versioning/SKILL.md"
+      "path": "skills/infrastructure/rails-api-versioning/SKILL.md"
     },
     "rails-architecture-review": {
-      "path": "rails-architecture-review/SKILL.md"
+      "path": "skills/code-quality/rails-architecture-review/SKILL.md"
     },
     "rails-authorization-policies": {
-      "path": "rails-authorization-policies/SKILL.md"
+      "path": "skills/code-quality/rails-authorization-policies/SKILL.md"
     },
     "rails-background-jobs": {
-      "path": "rails-background-jobs/SKILL.md"
+      "path": "skills/infrastructure/rails-background-jobs/SKILL.md"
     },
     "rails-bug-triage": {
-      "path": "rails-bug-triage/SKILL.md"
+      "path": "skills/testing/rails-bug-triage/SKILL.md"
     },
     "rails-code-conventions": {
-      "path": "rails-code-conventions/SKILL.md"
+      "path": "skills/code-quality/rails-code-conventions/SKILL.md"
     },
     "rails-code-review": {
       "path": "rails-code-review/SKILL.md"
     },
     "rails-context-engineering": {
-      "path": "rails-context-engineering/SKILL.md"
+      "path": "skills/context/rails-context-engineering/SKILL.md"
     },
     "rails-database-seeding": {
-      "path": "rails-database-seeding/SKILL.md"
+      "path": "skills/infrastructure/rails-database-seeding/SKILL.md"
     },
     "rails-engine-author": {
-      "path": "rails-engine-author/SKILL.md"
+      "path": "skills/engines/rails-engine-author/SKILL.md"
     },
     "rails-engine-compatibility": {
-      "path": "rails-engine-compatibility/SKILL.md"
+      "path": "skills/engines/rails-engine-compatibility/SKILL.md"
     },
     "rails-engine-docs": {
-      "path": "rails-engine-docs/SKILL.md"
+      "path": "skills/engines/rails-engine-docs/SKILL.md"
     },
     "rails-engine-extraction": {
-      "path": "rails-engine-extraction/SKILL.md"
+      "path": "skills/engines/rails-engine-extraction/SKILL.md"
     },
     "rails-engine-installers": {
-      "path": "rails-engine-installers/SKILL.md"
+      "path": "skills/engines/rails-engine-installers/SKILL.md"
     },
     "rails-engine-release": {
-      "path": "rails-engine-release/SKILL.md"
+      "path": "skills/engines/rails-engine-release/SKILL.md"
     },
     "rails-engine-reviewer": {
-      "path": "rails-engine-reviewer/SKILL.md"
+      "path": "skills/engines/rails-engine-reviewer/SKILL.md"
     },
     "rails-engine-testing": {
-      "path": "rails-engine-testing/SKILL.md"
+      "path": "skills/engines/rails-engine-testing/SKILL.md"
     },
     "rails-frontend-hotwire": {
-      "path": "rails-frontend-hotwire/SKILL.md"
+      "path": "skills/infrastructure/rails-frontend-hotwire/SKILL.md"
     },
     "rails-graphql-best-practices": {
-      "path": "rails-graphql-best-practices/SKILL.md"
+      "path": "skills/api/rails-graphql-best-practices/SKILL.md"
     },
     "rails-migration-safety": {
-      "path": "rails-migration-safety/SKILL.md"
+      "path": "skills/infrastructure/rails-migration-safety/SKILL.md"
     },
     "rails-performance-optimization": {
-      "path": "rails-performance-optimization/SKILL.md"
+      "path": "skills/infrastructure/rails-performance-optimization/SKILL.md"
     },
     "rails-project-onboarding": {
-      "path": "rails-project-onboarding/SKILL.md"
+      "path": "skills/context/rails-project-onboarding/SKILL.md"
     },
     "rails-review-response": {
-      "path": "rails-review-response/SKILL.md"
+      "path": "skills/code-quality/rails-review-response/SKILL.md"
     },
     "rails-security-review": {
-      "path": "rails-security-review/SKILL.md"
+      "path": "skills/code-quality/rails-security-review/SKILL.md"
     },
     "rails-stack-conventions": {
-      "path": "rails-stack-conventions/SKILL.md"
+      "path": "skills/code-quality/rails-stack-conventions/SKILL.md"
     },
     "rails-tdd-slices": {
-      "path": "rails-tdd-slices/SKILL.md"
+      "path": "skills/testing/rails-tdd-slices/SKILL.md"
     },
     "refactor-safely": {
-      "path": "refactor-safely/SKILL.md"
+      "path": "skills/code-quality/refactor-safely/SKILL.md"
     },
     "rspec-best-practices": {
-      "path": "rspec-best-practices/SKILL.md"
+      "path": "skills/testing/rspec-best-practices/SKILL.md"
     },
     "rspec-service-testing": {
-      "path": "rspec-service-testing/SKILL.md"
+      "path": "skills/testing/rspec-service-testing/SKILL.md"
     },
     "ruby-api-client-integration": {
-      "path": "ruby-api-client-integration/SKILL.md"
+      "path": "skills/api/ruby-api-client-integration/SKILL.md"
     },
     "ruby-service-objects": {
-      "path": "ruby-service-objects/SKILL.md"
+      "path": "skills/patterns/ruby-service-objects/SKILL.md"
     },
     "strategy-factory-null-calculator": {
-      "path": "strategy-factory-null-calculator/SKILL.md"
+      "path": "skills/patterns/strategy-factory-null-calculator/SKILL.md"
     },
     "ticket-planning": {
-      "path": "ticket-planning/SKILL.md"
+      "path": "skills/planning/ticket-planning/SKILL.md"
     },
     "yard-documentation": {
-      "path": "yard-documentation/SKILL.md"
+      "path": "skills/patterns/yard-documentation/SKILL.md"
     }
   }
 }

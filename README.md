@@ -24,10 +24,10 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 ---
 
 - **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
-- **Bootstrap discovery skill:** `[rails-skills-orchestrator](rails-skills-orchestrator/)` (session hook loads `rails-skills-orchestrator/SKILL.md` where applicable)
+- **Bootstrap discovery skill:** `[rails-skills-orchestrator](skills/orchestration/rails-skills-orchestrator/)` (session hook loads `skills/orchestration/rails-skills-orchestrator/SKILL.md` where applicable)
 - **Documentation:** [docs/README.md](docs/README.md) — Complete guides and workflows
 - **Workflows by Stage:** [docs/workflows/](docs/workflows/) — Step-by-step workflows (Discovery → Planning → Development → Quality → Review → Engines)
-- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 34+ skills with trigger words
+- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 36+ skills organized by category
 - **Integration Matrix:** [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) — Skill chaining and workflows
 - **Skill structure:** [docs/architecture.md](docs/architecture.md)
 - **Eval optimization:** [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) — baseline-vs-context targets and the per-skill loop used to lift scores
@@ -71,7 +71,7 @@ Why this matters:
 Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The primary daily workflow is:
 
 ```text
-rails-tdd-slices → rspec-best-practices (write failing test)
+skills/testing/rails-tdd-slices → skills/testing/rspec-best-practices (write failing test)
     ↓
 [CHECKPOINT: Test Design Review — confirm boundary, behavior, edge cases]
     ↓
@@ -81,9 +81,9 @@ Implement (minimal code to pass test) → Refactor
     ↓
 [GATE: Linters + Full Test Suite]
     ↓
-yard-documentation → Update docs
+skills/patterns/yard-documentation → Update docs
     ↓
-rails-code-review (self-review) → rails-review-response (on feedback)
+rails-code-review (self-review) → skills/code-quality/rails-review-response (on feedback)
     ↓
 PR
 ```

@@ -111,24 +111,24 @@ When multiple skills could apply: TDD → Planning → Domain discovery → Proc
 
 ## Typical Workflows
 
-Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: rails-tdd-slices"*, before proceeding with that skill's instructions.
+Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: skills/testing/rails-tdd-slices"*, before proceeding with that skill's instructions.
 
 **TDD Feature Loop** *(primary daily workflow)*:
-rails-context-engineering → rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR
+skills/context/rails-context-engineering → skills/testing/rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → skills/patterns/yard-documentation → rails-code-review → skills/code-quality/rails-review-response (on feedback) → PR
 
-**Feature (standard):** rails-context-engineering → create-prd → generate-tasks → *TDD Feature Loop*
+**Feature (standard):** skills/context/rails-context-engineering → create-prd → generate-tasks → *TDD Feature Loop*
 
-**Feature (DDD-first):** rails-context-engineering → create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*
+**Feature (DDD-first):** skills/context/rails-context-engineering → create-prd → skills/ddd/ddd-ubiquitous-language → skills/ddd/ddd-boundaries-review → skills/ddd/ddd-rails-modeling → generate-tasks → *TDD Feature Loop*
 
-**Code review + response:** rails-code-review → rails-review-response (on feedback) → re-review if Critical items addressed
+**Code review + response:** rails-code-review → skills/code-quality/rails-review-response (on feedback) → re-review if Critical items addressed
 
-**Bug fix:** rails-bug-triage → rails-tdd-slices → **[GATE: reproduction spec fails]** → fix → verify passes
+**Bug fix:** skills/testing/rails-bug-triage → skills/testing/rails-tdd-slices → **[GATE: reproduction spec fails]** → fix → verify passes
 
-**New engine:** rails-engine-author → **[GATE: engine specs fail]** → implement → rails-engine-docs
+**New engine:** skills/engines/rails-engine-author → **[GATE: engine specs fail]** → implement → skills/engines/rails-engine-docs
 
-**Refactoring:** refactor-safely → **[GATE: characterization tests pass on current code]** → refactor → verify still pass
+**Refactoring:** skills/code-quality/refactor-safely → **[GATE: characterization tests pass on current code]** → refactor → verify still pass
 
-**GraphQL:** ddd-ubiquitous-language → rails-graphql-best-practices → *TDD Feature Loop* → rails-security-review
+**GraphQL:** skills/ddd/ddd-ubiquitous-language → skills/api/rails-graphql-best-practices → *TDD Feature Loop* → skills/code-quality/rails-security-review
 
 ## Assets
 

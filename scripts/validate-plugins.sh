@@ -293,7 +293,7 @@ info "Total SKILL.md files found: $skill_count"
     else
       check_fail "tile.json missing skill present on disk: $skill_name (at $skill_path)"
     fi
-  done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.claude/*" -not -path "./.cursor*/*" -not -path "./.windsurf*/*" -not -path "./node_modules/*" -exec dirname {} \; | sort)
+  done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.claude/*" -not -path "./.cursor*/*" -not -path "./.windsurf*/*" -not -path "./.tessl/*" -not -path "./node_modules/*" -exec dirname {} \; | sort)
 
   # And every tile.json.skills entry must exist on disk
   while IFS= read -r skill_path; do

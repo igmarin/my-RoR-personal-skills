@@ -13,12 +13,13 @@ tmp/
 .gemini/
 .gemini-plugin/
 .cursor/
-.cursor-plugin/
 .windsurf/
-.windsurf-plugin/
 .tessl/
 .ruby-lsp/
 .vscode/
+
+# Plugin manifests (required by CI - shared)
+# .cursor-plugin/ and .windsurf-plugin/ are NOT ignored - CI needs these
 
 # Node
 node_modules/

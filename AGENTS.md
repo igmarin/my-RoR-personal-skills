@@ -38,7 +38,7 @@ Load the skill that best matches the current task. The bootstrap skill `rails-sk
 | **Patterns** | `skills/patterns/` | `ruby-service-objects`, `strategy-factory-null-calculator`, `yard-documentation` |
 | **Context** | `skills/context/` | `rails-context-engineering`, `rails-project-onboarding` |
 | **Orchestration** | `skills/orchestration/` | `rails-skills-orchestrator` |
-| **Workflows** | `skills/workflows/` | `rails-tdd-loop`, `rails-review-flow` |
+| **Workflows** | `skills/workflows/` | `rails-tdd-loop`, `rails-review-flow`, `rails-setup-flow`, `rails-quality-flow`, `rails-engines-flow` |
 
 ## Non-Negotiable Workflow Rule
 

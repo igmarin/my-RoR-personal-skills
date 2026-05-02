@@ -24,13 +24,22 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 ---
 
 - **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
-- **Bootstrap discovery skill:** `[rails-skills-orchestrator](skills/orchestration/rails-skills-orchestrator/)` (session hook loads `skills/orchestration/rails-skills-orchestrator/SKILL.md` where applicable)
+- **Bootstrap discovery skill:** `[rails-skills-orchestrator](skills/orchestration/rails-skills-orchestrator/)` (session hook loads orchestrator)
 - **Documentation:** [docs/README.md](docs/README.md) — Complete guides and workflows
-- **Workflows by Stage:** [docs/workflows/](docs/workflows/) — Step-by-step workflows (Discovery → Planning → Development → Quality → Review → Engines)
-- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 36+ skills organized by category
+- **Workflows:** [docs/workflows/](docs/workflows/) — Reference docs + callable workflow skills
+- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 38+ skills organized by category
 - **Integration Matrix:** [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) — Skill chaining and workflows
 - **Skill structure:** [docs/architecture.md](docs/architecture.md)
 - **Eval optimization:** [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) — baseline-vs-context targets and the per-skill loop used to lift scores
+
+### Quick Start — Which Skill to Use?
+
+| Goal | Skill |
+|------|-------|
+| Implement feature with TDD | `skills/workflows/rails-tdd-loop` |
+| Review PR | `skills/workflows/rails-review-flow` |
+| Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` |
+| Not sure where to start | `skills/orchestration/rails-skills-orchestrator` |
 
 ## Methodology
 

@@ -24,6 +24,11 @@
     "orchestration": "skills/orchestration/",
     "patterns": "skills/patterns/",
     "planning": "skills/planning/",
-    "testing": "skills/testing/"
+    "testing": "skills/testing/",
+    "workflows": "skills/workflows/"
+  },
+  "workflows": {
+    "tdd-loop": "skills/workflows/rails-tdd-loop",
+    "review-flow": "skills/workflows/rails-review-flow"
   }
 }

@@ -106,24 +106,25 @@ When multiple skills could apply: TDD → Planning → Domain discovery → Proc
 
 ## Typical Workflows
 
-Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: skills/testing/rails-tdd-slices"*, before proceeding with that skill's instructions.
+Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: skills/workflows/rails-tdd-loop"*, before proceeding with that skill's instructions.
 
-**TDD Feature Loop** *(primary daily workflow)*:
-skills/context/rails-context-engineering → skills/testing/rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → skills/patterns/yard-documentation → rails-code-review → skills/code-quality/rails-review-response (on feedback) → PR
+**TDD Feature Loop** *(primary daily workflow)* — use `skills/workflows/rails-tdd-loop`:
+skills/context/rails-context-engineering → skills/workflows/rails-tdd-loop → PR
 
-**Feature (standard):** skills/context/rails-context-engineering → create-prd → generate-tasks → *TDD Feature Loop*
+**Feature (standard):** skills/context/rails-context-engineering → skills/planning/create-prd → skills/planning/generate-tasks → skills/workflows/rails-tdd-loop
 
-**Feature (DDD-first):** skills/context/rails-context-engineering → create-prd → skills/ddd/ddd-ubiquitous-language → skills/ddd/ddd-boundaries-review → skills/ddd/ddd-rails-modeling → generate-tasks → *TDD Feature Loop*
+**Feature (DDD-first):** skills/context/rails-context-engineering → skills/planning/create-prd → skills/ddd/ddd-ubiquitous-language → skills/ddd/ddd-boundaries-review → skills/ddd/ddd-rails-modeling → skills/planning/generate-tasks → skills/workflows/rails-tdd-loop
 
-**Code review + response:** rails-code-review → skills/code-quality/rails-review-response (on feedback) → re-review if Critical items addressed
+**Code review + response** — use `skills/workflows/rails-review-flow`:
+skills/workflows/rails-review-flow → (orchestrates review → deep dive → response → merge)
 
-**Bug fix:** skills/testing/rails-bug-triage → skills/testing/rails-tdd-slices → **[GATE: reproduction spec fails]** → fix → verify passes
+**Bug fix:** skills/testing/rails-bug-triage → skills/workflows/rails-tdd-loop → **[GATE: reproduction spec fails]** → fix → verify passes
 
 **New engine:** skills/engines/rails-engine-author → **[GATE: engine specs fail]** → implement → skills/engines/rails-engine-docs
 
 **Refactoring:** skills/code-quality/refactor-safely → **[GATE: characterization tests pass on current code]** → refactor → verify still pass
 
-**GraphQL:** skills/ddd/ddd-ubiquitous-language → skills/api/rails-graphql-best-practices → *TDD Feature Loop* → skills/code-quality/rails-security-review
+**GraphQL:** skills/ddd/ddd-ubiquitous-language → skills/api/rails-graphql-best-practices → skills/workflows/rails-tdd-loop → skills/code-quality/rails-security-review
 
 ## Assets
 

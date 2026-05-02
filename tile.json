@@ -1,14 +1,14 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "3.2.0",
-  "summary": "Curated library of AI agent skills for Ruby on Rails development. Organized by category: planning, testing, code-quality, ddd, engines, infrastructure, api, patterns, context, and orchestration. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
+  "version": "3.3.0",
+  "summary": "Curated library of 38+ AI agent skills for Ruby on Rails development. Organized by category: planning, testing, code-quality, ddd, engines, infrastructure, api, patterns, context, orchestration, and workflows. Includes callable workflow skills (rails-tdd-loop, rails-review-flow) for complete development cycles. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and TDD automation.",
   "docs": "docs/index.md",
   "skills": {
     "api-rest-collection": {
       "path": "skills/api/api-rest-collection/SKILL.md"
     },
     "create-prd": {
-      "path": "create-prd/SKILL.md"
+      "path": "skills/planning/create-prd/SKILL.md"
     },
     "ddd-boundaries-review": {
       "path": "skills/ddd/ddd-boundaries-review/SKILL.md"
@@ -20,7 +20,7 @@
       "path": "skills/ddd/ddd-ubiquitous-language/SKILL.md"
     },
     "generate-tasks": {
-      "path": "generate-tasks/SKILL.md"
+      "path": "skills/planning/generate-tasks/SKILL.md"
     },
     "rails-skills-orchestrator": {
       "path": "skills/orchestration/rails-skills-orchestrator/SKILL.md"
@@ -44,7 +44,13 @@
       "path": "skills/code-quality/rails-code-conventions/SKILL.md"
     },
     "rails-code-review": {
-      "path": "rails-code-review/SKILL.md"
+      "path": "skills/code-quality/rails-code-review/SKILL.md"
+    },
+    "rails-review-flow": {
+      "path": "skills/workflows/rails-review-flow/SKILL.md"
+    },
+    "rails-tdd-loop": {
+      "path": "skills/workflows/rails-tdd-loop/SKILL.md"
     },
     "rails-context-engineering": {
       "path": "skills/context/rails-context-engineering/SKILL.md"

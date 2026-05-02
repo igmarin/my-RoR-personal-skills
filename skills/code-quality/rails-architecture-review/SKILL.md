@@ -18,7 +18,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 ## Quick Reference
 
 | Area | What to check |
-|------|--------------|
+|------|---------------|
 | Controllers | Coordinate only — no domain logic |
 | Models | Own persistence + cohesive domain rules, not orchestration |
 | Services | Create real boundaries, not just moved code |
@@ -32,9 +32,9 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 2. Check where domain logic lives.
 3. Inspect model responsibilities, callbacks, and associations.
 4. Inspect controller size and orchestration.
-5. **Check concerns, helpers, and presenters** — read each one: does it do one coherent thing, or does it mix auditing + notifications + emails + external API calls? Mixed concerns are High or Medium severity depending on blast radius. **Treat any concern used by only one class as a candidate for deletion — inline it instead.**
+5. Read every concern, helper, and presenter: does it do one coherent thing, or does it mix auditing + notifications + emails + external API calls? Mixed concerns are High or Medium severity depending on blast radius. **Treat any concern used by only one class as a candidate for deletion — inline it instead.**
 6. Check whether abstractions clarify the design or only move code around.
-7. **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count.
+7. **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count. If verification reveals the finding is not a genuine structural problem, either downgrade it to Medium/Low with a revised rationale, or remove it entirely. Do not list findings that do not survive code-level confirmation.
 
 ## Severity Levels
 
@@ -54,7 +54,9 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 - Service objects wrapping trivial one-liners
 - Concerns combining unrelated responsibilities — check EVERY concern in the app
 
-## Output Format
+## Output Format and Style
+
+**Begin with entry points.** Open the review by identifying the application's entry points (controllers, jobs, public API surface) before listing findings. Then write findings ordered by review area — boundary problems first, then model/callback issues, then concerns/helpers.
 
 Every finding uses this four-field structure:
 
@@ -64,6 +66,8 @@ Every finding uses this four-field structure:
 **Risk:** Controller runs a 5-step domain workflow. Partial state on failure; untestable without HTTP.
 **Improvement:** Extract to Orders::CreateOrder.call(params). Controller handles response/redirect only.
 ```
+
+For each finding include: severity, affected files or area, why the structure is risky, and the smallest credible improvement. Then list open assumptions and recommended next refactor steps.
 
 **High-severity callback example:**
 
@@ -75,7 +79,7 @@ module Auditable
   end
   def log_creation
     AuditLog.create!(...)
-    Slack.notify(...)      # external API in callback
+    Slack.notify(...)                          # external API in callback
     UserMailer.admin_alert(...).deliver_later  # mailer in callback
   end
 end
@@ -83,37 +87,13 @@ end
 
 Fix: keep only `AuditLog.create!` in the callback; move Slack/mailer to an explicit service call at the call site.
 
-See [EXAMPLES.md](./EXAMPLES.md) for mixed-concern and controller workflow patterns.
-
 ## Pitfalls
 
 | Pitfall | What to do |
 |---------|------------|
-| "Fat model is fine, controllers should be skinny" | Both should be focused — extract to services, not models |
-| "Service objects for everything" | Trivial one-liner wrappers add indirection without value |
-| Model with 500+ lines and multiple concerns | Extract domain logic to services or query objects |
-| Controller action > 15 lines | Extract to service — controller coordinates, not implements |
-
-## Output Style
-
-**Begin with entry points.** Open the review by identifying the application's entry points (controllers, jobs, public API surface) before listing findings. Then write findings ordered by review area — boundary problems first, then model/callback issues, then concerns/helpers.
-
-For each finding include:
-
-- Severity
-- Affected files or area
-- Why the structure is risky
-- The smallest credible improvement
-
-Then list open assumptions and recommended next refactor steps.
-
-## Integration
-
-| Skill | When to chain |
-|-------|---------------|
-| **ddd-boundaries-review** | When the architecture issue is really about bounded contexts, ownership, or language leakage |
-| **ddd-rails-modeling** | When the review identifies unclear domain modeling choices inside a context |
-| **rails-code-review** | For detailed code-level review after architecture review |
-| **refactor-safely** | When architecture review identifies extraction candidates |
-| **ruby-service-objects** | When recommending service extraction |
-| **rails-security-review** | When architecture review reveals security boundary concerns |
+| Flagging large files as High severity without reading them | Check whether size reflects legitimate domain complexity before assigning severity; downgrade or remove if no structural problem exists |
+| Recommending a service object for every action | Only extract when it creates a real boundary — wrapping a single ActiveRecord call in a service adds indirection without benefit |
+| Treating all callbacks as problematic | Callbacks are fine for persistence-scoped side effects (e.g., setting a default value); flag only those with external calls, cross-model orchestration, or hidden branching logic |
+| Conflating "concern used in one place" with "concern is bad" | The issue is single-use concerns that add indirection — the fix is inlining, not rewriting |
+| Proposing rewrites instead of smallest credible improvements | Each finding should recommend the minimal change that resolves the structural risk, not a full refactor |
+| Missing cross-layer constant reach | Check for models referencing controller constants or jobs referencing view helpers — these are High-severity coupling issues that are easy to overlook |

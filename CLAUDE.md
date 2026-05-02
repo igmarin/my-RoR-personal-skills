@@ -112,6 +112,15 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 |-------|-------------|
 | `refactor-safely` | Restructuring code while preserving behavior |
 
+### Workflow Skills (Orchestrators)
+| Skill | Use when... |
+|-------|-------------|
+| `rails-tdd-loop` | Full TDD feature cycle: test → implement → review → PR |
+| `rails-review-flow` | Systematic PR review: review → deep dive → response |
+| `rails-setup-flow` | New project setup: context → onboarding → CI/CD |
+| `rails-quality-flow` | Pre-PR quality check: conventions → refactor → docs |
+| `rails-engines-flow` | Engine development: author → test → review → release |
+
 ## Skill Priority
 
 1. **TDD always** — `rspec-best-practices` applies whenever code is produced
@@ -141,7 +150,13 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 `ddd-ubiquitous-language` → `rails-graphql-best-practices` → *TDD Feature Loop* → `rails-security-review`
 
 **New engine:**
-`rails-engine-author` → **[GATE: engine specs]** → implement → `rails-engine-docs`
+`rails-engines-flow` (or atomic: `rails-engine-author` → **[GATE: engine specs]** → implement → `rails-engine-docs`)
+
+**Project setup:**
+`rails-setup-flow` (context → onboarding → CI/CD)
+
+**Quality before PR:**
+`rails-quality-flow` (conventions → refactor → docs)
 
 **Refactoring:**
 `refactor-safely` → **[GATE: characterization tests pass]** → refactor → verify tests still pass
@@ -171,3 +186,7 @@ Generated artifacts (YARD docs, Postman collections, READMEs, task descriptions)
 ## Eval Strategy
 
 Skills are scored on two axes: **skill-specific criteria** AND **model performance baseline-vs-with-context**. A skill that only beats baseline marginally is under-specified — it should change the model's output meaningfully. See [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) for the optimization loop and per-skill targets.
+
+## Canonical Reference
+
+For the complete skill category table, workflow chaining rules, and all constraints, see [AGENTS.md](AGENTS.md) — the single source of truth for agent guidance across all platforms.

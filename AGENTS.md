@@ -4,7 +4,7 @@ This file tells AI agents how to use this repository effectively.
 
 ## What This Repository Is
 
-A curated library of 36 AI agent skills for Ruby on Rails development. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
+A curated library of 39 AI agent skills for Ruby on Rails development. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
 
 ## How Skills Are Organized
 
@@ -58,6 +58,9 @@ Do not write implementation code before the test exists and fails. Every skill t
 |------|---------------|---------------|
 | Implement feature with TDD | `skills/workflows/rails-tdd-loop` | Full orchestrated cycle |
 | Review PR systematically | `skills/workflows/rails-review-flow` | Review → deep dive → response |
+| Set up project / CI/CD | `skills/workflows/rails-setup-flow` | Context → onboarding → CI/CD |
+| Quality check before PR | `skills/workflows/rails-quality-flow` | Conventions → refactor → docs |
+| Build Rails engine | `skills/workflows/rails-engines-flow` | Author → test → review → release |
 | Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` | Planning only |
 
 ### TDD Feature Loop (Recommended)

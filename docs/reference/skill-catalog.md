@@ -1,6 +1,6 @@
 # Skill Catalog — Rails Agent Skills
 
-Complete catalog of 36+ skills organized by development lifecycle stage and by category.
+Complete catalog of 39 skills organized by development lifecycle stage and by category.
 
 ---
 
@@ -8,7 +8,7 @@ Complete catalog of 36+ skills organized by development lifecycle stage and by c
 
 **By Stage:** [00 — Discovery](#00--discovery--context) · [10 — Planning](#10--planning--design) · [30 — Development](#30--development) · [40 — Quality](#40--code-quality) · [50 — Review](#50--review--validation) · [60 — Engines](#60--engines)
 
-**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Planning](#planning) · [Testing](#testing)
+**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Planning](#planning) · [Testing](#testing) · [Workflows](#workflows)
 
 ---
 
@@ -175,7 +175,7 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rails-code-review** | `rails-code-review/` *(root)* | Systematic Rails PR review |
+| **rails-code-review** | `skills/code-quality/rails-code-review/` | Systematic Rails PR review |
 | **rails-review-response** | `skills/code-quality/rails-review-response/` | Respond to review feedback |
 | **rails-architecture-review** | `skills/code-quality/rails-architecture-review/` | Structural boundary review |
 | **rails-security-review** | `skills/code-quality/rails-security-review/` | Deep security audit |
@@ -234,8 +234,8 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **create-prd** | `create-prd/` *(root)* | Generate PRD with goals, user stories |
-| **generate-tasks** | `generate-tasks/` *(root)* | Convert PRD into TDD-ready tasks |
+| **create-prd** | `skills/planning/create-prd/` | Generate PRD with goals, user stories |
+| **generate-tasks** | `skills/planning/generate-tasks/` | Convert PRD into TDD-ready tasks |
 | **ticket-planning** | `skills/planning/ticket-planning/` | Create tickets in issue tracker |
 
 ### Testing
@@ -246,3 +246,13 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 | **rspec-service-testing** | `skills/testing/rspec-service-testing/` | Service object specific testing |
 | **rails-tdd-slices** | `skills/testing/rails-tdd-slices/` | Choose the best first failing spec |
 | **rails-bug-triage** | `skills/testing/rails-bug-triage/` | Bug diagnosis and reproduction |
+
+### Workflows
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| **rails-tdd-loop** | `skills/workflows/rails-tdd-loop/` | TDD feature loop: test → implement → review → PR |
+| **rails-review-flow** | `skills/workflows/rails-review-flow/` | Systematic PR review: review → deep dive → response |
+| **rails-setup-flow** | `skills/workflows/rails-setup-flow/` | Project setup: context → onboarding → CI/CD |
+| **rails-quality-flow** | `skills/workflows/rails-quality-flow/` | Quality check: conventions → refactor → docs |
+| **rails-engines-flow** | `skills/workflows/rails-engines-flow/` | Engine development: author → test → review → release |

@@ -150,5 +150,6 @@ When asked to refactor:
 
 ## Assets
 
-- [assets/characterization_tests.md](assets/characterization_tests.md)
-- [assets/examples.md](assets/examples.md)
+- [EXAMPLES.md](./EXAMPLES.md)
+- [HEURISTICS.md](./HEURISTICS.md)
+- [INTEGRATION.md](./INTEGRATION.md)

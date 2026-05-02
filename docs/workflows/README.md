@@ -53,6 +53,24 @@ flowchart TD
 
 ---
 
+## Docs vs. Callable Workflow Skills
+
+This directory contains **reference guides** describing each stage. For **executable orchestration**, use the callable workflow skills in `skills/workflows/`:
+
+| Stage Doc | Callable Skill | Status |
+|-----------|----------------|--------|
+| [development.md](development.md) | [`rails-tdd-loop`](../../skills/workflows/rails-tdd-loop/SKILL.md) | Active |
+| [review.md](review.md) | [`rails-review-flow`](../../skills/workflows/rails-review-flow/SKILL.md) | Active |
+| [setup.md](setup.md) | [`rails-setup-flow`](../../skills/workflows/rails-setup-flow/SKILL.md) | Active |
+| [quality.md](quality.md) | [`rails-quality-flow`](../../skills/workflows/rails-quality-flow/SKILL.md) | Active |
+| [engines.md](engines.md) | [`rails-engines-flow`](../../skills/workflows/rails-engines-flow/SKILL.md) | Active |
+| [discovery.md](discovery.md) | *(none — linear, no orchestration needed)* | Doc only |
+| [planning.md](planning.md) | *(none — linear, no orchestration needed)* | Doc only |
+
+**When to use which:** Read the stage doc to understand the full context and rationale. Invoke the callable skill when you want the agent to execute the workflow automatically.
+
+---
+
 ## Specialized Workflows
 
 | Situation | Workflow | Quick Entry |

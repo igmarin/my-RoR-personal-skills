@@ -8,6 +8,7 @@ tmp/
 .agents/skills/
 
 # IDE / AI assistant configs (personal, not shared)
+.crush/
 .codex/
 .codex-plugin/
 .gemini/

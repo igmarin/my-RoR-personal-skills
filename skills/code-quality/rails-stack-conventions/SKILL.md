@@ -41,17 +41,6 @@ For a typical feature, compose stack patterns in this order:
 
 Each step should remain testable in isolation before wiring to the next layer.
 
-## Quick Reference
-
-| Aspect | Convention |
-|--------|-----------|
-| Style | RuboCop project config when present; otherwise Ruby Style Guide, single quotes |
-| Models | MVC — service objects for complex logic, concerns for shared behavior |
-| Queries | Eager load with `includes`; never iterate over associations without preloading |
-| Frontend | Hotwire (Turbo + Stimulus); Tailwind CSS |
-| Testing | RSpec with FactoryBot; TDD |
-| Security | Strong params, guard XSS/CSRF/SQLi; Devise/Pundit for auth |
-
 ## Key Code Patterns
 
 ### Hotwire: Turbo Frames
@@ -109,26 +98,19 @@ See **ruby-service-objects** for the full `.call` pattern and response format.
 
 ## Security
 
-- **Strong params** on every controller action that writes data
-- Guard against XSS (use `html_escape`, avoid `raw`), CSRF (Rails default on), SQLi (use AR query methods or `sanitize_sql` for raw SQL)
-- Auth: Devise for authentication, Pundit for authorization
+This project uses **Devise** for authentication and **Pundit** for authorization. Apply these on every feature that introduces access-controlled resources.
 
-## Common Mistakes
+## Pitfalls to Avoid
 
-| Mistake | Correct approach |
-|---------|----------------|
+| Issue | Correct approach |
+|-------|------------------|
 | Business logic in views | Use helpers, presenters, or Stimulus controllers |
 | N+1 queries in loops | Eager load with `includes` before the loop |
-| Raw SQL without parameterization | Use AR query methods or `ActiveRecord::Base.sanitize_sql` |
-| Skipping FactoryBot for "quick" test | Fixtures are brittle — always use factories |
-
-## Red Flags
-
-- Controller action with more than 15 lines of business logic
-- Model with no validations on required fields
-- View with embedded Ruby conditionals spanning 10+ lines
-- No `includes` on associations used in loops
-- Hardcoded strings that belong in I18n
+| Skipping FactoryBot for "quick" tests | Fixtures are brittle — always use factories |
+| Controller action with 15+ lines of business logic | Extract to a service object |
+| Model with no validations on required fields | Add presence/format validations |
+| View with 10+ lines of embedded Ruby conditionals | Move logic to a presenter or partial |
+| Hardcoded strings that belong in I18n | Use `t()` helpers |
 
 ## Integration
 

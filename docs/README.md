@@ -12,7 +12,7 @@ Master index for all project documentation.
 ## What this gives you
 
 - A complete, structured workflow system (Discovery → PR)
-- 38+ production-grade skills with clear triggers and responsibilities
+- 39 production-grade skills with clear triggers and responsibilities
 - Enforced TDD workflows (tests as a hard gate, not a suggestion)
 - Context-aware orchestration across tasks and agents
 - A repeatable way to turn AI into a reliable engineering system
@@ -103,7 +103,7 @@ Step-by-step workflows for each development phase:
 
 ### Skill Catalog
 
-Complete catalog of 38+ skills organized by category:
+Complete catalog of 39 skills organized by category:
 
 - **[skill-catalog.md](reference/skill-catalog.md)** — List with descriptions and triggers
 - **[integration-matrix.md](reference/integration-matrix.md)** — Which skill connects to which

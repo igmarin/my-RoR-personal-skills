@@ -6,3 +6,19 @@ evals/worst-cases/*
 tmp/
 .Gemfile.lock
 .agents/skills/
+
+# IDE / AI assistant configs (personal, not shared)
+.codex/
+.codex-plugin/
+.gemini/
+.gemini-plugin/
+.cursor/
+.cursor-plugin/
+.windsurf/
+.windsurf-plugin/
+.tessl/
+.ruby-lsp/
+.vscode/
+
+# Node
+node_modules/

@@ -276,7 +276,7 @@ while IFS= read -r skill_file; do
     check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
     skill_errors=$((skill_errors + 1))
   fi
-done < <(find . -maxdepth 2 -name "SKILL.md" -not -path "./.git/*" | sort)
+done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.tessl/*" -not -path "./.claude/*" -not -path "./node_modules/*" | sort)
 
 info "Total SKILL.md files found: $skill_count"
 
@@ -293,7 +293,7 @@ info "Total SKILL.md files found: $skill_count"
     else
       check_fail "tile.json missing skill present on disk: $skill_name (at $skill_path)"
     fi
-  done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.claude/*" -not -path "./.cursor*/*" -not -path "./.windsurf*/*" -not -path "./.tessl/*" -not -path "./node_modules/*" -exec dirname {} \; | sort)
+  done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.claude/*" -not -path "./.cursor/*" -not -path "./.windsurf/*" -not -path "./.tessl/*" -not -path "./node_modules/*" -exec dirname {} \; | sort)
 
   # And every tile.json.skills entry must exist on disk
   while IFS= read -r skill_path; do

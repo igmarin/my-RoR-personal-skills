@@ -148,8 +148,8 @@ security:
 
 | If setup is done... | Next step |
 |---------------------|-----------|
-| CI/CD ready | `rails-tdd-slices` → [30-development](30-development.md) |
-| Need new feature | `create-prd` → [10-planning](10-planning.md) |
+| CI/CD ready | `rails-tdd-slices` → [development](development.md) |
+| Need new feature | `create-prd` → [planning](planning.md) |
 
 ---
 

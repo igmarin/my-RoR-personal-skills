@@ -113,9 +113,9 @@ When the team uses an issue tracker (Jira, Linear, GitHub Issues).
 
 | Planning output | Next step |
 |-----------------|-----------|
-| Tasks ready | `rails-tdd-slices` → [30-development](30-development.md) |
-| Need additional architecture | `rails-architecture-review` → [50-review](50-review.md) |
-| Need migration | `rails-migration-safety` → [30-development](30-development.md) |
+| Tasks ready | `rails-tdd-slices` → [development](development.md) |
+| Need additional architecture | `rails-architecture-review` → [review](review.md) |
+| Need migration | `rails-migration-safety` → [development](development.md) |
 
 ---
 

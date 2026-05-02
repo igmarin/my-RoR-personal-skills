@@ -6,7 +6,7 @@ Reference material for this tile: workflows, authoring, setup, and MCP. Linked f
 
 ## Entry skill
 
-- [rails-skills-orchestrator](../rails-skills-orchestrator/SKILL.md) — pick the right skill and enforce the tests-before-implementation gate
+- [rails-skills-orchestrator](../skills/orchestration/rails-skills-orchestrator/SKILL.md) — pick the right skill and enforce the tests-before-implementation gate
 
 ## Guides
 

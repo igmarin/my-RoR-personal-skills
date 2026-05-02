@@ -12,7 +12,7 @@ Master index for all project documentation.
 ## What this gives you
 
 - A complete, structured workflow system (Discovery → PR)
-- 30+ production-grade skills with clear triggers and responsibilities
+- 38+ production-grade skills with clear triggers and responsibilities
 - Enforced TDD workflows (tests as a hard gate, not a suggestion)
 - Context-aware orchestration across tasks and agents
 - A repeatable way to turn AI into a reliable engineering system
@@ -25,7 +25,7 @@ Think of this as a decision map — not just docs. Pick your current stage and f
 
 | If you are... | Go to... |
 |---------------|----------|
-| **New to the project** | [Quick Start](#quick-start) → [Workflows Discovery](workflows/00-discovery.md) |
+| **New to the project** | [Quick Start](#quick-start) → [Workflows Discovery](workflows/discovery.md) |
 | **Developer looking for workflow** | [Workflows Index](workflows/) — All flows by stage |
 | **Skill contributor** | [Skill Design Principles](skill-design-principles.md) |
 | **Debugging integration** | [Implementation Guide](implementation-guide.md) |
@@ -87,13 +87,13 @@ Step-by-step workflows for each development phase:
 
 | Stage | Document | Description |
 |-------|----------|-------------|
-| **00** | [Discovery & Context](workflows/00-discovery.md) | Understand codebase, onboarding |
-| **10** | [Planning & Design](workflows/10-planning.md) | PRD, tasks, DDD |
-| **20** | [Setup & Configuration](workflows/20-setup.md) | CI/CD, dev environment |
-| **30** | [Development](workflows/30-development.md) | TDD, implementation, bug fixes |
-| **40** | [Code Quality](workflows/40-quality.md) | Conventions, refactoring, docs |
-| **50** | [Review & Validation](workflows/50-review.md) | Code review, security, architecture |
-| **60** | [Engines](workflows/60-engines.md) | Rails engines development |
+| **Discovery** | [Discovery & Context](workflows/discovery.md) | Understand codebase, onboarding |
+| **Planning** | [Planning & Design](workflows/planning.md) | PRD, tasks, DDD |
+| **Setup** | [Setup & Configuration](workflows/setup.md) | CI/CD, dev environment |
+| **Development** | [Development](workflows/development.md) | TDD, implementation, bug fixes |
+| **Quality** | [Code Quality](workflows/quality.md) | Conventions, refactoring, docs |
+| **Review** | [Review & Validation](workflows/review.md) | Code review, security, architecture |
+| **Engines** | [Engines](workflows/engines.md) | Rails engines development |
 
 **Complete index:** [workflows/README.md](workflows/README.md)
 
@@ -103,7 +103,7 @@ Step-by-step workflows for each development phase:
 
 ### Skill Catalog
 
-Complete catalog of 34+ skills organized by stage:
+Complete catalog of 38+ skills organized by category:
 
 - **[skill-catalog.md](reference/skill-catalog.md)** — List with descriptions and triggers
 - **[integration-matrix.md](reference/integration-matrix.md)** — Which skill connects to which
@@ -163,15 +163,15 @@ docs/
 ├── plugin-validation.md       # Plugin validation
 ├── vs-code-setup.md          # VS Code specific
 │
-├── workflows/                 # Workflows by stage (new)
+├── workflows/                 # Workflows by stage
 │   ├── README.md
-│   ├── 00-discovery.md
-│   ├── 10-planning.md
-│   ├── 20-setup.md
-│   ├── 30-development.md
-│   ├── 40-quality.md
-│   ├── 50-review.md
-│   └── 60-engines.md
+│   ├── discovery.md
+│   ├── planning.md
+│   ├── setup.md
+│   ├── development.md
+│   ├── quality.md
+│   ├── review.md
+│   └── engines.md
 │
 ├── reference/                 # Quick reference (new)
 │   ├── skill-catalog.md

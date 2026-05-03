@@ -32,9 +32,12 @@ module Evaluator
       # @return [String] The file contents, or an error message if not found.
       def self.call(path, working_dir_path)
         target = secure_path(path, working_dir_path)
-        return 'Error: File not found' unless target.exist?
+        return 'Error: File not found' unless target.exist? && target.file?
+        return 'Error: File is not readable' unless target.readable?
 
         target.read
+      rescue StandardError => e
+        "Error reading file: #{e.message}"
       end
     end
   end

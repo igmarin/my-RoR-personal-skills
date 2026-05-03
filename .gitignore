@@ -1,5 +1,6 @@
 .DS_Store
 .agents/skills/
+.agents/*
 # Claude Code internal state (worktrees, plans, session data)
 .claude/
 evals/worst-cases/*
@@ -25,3 +26,4 @@ tmp/
 # Node
 node_modules/
 .windsurfrules
+.mardownlint.yaml

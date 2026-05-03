@@ -1,8 +1,5 @@
-#!/Users/igmarin/.rbenv/versions/4.0.2/bin/ruby
+#!/usr/bin/env ruby
 # frozen_string_literal: true
-
-$stdout.sync = true
-$stderr.sync = true
 
 require 'optparse'
 require 'json'

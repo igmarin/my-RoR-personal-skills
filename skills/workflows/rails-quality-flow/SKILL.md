@@ -2,76 +2,61 @@
 name: rails-quality-flow
 license: MIT
 description: >
-  Complete code quality workflow. Orchestrates conventions → refactoring → documentation.
-  Use after implementation to ensure production quality. Trigger: code review prep,
-  refactor safely, add documentation, quality check, before PR.
+  Complete code quality workflow for Rails projects. Enforces naming conventions, reduces duplication,
+  extracts methods and service objects, reduces complexity, and generates YARD docstrings and inline
+  comments across the full codebase. Use this composite workflow instead of individual refactoring or
+  documentation skills when a full production-readiness review is needed end-to-end. Use when: code review prep,
+  before PR, refactor safely, add documentation, quality check, quality audit, full Rails quality sweep,
+  production-ready review.
 keywords: rails, quality, conventions, refactoring, documentation, yard, review
 ---
 
 # Rails Quality Flow — Complete Quality Assurance Workflow
 
-Orchestrates systematic code quality checks, safe refactoring, and documentation updates.
-
-## When to Use
-
-- Preparing code for review (before PR)
-- Systematic refactoring with safety
-- Adding documentation to existing code
-- Quality audit of codebase
+Orchestrates systematic code quality checks, safe refactoring, and documentation updates across three phases. Use this instead of individual refactoring or documentation skills when full production-readiness is required end-to-end.
 
 ## Workflow Phases
 
 ### Phase 1: Conventions Review
 
-**Check code against Rails standards:**
-1. **skills/code-quality/rails-code-conventions** — Daily coding checklist
-   - DRY/YAGNI/PORO/CoC/KISS compliance
-   - Linter as style source of truth
-   - Structured logging
-   - Per-path rules
+Check code against Rails standards via **skills/code-quality/rails-code-conventions** (DRY/YAGNI/PORO/CoC/KISS compliance, linter as style source of truth, structured logging) and **skills/code-quality/rails-stack-conventions** (Rails + PostgreSQL patterns, Hotwire + Tailwind conventions, security best practices).
 
-2. **skills/code-quality/rails-stack-conventions** — Stack-specific conventions
-   - Rails + PostgreSQL patterns
-   - Hotwire + Tailwind conventions
-   - Security best practices
+**Example violation and fix:**
+```ruby
+# Violation (DRY): duplicated discount logic across OrderService and CartService
+def apply_discount(price, pct)  # repeated verbatim in two classes
+  price - (price * pct / 100.0)
+end
 
-**Output:** Convention violations list with severity (must-fix vs should-fix vs nice-to-have)
+# Fix: extract to shared PORO
+class DiscountCalculator
+  def self.apply(price, pct) = price - (price * pct / 100.0)
+end
+```
+
+**Output:** Convention violations list with severity (must-fix / should-fix / nice-to-have)
 
 ---
 
 ### Phase 2: Refactoring (Optional)
 
-**Only if code needs restructuring:**
-
 **Decision Gate — Need Refactoring?**
-- High complexity / low readability? → Proceed to refactoring
-- Logic duplication found? → Proceed to refactoring
-- Otherwise → Skip to documentation
+- High complexity / low readability? → Proceed
+- Logic duplication found? → Proceed
+- Otherwise → Skip to Phase 3
 
-**Refactoring Path:**
-1. **skills/code-quality/refactor-safely** — Characterization tests first
-2. Extract methods/classes with tests passing
-3. Verify no behavioral changes
+Follow **skills/code-quality/refactor-safely** (write characterization tests first, extract methods/classes, verify no behavioral changes before continuing).
 
 **HARD GATE — Tests Pass:**
-- All existing tests pass
-- New characterization tests written
-- No functional changes introduced
+```bash
+bundle exec rspec   # All tests must pass before proceeding
+```
 
 ---
 
 ### Phase 3: Documentation
 
-**Document public APIs:**
-1. **skills/patterns/yard-documentation** — YARD docs for Ruby classes
-   - All public methods documented
-   - Params and return values specified
-   - Examples for complex methods
-
-2. **Update README/diagrams:**
-   - Architecture changes reflected
-   - API changes documented
-   - Setup instructions updated if needed
+Document public APIs via **skills/patterns/yard-documentation** (annotate all public methods with params, return values, and examples; update README/diagrams for architecture or API changes).
 
 **Output:** Updated YARD comments, refreshed README sections
 
@@ -80,21 +65,22 @@ Orchestrates systematic code quality checks, safe refactoring, and documentation
 ## Quick Reference
 
 ```
-Before PR?       → rails-code-conventions → yard-documentation
+Before PR?        → rails-code-conventions → yard-documentation
 Need to refactor? → refactor-safely → rails-code-conventions
-Quality audit?   → rails-code-conventions → rails-stack-conventions
-Not sure?        → rails-skills-orchestrator
+Quality audit?    → rails-code-conventions → rails-stack-conventions
+Not sure?         → rails-skills-orchestrator
 ```
 
 ## HARD-GATE: Quality Before Merge
 
 **NEVER open PR before:**
-1. Linters pass (RuboCop, ERBLint)
-2. All tests pass
-3. YARD docs complete for public APIs
-4. Security scan passes (Brakeman)
-
-**Why:** Technical debt compounds. Quality gates prevent it.
+```bash
+bundle exec rubocop        # Linter must pass
+bundle exec erblint --lint-all  # ERB linter must pass
+bundle exec rspec          # All tests must pass
+bundle exec brakeman       # Security scan must pass
+```
+Plus: YARD docs complete for all public APIs.
 
 ## Output Style
 
@@ -116,12 +102,3 @@ Not sure?        → rails-skills-orchestrator
 - YARD coverage: 87% (improved from 65%)
 - README updated: YES
 ```
-
-## Integration
-
-| Predecessor | This Skill | Successor |
-|-------------|------------|-----------|
-| rails-tdd-loop (development complete) | rails-quality-flow | rails-review-flow |
-| Any implementation skill | rails-quality-flow | rails-code-review |
-
-**From AGENTS.md:** This is the quality workflow. Always run before review.

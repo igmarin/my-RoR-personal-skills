@@ -17,15 +17,12 @@ Use this skill when documenting Ruby classes and public methods with YARD.
 ## HARD-GATE: After implementation
 
 ```
-YARD is not optional polish. After any feature or fix that adds or changes
-public Ruby API (classes, modules, public methods):
+After any feature or fix that adds or changes public Ruby API (classes, modules, public methods):
 
 1. Add or update YARD on those surfaces before the work is considered done.
-2. Do not skip YARD because "the PR is small" or "I'll do it later".
-3. All YARD text must be in English unless user explicitly requests otherwise.
+2. All YARD text must be in English unless user explicitly requests otherwise.
 
-Task lists from generate-tasks MUST include explicit YARD sub-tasks after
-implementation.
+Task lists from generate-tasks MUST include explicit YARD sub-tasks after implementation.
 ```
 
 ## Tag Reference
@@ -107,7 +104,7 @@ def self.call(plan_id:)
 
 ## Inline tagged notes
 
-YARD documents the contract; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) document the *why* on the same code — required for business-rule constants, deferred work, workarounds, and perf tradeoffs. Every tag carries actionable context (owner, ticket, next step); naked tags fail review. See [references/tagged-notes.md](references/tagged-notes.md) and **rails-code-conventions**.
+YARD documents the contract; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) document the *why* on the same code. Every tag carries actionable context (owner, ticket, next step); naked tags fail review. See [references/tagged-notes.md](references/tagged-notes.md) and **rails-code-conventions**.
 
 ## Verification
 
@@ -123,8 +120,8 @@ For advanced tags (`@abstract`, `@deprecated`, `@api private`, `@yield`, `@overl
 
 | Skill | When to chain |
 |-------|----------------|
-| **ruby-service-objects** | When implementing or documenting service objects |
-| **ruby-api-client-integration** | When documenting API client layers (Auth, Client, Fetcher, Builder) |
-| **rails-engine-docs** | When documenting engine public API or extension points |
-| **rails-code-review** | When reviewing that public interfaces are documented |
-| **generate-tasks** | Generated task lists include YARD parents after implementation |
+| **ruby-service-objects** | Implementing or documenting service objects |
+| **ruby-api-client-integration** | Documenting API client layers (Auth, Client, Fetcher, Builder) |
+| **rails-engine-docs** | Documenting engine public API or extension points |
+| **rails-code-review** | Reviewing that public interfaces are documented |
+| **generate-tasks** | Generated task lists include YARD tasks after implementation |

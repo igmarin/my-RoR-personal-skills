@@ -67,12 +67,12 @@ When using this skill, return:
 **Minimal example (one row):**
 
 | Canonical term | Aliases | Definition | Invariant | Context |
-|----------------|---------|------------|-----------|---------|
+|----------------|---------|------------|-----------|----------|
 | Shipment | Parcel, Package | Physical goods sent to a customer address | Must reference a valid Order | Fulfillment |
 
 **Open questions:** Does "Parcel" ever mean an internal warehouse bin ID? If yes, split into two glossary entries.
 
-See [EXAMPLES.md](./EXAMPLES.md) for a full worked glossary example and common mistakes.
+See [assets/examples.md](assets/examples.md) for a full worked glossary example and common mistakes.
 
 ## Integration
 

@@ -100,7 +100,23 @@ let(:source_shelter) { create(:shelter, :with_animals) }
 
 ## FactoryBot Hash Factories for API Responses
 
-When testing API clients, use `class: Hash` with `initialize_with` to build hash-shaped response fixtures — see [PATTERNS.md](./PATTERNS.md) for the full pattern and factory placement.
+When testing API clients, use `class: Hash` with `initialize_with` to build hash-shaped response fixtures. A minimal example:
+
+```ruby
+FactoryBot.define do
+  factory :api_animal_response, class: Hash do
+    tag_number { 'TAG001' }
+    status     { 'active' }
+
+    initialize_with { attributes.stringify_keys }
+  end
+end
+
+# In the spec:
+let(:api_response) { build(:api_animal_response, tag_number: 'TAG002') }
+```
+
+See [PATTERNS.md](./PATTERNS.md) for the full pattern and factory placement guidance.
 
 ## New Test File Checklist
 
@@ -117,7 +133,7 @@ When testing API clients, use `class: Hash` with `initialize_with` to build hash
 ## Common Mistakes
 
 | Mistake | Correct approach |
-|---------|-----------------|
+|---------|------------------|
 | No error scenario tests | Happy path only = false confidence — always test failures |
 | `let!` everywhere | Use `let` (lazy) unless the value is needed unconditionally for setup |
 | Huge factory setup | Keep factories minimal — only attributes required for the test |

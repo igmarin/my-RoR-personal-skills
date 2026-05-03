@@ -28,7 +28,7 @@ OUTPUT MODE:
   If the user asks for implementation tasks, checklist, or exact steps, produce the detailed mode.
 ```
 
-Every generated task list MUST contain the following elements:
+Every generated task list MUST contain the following elements (see [TASK_TEMPLATES.md](./TASK_TEMPLATES.md) for full template structures):
 
 1. **Task 0.0** — "Create feature branch" with checkout command (e.g., `git checkout -b feature/name`)
 2. **Relevant Files section** — All files to create/modify with concrete paths, listed before Tasks
@@ -41,8 +41,6 @@ Every generated task list MUST contain the following elements:
 5. **Documentation update task** — Update README, diagrams (Mermaid, ADRs), domain docs; list concrete paths
 6. **Code review gate** — Self-review via rails-code-review; fix blockers before opening PR
 7. **Save location** — `tasks-[feature-name].md` in `/tasks/` folder
-
-See [TASK_TEMPLATES.md](./TASK_TEMPLATES.md) for full templates.
 
 ## Extended Resources (Load When Needed)
 
@@ -62,10 +60,6 @@ Load these files only when their specific guidance is required:
    - `Relevant Files` section is present
    - At least 3 implementation task groups use the full TDD sequence: write spec -> run fail -> implement -> run pass
    - YARD, documentation, and code-review parent tasks appear after implementation work
-
-## Rails-First Slice Heuristics
-
-See [HEURISTICS.md](./HEURISTICS.md) for the full change-type → first-slice mapping table.
 
 ## Pitfalls
 

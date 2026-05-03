@@ -71,73 +71,50 @@ Use this section order:
 
 Keep the main sections business-facing. Do not restate the background in the summary or repeat the AC in Technical Notes.
 
-### 5. Decide: drafts or create in the issue tracker
+### 5. Output: drafts or create in the issue tracker
 
-**Drafts only:**
+**Draft-only:**
 
-- return markdown tickets
-- keep titles, issue types, and dependencies explicit
+- Return markdown tickets following the five-section structure (Summary, Background, Acceptance Criteria, Dependencies, Technical Notes) with the appropriate area prefix in the title.
+- Keep titles, issue types, and dependencies explicit.
+- Include brief sequencing notes when helpful.
+- See [EXAMPLES.md](./EXAMPLES.md) for a full plan → ticket draft with classification applied.
 
 **Create in issue tracker:**
 
-- verify the target project/board details first
-- confirm required fields: project, issue type, sprint, status behavior, epic, labels, components
-- create issues **only after** the plan is considered approved enough
-- use whatever integration the user has (API, MCP, UI); do not assume credentials in the repo
+- Verify the target project/board details first.
+- Confirm required fields: project, issue type, sprint, status behavior, epic, labels, components.
+- Create issues **only after** the plan is considered approved enough.
+- Use whatever integration the user has (API, MCP, UI); do not assume credentials in the repo.
+- Validate **one** issue before bulk-creating if the sprint field or workflow behavior is uncertain.
+- After creation, report: created issue keys, confirmed status, confirmed sprint/bucket, and any assumptions used.
+
+**Example field shape for MCP/API creation:**
+
+```json
+{
+  "project": "<project-key>",
+  "issuetype": "Story",
+  "summary": "BE | Enable payment webhook processing",
+  "description": "<full ticket body>",
+  "labels": ["payments", "backend"],
+  "components": ["payments-service"],
+  "sprint": { "id": "<sprint-id>" },
+  "epic": "<epic-key>"
+}
+```
+
+Omit fields the project does not require. Confirm actual field names from the tracker's create-metadata endpoint before issuing the call. Do not set status on create — use the project's default initial status.
 
 ## Sprint Placement Heuristics
 
 Defaults unless the user overrides:
 
-- `foundation` or `api` tickets go **before** client tickets
-- `client` tickets depend on stable API behavior when applicable
-- `external` confirmation tickets usually stay **out** of active build sprints
-- `follow-up` tickets stay in `ready-to-refine` or later until enabling work is clear
-
-For boards with a named future sprint such as **Ready to Refine**, treat it as a **planning bucket**, not an execution guarantee.
-
-## Ticket Creation Guidance
-
-When creating tickets in an issue tracker:
-
-- create them in the project that backs the board
-- do not assume status can be set on create; many workflows use the project's default initial status
-- if sprint assignment is required, inspect create metadata and use the sprint field shape expected by that project
-- validate **one** issue first if sprint field or workflow behavior is uncertain
-
-## Output Patterns
-
-### Draft-only output
-
-Provide ticket markdown plus brief sequencing notes when helpful. Minimum inline shape:
-
-```
-BE | Add Google OAuth2 callback endpoint
-
-**Summary:** Implement the Rails OAuth2 callback action that exchanges the
-authorization code for a user token and creates or finds a User by email.
-
-**Background:** Users need Google login. Callback completes the flow after Google redirects.
-
-**Acceptance Criteria:**
-- POST /auth/google/callback exchanges code for token
-- Creates or finds User by email; returns session on success, error JSON on failure
-
-**Dependencies:** None. Unblocked.
-
-**Technical Notes:** Uses omniauth-google-oauth2. Callback path must match Google Cloud Console.
-```
-
-See [EXAMPLES.md](./EXAMPLES.md) for a full plan → ticket draft with classification applied.
-
-### Creation output
-
-After creation, report:
-
-- created issue keys
-- confirmed status
-- confirmed sprint/bucket
-- any assumptions used
+- `foundation` and `api` tickets → placed **before** all dependent `client` tickets
+- `client` tickets → blocked until the API surface they depend on is stable
+- `external` confirmation tickets → excluded from active build sprints
+- `follow-up` tickets → `ready-to-refine` or `later` until their enabling work is complete
+- Named future sprints (e.g. **Ready to Refine**) → treat as a **planning bucket**, not an execution commitment
 
 ## Integration
 

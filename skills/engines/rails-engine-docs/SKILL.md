@@ -10,9 +10,7 @@ description: >
 ---
 # Rails Engine Docs
 
-Use this skill when the task is to write or improve documentation for a Rails engine.
-
-Engine docs should optimize for host-app adoption. Readers need to know what the engine does, how to install it, how to configure it, and where the boundaries are. All generated documentation (README, guides, examples) must be in **English** unless the user explicitly requests another language.
+All generated documentation (README, guides, examples) must be in **English** unless the user explicitly requests another language.
 
 ## Recommended README Shape
 
@@ -79,7 +77,7 @@ When asked to write docs:
 2. Show one realistic configuration example.
 3. Document operational steps explicitly.
 4. Keep sections short and task-oriented.
-5. Check each row in the Documentation Gaps checklist — if any is missing, fill it and re-check before finalizing.
+5. Check each row in the Documentation Gaps checklist against the draft. A checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.
 
 ## Integration
 

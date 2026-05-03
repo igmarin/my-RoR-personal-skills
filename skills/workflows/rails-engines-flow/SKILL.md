@@ -2,9 +2,10 @@
 name: rails-engines-flow
 license: MIT
 description: >
-  Complete Rails engine development workflow. Orchestrates authoring → testing → review → release.
+  Complete Rails engine development workflow. Orchestrates scaffolding engine structure and generating
+  mountable namespaces → testing → code review and dependency auditing → release.
   Use when creating, extracting, or maintaining Rails engines. Trigger: create engine,
-  extract engine, engine release, engine testing.
+  extract engine, engine release, engine testing, mountable engine, gem extraction.
 keywords: rails, engine, workflow, gem, release, testing, extraction
 ---
 
@@ -12,28 +13,45 @@ keywords: rails, engine, workflow, gem, release, testing, extraction
 
 Orchestrates the full lifecycle of Rails engine development from scaffolding to release.
 
-## When to Use
-
-- Creating a new Rails engine
-- Extracting code from host app to engine
-- Preparing engine for release
-- Reviewing engine architecture
-
 ## Workflow Phases
 
 ### Phase 1: Engine Authoring
 
 **Scaffold and structure the engine:**
-1. **skills/engines/rails-engine-author** — Design and scaffold
-   - Namespace isolation
-   - Directory structure
-   - Initial gemspec configuration
+1. **skills/engines/rails-engine-author** — Design and scaffold namespace isolation, directory structure, and gemspec configuration
+
+**Kickoff command:**
+```bash
+rails plugin new my_engine --mountable --skip-test
+```
+
+**Expected directory structure after scaffolding:**
+```
+my_engine/
+  app/
+  config/routes.rb
+  lib/my_engine/engine.rb
+  lib/my_engine/version.rb
+  lib/my_engine.rb
+  my_engine.gemspec
+  test/dummy/
+```
 
 **HARD GATE — Engine Structure Check:**
-- Proper namespace (e.g., `MyEngine::` not `::`)
-- Isolated migrations
-- Dummy app configured
-- Gemspec metadata complete
+```bash
+# Verify namespace isolation
+grep -r 'module MyEngine' lib/my_engine/engine.rb
+
+# Verify gemspec metadata is complete
+ruby -e "require 'rubygems'; spec = Gem::Specification.load('my_engine.gemspec'); puts spec.validate"
+
+# Verify isolated migrations declared
+grep 'isolate_namespace\|engine.config.isolate_namespace' lib/my_engine/engine.rb
+```
+
+- Proper namespace (`MyEngine::` not `::`)
+- Isolated migrations and dummy app configured
+- Gemspec metadata passes `gem specification` validation
 
 **If structure check FAILS:** Return to rails-engine-author and fix.
 
@@ -43,21 +61,23 @@ Orchestrates the full lifecycle of Rails engine development from scaffolding to 
 
 **Proceed only after structure check passes.**
 
-1. **skills/engines/rails-engine-testing** — Set up test infrastructure
-   - Dummy app for testing
-   - Engine-specific spec helpers
-   - Factories isolation
-   - Test database configuration
+1. **skills/engines/rails-engine-testing** — Set up dummy app, spec helpers, factory isolation, and test database
 
 2. **Write initial characterization tests:**
    - Test engine mounting
    - Test generators if any
    - Test core functionality
 
+**Run tests from engine root:**
+```bash
+cd my_engine && bundle exec rspec
+```
+
 **HARD GATE — Tests Run:**
-- `bundle exec rspec` executes in engine directory
-- At least one test passes (engine loads)
-- No load path issues
+```bash
+bundle exec rspec --format progress 2>&1 | tail -5
+# Must show: no load errors, exit 0 or partial pass
+```
 
 ---
 
@@ -69,15 +89,15 @@ Orchestrates the full lifecycle of Rails engine development from scaffolding to 
    - rails-tdd-loop for complex features
    - Individual skills for simple additions
 
-2. **skills/engines/rails-engine-reviewer** — Architecture review
-   - Coupling assessment
-   - API surface design
-   - Host app integration points
+2. **skills/engines/rails-engine-reviewer** — Coupling assessment, API surface design, host app integration points
 
-3. **skills/engines/rails-engine-compatibility** — Version matrix
-   - Rails version compatibility
-   - Ruby version support
-   - Dependency constraints
+3. **skills/engines/rails-engine-compatibility** — Rails/Ruby version matrix and dependency constraints
+
+**Check gem dependencies:**
+```bash
+bundle exec rake dependencies
+bundle exec bundler-audit check --update
+```
 
 ---
 
@@ -85,22 +105,19 @@ Orchestrates the full lifecycle of Rails engine development from scaffolding to 
 
 **Prepare for publication:**
 
-1. **skills/engines/rails-engine-docs** — Comprehensive documentation
-   - Installation instructions
-   - Configuration guide
-   - Usage examples
-   - Changelog
+1. **skills/engines/rails-engine-docs** — Installation, configuration, usage examples, changelog
 
-2. **skills/engines/rails-engine-release** — Versioned release
-   - Version bump (follow SemVer)
-   - Changelog updates
-   - Upgrade notes
-   - Git tag creation
+2. **skills/engines/rails-engine-release** — Version bump (SemVer), changelog, upgrade notes, git tag
+
+**Release commands:**
+```bash
+gem build my_engine.gemspec
+gem push my_engine-1.0.0.gem
+git tag v1.0.0 && git push origin v1.0.0
+```
 
 **Optional:**
-3. **skills/engines/rails-engine-installers** — Idempotent install generator
-   - `rails g my_engine:install` works
-   - Host app configuration automated
+3. **skills/engines/rails-engine-installers** — Idempotent `rails g my_engine:install` generator for host app configuration
 
 **Output:** Published gem or releasable GitHub repository.
 
@@ -123,32 +140,15 @@ Not sure?          → rails-skills-orchestrator
 3. Migrations won't conflict
 4. Dependencies clearly declared
 
-**Why:** Poorly isolated engines create coupling nightmares.
-
 ## Output Style
 
-**Engine Release Checklist:**
+**Engine Release Checklist (abbreviated):**
 ```markdown
 # Engine Release — v1.0.0
-
-## Structure
 - [x] Namespace isolation: MyEngine::
-- [x] Dummy app: Configured
-- [x] Migrations: Isolated and reversible
-
-## Testing
-- [x] Test suite: 42 tests, all passing
-- [x] Compatibility: Rails 7.0, 7.1; Ruby 3.1, 3.2
-
-## Documentation
-- [x] README: Installation, usage, examples
-- [x] Changelog: v1.0.0 changes documented
-- [x] Upgrade notes: N/A (initial release)
-
-## Release
-- [x] Version bumped in gemspec
+- [x] Test suite: passing
+- [x] README and Changelog updated
 - [x] Git tag: v1.0.0
-- [x] Pushed to RubyGems (if public)
 ```
 
 ## Integration

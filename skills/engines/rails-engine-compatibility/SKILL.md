@@ -52,7 +52,7 @@ strategy:
 ## Pitfalls
 
 | Problem | Correct approach |
-|---------|-----------------|
+|---------|------------------|
 | `Rails.version` branching | Use `respond_to?`, `defined?`, or adapter seams — version checks are brittle |
 | Zeitwerk file/constant mismatch | File path must mirror constant name exactly — `my_engine/widget_policy.rb` → `MyEngine::WidgetPolicy` |
 | Broad gemspec constraints without CI | Claiming `>= 5.2` without testing 5.2/6.x is silent incompatibility |
@@ -74,7 +74,7 @@ if ActiveSupport::Cache.respond_to?(:format_version=)
 end
 ```
 
-See [EXAMPLES.md](./EXAMPLES.md) for gemspec bounds, Zeitwerk file/constant naming, reload-safe hooks, and CI matrix YAML.
+If an EXAMPLES.md is present in the repository, consult it for additional patterns covering gemspec bounds, Zeitwerk file/constant naming, reload-safe hooks, and CI matrix YAML. If not, the Pitfalls table and Key Example above cover the most common cases.
 
 ## Output Style
 
@@ -95,5 +95,7 @@ When asked to improve compatibility:
 
 ## Assets
 
-- [assets/compatibility_matrix.md](assets/compatibility_matrix.md)
-- [assets/zeitwerk_notes.md](assets/zeitwerk_notes.md)
+The following supplementary files may be present in the repository. Consult them if available; the skill body above is self-contained if they are not.
+
+- [assets/compatibility_matrix.md](assets/compatibility_matrix.md) — version support matrix template
+- [assets/zeitwerk_notes.md](assets/zeitwerk_notes.md) — extended Zeitwerk naming and configuration notes

@@ -2,10 +2,11 @@
 name: rails-api-versioning
 license: MIT
 description: >
-  Implement REST API versioning strategies in Rails. Covers URL path versioning,
+  Implements REST API versioning strategies in Rails, covering URL path versioning,
   header-based versioning, deprecation policies, and maintaining backward
-  compatibility. Trigger words: API versioning, version, deprecation,
-  backward compatibility, v1, v2, API evolution.
+  compatibility across versions. Use when adding a new API version (v1, v2),
+  planning API evolution, setting deprecation or sunset policies, or ensuring
+  backward compatibility for existing consumers.
 ---
 
 # Rails API Versioning
@@ -70,9 +71,11 @@ module V2
 end
 ```
 
+See [references/strategies.md](references/strategies.md) for a full URL path vs. Accept header comparison.
+
 ## Deprecation
 
-Define the `Deprecatable` concern to emit `Sunset` and `Deprecation` response headers:
+Define the `Deprecatable` concern to emit `Sunset` and `Deprecation` response headers. The inline implementation below is the canonical reference; a copy also lives in `app/controllers/concerns/deprecatable.rb`.
 
 ```ruby
 # app/controllers/concerns/deprecatable.rb

@@ -17,11 +17,11 @@ Integration matrix: which skill connects to which and in what order.
 ### TDD Feature Loop (Main)
 
 ```text
-rails-context-engineering
+skills/context/rails-context-engineering
     ↓
-rails-tdd-slices
+skills/testing/rails-tdd-slices
     ↓
-rspec-best-practices → [checkpoint: Test Feedback]
+skills/testing/rspec-best-practices → [checkpoint: Test Feedback]
     ↓
 [checkpoint: Implementation Proposal]
     ↓
@@ -29,15 +29,15 @@ Implement
     ↓
 [gate: Linters + Full Suite]
     ↓
-yard-documentation
+skills/patterns/yard-documentation
     ↓
-rails-code-review → rails-review-response (if feedback) → PR
+rails-code-review → skills/code-quality/rails-review-response (if feedback) → PR
 ```
 
 ### Feature from Scratch
 
 ```text
-rails-context-engineering
+skills/context/rails-context-engineering
     ↓
 create-prd → [gate: PRD approved]
     ↓
@@ -49,11 +49,11 @@ generate-tasks
 ### Feature DDD-First
 
 ```text
-rails-context-engineering
+skills/context/rails-context-engineering
     ↓
 create-prd
     ↓
-ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling
+skills/ddd/ddd-ubiquitous-language → skills/ddd/ddd-boundaries-review → skills/ddd/ddd-rails-modeling
     ↓
 generate-tasks
     ↓

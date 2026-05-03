@@ -24,13 +24,22 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 ---
 
 - **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
-- **Bootstrap discovery skill:** `[rails-skills-orchestrator](rails-skills-orchestrator/)` (session hook loads `rails-skills-orchestrator/SKILL.md` where applicable)
+- **Bootstrap discovery skill:** `[rails-skills-orchestrator](skills/orchestration/rails-skills-orchestrator/)` (session hook loads orchestrator)
 - **Documentation:** [docs/README.md](docs/README.md) — Complete guides and workflows
-- **Workflows by Stage:** [docs/workflows/](docs/workflows/) — Step-by-step workflows (Discovery → Planning → Development → Quality → Review → Engines)
-- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 34+ skills with trigger words
+- **Workflows:** [docs/workflows/](docs/workflows/) — Reference docs + callable workflow skills
+- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 38+ skills organized by category
 - **Integration Matrix:** [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) — Skill chaining and workflows
 - **Skill structure:** [docs/architecture.md](docs/architecture.md)
 - **Eval optimization:** [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) — baseline-vs-context targets and the per-skill loop used to lift scores
+
+### Quick Start — Which Skill to Use?
+
+| Goal | Skill |
+|------|-------|
+| Implement feature with TDD | `skills/workflows/rails-tdd-loop` |
+| Review PR | `skills/workflows/rails-review-flow` |
+| Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` |
+| Not sure where to start | `skills/orchestration/rails-skills-orchestrator` |
 
 ## Methodology
 
@@ -71,7 +80,7 @@ Why this matters:
 Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The primary daily workflow is:
 
 ```text
-rails-tdd-slices → rspec-best-practices (write failing test)
+skills/testing/rails-tdd-slices → skills/testing/rspec-best-practices (write failing test)
     ↓
 [CHECKPOINT: Test Design Review — confirm boundary, behavior, edge cases]
     ↓
@@ -81,9 +90,9 @@ Implement (minimal code to pass test) → Refactor
     ↓
 [GATE: Linters + Full Test Suite]
     ↓
-yard-documentation → Update docs
+skills/patterns/yard-documentation → Update docs
     ↓
-rails-code-review (self-review) → rails-review-response (on feedback)
+skills/code-quality/rails-code-review (self-review) → skills/code-quality/rails-review-response (on feedback)
     ↓
 PR
 ```
@@ -98,7 +107,7 @@ This library intentionally reuses proven patterns from broader agent-skill libra
 
 
 | Reused pattern                         | Rails-first destination in this repo                                       |
-| -------------------------------------- | -------------------------------------------------------------------------- |
+| ----------------------------------------| ----------------------------------------------------------------------------|
 | PRD interview + scope control          | `create-prd`                                                               |
 | Planning from requirements             | `generate-tasks`                                                           |
 | TDD loop and smallest safe slice       | `rspec-best-practices` + `rails-tdd-slices`                                |
@@ -120,22 +129,22 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 **Step 1: Planning & Task Breakdown**
 
 - **Action:** Define the feature's requirements.
-  - **Use Skill:** [create-prd](create-prd/)
+  - **Use Skill:** [create-prd](skills/planning/create-prd/)
 - **Then:** Break the PRD into a detailed, TDD-ready checklist.
-  - **Use Skill:** [generate-tasks](generate-tasks/)
+  - **Use Skill:** [generate-tasks](skills/planning/generate-tasks/)
 
 **Step 2: Start the TDD Cycle**
 
 - **Action:** Pick the first, highest-value "slice" of behavior from your task list.
 - **Action:** Get guidance on choosing the right *type* of test to write first (e.g., a request spec).
-  - **Use Skill:** [rails-tdd-slices](rails-tdd-slices/)
+  - **Use Skill:** [rails-tdd-slices](skills/testing/rails-tdd-slices/)
 - **Action:** Write the first failing test. **Crucially, run it and watch it fail.**
-  - **Use Skill:** [rspec-best-practices](rspec-best-practices/)
+  - **Use Skill:** [rspec-best-practices](skills/testing/rspec-best-practices/)
 
 **Step 3: Implementation**
 
 - **Action:** Write the minimum amount of application code required to make your failing test pass.
-  - **Use Skills:** [ruby-service-objects](ruby-service-objects/) for business logic, [rails-code-conventions](rails-code-conventions/) for general code quality.
+  - **Use Skills:** [ruby-service-objects](skills/patterns/ruby-service-objects/) for business logic, [rails-code-conventions](skills/code-quality/rails-code-conventions/) for general code quality.
 
 **Step 4: Verification**
 
@@ -145,14 +154,14 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 **Step 5: Documentation & Self-Review**
 
 - **Action:** Add inline documentation to any new public classes or methods.
-  - **Use Skill:** [yard-documentation](yard-documentation/)
+  - **Use Skill:** [yard-documentation](skills/patterns/yard-documentation/)
 - **Action:** Perform a self-review of your changes.
-  - **Use Skill:** [rails-code-review](rails-code-review/)
+  - **Use Skill:** [rails-code-review](skills/code-quality/rails-code-review/)
 
 **Step 6: Responding to Peer Review**
 
 - **Action:** When you receive feedback from teammates, evaluate and implement their suggestions systematically.
-  - **Use Skill:** [rails-review-response](rails-review-response/)
+  - **Use Skill:** [rails-review-response](skills/code-quality/rails-review-response/)
 
 *For more detailed diagrams of these flows, see the **[Workflows Index](docs/workflows/)**.*
 
@@ -239,9 +248,9 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                               | Description                                                                  |
 | ----------------------------------- | ---------------------------------------------------------------------------- |
-| [create-prd](create-prd/)           | Generate Product Requirements Documents from feature descriptions            |
-| [generate-tasks](generate-tasks/)   | Break down PRDs into step-by-step implementation task lists                  |
-| [ticket-planning](ticket-planning/) | Draft or create tickets from plans; sprint placement and classification |
+| [create-prd](skills/planning/create-prd/)           | Generate Product Requirements Documents from feature descriptions            |
+| [generate-tasks](skills/planning/generate-tasks/)   | Break down PRDs into step-by-step implementation task lists                  |
+| [ticket-planning](skills/planning/ticket-planning/) | Draft or create tickets from plans; sprint placement and classification |
 
 
 ### Rails Code Quality
@@ -249,21 +258,21 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                                                         | Description                                                                                              |
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [rails-code-review](rails-code-review/)                       | Review Rails code following The Rails Way conventions — giving a review                                  |
-| [rails-review-response](rails-review-response/)               | Respond to review feedback — evaluate, push back, implement safely, trigger re-review                    |
-| [rails-architecture-review](rails-architecture-review/)       | Review application structure, boundaries, and responsibilities                                           |
-| [rails-security-review](rails-security-review/)               | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities                                               |
-| [rails-migration-safety](rails-migration-safety/)             | Plan production-safe database migrations                                                                 |
-| [rails-stack-conventions](rails-stack-conventions/)           | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions                                                |
-| [rails-code-conventions](rails-code-conventions/)             | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
-| [rails-background-jobs](rails-background-jobs/)               | Design idempotent background jobs with Active Job / Solid Queue                                          |
-| [rails-graphql-best-practices](rails-graphql-best-practices/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby      |
-| [rails-authorization-policies](rails-authorization-policies/) | Pundit/CanCanCan, roles, permissions, policy objects                                                  |
-| [rails-performance-optimization](rails-performance-optimization/) | N+1 prevention, profiling, caching, query optimization                                                |
-| [rails-api-versioning](rails-api-versioning/) | REST API versioning strategies and deprecation policies                                              |
-| [rails-database-seeding](rails-database-seeding/) | Fixtures vs Seeds for dev/test data management                                                         |
-| [rails-frontend-hotwire](rails-frontend-hotwire/) | Turbo/Stimulus integration patterns                                                                    |
-| [api-rest-collection](api-rest-collection/)                   | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL           |
+| [rails-code-review](skills/code-quality/rails-code-review/)                       | Review Rails code following The Rails Way conventions — giving a review                                  |
+| [rails-review-response](skills/code-quality/rails-review-response/)               | Respond to review feedback — evaluate, push back, implement safely, trigger re-review                    |
+| [rails-architecture-review](skills/code-quality/rails-architecture-review/)       | Review application structure, boundaries, and responsibilities                                           |
+| [rails-security-review](skills/code-quality/rails-security-review/)               | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities                                               |
+| [rails-migration-safety](skills/infrastructure/rails-migration-safety/)             | Plan production-safe database migrations                                                                 |
+| [rails-stack-conventions](skills/code-quality/rails-stack-conventions/)           | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions                                                |
+| [rails-code-conventions](skills/code-quality/rails-code-conventions/)             | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
+| [rails-background-jobs](skills/infrastructure/rails-background-jobs/)               | Design idempotent background jobs with Active Job / Solid Queue                                          |
+| [rails-graphql-best-practices](skills/api/rails-graphql-best-practices/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby      |
+| [rails-authorization-policies](skills/code-quality/rails-authorization-policies/) | Pundit/CanCanCan, roles, permissions, policy objects                                                  |
+| [rails-performance-optimization](skills/infrastructure/rails-performance-optimization/) | N+1 prevention, profiling, caching, query optimization                                                |
+| [rails-api-versioning](skills/infrastructure/rails-api-versioning/) | REST API versioning strategies and deprecation policies                                              |
+| [rails-database-seeding](skills/infrastructure/rails-database-seeding/) | Fixtures vs Seeds for dev/test data management                                                         |
+| [rails-frontend-hotwire](skills/infrastructure/rails-frontend-hotwire/) | Turbo/Stimulus integration patterns                                                                    |
+| [api-rest-collection](skills/api/api-rest-collection/)                   | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL           |
 
 
 ### DDD & Domain Modeling
@@ -271,9 +280,9 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                                               | Description                                                                                        |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [ddd-ubiquitous-language](ddd-ubiquitous-language/) | Build a shared domain glossary, resolve synonyms, and clarify business terminology                 |
-| [ddd-boundaries-review](ddd-boundaries-review/)     | Review bounded contexts, ownership, and language leakage in Rails codebases                        |
-| [ddd-rails-modeling](ddd-rails-modeling/)           | Map DDD concepts to Rails models, services, value objects, and boundaries without over-engineering |
+| [ddd-ubiquitous-language](skills/ddd/ddd-ubiquitous-language/) | Build a shared domain glossary, resolve synonyms, and clarify business terminology                 |
+| [ddd-boundaries-review](skills/ddd/ddd-boundaries-review/)     | Review bounded contexts, ownership, and language leakage in Rails codebases                        |
+| [ddd-rails-modeling](skills/ddd/ddd-rails-modeling/)           | Map DDD concepts to Rails models, services, value objects, and boundaries without over-engineering |
 
 
 ### Ruby Patterns
@@ -281,10 +290,10 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                                                                 | Description                                                                  |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [ruby-service-objects](ruby-service-objects/)                         | Build service objects with .call, standardized responses, transactions       |
-| [ruby-api-client-integration](ruby-api-client-integration/)           | Integrate external APIs with the layered Auth/Client/Fetcher/Builder pattern |
-| [strategy-factory-null-calculator](strategy-factory-null-calculator/) | Implement variant-based calculators with Strategy + Factory + Null Object    |
-| [yard-documentation](yard-documentation/)                             | Write YARD docs for Ruby classes and public methods (all output in English)  |
+| [ruby-service-objects](skills/patterns/ruby-service-objects/)                         | Build service objects with .call, standardized responses, transactions       |
+| [ruby-api-client-integration](skills/api/ruby-api-client-integration/)           | Integrate external APIs with the layered Auth/Client/Fetcher/Builder pattern |
+| [strategy-factory-null-calculator](skills/patterns/strategy-factory-null-calculator/) | Implement variant-based calculators with Strategy + Factory + Null Object    |
+| [yard-documentation](skills/patterns/yard-documentation/)                             | Write YARD docs for Ruby classes and public methods (all output in English)  |
 
 
 ### Context & Setup
@@ -292,8 +301,8 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                                                       | Description                                                                                   |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| [rails-context-engineering](rails-context-engineering/)     | Load schema, routes, nearest patterns before any code/spec/PRD — surface ambiguity explicitly |
-| [rails-project-onboarding](rails-project-onboarding/) | Complete dev environment setup (Docker, env vars, database)                               |
+| [rails-context-engineering](skills/context/rails-context-engineering/)     | Load schema, routes, nearest patterns before any code/spec/PRD — surface ambiguity explicitly |
+| [rails-project-onboarding](skills/context/rails-project-onboarding/) | Complete dev environment setup (Docker, env vars, database)                               |
 
 
 ### Testing
@@ -301,10 +310,10 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                                           | Description                                                                |
 | ----------------------------------------------- | -------------------------------------------------------------------------- |
-| [rspec-best-practices](rspec-best-practices/)   | Write maintainable, deterministic RSpec tests with TDD discipline          |
-| [rails-tdd-slices](rails-tdd-slices/)           | Pick the best first failing spec for a Rails change before implementation  |
-| [rails-bug-triage](rails-bug-triage/)           | Turn a Rails bug report into a reproducible failing spec and fix plan      |
-| [rspec-service-testing](rspec-service-testing/) | Test service objects with instance_double, hash factories, shared_examples |
+| [rspec-best-practices](skills/testing/rspec-best-practices/)   | Write maintainable, deterministic RSpec tests with TDD discipline          |
+| [rails-tdd-slices](skills/testing/rails-tdd-slices/)           | Pick the best first failing spec for a Rails change before implementation  |
+| [rails-bug-triage](skills/testing/rails-bug-triage/)           | Turn a Rails bug report into a reproducible failing spec and fix plan      |
+| [rspec-service-testing](skills/testing/rspec-service-testing/) | Test service objects with instance_double, hash factories, shared_examples |
 
 
 ### Rails Engines
@@ -312,14 +321,14 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                                                     | Description                                                       |
 | --------------------------------------------------------- | ----------------------------------------------------------------- |
-| [rails-engine-author](rails-engine-author/)               | Design and scaffold Rails engines with proper namespace isolation |
-| [rails-engine-testing](rails-engine-testing/)             | Set up dummy apps and engine-specific specs                       |
-| [rails-engine-reviewer](rails-engine-reviewer/)           | Review engine architecture, coupling, and maintainability         |
-| [rails-engine-release](rails-engine-release/)             | Prepare versioned releases with changelogs and upgrade notes      |
-| [rails-engine-docs](rails-engine-docs/)                   | Write comprehensive engine documentation                          |
-| [rails-engine-installers](rails-engine-installers/)       | Create idempotent install generators                              |
-| [rails-engine-extraction](rails-engine-extraction/)       | Extract host app code into engines incrementally                  |
-| [rails-engine-compatibility](rails-engine-compatibility/) | Maintain cross-version compatibility                              |
+| [rails-engine-author](skills/engines/rails-engine-author/)               | Design and scaffold Rails engines with proper namespace isolation |
+| [rails-engine-testing](skills/engines/rails-engine-testing/)             | Set up dummy apps and engine-specific specs                       |
+| [rails-engine-reviewer](skills/engines/rails-engine-reviewer/)           | Review engine architecture, coupling, and maintainability         |
+| [rails-engine-release](skills/engines/rails-engine-release/)             | Prepare versioned releases with changelogs and upgrade notes      |
+| [rails-engine-docs](skills/engines/rails-engine-docs/)                   | Write comprehensive engine documentation                          |
+| [rails-engine-installers](skills/engines/rails-engine-installers/)       | Create idempotent install generators                              |
+| [rails-engine-extraction](skills/engines/rails-engine-extraction/)       | Extract host app code into engines incrementally                  |
+| [rails-engine-compatibility](skills/engines/rails-engine-compatibility/) | Maintain cross-version compatibility                              |
 
 
 ### Refactoring
@@ -327,7 +336,7 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                               | Description                                                      |
 | ----------------------------------- | ---------------------------------------------------------------- |
-| [refactor-safely](refactor-safely/) | Restructure code with characterization tests and safe extraction |
+| [refactor-safely](skills/code-quality/refactor-safely/) | Restructure code with characterization tests and safe extraction |
 
 
 ### Meta
@@ -335,7 +344,7 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 | Skill                                            | Description                                                    |
 | ------------------------------------------------ | -------------------------------------------------------------- |
-| [rails-skills-orchestrator](rails-skills-orchestrator/) | Discover and invoke the right skill for the current Rails task |
+| [rails-skills-orchestrator](skills/orchestration/rails-skills-orchestrator/) | Discover and invoke the right skill for the current Rails task |
 | [docs/skill-template.md](docs/skill-template.md) | Authoring template and checklist for expanding the library     |
 
 

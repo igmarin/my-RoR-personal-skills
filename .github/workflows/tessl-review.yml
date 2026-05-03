@@ -32,6 +32,7 @@ jobs:
         run: |
           while IFS= read -r dir; do
             [ -z "$dir" ] && continue
+            [ ! -d "$dir" ] && echo "Skipping $dir (directory not found)" && continue
             echo "── Reviewing $dir ──"
             cd "$dir"
             tessl skill review

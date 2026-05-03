@@ -17,6 +17,8 @@ module Evaluator
         # @return [Pathname] The fully expanded and secure path.
         # @raise [RuntimeError] If the path attempts to traverse outside the working directory.
         def secure_path(path, working_dir_path)
+          validate_relative_path!(path)
+
           working_dir_real = working_dir_path.realpath
           full_path = working_dir_real.join(path).expand_path
           raise "Path traversal is not allowed: #{path}" unless full_path.to_s.start_with?(working_dir_real.to_s)
@@ -27,6 +29,24 @@ module Evaluator
         end
 
         private
+
+        def validate_relative_path!(path)
+          raise 'Path must be a string' unless path.is_a?(String)
+
+          normalized = path.strip
+          raise 'Path must not be empty' if normalized.empty?
+          raise "Absolute paths are not allowed: #{path}" if normalized.start_with?('/', '\\')
+          raise "Backslashes are not allowed in paths: #{path}" if normalized.include?('\\')
+
+          segments = normalized.split('/')
+          raise "Invalid path: #{path}" if segments.empty? || segments.any?(&:empty?)
+          raise "Path traversal is not allowed: #{path}" if segments.any? { |s| s == '.' || s == '..' }
+          raise "Invalid characters in path: #{path}" unless segments.all? { |s| valid_path_segment?(s) }
+        end
+
+        def valid_path_segment?(segment)
+          segment.match?(/\A[a-zA-Z0-9._-]+\z/) && segment.count('.') <= 1
+        end
 
         def verify_symlink_safety(full_path, working_dir_real, original_path)
           path_to_check = full_path.exist? ? full_path : full_path.dirname

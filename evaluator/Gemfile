@@ -2,10 +2,8 @@
 
 source 'https://rubygems.org'
 
-gem 'cgi', '~> 0.5.1'
-gem 'dotenv'
-gem 'faraday'
-gem 'json'
+# Runtime dependencies are declared in agent_evaluator.gemspec.
+gemspec
 
 group :development, :test do
   gem 'minitest', '~> 5.0'

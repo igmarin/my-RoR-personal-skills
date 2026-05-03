@@ -1,5 +1,8 @@
-#!/usr/bin/env ruby
+#!/Users/igmarin/.rbenv/versions/4.0.2/bin/ruby
 # frozen_string_literal: true
+
+$stdout.sync = true
+$stderr.sync = true
 
 require 'optparse'
 require 'json'
@@ -26,36 +29,39 @@ if options[:eval].nil? || options[:skill].nil?
   exit 1
 end
 
+result = Evaluator::Runner.call(
+  eval_folder_path: options[:eval],
+  skill_path: options[:skill]
+)
+
+puts "\n========================================="
+puts '              RESULTS                    '
+puts "=========================================\n"
+
+unless result[:success]
+  puts "Evaluation failed: #{result[:response][:error][:message]}"
+  exit 1
+end
+
+response = result[:response]
+
 begin
-  runner = Evaluator::Runner.new
-  result = runner.evaluate(options[:eval], options[:skill])
+  parsed_judge = JSON.parse(response[:judge_score])
+  puts "Baseline Score: #{parsed_judge['baseline_score']}/100"
+  puts "Context Score:  #{parsed_judge['context_score']}/100"
+  puts "\nReasoning:"
+  puts parsed_judge['reasoning']
 
   puts "\n========================================="
-  puts '              RESULTS                    '
+  puts '        BASELINE CODE CHANGES            '
   puts "=========================================\n"
+  puts response[:baseline_diff]
 
-  begin
-    parsed_judge = JSON.parse(result[:judge_score])
-    puts "Baseline Score: #{parsed_judge['baseline_score']}/100"
-    puts "Context Score:  #{parsed_judge['context_score']}/100"
-    puts "\nReasoning:"
-    puts parsed_judge['reasoning']
-
-    puts "\n========================================="
-    puts '        BASELINE CODE CHANGES            '
-    puts "=========================================\n"
-    puts result[:baseline_diff]
-
-    puts "\n========================================="
-    puts '        CONTEXT CODE CHANGES             '
-    puts "=========================================\n"
-    puts result[:context_diff]
-  rescue JSON::ParserError
-    puts 'Could not parse judge JSON response. Raw output:'
-    puts result[:judge_score]
-  end
-rescue StandardError => e
-  puts "Evaluation failed: #{e.message}"
-  puts e.backtrace.join("\n")
-  exit 1
+  puts "\n========================================="
+  puts '        CONTEXT CODE CHANGES             '
+  puts "=========================================\n"
+  puts response[:context_diff]
+rescue JSON::ParserError
+  puts 'Could not parse judge JSON response. Raw output:'
+  puts response[:judge_score]
 end

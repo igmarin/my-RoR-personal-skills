@@ -6,6 +6,11 @@ module Evaluator
   module Tools
     # Tests for Evaluator::Tools::RunCommand
     class RunCommandTest < Minitest::Test
+      def setup
+        # Reset config to allow all commands
+        Evaluator::Config.reset
+      end
+
       def test_call_executes_command
         Dir.mktmpdir do |dir|
           working_dir = Pathname.new(dir).expand_path

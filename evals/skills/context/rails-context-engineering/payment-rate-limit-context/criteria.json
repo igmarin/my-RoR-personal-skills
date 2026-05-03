@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent loads project context correctly before coding — reading schema, routes, and existing patterns — and surfaces key ambiguities rather than jumping into implementation, as prescribed by the rails-context-engineering skill.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Context analysis document created",
+      "max_score": 8,
+      "description": "A docs/context_analysis.md file is produced"
+    },
+    {
+      "name": "Schema summary accurate",
+      "max_score": 12,
+      "description": "The schema summary correctly identifies the payments, users, and rate_limit_rules tables with their key fields and infers that users have a rate_limit_exempt flag"
+    },
+    {
+      "name": "Route map complete",
+      "max_score": 10,
+      "description": "The route map lists all 5 routes: GET /api/v1/payments, POST /api/v1/payments, GET /api/v1/payments/:id, GET /api/v1/users/:id, PATCH /api/v1/users/:id"
+    },
+    {
+      "name": "Nearest pattern identified",
+      "max_score": 12,
+      "description": "The analysis references CreatePaymentService as the nearest pattern and notes it uses the .call + { success:, response: } service object convention"
+    },
+    {
+      "name": "At least 3 ambiguities raised",
+      "max_score": 15,
+      "description": "The ambiguities section contains at least 3 concrete questions — e.g. storage backend (Redis vs DB), HTTP response code on limit exceeded, whether rate_limit_exempt bypasses all rules"
+    },
+    {
+      "name": "Proposed integration point",
+      "max_score": 12,
+      "description": "The analysis proposes a specific integration point for rate limiting (e.g. controller concern, Rack middleware, or service object) with brief reasoning"
+    },
+    {
+      "name": "rate_limit_rules table leveraged",
+      "max_score": 8,
+      "description": "The analysis acknowledges the existing rate_limit_rules table and considers whether it should drive the rate limiting logic"
+    },
+    {
+      "name": "No implementation code written",
+      "max_score": 10,
+      "description": "The agent produces only the context analysis document — no Ruby service classes, specs, or migrations are generated"
+    },
+    {
+      "name": "Markdown structure",
+      "max_score": 7,
+      "description": "The document uses clear Markdown headings for each section"
+    },
+    {
+      "name": "English only",
+      "max_score": 6,
+      "description": "All text in the analysis is written in English"
+    }
+  ]
+}

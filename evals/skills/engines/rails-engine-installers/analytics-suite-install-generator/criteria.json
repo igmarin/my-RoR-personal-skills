@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent correctly implements a Rails engine install generator using Rails::Generators::Base, Rails::Generators::Migration, copy_file, migration_template, route, and say — following the rails-engine-installers skill.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Generator file created",
+      "max_score": 8,
+      "description": "A file is created at lib/generators/analytics_suite/install/install_generator.rb"
+    },
+    {
+      "name": "Inherits from Rails::Generators::Base",
+      "max_score": 10,
+      "description": "The generator class inherits from Rails::Generators::Base"
+    },
+    {
+      "name": "Includes Rails::Generators::Migration",
+      "max_score": 10,
+      "description": "The generator includes Rails::Generators::Migration to support migration_template"
+    },
+    {
+      "name": "self.next_migration_number implemented",
+      "max_score": 10,
+      "description": "The generator implements self.next_migration_number correctly (typically using Time.now.utc.strftime or ActiveRecord::Generators::Base pattern)"
+    },
+    {
+      "name": "copy_file for initializer",
+      "max_score": 10,
+      "description": "The generator uses copy_file to install the initializer into config/initializers/analytics_suite.rb"
+    },
+    {
+      "name": "migration_template for migration",
+      "max_score": 12,
+      "description": "The generator uses migration_template to copy create_analytics_events.rb into db/migrate/ with a timestamped filename"
+    },
+    {
+      "name": "route injection",
+      "max_score": 10,
+      "description": "The generator calls route('mount AnalyticsSuite::Engine => \"/analytics\"') or equivalent to add the mount to config/routes.rb"
+    },
+    {
+      "name": "say post-install message",
+      "max_score": 8,
+      "description": "The generator ends with a say call that prints post-install instructions (e.g. how to set ANALYTICS_SUITE_KEY)"
+    },
+    {
+      "name": "template file present",
+      "max_score": 8,
+      "description": "The initializer template exists in lib/generators/analytics_suite/install/templates/ (or the install dir)"
+    },
+    {
+      "name": "frozen_string_literal",
+      "max_score": 6,
+      "description": "All Ruby files produced include # frozen_string_literal: true"
+    },
+    {
+      "name": "Namespace correct",
+      "max_score": 8,
+      "description": "The generator class is named AnalyticsSuite::InstallGenerator and is within the AnalyticsSuite namespace"
+    }
+  ]
+}

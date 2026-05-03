@@ -1,3 +1,12 @@
+PATH
+  remote: .
+  specs:
+    rails-agent-evaluator (0.0.1)
+      cgi (~> 0.5.1)
+      dotenv (~> 3.2.0)
+      faraday (~> 2.14)
+      json (~> 2.19)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -179,12 +188,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  cgi (~> 0.5.1)
-  dotenv
-  faraday
-  json
   minitest (~> 5.0)
   mocha (~> 2.1)
+  rails-agent-evaluator!
   rake (~> 13.4)
   reek (~> 6.5)
   rubocop (~> 1.70)
@@ -236,6 +242,7 @@ CHECKSUMS
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   public_suffix (7.0.5) sha256=1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
+  rails-agent-evaluator (0.0.1)
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
   reek (6.5.0) sha256=d26d3a492773b2bbc228888067a21afe33ac07954a17dbd64cdeae42c4c69be1

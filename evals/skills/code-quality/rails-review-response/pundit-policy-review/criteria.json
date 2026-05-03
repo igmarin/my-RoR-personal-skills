@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent can evaluate incoming code review comments, respond with agree/disagree reasoning for each, and implement the agreed-upon changes — following the rails-review-response skill's structured response format.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Review response document created",
+      "max_score": 8,
+      "description": "A docs/review_response.md file is produced that addresses all 4 review comments"
+    },
+    {
+      "name": "Comment 1 implemented correctly",
+      "max_score": 15,
+      "description": "update? now checks that the current user is the project owner (record.user == user) OR a team admin — not just user.present?"
+    },
+    {
+      "name": "Comment 2 refactoring applied",
+      "max_score": 10,
+      "description": "A private method (owner_or_admin? or similar) is extracted and both update? and destroy? delegate to it"
+    },
+    {
+      "name": "Comment 3 YARD added",
+      "max_score": 8,
+      "description": "Public policy methods (index?, show?, create?, update?, destroy?) have YARD @return [Boolean] documentation"
+    },
+    {
+      "name": "Comment 4 addressed in response",
+      "max_score": 8,
+      "description": "The review response explains why scope.all does not filter by active: true (either intentional with explanation, or a fix is applied)"
+    },
+    {
+      "name": "Agree/disagree labels in response",
+      "max_score": 8,
+      "description": "Each comment in docs/review_response.md is labeled Agree, Disagree, or Acknowledged with clear reasoning"
+    },
+    {
+      "name": "frozen_string_literal preserved",
+      "max_score": 5,
+      "description": "The updated policy file still has # frozen_string_literal: true"
+    },
+    {
+      "name": "No unrelated changes",
+      "max_score": 8,
+      "description": "The policy file has no changes beyond what the review comments requested (index?, show?, create? are unchanged)"
+    },
+    {
+      "name": "owner_or_admin? logic is correct",
+      "max_score": 10,
+      "description": "The private method checks both conditions correctly — record ownership AND admin role — using OR, not AND"
+    },
+    {
+      "name": "destroy? uses same logic as update?",
+      "max_score": 8,
+      "description": "destroy? delegates to owner_or_admin? (or the same logic as update?) after comment 2 is applied"
+    },
+    {
+      "name": "Response is professional",
+      "max_score": 6,
+      "description": "The review response is written in a respectful, constructive tone consistent with the rails-review-response skill expectations"
+    },
+    {
+      "name": "Scope class preserved",
+      "max_score": 6,
+      "description": "The Scope::resolve method is either kept as-is (with an explanatory comment) or updated with a clear rationale"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent produces a complete, actionable developer onboarding guide for a Rails API app using Docker, PostgreSQL, and Redis — following the rails-project-onboarding skill.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Onboarding doc created",
+      "max_score": 8,
+      "description": "A docs/onboarding.md file is produced"
+    },
+    {
+      "name": "Prerequisites section",
+      "max_score": 8,
+      "description": "The guide includes a Prerequisites section that lists Ruby 3.2.2 (or rbenv), Docker, and git"
+    },
+    {
+      "name": "bundle install step",
+      "max_score": 8,
+      "description": "The guide includes a step to run bundle install"
+    },
+    {
+      "name": ".env setup step",
+      "max_score": 10,
+      "description": "The guide instructs the engineer to copy .env.example to .env and fill in the required values"
+    },
+    {
+      "name": "Docker startup step",
+      "max_score": 10,
+      "description": "The guide includes docker-compose up -d (or equivalent) to start PostgreSQL and Redis"
+    },
+    {
+      "name": "Database setup step",
+      "max_score": 10,
+      "description": "The guide includes rails db:create db:migrate and optionally db:seed"
+    },
+    {
+      "name": "Test suite step",
+      "max_score": 8,
+      "description": "The guide includes a step to run the test suite (rspec or rails test)"
+    },
+    {
+      "name": "Server startup step",
+      "max_score": 8,
+      "description": "The guide includes rails server or bundle exec rails s"
+    },
+    {
+      "name": "Troubleshooting section",
+      "max_score": 10,
+      "description": "The guide has a Troubleshooting section with at least 3 common issues and solutions (e.g. port conflicts, missing .env, bundle install errors)"
+    },
+    {
+      "name": "Correct env vars referenced",
+      "max_score": 8,
+      "description": "The guide references DATABASE_URL and REDIS_URL from the .env.example (not hardcoded values)"
+    },
+    {
+      "name": "Step order is logical",
+      "max_score": 8,
+      "description": "The steps are in a logical sequence: clone → deps → env → Docker → DB → test → run"
+    },
+    {
+      "name": "English only",
+      "max_score": 4,
+      "description": "All text in the guide is in English"
+    }
+  ]
+}

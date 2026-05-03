@@ -1,0 +1,71 @@
+{
+  "mappings": [
+    {"intent": "write PRD", "skill": "create-prd", "path": "skills/planning/create-prd/SKILL.md", "examples": ["Create a product requirements document for a new feature to import CSVs"]},
+    {"intent": "generate tasks", "skill": "generate-tasks", "path": "skills/planning/generate-tasks/SKILL.md", "examples": ["Break down PRD into implementation tasks for backend and frontend"]},
+    {"intent": "create tickets", "skill": "ticket-planning", "path": "skills/planning/ticket-planning/SKILL.md", "examples": ["Create tickets from task list", "Create Jira tickets from this plan"]},
+    {"intent": "triage bug", "skill": "rails-bug-triage", "path": "skills/testing/rails-bug-triage/SKILL.md", "examples": ["Triage a production 500 error for orders#create", "Debug why checkout fails at midnight"]},
+    {"intent": "start TDD slice", "skill": "rails-tdd-slices", "path": "skills/testing/rails-tdd-slices/SKILL.md", "examples": ["Choose first failing spec for authentication flow", "Where do I start testing this feature?"]},
+    {"intent": "write tests", "skill": "rspec-best-practices", "path": "skills/testing/rspec-best-practices/SKILL.md", "examples": ["Write specs for the billing service", "How should I structure this test?"]},
+    {"intent": "test service object", "skill": "rspec-service-testing", "path": "skills/testing/rspec-service-testing/SKILL.md", "examples": ["Write specs for my payment processing service"]},
+    {"intent": "review code", "skill": "rails-code-review", "path": "skills/code-quality/rails-code-review/SKILL.md", "examples": ["Review this PR", "Check this controller for issues"]},
+    {"intent": "review architecture", "skill": "rails-architecture-review", "path": "skills/code-quality/rails-architecture-review/SKILL.md", "examples": ["This codebase feels messy", "Are my service boundaries right?"]},
+    {"intent": "security audit", "skill": "rails-security-review", "path": "skills/code-quality/rails-security-review/SKILL.md", "examples": ["Check this endpoint for vulnerabilities", "Does this have proper authorization?"]},
+    {"intent": "authorization policies", "skill": "rails-authorization-policies", "path": "skills/code-quality/rails-authorization-policies/SKILL.md", "examples": ["Add role-based access to admin endpoints", "Set up Pundit policies"]},
+    {"intent": "refactor", "skill": "refactor-safely", "path": "skills/code-quality/refactor-safely/SKILL.md", "examples": ["Refactor this fat controller", "Extract this logic cleanly"]},
+    {"intent": "code conventions", "skill": "rails-code-conventions", "path": "skills/code-quality/rails-code-conventions/SKILL.md", "examples": ["Check this code follows Rails conventions"]},
+    {"intent": "stack conventions", "skill": "rails-stack-conventions", "path": "skills/code-quality/rails-stack-conventions/SKILL.md", "examples": ["Writing for PostgreSQL + Hotwire + Tailwind stack"]},
+    {"intent": "respond to review", "skill": "rails-review-response", "path": "skills/code-quality/rails-review-response/SKILL.md", "examples": ["Address these review comments", "Respond to PR feedback"]},
+    {"intent": "service object", "skill": "ruby-service-objects", "path": "skills/patterns/ruby-service-objects/SKILL.md", "examples": ["Implement a service to sync users with external API", "Extract this into a service"]},
+    {"intent": "strategy pattern", "skill": "strategy-factory-null-calculator", "path": "skills/patterns/strategy-factory-null-calculator/SKILL.md", "examples": ["Build a calculator with variant dispatch", "Factory pattern for pricing"]},
+    {"intent": "documentation", "skill": "yard-documentation", "path": "skills/patterns/yard-documentation/SKILL.md", "examples": ["Add YARD docs to this module", "Document the public API"]},
+    {"intent": "domain language", "skill": "ddd-ubiquitous-language", "path": "skills/ddd/ddd-ubiquitous-language/SKILL.md", "examples": ["Define domain terms for invoicing", "What should we call this concept?"]},
+    {"intent": "bounded contexts", "skill": "ddd-boundaries-review", "path": "skills/ddd/ddd-boundaries-review/SKILL.md", "examples": ["Review context boundaries", "Check for language leakage across modules"]},
+    {"intent": "DDD modeling", "skill": "ddd-rails-modeling", "path": "skills/ddd/ddd-rails-modeling/SKILL.md", "examples": ["Map aggregates to Rails models", "Model this domain in Rails"]},
+    {"intent": "review rails engine", "skill": "rails-engine-reviewer", "path": "skills/engines/rails-engine-reviewer/SKILL.md", "examples": ["Review mountable engine for namespace leakage and migrations"]},
+    {"intent": "create engine", "skill": "rails-engine-author", "path": "skills/engines/rails-engine-author/SKILL.md", "examples": ["Scaffold a new mountable engine for notifications"]},
+    {"intent": "extract to engine", "skill": "rails-engine-extraction", "path": "skills/engines/rails-engine-extraction/SKILL.md", "examples": ["Extract the notification system into an engine"]},
+    {"intent": "safe migration", "skill": "rails-migration-safety", "path": "skills/infrastructure/rails-migration-safety/SKILL.md", "examples": ["Add a column without downtime", "Safe index on large table"]},
+    {"intent": "background job", "skill": "rails-background-jobs", "path": "skills/infrastructure/rails-background-jobs/SKILL.md", "examples": ["Process invoice PDFs asynchronously", "Set up Sidekiq job"]},
+    {"intent": "database seeding", "skill": "rails-database-seeding", "path": "skills/infrastructure/rails-database-seeding/SKILL.md", "examples": ["Set up seed data for development"]},
+    {"intent": "performance", "skill": "rails-performance-optimization", "path": "skills/infrastructure/rails-performance-optimization/SKILL.md", "examples": ["Fix N+1 queries on the dashboard", "Optimize slow page load"]},
+    {"intent": "api versioning", "skill": "rails-api-versioning", "path": "skills/infrastructure/rails-api-versioning/SKILL.md", "examples": ["Add v2 of the users API", "Deprecate v1 endpoints"]},
+    {"intent": "hotwire frontend", "skill": "rails-frontend-hotwire", "path": "skills/infrastructure/rails-frontend-hotwire/SKILL.md", "examples": ["Add Turbo Frames to this form", "Make this page interactive with Stimulus"]},
+    {"intent": "api collection", "skill": "api-rest-collection", "path": "skills/api/api-rest-collection/SKILL.md", "examples": ["Generate Postman collection for /api/v1/users endpoints"]},
+    {"intent": "graphql", "skill": "rails-graphql-best-practices", "path": "skills/api/rails-graphql-best-practices/SKILL.md", "examples": ["Build GraphQL API for product catalog"]},
+    {"intent": "api client", "skill": "ruby-api-client-integration", "path": "skills/api/ruby-api-client-integration/SKILL.md", "examples": ["Integrate with Stripe API", "Build HTTP client for external service"]},
+    {"intent": "load context", "skill": "rails-context-engineering", "path": "skills/context/rails-context-engineering/SKILL.md", "examples": ["Load schema and routes before coding", "What does this codebase use?"]},
+    {"intent": "onboarding", "skill": "rails-project-onboarding", "path": "skills/context/rails-project-onboarding/SKILL.md", "examples": ["I just joined this team", "Set up my dev environment"]}
+  ],
+  "defaults": {
+    "test_gate": "skills/testing/rspec-best-practices",
+    "tdd_flow": ["skills/testing/rails-tdd-slices", "skills/testing/rspec-best-practices"],
+    "review_flow": ["skills/code-quality/rails-code-review", "skills/code-quality/rails-review-response"],
+    "context_first": "skills/context/rails-context-engineering"
+  },
+  "disambiguation": {
+    "architecture_vs_code_review": "Use architecture-review when the question is about system shape, boundaries, or design; use code-review when the subject is a specific PR, file, or changeset.",
+    "tdd_slices_vs_rspec": "Use tdd-slices when the challenge is WHICH test to write first; use rspec-best-practices when the challenge is HOW to write or improve a test.",
+    "performance_vs_bug": "If slow behavior is intermittent, default to rails-bug-triage; if consistently slow with no errors, use rails-performance-optimization.",
+    "engine_author_vs_extraction": "Use rails-engine-author for greenfield engines; use rails-engine-extraction when pulling existing code into an engine."
+  },
+  "categories": {
+    "api": "skills/api/",
+    "code-quality": "skills/code-quality/",
+    "context": "skills/context/",
+    "ddd": "skills/ddd/",
+    "engines": "skills/engines/",
+    "infrastructure": "skills/infrastructure/",
+    "orchestration": "skills/orchestration/",
+    "patterns": "skills/patterns/",
+    "planning": "skills/planning/",
+    "testing": "skills/testing/",
+    "workflows": "skills/workflows/"
+  },
+  "workflows": {
+    "tdd-loop": "skills/workflows/rails-tdd-loop",
+    "review-flow": "skills/workflows/rails-review-flow",
+    "setup-flow": "skills/workflows/rails-setup-flow",
+    "quality-flow": "skills/workflows/rails-quality-flow",
+    "engines-flow": "skills/workflows/rails-engines-flow"
+  }
+}

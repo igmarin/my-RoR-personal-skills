@@ -10,13 +10,13 @@ Step-by-step guides for each stage of Rails development. Each workflow is a chai
 flowchart TD
     START([What do you need to do?]) --> DECISION{What stage are you at?}
 
-    DECISION -->|New project or setup| DISCOVERY[00-discovery]
-    DECISION -->|Plan feature| PLANNING[10-planning]
-    DECISION -->|Configure CI/CD or environment| SETUP[20-setup]
-    DECISION -->|Develop code| DEV[30-development]
-    DECISION -->|Review quality| QUALITY[40-quality]
-    DECISION -->|Code review| REVIEW[50-review]
-    DECISION -->|Build engine| ENGINES[60-engines]
+    DECISION -->|New project or setup| DISCOVERY[discovery]
+    DECISION -->|Plan feature| PLANNING[planning]
+    DECISION -->|Configure CI/CD or environment| SETUP[setup]
+    DECISION -->|Develop code| DEV[development]
+    DECISION -->|Review quality| QUALITY[quality]
+    DECISION -->|Code review| REVIEW[review]
+    DECISION -->|Build engine| ENGINES[engines]
 
     DISCOVERY --> NEXT{What next?}
     PLANNING --> NEXT
@@ -43,13 +43,31 @@ flowchart TD
 
 | Stage | Workflow | Description | Primary Skills |
 |-------|----------|-------------|----------------|
-| **00** | [Discovery & Context](00-discovery.md) | Understand codebase, project onboarding | `rails-context-engineering`, `rails-project-onboarding` |
-| **10** | [Planning & Design](10-planning.md) | Plan features, PRD, tasks, DDD | `create-prd`, `generate-tasks`, `ddd-*` |
-| **20** | [Setup & Configuration](20-setup.md) | Configure CI/CD, environment, deploy | `rails-project-onboarding` *(plus roadmap `rails-ci-cd-setup`)* |
-| **30** | [Development](30-development.md) | TDD development, implementation | `rails-tdd-slices`, `rspec-*`, implementation |
-| **40** | [Code Quality](40-quality.md) | Conventions, refactoring, documentation | `rails-code-conventions`, `refactor-safely`, `yard-documentation` |
-| **50** | [Review & Validation](50-review.md) | Code review, security, architecture | `rails-code-review`, `rails-security-review`, `rails-architecture-review` |
-| **60** | [Engine Development](60-engines.md) | Create and maintain Rails engines | `rails-engine-*` |
+| **Discovery** | [Discovery & Context](discovery.md) | Understand codebase, project onboarding | `rails-context-engineering`, `rails-project-onboarding` |
+| **Planning** | [Planning & Design](planning.md) | Plan features, PRD, tasks, DDD | `create-prd`, `generate-tasks`, `ddd-*` |
+| **Setup** | [Setup & Configuration](setup.md) | Configure CI/CD, environment, deploy | `rails-project-onboarding` *(plus roadmap `rails-ci-cd-setup`)* |
+| **Development** | [Development](development.md) | TDD development, implementation | `rails-tdd-slices`, `rspec-*`, implementation |
+| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `rails-code-conventions`, `refactor-safely`, `yard-documentation` |
+| **Review** | [Review & Validation](review.md) | Code review, security, architecture | `rails-code-review`, `rails-security-review`, `rails-architecture-review` |
+| **Engines** | [Engine Development](engines.md) | Create and maintain Rails engines | `rails-engine-*` |
+
+---
+
+## Docs vs. Callable Workflow Skills
+
+This directory contains **reference guides** describing each stage. For **executable orchestration**, use the callable workflow skills in `skills/workflows/`:
+
+| Stage Doc | Callable Skill | Status |
+|-----------|----------------|--------|
+| [development.md](development.md) | [`rails-tdd-loop`](../../skills/workflows/rails-tdd-loop/SKILL.md) | Active |
+| [review.md](review.md) | [`rails-review-flow`](../../skills/workflows/rails-review-flow/SKILL.md) | Active |
+| [setup.md](setup.md) | [`rails-setup-flow`](../../skills/workflows/rails-setup-flow/SKILL.md) | Active |
+| [quality.md](quality.md) | [`rails-quality-flow`](../../skills/workflows/rails-quality-flow/SKILL.md) | Active |
+| [engines.md](engines.md) | [`rails-engines-flow`](../../skills/workflows/rails-engines-flow/SKILL.md) | Active |
+| [discovery.md](discovery.md) | *(none — linear, no orchestration needed)* | Doc only |
+| [planning.md](planning.md) | *(none — linear, no orchestration needed)* | Doc only |
+
+**When to use which:** Read the stage doc to understand the full context and rationale. Invoke the callable skill when you want the agent to execute the workflow automatically.
 
 ---
 
@@ -57,12 +75,12 @@ flowchart TD
 
 | Situation | Workflow | Quick Entry |
 |-----------|----------|-------------|
-| **Bug fix** | [Bug Fix Loop](30-development.md#bug-fix-loop) | `rails-bug-triage` → Fix → Test |
-| **Refactoring** | [Refactor Safely](40-quality.md#refactor-safely) | `refactor-safely` → characterization tests → extract |
-| **Performance** | [Performance Optimization](30-development.md#performance) | `rails-performance-optimization` |
-| **GraphQL** | [GraphQL Feature](30-development.md#graphql) | `rails-graphql-best-practices` |
-| **Authorization** | [Authorization Setup](30-development.md#authorization) | `rails-authorization-policies` |
-| **External API** | [API Integration](30-development.md#external-api-integration) | `ruby-api-client-integration` |
+| **Bug fix** | [Bug Fix Loop](development.md#bug-fix-loop) | `rails-bug-triage` → Fix → Test |
+| **Refactoring** | [Refactor Safely](quality.md#refactor-safely) | `refactor-safely` → characterization tests → extract |
+| **Performance** | [Performance Optimization](development.md#performance) | `rails-performance-optimization` |
+| **GraphQL** | [GraphQL Feature](development.md#graphql) | `rails-graphql-best-practices` |
+| **Authorization** | [Authorization Setup](development.md#authorization) | `rails-authorization-policies` |
+| **External API** | [API Integration](development.md#external-api-integration) | `ruby-api-client-integration` |
 
 ---
 

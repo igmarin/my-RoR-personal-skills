@@ -6,3 +6,22 @@ evals/worst-cases/*
 tmp/
 .Gemfile.lock
 .agents/skills/
+
+# IDE / AI assistant configs (personal, not shared)
+.crush/
+.codex/
+.codex-plugin/
+.gemini/
+.gemini-plugin/
+.cursor/
+.windsurf/
+.tessl/
+.ruby-lsp/
+.vscode/
+
+# Plugin manifests (required by CI - shared)
+# .cursor-plugin/ and .windsurf-plugin/ are NOT ignored - CI needs these
+
+# Node
+node_modules/
+.windsurfrules

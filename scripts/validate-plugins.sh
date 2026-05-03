@@ -73,8 +73,8 @@ else
     check_fail "Invalid JSON syntax"
   fi
 
-  # Check required fields
-  for field in "name" "displayName" "version" "author" "license"; do
+  # Check required fields (Claude Code plugin.json)
+  for field in "name" "version" "author" "license"; do
     if jq -e ".$field" .claude-plugin/plugin.json > /dev/null 2>&1; then
       check_pass "Field present: $field"
     else
@@ -276,31 +276,35 @@ while IFS= read -r skill_file; do
     check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
     skill_errors=$((skill_errors + 1))
   fi
-done < <(find . -maxdepth 2 -name "SKILL.md" -not -path "./.git/*" | sort)
+done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.tessl/*" -not -path "./.claude/*" -not -path "./node_modules/*" | sort)
 
 info "Total SKILL.md files found: $skill_count"
 
-# Cross-check: every top-level skill dir with SKILL.md must be in tile.json.skills
-section "tile.json ↔ Disk Skill Inventory Sync"
+  # Cross-check: every skill dir with SKILL.md must be in tile.json.skills
+  section "tile.json ↔ Disk Skill Inventory Sync"
 
-if [ -f "tile.json" ]; then
+  if [ -f "tile.json" ]; then
   while IFS= read -r dir; do
     skill_name=$(basename "$dir")
-    if jq -e ".skills.\"$skill_name\"" tile.json > /dev/null 2>&1; then
+    skill_path="${dir#./}/SKILL.md"
+    # Check if this path exists in tile.json values
+    if jq -r '.skills | .[].path' tile.json | grep -qx "$skill_path"; then
       check_pass "tile.json includes skill: $skill_name"
     else
-      check_fail "tile.json missing skill present on disk: $skill_name"
+      check_fail "tile.json missing skill present on disk: $skill_name (at $skill_path)"
     fi
-  done < <(find . -maxdepth 2 -name "SKILL.md" -not -path "./.git/*" -not -path "./.claude/*" -not -path "./.cursor*/*" -not -path "./.windsurf*/*" -exec dirname {} \; | sort)
+  done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.claude/*" -not -path "./.cursor/*" -not -path "./.windsurf/*" -not -path "./.tessl/*" -not -path "./node_modules/*" -exec dirname {} \; | sort)
 
   # And every tile.json.skills entry must exist on disk
-  while IFS= read -r tile_skill; do
-    if [ -f "$tile_skill/SKILL.md" ]; then
-      check_pass "Disk has skill listed in tile.json: $tile_skill"
+  while IFS= read -r skill_path; do
+    if [ -f "$skill_path" ]; then
+      skill_name=$(basename $(dirname "$skill_path"))
+      check_pass "Disk has skill listed in tile.json: $skill_name"
     else
-      check_fail "tile.json references missing skill dir: $tile_skill"
+      skill_name=$(basename $(dirname "$skill_path"))
+      check_fail "tile.json references missing skill: $skill_name (expected at $skill_path)"
     fi
-  done < <(jq -r '.skills | keys[]' tile.json 2>/dev/null | sort)
+  done < <(jq -r '.skills | .[].path' tile.json 2>/dev/null | sort)
 fi
 
 # Summary

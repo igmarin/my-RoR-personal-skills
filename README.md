@@ -23,6 +23,7 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 ---
 
 [![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills) [![Ruby](https://img.shields.io/badge/ruby-%23CC342D.svg?style=flat&logo=ruby&logoColor=white)](https://www.ruby-lang.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills)](https://github.com/igmarin/rails-agent-skills/tags) ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/igmarin/rails-agent-skills?utm_source=oss&utm_medium=github&utm_campaign=igmarin%2Frails-agent-skills&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+
 ---
 
 - **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
@@ -38,8 +39,8 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 
 | Goal | Skill |
 |------|-------|
-| Implement feature with TDD | `skills/workflows/rails-tdd-loop` |
-| Review PR | `skills/workflows/rails-review-flow` |
+| Implement feature with TDD | `workflows/rails-tdd-loop` |
+| Review PR | `workflows/rails-review-flow` |
 | Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` |
 | Not sure where to start | `skills/orchestration/rails-skills-orchestrator` |
 
@@ -126,14 +127,14 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 
 **Goal:** Build a new feature, e.g., "Feature A"
 
-**Step 1: Planning & Task Breakdown**
+### Step 1: Planning & Task Breakdown
 
 - **Action:** Define the feature's requirements.
   - **Use Skill:** [create-prd](skills/planning/create-prd/)
 - **Then:** Break the PRD into a detailed, TDD-ready checklist.
   - **Use Skill:** [generate-tasks](skills/planning/generate-tasks/)
 
-**Step 2: Start the TDD Cycle**
+### Step 2: Start the TDD Cycle
 
 - **Action:** Pick the first, highest-value "slice" of behavior from your task list.
 - **Action:** Get guidance on choosing the right *type* of test to write first (e.g., a request spec).
@@ -141,24 +142,24 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 - **Action:** Write the first failing test. **Crucially, run it and watch it fail.**
   - **Use Skill:** [rspec-best-practices](skills/testing/rspec-best-practices/)
 
-**Step 3: Implementation**
+### Step 3: Implementation
 
 - **Action:** Write the minimum amount of application code required to make your failing test pass.
   - **Use Skills:** [ruby-service-objects](skills/patterns/ruby-service-objects/) for business logic, [rails-code-conventions](skills/code-quality/rails-code-conventions/) for general code quality.
 
-**Step 4: Verification**
+### Step 4: Verification
 
 - **Action:** Run the test again and watch it pass.
 - **Action:** Run linters and the full test suite to ensure no regressions. Refactor your new code if needed.
 
-**Step 5: Documentation & Self-Review**
+### Step 5: Documentation & Self-Review
 
 - **Action:** Add inline documentation to any new public classes or methods.
   - **Use Skill:** [yard-documentation](skills/patterns/yard-documentation/)
 - **Action:** Perform a self-review of your changes.
   - **Use Skill:** [rails-code-review](skills/code-quality/rails-code-review/)
 
-**Step 6: Responding to Peer Review**
+### Step 6: Responding to Peer Review
 
 - **Action:** When you receive feedback from teammates, evaluate and implement their suggestions systematically.
   - **Use Skill:** [rails-review-response](skills/code-quality/rails-review-response/)

@@ -3,6 +3,7 @@
 This document outlines the step-by-step master plan to restructure the repository, build a custom Ruby evaluator, and transition from simple skills/workflows to fully autonomous agents.
 
 ## Phase 1: Structural Separation
+
 **Goal:** Clean up the repository base and prepare for scaling without breaking current integrations.
 
 1. **Create the `workflows/` directory**: At the root of the repository, separating orchestrators from atomic skills.
@@ -13,6 +14,7 @@ This document outlines the step-by-step master plan to restructure the repositor
    - Move current test folders to match the source structure (e.g., `evals/api-versioning-with-controller-inheritan` moves to `evals/skills/api/api-versioning/`).
 
 ## Phase 2: Ruby Evaluator V1 (One-Shot)
+
 **Goal:** Solve Tessl's context disconnection and gain independence.
 
 1. **Scaffold the Evaluator**: Create an `evaluator/` (or `runner/`) folder at the root, initialized as a standalone Ruby app with its own `Gemfile`.
@@ -26,12 +28,14 @@ This document outlines the step-by-step master plan to restructure the repositor
 5. **Transition**: Validate the script locally and deprecate Tessl.
 
 ## Phase 3: Consolidation and Extraction
+
 **Goal:** Stabilize the evaluation engine and expand coverage.
 
 1. **Gemification**: Extract the stable `evaluator/` code into an independent Ruby gem (e.g., `agent_evaluator_core`) and install it back into the repository.
 2. **Complete Coverage**: Write missing `task.md` and `criteria.json` for all critical workflows and skills, running them constantly through the new gem.
 
 ## Phase 4: The Transition to Agents
+
 **Goal:** Move from static prompt execution to an interactive multi-agent system.
 
 1. **Engine Evolution**: Use the evaluator gem's foundation (API calling, parsing, context hydration) to build a custom Agent Framework (or expand the current `mcp_server`).

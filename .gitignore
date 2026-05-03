@@ -26,4 +26,4 @@ tmp/
 # Node
 node_modules/
 .windsurfrules
-.mardownlint.yaml
+.markdownlint.yaml

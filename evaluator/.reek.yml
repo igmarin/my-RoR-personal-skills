@@ -1,0 +1,43 @@
+directories:
+  "test":
+    IrresponsibleModule:
+      enabled: false
+    DuplicateMethodCall:
+      enabled: false
+    TooManyStatements:
+      enabled: false
+    FeatureEnvy:
+      enabled: false
+    InstanceVariableAssumption:
+      enabled: false
+    UtilityFunction:
+      enabled: false
+
+detectors:
+  DuplicateMethodCall:
+    exclude:
+      - "Evaluator::Client#call"
+      - "Evaluator::ContextHydrator#call"
+      - "Evaluator::ReactAgent#call"
+      - "Evaluator::Runner#call"
+      - "Evaluator::AgentRunner#print_header"
+  UncommunicativeVariableName:
+    accept:
+      - e
+      - f
+      - id
+  TooManyInstanceVariables:
+    max_instance_variables: 6
+  TooManyStatements:
+    max_statements: 20
+  DataClump:
+    exclude:
+      - "Evaluator::Tools"
+  FeatureEnvy:
+    exclude:
+      - "Evaluator::ContextHydrator#build_xml"
+  NilCheck:
+    exclude:
+      - "Evaluator::ReactAgent#call"
+  LongParameterList:
+    max_params: 5

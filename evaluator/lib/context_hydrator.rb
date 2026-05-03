@@ -1,42 +1,68 @@
 # frozen_string_literal: true
 
-require "pathname"
+require 'pathname'
 
 module Evaluator
+  # Responsible for loading skill context files (markdown files) from a given path
+  # and wrapping them in XML tags for injection into the LLM system prompt.
   class ContextHydrator
-    def initialize(base_path = nil)
-      @base_path = base_path || Pathname.new(File.expand_path("../../", __dir__))
+    HYDRATION_FAILED = 'Failed to hydrate context from skill path'
+
+    # Loads and formats skill context files.
+    #
+    # @param params [Hash] The configuration for context hydration.
+    # @option params [String] :skill_path The path to the skill directory containing markdown files.
+    # @option params [Pathname, String] :base_path (optional) The base path to resolve the skill directory against.
+    # @return [Hash] A result hash with :success, and :response containing the XML formatted context.
+    def self.call(params)
+      new(params).call
     end
 
-    def hydrate(skill_path)
-      full_path = @base_path.join(skill_path)
-      
-      unless full_path.exist? && full_path.directory?
-        raise ArgumentError, "Skill path #{skill_path} does not exist or is not a directory"
-      end
+    # @param params [Hash] The configuration for context hydration.
+    def initialize(params)
+      @skill_path = params[:skill_path]
+      @base_path = params[:base_path] || Pathname.new(File.expand_path('../../', __dir__))
+    end
 
-      md_files = Dir.glob(full_path.join("*.md")).sort
+    # Performs the hydration process.
+    #
+    # @return [Hash] The standardized result hash indicating success or failure.
+    def call
+      full_path = @base_path.join(@skill_path)
 
-      build_xml(skill_path, md_files)
+      return { success: false, response: { error: { message: "Skill path #{@skill_path} does not exist or is not a directory" } } } unless full_path.exist? && full_path.directory?
+
+      md_files = Dir.glob(full_path.join('*.md'))
+      xml_context = build_xml(@skill_path, md_files)
+
+      { success: true, response: { context: xml_context } }
+    rescue StandardError => e
+      Rails.logger.error("Hydration Error: #{e.message}") if defined?(Rails)
+      { success: false, response: { error: { message: e.message } } }
     end
 
     private
 
-    def build_xml(skill_path, md_files)
-      return "" if md_files.empty?
+    # Builds the XML structure wrapping the contents of the markdown files.
+    #
+    # @param _skill_path [String] The original skill path string (unused).
+    # @param md_files [Array<String>] List of absolute paths to markdown files.
+    # @return [String] The combined XML representation of the file contents.
+    def build_xml(_skill_path, md_files)
+      return '' if md_files.empty?
 
-      xml = ["<agent_context>"]
-      
+      xml = ['<agent_context>']
+
       md_files.each do |file_path|
         relative_path = Pathname.new(file_path).relative_path_from(@base_path).to_s
         content = File.read(file_path)
-        
+
         xml << "  <file path=\"#{relative_path}\">"
-        xml << content.gsub(/^/, "    ") # indent content for readability
-        xml << "  </file>"
+        xml << content.gsub(/^/, '    ') # indent content for readability
+        xml << '  </file>'
       end
-      
-      xml << "</agent_context>"
+
+      xml << '</agent_context>'
       xml.join("\n")
     end
   end

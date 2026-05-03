@@ -1,48 +1,59 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "optparse"
-require "json"
-require_relative "../lib/runner"
+require 'optparse'
+require 'json'
+require_relative '../lib/runner'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: evaluate [options]"
+  opts.banner = 'Usage: evaluate [options]'
 
-  opts.on("-e", "--eval FOLDER", "Path to the eval folder (e.g., evals/skills/infrastructure/rails-api-versioning/api-versioning...)") do |e|
+  opts.on('-e', '--eval FOLDER',
+          'Path to the eval folder (e.g., evals/skills/infrastructure/rails-api-versioning/api-versioning...)') do |e|
     options[:eval] = e
   end
 
-  opts.on("-s", "--skill FOLDER", "Path to the skill folder to hydrate from (e.g., skills/infrastructure/rails-api-versioning)") do |s|
+  opts.on('-s', '--skill FOLDER',
+          'Path to the skill folder to hydrate from (e.g., skills/infrastructure/rails-api-versioning)') do |s|
     options[:skill] = s
   end
 end.parse!
 
 if options[:eval].nil? || options[:skill].nil?
-  puts "Error: Both --eval and --skill options are required."
-  puts "Example: bin/evaluate -e evals/skills/infrastructure/rails-api-versioning/api-versioning-with-controller-inheritan -s skills/infrastructure/rails-api-versioning"
+  puts 'Error: Both --eval and --skill options are required.'
+  puts 'Example: bin/evaluate -e evals/skills/infrastructure/rails-api-versioning/api-versioning-with-controller-inheritan -s skills/infrastructure/rails-api-versioning'
   exit 1
 end
 
 begin
   runner = Evaluator::Runner.new
   result = runner.evaluate(options[:eval], options[:skill])
-  
+
   puts "\n========================================="
-  puts "              RESULTS                    "
+  puts '              RESULTS                    '
   puts "=========================================\n"
-  
+
   begin
     parsed_judge = JSON.parse(result[:judge_score])
     puts "Baseline Score: #{parsed_judge['baseline_score']}/100"
     puts "Context Score:  #{parsed_judge['context_score']}/100"
     puts "\nReasoning:"
     puts parsed_judge['reasoning']
+
+    puts "\n========================================="
+    puts '        BASELINE CODE CHANGES            '
+    puts "=========================================\n"
+    puts result[:baseline_diff]
+
+    puts "\n========================================="
+    puts '        CONTEXT CODE CHANGES             '
+    puts "=========================================\n"
+    puts result[:context_diff]
   rescue JSON::ParserError
-    puts "Could not parse judge JSON response. Raw output:"
+    puts 'Could not parse judge JSON response. Raw output:'
     puts result[:judge_score]
   end
-
 rescue StandardError => e
   puts "Evaluation failed: #{e.message}"
   puts e.backtrace.join("\n")

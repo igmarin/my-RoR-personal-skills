@@ -66,10 +66,10 @@
     "./skills/testing/rails-tdd-slices",
     "./skills/testing/rspec-best-practices",
     "./skills/testing/rspec-service-testing",
-    "./skills/workflows/rails-tdd-loop",
-    "./skills/workflows/rails-review-flow",
-    "./skills/workflows/rails-setup-flow",
-    "./skills/workflows/rails-quality-flow",
-    "./skills/workflows/rails-engines-flow"
+    "./workflows/rails-tdd-loop",
+    "./workflows/rails-review-flow",
+    "./workflows/rails-setup-flow",
+    "./workflows/rails-quality-flow",
+    "./workflows/rails-engines-flow"
   ]
 }

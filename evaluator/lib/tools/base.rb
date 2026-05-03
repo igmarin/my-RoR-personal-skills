@@ -13,49 +13,50 @@ module Evaluator
         # Ensures the resulting path stays within the boundaries of the working directory.
         #
         # @param path [String] The relative path to resolve.
-        # @param working_dir_path [Pathname] The expanded pathname of the working directory.
+        # @param working_dir_path [Pathname, String] The pathname of the working directory.
         # @return [Pathname] The fully expanded and secure path.
-        # @raise [RuntimeError] If the path attempts to traverse outside the working directory.
+        # @raise [ArgumentError] If path is invalid or attempts traversal.
         def secure_path(path, working_dir_path)
-          validate_relative_path!(path)
+          validate_input!(path, working_dir_path)
 
-          working_dir_real = working_dir_path.realpath
-          full_path = working_dir_real.join(path).expand_path
-          raise "Path traversal is not allowed: #{path}" unless full_path.to_s.start_with?(working_dir_real.to_s)
+          working_dir_real = Pathname.new(working_dir_path).realpath
+          working_dir_str = working_dir_real.to_s
 
-          verify_symlink_safety(full_path, working_dir_real, path)
+          # Use File.expand_path with a fixed base to resolve '..' and '.'
+          # Then wrap in Pathname for consistent API
+          expanded_path = File.expand_path(path, working_dir_str)
+          full_path = Pathname.new(expanded_path)
+
+          raise ArgumentError, "Path traversal attempt: #{path}" unless full_path.to_s.start_with?(working_dir_str)
+
+          verify_symlink_safety!(full_path, working_dir_real, working_dir_str, path)
 
           full_path
         end
 
         private
 
-        def validate_relative_path!(path)
-          raise 'Path must be a string' unless path.is_a?(String)
-
-          normalized = path.strip
-          raise 'Path must not be empty' if normalized.empty?
-          raise "Absolute paths are not allowed: #{path}" if normalized.start_with?('/', '\\')
-          raise "Backslashes are not allowed in paths: #{path}" if normalized.include?('\\')
-
-          segments = normalized.split('/')
-          raise "Invalid path: #{path}" if segments.empty? || segments.any?(&:empty?)
-          raise "Path traversal is not allowed: #{path}" if segments.any? { |s| s == '.' || s == '..' }
-          raise "Invalid characters in path: #{path}" unless segments.all? { |s| valid_path_segment?(s) }
+        def validate_input!(path, working_dir_path)
+          raise ArgumentError, 'Path must be a string' unless path.is_a?(String)
+          raise ArgumentError, 'Working directory must be provided' unless working_dir_path
+          raise ArgumentError, 'Path cannot be empty' if path.strip.empty?
+          raise ArgumentError, 'Absolute paths are not allowed' if path.start_with?('/')
         end
 
-        def valid_path_segment?(segment)
-          segment.match?(/\A[a-zA-Z0-9._-]+\z/) && segment.count('.') <= 1
-        end
-
-        def verify_symlink_safety(full_path, working_dir_real, original_path)
-          path_to_check = full_path.exist? ? full_path : full_path.dirname
-          return unless path_to_check.exist?
-
-          real_path = path_to_check.realpath
-          return if real_path.to_s.start_with?(working_dir_real.to_s)
-
-          raise "Symlink path traversal is not allowed: #{original_path}"
+        def verify_symlink_safety!(full_path, working_dir_real, working_dir_str, original_path)
+          # Check every component of the path to prevent escaping via intermediate symlinks
+          current = full_path
+          while current != working_dir_real && current.to_s.length > working_dir_str.length
+            if current.exist? || current.symlink?
+              begin
+                real = current.realpath
+                raise ArgumentError, "Symlink escapes sandbox: #{original_path}" unless real.to_s.start_with?(working_dir_str)
+              rescue Errno::ENOENT
+                # Path component doesn't exist, which is fine for new files
+              end
+            end
+            current = current.dirname
+          end
         end
       end
     end

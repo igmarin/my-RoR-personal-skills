@@ -39,6 +39,8 @@ module Evaluator
         return 'Error: File is not readable' unless target.readable?
 
         target.read
+      rescue ArgumentError
+        raise
       rescue StandardError => e
         "Error reading file: #{e.message}"
       end
@@ -51,7 +53,7 @@ module Evaluator
 
           normalized = path.strip
           return 'Error: Invalid path. Path must not be empty.' if normalized.empty?
-          return 'Error: Invalid path. Directory separators are not allowed.' if normalized.include?('/') || normalized.include?('\\')
+          raise ArgumentError, "Path traversal attempt: #{path}" if normalized.include?('/') || normalized.include?('\\')
           return 'Error: Invalid path. More than one dot is not allowed.' if normalized.count('.') > 1
           return 'Error: Invalid path. Allowed characters are letters, numbers, dot, underscore, and hyphen.' unless normalized.match?(/\A[a-zA-Z0-9._-]+\z/)
 

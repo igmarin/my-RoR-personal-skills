@@ -49,9 +49,12 @@ module Evaluator
       )
 
       assert result[:success]
-      assert_equal 'diff-baseline', result[:response][:baseline_diff]
-      assert_equal 'diff-context',  result[:response][:context_diff]
-      assert_equal judge_result,    result[:response][:judge_score]
+      assert_equal 1, result[:tasks].size
+      task_result = result[:tasks].first
+
+      assert_equal 'diff-baseline', task_result[:baseline_diff]
+      assert_equal 'diff-context',  task_result[:context_diff]
+      assert_equal judge_result,    task_result[:judge_score]
     end
 
     def test_call_returns_failure_on_unexpected_error

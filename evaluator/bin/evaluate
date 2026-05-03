@@ -18,6 +18,10 @@ OptionParser.new do |opts|
           'Path to the skill folder to hydrate from (e.g., skills/infrastructure/rails-api-versioning)') do |s|
     options[:skill] = s
   end
+
+  opts.on('-o', '--output FILE', 'Path to save the JSON report') do |o|
+    options[:output] = o
+  end
 end.parse!
 
 if options[:eval].nil? || options[:skill].nil?
@@ -40,25 +44,34 @@ unless result[:success]
   exit 1
 end
 
-response = result[:response]
-
-begin
-  parsed_judge = JSON.parse(response[:judge_score])
-  puts "Baseline Score: #{parsed_judge['baseline_score']}/100"
-  puts "Context Score:  #{parsed_judge['context_score']}/100"
-  puts "\nReasoning:"
-  puts parsed_judge['reasoning']
-
+result[:tasks].each do |task_result|
   puts "\n========================================="
-  puts '        BASELINE CODE CHANGES            '
+  puts "       RESULTS: #{task_result[:path]}    "
   puts "=========================================\n"
-  puts response[:baseline_diff]
 
-  puts "\n========================================="
-  puts '        CONTEXT CODE CHANGES             '
-  puts "=========================================\n"
-  puts response[:context_diff]
-rescue JSON::ParserError
-  puts 'Could not parse judge JSON response. Raw output:'
-  puts response[:judge_score]
+  begin
+    parsed_judge = JSON.parse(task_result[:judge_score])
+    puts "Baseline Score: #{parsed_judge['baseline_score']}/100"
+    puts "Context Score:  #{parsed_judge['context_score']}/100"
+    puts "\nReasoning:"
+    puts parsed_judge['reasoning']
+
+    puts "\n========================================="
+    puts "  BASELINE CHANGES: #{task_result[:path]}  "
+    puts "=========================================\n"
+    puts task_result[:baseline_diff]
+
+    puts "\n========================================="
+    puts "   CONTEXT CHANGES: #{task_result[:path]}  "
+    puts "=========================================\n"
+    puts task_result[:context_diff]
+  rescue JSON::ParserError
+    puts 'Could not parse judge JSON response. Raw output:'
+    puts task_result[:judge_score]
+  end
+end
+
+if options[:output]
+  File.write(options[:output], JSON.pretty_generate(result))
+  puts "\nReport saved to #{options[:output]}"
 end

@@ -26,11 +26,11 @@ module Evaluator
         Dir.mktmpdir do |dir|
           working_dir = Pathname.new(dir).expand_path
 
-          error = assert_raises(RuntimeError) do
+          error = assert_raises(ArgumentError) do
             TestBase.public_secure_path('../test.txt', working_dir)
           end
 
-          assert_match(/Path traversal is not allowed/, error.message)
+          assert_match(/Path traversal attempt/, error.message)
         end
       end
     end

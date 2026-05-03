@@ -29,10 +29,14 @@ This document outlines the step-by-step master plan to restructure the repositor
 
 ## Phase 3: Consolidation and Extraction
 
-**Goal:** Stabilize the evaluation engine and expand coverage.
+**Goal:** Stabilize the evaluation engine, automate execution, and expand coverage.
 
 1. **Gemification**: Extract the stable `evaluator/` code into an independent Ruby gem (e.g., `agent_evaluator_core`) and install it back into the repository.
-2. **Complete Coverage**: Write missing `task.md` and `criteria.json` for all critical workflows and skills, running them constantly through the new gem.
+2. **Robust Task Discovery**: Implement recursive discovery of `task.md` files. If a directory is targeted (e.g., `evals/skills/api`), the runner should detect and execute all nested evaluation tasks.
+3. **Parallel Execution**: Implement a parallel runner to handle high-volume evaluations, ensuring the full suite can be validated in minutes rather than hours.
+4. **CI/CD Integration**: Connect the evaluator to GitHub Actions to run on every PR, preventing regressions in skill effectiveness.
+5. **Reporting & Benchmarking**: Generate structured JSON/HTML reports and maintain a history of scores to track improvements in agent performance over time.
+6. **Complete Coverage**: Write missing `task.md` and `criteria.json` for all 39 skills and critical workflows.
 
 ## Phase 4: The Transition to Agents
 

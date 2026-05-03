@@ -13,6 +13,8 @@ description: >
   conventions, where is this defined, ambiguous requirements, spec vs code
   drift, unclear spec, missing requirements, what does the codebase already
   use, match existing style.
+metadata:
+  version: 1.0.0
 ---
 
 # Rails Context Engineering
@@ -36,18 +38,20 @@ ALWAYS re-check context when the user's request changes scope mid-conversation.
    - `db/schema.rb` — tables and columns involved (grep by table name)
    - `config/routes.rb` — routes that border the change
    - `Gemfile.lock` — confirm Rails version + domain gems (sidekiq, pundit, rspec, rails-i18n, graphql, etc.)
-3. **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. See [references/context-sources.md](./references/context-sources.md) for exact Grep/Read patterns per layer.
+3. **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. Use grep to find: `grep -r "class.*Controller" app/controllers`, `grep -r "class.*Service" app/services`, etc.
 4. **Detect drift:** If there is an existing spec for the area, compare what it asserts vs what the code currently does. Drift is a red flag — document it.
 5. **Post the Context Summary:** Before any proposal, output the template below (see Output Style).
-6. **Handle ambiguity:** If steps 2–4 surface a conflict (two patterns used, spec vs code drift, missing requirement, unclear boundary), produce a Confusion Block using [references/confusion-management.md](./references/confusion-management.md). Do not pick silently.
+6. **Handle ambiguity:** If steps 2–4 surface a conflict (two patterns used, specs contradict code, missing requirement, unclear boundary), produce a Confusion Block:
+
+```text
+### Confusion Block
+- Conflict: <what conflicts — e.g., spec asserts X but code does Y>
+- Options: <list the options with their tradeoffs>
+- Recommendation: <state which option and why, or ask user to choose>
+```
+
+Do not pick silently.
 7. **Hand off:** With context loaded, proceed to the next skill (`create-prd`, `generate-tasks`, `rails-tdd-slices`, `rails-stack-conventions`, etc.). The Context Summary travels with the task.
-
-## Extended Resources
-
-| Resource | When to read |
-|----------|--------------|
-| [references/context-sources.md](./references/context-sources.md) | For the exact Grep/Read commands per Rails layer (model, controller, service, job, engine, migration) |
-| [references/confusion-management.md](./references/confusion-management.md) | When two patterns coexist, specs contradict code, or a requirement is missing — for how to surface ambiguity without silently choosing |
 
 ## Output Style
 
@@ -89,6 +93,4 @@ Additional MUSTs:
 | **rails-tdd-slices** | Nearest spec in the summary usually reveals the right first failing spec |
 | **rails-bug-triage** / **refactor-safely** | Context precedes reproduction or characterization tests |
 | **rails-architecture-review** / **ddd-ubiquitous-language** | When context reveals boundary or naming drift |
-
-See [EXAMPLES.md](./EXAMPLES.md) for worked Context Summaries and a Confusion Block.
  

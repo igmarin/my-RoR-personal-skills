@@ -6,6 +6,8 @@ description: >
   API actions). Requires generating or updating an API Collection file (e.g., Postman
   Collection v2.1) so the new or changed endpoints can be tested. Trigger words:
   endpoint, API route, controller action, API collection, request collection.
+metadata:
+  version: 1.0.0
 ---
 # REST API Collection
 
@@ -16,10 +18,10 @@ description: >
 | Aspect | Rule |
 |--------|------|
 | When | Create or update collection when creating or modifying any REST API endpoint (route + controller action) |
-| Format | Postman Collection JSON v2.1 (`schema` or `info.schema` references v2.1) is a good default standard |
+| Format | Postman Collection JSON v2.1 (`schema` or `info.schema` references v2.1) |
 | Location | One file per app or engine — `docs/api-collections/<app-or-engine-name>.json` or `spec/fixtures/api-collections/`; if a collection folder already exists, update the existing file |
 | Language | All request names, descriptions, and variable names must be in **English** |
-| Variables | Use `{{base_url}}` (or equivalent) for the base URL so the collection works across environments |
+| Variables | Use `{{base_url}}` for the base URL so the collection works across environments |
 | Per request | method, URL (with variables for base URL), headers (Content-Type, Authorization if needed), body example when applicable |
 | Validation | See validation steps in the HARD-GATE section below |
 
@@ -65,9 +67,4 @@ See [EXAMPLES.md](./EXAMPLES.md) for a multi-endpoint collection with auth token
 
 ## Integration
 
-| Skill | When to chain |
-|-------|----------------|
-| **rails-engine-author** | When the engine exposes HTTP endpoints |
-| **rails-engine-docs** | When documenting engine API or how to test endpoints |
-| **rails-code-review** | When reviewing API changes (ensure collection was updated) |
-| **rails-engine-testing** | When adding request/routing specs (collection can mirror those flows) |
+Chain to **rails-engine-author** when the engine exposes HTTP endpoints.

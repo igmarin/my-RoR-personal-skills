@@ -15,6 +15,20 @@ When **reviewing** Rails code, analyze it against the following areas. When **wr
 
 **Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.
 
+## Pre-flight Checks
+
+Before starting the review, verify the following:
+
+- **Rails project detected**: Confirm you're in a Rails application (check for `config/application.rb`, `Gemfile` with `rails`, or `bin/rails`)
+- **Diff available**: Ensure you have access to the code changes (git diff, PR diff, or file paths)
+- **Files exist**: Verify all files referenced in the diff exist in the repository
+- **Review scope clear**: Confirm whether reviewing a full PR, a specific feature, or targeted files
+
+**If pre-flight checks fail**:
+- Not a Rails project → Use appropriate review skill for the technology stack
+- No diff available → Request the diff or file paths from the user
+- Files missing → Flag as Critical and request clarification before proceeding
+
 ## HARD-GATE: After implementation (before PR)
 
 ```
@@ -43,6 +57,12 @@ generate-tasks must include a "Code review before merge" task.
 Work through the diff in this sequence. Deep criteria: [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md). One-page PR baseline: [assets/checklist.md](./assets/checklist.md). Finding examples (JSON + comment shape): [assets/examples.md](./assets/examples.md).
 
 Configuration → Routing → Controllers → Views → Models → Associations → Queries → Migrations → Validations → I18n → Sessions → Security → Caching → Jobs → Tests
+
+**Edge case handling:**
+- **Empty diff**: If no files changed, state "No code changes to review" and skip to conclusion
+- **Large diff (>50 files)**: Prioritize Critical checks first, then sample key files for Suggestion items; flag for targeted follow-up review
+- **Single file change**: Apply all relevant review areas to that file; don't skip areas just because diff is small
+- **Test-only changes**: Focus on test quality, coverage, and test organization; skip application code checks
 
 **Critical checks to spot immediately:**
 
@@ -93,6 +113,17 @@ Group findings under `### Critical` / `### Suggestion` / `### Nice to have` (omi
 ```
 
 **Template rules:** each bullet is `[file:line] (Area)` + risk + **`Mitigation:`** (required). Tag **(Area)** from: Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests — across the whole review, cover **≥4** distinct areas when the diff touches that many surfaces.
+
+**Output validation:**
+- Verify all file paths in `[file:line]` references exist in the repository
+- Ensure line numbers are within the valid range for each file
+- Check that each finding includes a required **`Mitigation:`** field
+- Confirm severity sections are properly categorized
+- Validate that `Actions required:` section summarizes all findings accurately
+
+**If file references are invalid:**
+- Skip the finding and note: `[path/to/file.rb:LINE] — File not found in repository, skipping`
+- Request clarification from the user before including in final review
 
 ## Re-review before merge
 

@@ -5,6 +5,8 @@ description: >
   Use when creating, scaffolding, or refactoring a Rails engine. Covers engine
   types (Plain, Railtie, Engine, Mountable), namespace isolation, host-app
   contract definition, and recommended file structure.
+metadata:
+  version: 1.0.0
 ---
 # Rails Engine Author
 
@@ -31,20 +33,17 @@ Before engine work is complete, confirm all of the following:
 1. The root file is minimal: requires version, configuration, and engine only.
 2. Public-facing engines use isolate_namespace.
 3. The root module exposes .configure yielding a Configuration object.
-4. Host model references stay configurable strings (for example "User"), never ::User.
-5. Engine code never auto-applies migrations at boot.
+4. Host model references stay configurable strings (e.g. "User"), never ::User.
+5. Engine code never auto-applies migrations at boot (no config.paths['db/migrate'] or ActiveRecord::Migrator).
 6. The host contract is documented per the Host App Contract section.
+7. Initializers are idempotent and safe in development reloads.
+8. Assets and generators are namespaced and idempotent.
+9. Dummy app exists and integration tests pass.
+10. Mount the engine in the dummy app and verify routes load correctly.
+11. Search engine files for hard-coded host constants (::User, ::Employee).
+12. Search engine boot code for migration auto-apply patterns (db:migrate, ActiveRecord::Migrator, config.paths['db/migrate']).
+13. Expose integration seams through services, adapters, or hooks — not direct host constants.
 ```
-
-## Pitfalls
-
-| Pitfall | What to do |
-|---------|------------|
-| Starting with mountable when plain gem suffices | Use the lightest option — mountable adds routes, controllers, views only when needed |
-| Missing `isolate_namespace` | Mountable and public-facing engines must isolate to avoid constant collisions with host |
-| No host contract defined | Without a documented contract, integration becomes guesswork across host apps — see Host App Contract section |
-| Engine depends on host internals | Reference host models through configurable class names or adapters |
-| No dummy app | Integration must be verified through a real mounted engine, not isolated classes |
 
 ## Workflow
 
@@ -88,7 +87,6 @@ my_engine/
 ```
 
 Keep the root module small:
-
 - `lib/my_engine.rb`: requires version, engine, and public configuration entrypoints.
 - `lib/my_engine/engine.rb`: engine class, initializers, autoload/eager-load behavior, asset/config hooks.
 - `lib/my_engine/version.rb`: version only.
@@ -111,28 +109,6 @@ end
 ```
 
 Do not scatter configuration across unrelated constants and initializers.
-
-## Implementation Rules
-
-- Use `isolate_namespace` for mountable and public-facing engines.
-- Keep initializers idempotent and safe in development reloads; use `config.to_prepare` only for reload-sensitive code (e.g. decorators).
-- Treat migrations as host-owned — provide install/copy generators, never apply silently. Do NOT use `config.paths['db/migrate']` or `ActiveRecord::Migrator` in initializers:
-
-```ruby
-# WRONG — auto-applies migrations at boot, host loses control
-initializer 'my_engine.migrations' do
-  config.paths['db/migrate'] << root.join('db/migrate')
-end
-
-# RIGHT — host copies via install generator, runs manually
-# See rails-engine-installers for generator patterns
-```
-- Reference host app models through configurable class names or adapters; do not hard-code host constants.
-- Expose integration seams through services, adapters, or hooks — not direct host constants.
-- Keep assets and generators namespaced and idempotent.
-- Put reusable domain logic in POROs/services, not hooks.
-
-Use `rails-engine-installers` for generator-heavy setup, `rails-engine-testing` for dummy-app coverage, and `rails-engine-reviewer` for audits.
 
 ## Testing Expectations
 
@@ -192,29 +168,7 @@ MyEngine::Engine.routes.draw do
 end
 ```
 
-## Verification
-
-Before calling the engine structure done:
-
-1. Check `lib/my_engine.rb` is still requires + configuration only.
-2. Search engine files for hard-coded host constants such as `::User` or `::Employee`.
-3. Search engine boot code for migration auto-apply patterns such as `db:migrate`, `ActiveRecord::Migrator`, or `config.paths['db/migrate']`.
-4. Mount the engine in the dummy app and verify routes load correctly.
-5. Confirm the host contract (see Host App Contract section) names required host config and engine-provided surfaces.
-
-## Output Style
-
-When asked to create or refactor an engine:
-
-1. State the engine type you are using and why.
-2. Show the target file structure.
-3. Implement the smallest viable set of files first.
-4. Add tests before broadening features.
-5. Call out assumptions about the host app explicitly.
-
 ## Optional Reference Pattern
-
-If a real-world engine corpus is available, inspect comparable engines before making structural decisions. Prefer matching successful patterns from mature engines over inventing new conventions.
 
 For a reusable starter layout and file stubs, read [reference.md](reference.md).
 

@@ -1,4 +1,5 @@
 # Rails Agent Skills
+<img width="1408" height="768" alt="rails-agent-skills" src="https://github.com/user-attachments/assets/55e84f62-52ab-44a5-8b0f-9fe1bdb12212" />
 
 > **Rails Agent Skills** turns AI coding assistants into reliable Rails engineers — not just autocomplete tools.
 >

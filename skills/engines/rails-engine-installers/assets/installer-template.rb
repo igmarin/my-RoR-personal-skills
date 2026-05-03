@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Template for an install generator that copies migrations and creates an initializer
 module MyEngine
   module Generators

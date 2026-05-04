@@ -82,4 +82,26 @@ class ResourceRegistryTest < Minitest::Test
     names = fresh_registry.all_resources.map(&:name)
     assert_includes names, 'skill/my-new-skill'
   end
+
+  def test_deduplicates_skill_directories
+    project_root = Pathname.new(@tmpdir)
+
+    # Mock glob to return duplicate paths
+    def project_root.glob(pattern)
+      if pattern == '*/SKILL.md'
+        [join('rails-code-review', 'SKILL.md')]
+      elsif pattern == '.tessl/tiles/*/*/*/SKILL.md'
+        [join('.tessl', 'tiles', 'owner', 'repo', 'rails-code-review', 'SKILL.md')]
+      else
+        []
+      end
+    end
+
+    registry = McpSkills::ResourceRegistry.new(project_root)
+    skill_resources = registry.all_resources.select { |r| r.name.start_with?('skill/') }
+
+    names = skill_resources.map(&:name)
+    assert_equal names.uniq.length, names.length, 'Resources should be deduplicated'
+    assert_equal 1, names.count('skill/rails-code-review')
+  end
 end

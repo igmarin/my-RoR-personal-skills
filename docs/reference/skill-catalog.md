@@ -251,8 +251,8 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rails-tdd-loop** | `skills/workflows/rails-tdd-loop/` | TDD feature loop: test → implement → review → PR |
-| **rails-review-flow** | `skills/workflows/rails-review-flow/` | Systematic PR review: review → deep dive → response |
-| **rails-setup-flow** | `skills/workflows/rails-setup-flow/` | Project setup: context → onboarding → CI/CD |
-| **rails-quality-flow** | `skills/workflows/rails-quality-flow/` | Quality check: conventions → refactor → docs |
-| **rails-engines-flow** | `skills/workflows/rails-engines-flow/` | Engine development: author → test → review → release |
+| **rails-tdd-loop** | `workflows/rails-tdd-loop/` | TDD feature loop: test → implement → review → PR |
+| **rails-review-flow** | `workflows/rails-review-flow/` | Systematic PR review: review → deep dive → response |
+| **rails-setup-flow** | `workflows/rails-setup-flow/` | Project setup: context → onboarding → CI/CD |
+| **rails-quality-flow** | `workflows/rails-quality-flow/` | Quality check: conventions → refactor → docs |
+| **rails-engines-flow** | `workflows/rails-engines-flow/` | Engine development: author → test → review → release |

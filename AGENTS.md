@@ -38,7 +38,7 @@ Load the skill that best matches the current task. The bootstrap skill `rails-sk
 | **Patterns** | `skills/patterns/` | `ruby-service-objects`, `strategy-factory-null-calculator`, `yard-documentation` |
 | **Context** | `skills/context/` | `rails-context-engineering`, `rails-project-onboarding` |
 | **Orchestration** | `skills/orchestration/` | `rails-skills-orchestrator` |
-| **Workflows** | `skills/workflows/` | `rails-tdd-loop`, `rails-review-flow`, `rails-setup-flow`, `rails-quality-flow`, `rails-engines-flow` |
+| **Workflows** | `workflows/` | `rails-tdd-loop`, `rails-review-flow`, `rails-setup-flow`, `rails-quality-flow`, `rails-engines-flow` |
 
 ## Non-Negotiable Workflow Rule
 
@@ -56,11 +56,11 @@ Do not write implementation code before the test exists and fails. Every skill t
 
 | Goal | Workflow Skill | Atomic Skills |
 |------|---------------|---------------|
-| Implement feature with TDD | `skills/workflows/rails-tdd-loop` | Full orchestrated cycle |
-| Review PR systematically | `skills/workflows/rails-review-flow` | Review → deep dive → response |
-| Set up project / CI/CD | `skills/workflows/rails-setup-flow` | Context → onboarding → CI/CD |
-| Quality check before PR | `skills/workflows/rails-quality-flow` | Conventions → refactor → docs |
-| Build Rails engine | `skills/workflows/rails-engines-flow` | Author → test → review → release |
+| Implement feature with TDD | `workflows/rails-tdd-loop` | Full orchestrated cycle |
+| Review PR systematically | `workflows/rails-review-flow` | Review → deep dive → response |
+| Set up project / CI/CD | `workflows/rails-setup-flow` | Context → onboarding → CI/CD |
+| Quality check before PR | `workflows/rails-quality-flow` | Conventions → refactor → docs |
+| Build Rails engine | `workflows/rails-engines-flow` | Author → test → review → release |
 | Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` | Planning only |
 
 ### TDD Feature Loop (Recommended)
@@ -69,7 +69,7 @@ The default daily workflow — orchestrated by `rails-tdd-loop`:
 
 ```
 skills/context/rails-context-engineering
-  → skills/workflows/rails-tdd-loop (orchestrates below)
+  → workflows/rails-tdd-loop (orchestrates below)
     → skills/testing/rails-tdd-slices
     → skills/testing/rspec-best-practices
     → [GATE: test feedback OK]
@@ -80,7 +80,7 @@ skills/context/rails-context-engineering
     → PR
 ```
 
-For a full feature from scratch: `skills/context/rails-context-engineering` → `skills/planning/create-prd` → `skills/planning/generate-tasks` → `skills/workflows/rails-tdd-loop`.
+For a full feature from scratch: `skills/context/rails-context-engineering` → `skills/planning/create-prd` → `skills/planning/generate-tasks` → `workflows/rails-tdd-loop`.
 
 See `docs/workflow-guide.md` for all workflow variants (bug fix, GraphQL, engine, migration, refactor, etc.).
 

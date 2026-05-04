@@ -1,0 +1,69 @@
+directories:
+  "test":
+    IrresponsibleModule:
+      enabled: false
+    DuplicateMethodCall:
+      enabled: false
+    TooManyStatements:
+      enabled: false
+    FeatureEnvy:
+      enabled: false
+    InstanceVariableAssumption:
+      enabled: false
+    UtilityFunction:
+      enabled: false
+    NestedIterators:
+      enabled: false
+    UncommunicativeVariableName:
+      enabled: false
+
+detectors:
+  InstanceVariableAssumption:
+    exclude:
+      - "Evaluator::Config"
+      - "Evaluator::Clients::Providers::OpenAI"
+      - "Evaluator::Clients::Providers::Gemini"
+  MissingSafeMethod:
+    enabled: false
+  ControlParameter:
+    exclude:
+      - "Evaluator::Tools::Base"
+  DuplicateMethodCall:
+    exclude:
+      - "Evaluator::Client#call"
+      - "Evaluator::ContextHydrator#call"
+      - "Evaluator::ReactAgent#call"
+      - "Evaluator::Runner#call"
+      - "Evaluator::AgentRunner#print_header"
+      - "Evaluator::Config#load_and_merge_json"
+      - "Evaluator::Clients::Providers::Gemini#initialize"
+      - "Evaluator::Clients::BaseClient#execute_request"
+  UncommunicativeVariableName:
+    accept:
+      - e
+      - f
+      - id
+  TooManyInstanceVariables:
+    max_instance_variables: 6
+  TooManyStatements:
+    max_statements: 20
+  DataClump:
+    exclude:
+      - "Evaluator::Tools"
+  FeatureEnvy:
+    exclude:
+      - "Evaluator::ContextHydrator#build_xml"
+      - "Evaluator::Clients::BaseClient#handle_response"
+      - "Evaluator::Clients::Providers::Gemini#config_error"
+  UtilityFunction:
+    exclude:
+      - "Evaluator::Clients::BaseClient#failure_response"
+      - "Evaluator::Clients::BaseClient#extract_message"
+      - "Evaluator::Clients::Providers::OpenAI#extract_message"
+      - "Evaluator::Clients::Providers::Gemini#extract_message"
+  NilCheck:
+    exclude:
+      - "Evaluator::ReactAgent#call"
+      - "Evaluator::Clients::BaseClient#handle_response"
+  LongParameterList:
+    max_params: 5

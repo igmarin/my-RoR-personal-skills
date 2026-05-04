@@ -1,4 +1,5 @@
 # Rails Agent Skills
+
 <img width="1408" height="768" alt="rails-agent-skills" src="https://github.com/user-attachments/assets/55e84f62-52ab-44a5-8b0f-9fe1bdb12212" />
 
 > **Rails Agent Skills** turns AI coding assistants into reliable Rails engineers — not just autocomplete tools.
@@ -10,6 +11,7 @@
 ## Why this exists
 
 Most AI-generated code fails in real Rails apps because it lacks:
+
 - awareness of project conventions
 - disciplined workflows (especially TDD)
 - structured context across tasks
@@ -20,7 +22,7 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 
 ---
 
-[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills) [![Ruby](https://img.shields.io/badge/ruby-%23CC342D.svg?style=flat&logo=ruby&logoColor=white)](https://www.ruby-lang.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills)](https://github.com/igmarin/rails-agent-skills/tags)
+[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills) [![Ruby](https://img.shields.io/badge/ruby-%23CC342D.svg?style=flat&logo=ruby&logoColor=white)](https://www.ruby-lang.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills)](https://github.com/igmarin/rails-agent-skills/tags) ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/igmarin/rails-agent-skills?utm_source=oss&utm_medium=github&utm_campaign=igmarin%2Frails-agent-skills&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ---
 
@@ -37,8 +39,8 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 
 | Goal | Skill |
 |------|-------|
-| Implement feature with TDD | `skills/workflows/rails-tdd-loop` |
-| Review PR | `skills/workflows/rails-review-flow` |
+| Implement feature with TDD | `workflows/rails-tdd-loop` |
+| Review PR | `workflows/rails-review-flow` |
 | Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` |
 | Not sure where to start | `skills/orchestration/rails-skills-orchestrator` |
 
@@ -106,7 +108,6 @@ See [docs/workflows/](docs/workflows/) for the full TDD Feature Loop and all wor
 
 This library intentionally reuses proven patterns from broader agent-skill libraries, but translates them into a **Rails-first** workflow instead of copying generic frontend-oriented skills one-to-one.
 
-
 | Reused pattern                         | Rails-first destination in this repo                                       |
 | ----------------------------------------| ----------------------------------------------------------------------------|
 | PRD interview + scope control          | `create-prd`                                                               |
@@ -115,7 +116,6 @@ This library intentionally reuses proven patterns from broader agent-skill libra
 | Bug investigation to reproducible test | `rails-bug-triage`                                                         |
 | Domain language and context design     | `ddd-ubiquitous-language` + `ddd-boundaries-review` + `ddd-rails-modeling` |
 | Skill authoring conventions            | `docs/skill-template.md`                                                   |
-
 
 The rule of thumb is: **reuse patterns, not names**. If a broader skill maps cleanly to Rails/RSpec/YARD workflows, absorb the pattern into the existing chain. Create a new skill only when there is a real Rails-specific workflow gap.
 
@@ -127,14 +127,14 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 
 **Goal:** Build a new feature, e.g., "Feature A"
 
-**Step 1: Planning & Task Breakdown**
+### Step 1: Planning & Task Breakdown
 
 - **Action:** Define the feature's requirements.
   - **Use Skill:** [create-prd](skills/planning/create-prd/)
 - **Then:** Break the PRD into a detailed, TDD-ready checklist.
   - **Use Skill:** [generate-tasks](skills/planning/generate-tasks/)
 
-**Step 2: Start the TDD Cycle**
+### Step 2: Start the TDD Cycle
 
 - **Action:** Pick the first, highest-value "slice" of behavior from your task list.
 - **Action:** Get guidance on choosing the right *type* of test to write first (e.g., a request spec).
@@ -142,24 +142,24 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 - **Action:** Write the first failing test. **Crucially, run it and watch it fail.**
   - **Use Skill:** [rspec-best-practices](skills/testing/rspec-best-practices/)
 
-**Step 3: Implementation**
+### Step 3: Implementation
 
 - **Action:** Write the minimum amount of application code required to make your failing test pass.
   - **Use Skills:** [ruby-service-objects](skills/patterns/ruby-service-objects/) for business logic, [rails-code-conventions](skills/code-quality/rails-code-conventions/) for general code quality.
 
-**Step 4: Verification**
+### Step 4: Verification
 
 - **Action:** Run the test again and watch it pass.
 - **Action:** Run linters and the full test suite to ensure no regressions. Refactor your new code if needed.
 
-**Step 5: Documentation & Self-Review**
+### Step 5: Documentation & Self-Review
 
 - **Action:** Add inline documentation to any new public classes or methods.
   - **Use Skill:** [yard-documentation](skills/patterns/yard-documentation/)
 - **Action:** Perform a self-review of your changes.
   - **Use Skill:** [rails-code-review](skills/code-quality/rails-code-review/)
 
-**Step 6: Responding to Peer Review**
+### Step 6: Responding to Peer Review
 
 - **Action:** When you receive feedback from teammates, evaluate and implement their suggestions systematically.
   - **Use Skill:** [rails-review-response](skills/code-quality/rails-review-response/)
@@ -246,16 +246,13 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 
 ### Planning & Tasks
 
-
 | Skill                               | Description                                                                  |
 | ----------------------------------- | ---------------------------------------------------------------------------- |
 | [create-prd](skills/planning/create-prd/)           | Generate Product Requirements Documents from feature descriptions            |
 | [generate-tasks](skills/planning/generate-tasks/)   | Break down PRDs into step-by-step implementation task lists                  |
 | [ticket-planning](skills/planning/ticket-planning/) | Draft or create tickets from plans; sprint placement and classification |
 
-
 ### Rails Code Quality
-
 
 | Skill                                                         | Description                                                                                              |
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -275,9 +272,7 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 | [rails-frontend-hotwire](skills/infrastructure/rails-frontend-hotwire/) | Turbo/Stimulus integration patterns                                                                    |
 | [api-rest-collection](skills/api/api-rest-collection/)                   | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL           |
 
-
 ### DDD & Domain Modeling
-
 
 | Skill                                               | Description                                                                                        |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
@@ -285,9 +280,7 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 | [ddd-boundaries-review](skills/ddd/ddd-boundaries-review/)     | Review bounded contexts, ownership, and language leakage in Rails codebases                        |
 | [ddd-rails-modeling](skills/ddd/ddd-rails-modeling/)           | Map DDD concepts to Rails models, services, value objects, and boundaries without over-engineering |
 
-
 ### Ruby Patterns
-
 
 | Skill                                                                 | Description                                                                  |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
@@ -296,18 +289,14 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 | [strategy-factory-null-calculator](skills/patterns/strategy-factory-null-calculator/) | Implement variant-based calculators with Strategy + Factory + Null Object    |
 | [yard-documentation](skills/patterns/yard-documentation/)                             | Write YARD docs for Ruby classes and public methods (all output in English)  |
 
-
 ### Context & Setup
-
 
 | Skill                                                       | Description                                                                                   |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | [rails-context-engineering](skills/context/rails-context-engineering/)     | Load schema, routes, nearest patterns before any code/spec/PRD — surface ambiguity explicitly |
 | [rails-project-onboarding](skills/context/rails-project-onboarding/) | Complete dev environment setup (Docker, env vars, database)                               |
 
-
 ### Testing
-
 
 | Skill                                           | Description                                                                |
 | ----------------------------------------------- | -------------------------------------------------------------------------- |
@@ -316,9 +305,7 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 | [rails-bug-triage](skills/testing/rails-bug-triage/)           | Turn a Rails bug report into a reproducible failing spec and fix plan      |
 | [rspec-service-testing](skills/testing/rspec-service-testing/) | Test service objects with instance_double, hash factories, shared_examples |
 
-
 ### Rails Engines
-
 
 | Skill                                                     | Description                                                       |
 | --------------------------------------------------------- | ----------------------------------------------------------------- |
@@ -331,23 +318,18 @@ The guide covers both the **MCP server** (recommended — on-demand, saves token
 | [rails-engine-extraction](skills/engines/rails-engine-extraction/)       | Extract host app code into engines incrementally                  |
 | [rails-engine-compatibility](skills/engines/rails-engine-compatibility/) | Maintain cross-version compatibility                              |
 
-
 ### Refactoring
-
 
 | Skill                               | Description                                                      |
 | ----------------------------------- | ---------------------------------------------------------------- |
 | [refactor-safely](skills/code-quality/refactor-safely/) | Restructure code with characterization tests and safe extraction |
 
-
 ### Meta
-
 
 | Skill                                            | Description                                                    |
 | ------------------------------------------------ | -------------------------------------------------------------- |
 | [rails-skills-orchestrator](skills/orchestration/rails-skills-orchestrator/) | Discover and invoke the right skill for the current Rails task |
 | [docs/skill-template.md](docs/skill-template.md) | Authoring template and checklist for expanding the library     |
-
 
 ## Skill Relationships
 
@@ -420,8 +402,6 @@ graph TB
     BT[rails-bug-triage] --> L
 ```
 
-
-
 ## How Skills Work
 
 Each skill is a `SKILL.md` file in its own directory. For detailed conventions and structure, refer to the [Skill Design Principles](docs/skill-design-principles.md).
@@ -429,7 +409,6 @@ Each skill is a `SKILL.md` file in its own directory. For detailed conventions a
 ## Typical Workflows
 
 Tests are a **gate** between planning and implementation. See [docs/workflows/](docs/workflows/) for full diagrams.
-
 
 | Workflow                                        | Skill Chain                                                                                                                                                                                                                                           |
 | -------------------------------------------------| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -446,7 +425,6 @@ Tests are a **gate** between planning and implementation. See [docs/workflows/](
 | **Refactoring**                                 | refactor-safely → **[characterization tests]** → refactor → verify tests pass                                                                                                                                                                         |
 | **New service**                                 | rails-tdd-slices → **[write .call spec, verify failure]** → ruby-service-objects → verify passes                                                                                                                                                      |
 | **API integration**                             | rails-tdd-slices → **[write layer specs, verify failure]** → ruby-api-client-integration → verify passes                                                                                                                                              |
-
 
 ## Creating New Skills
 

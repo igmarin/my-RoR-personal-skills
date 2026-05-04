@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent writes complete Rails engine documentation including a gem README with installation/usage sections and inline YARD documentation for the engine's main public class.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "README.md created",
+      "max_score": 8,
+      "description": "A README.md is produced at the repo root"
+    },
+    {
+      "name": "Installation section",
+      "max_score": 10,
+      "description": "README has an Installation section showing how to add the gem to a Gemfile and run bundle install"
+    },
+    {
+      "name": "Usage example with Calculator.call",
+      "max_score": 12,
+      "description": "README includes a code example showing ShippingRates::Calculator.call with the required params hash"
+    },
+    {
+      "name": "Supported carriers listed",
+      "max_score": 8,
+      "description": "README lists the three supported carriers: ups, fedex, usps"
+    },
+    {
+      "name": "Return shape documented",
+      "max_score": 10,
+      "description": "README documents the success and error return shapes: { success: true/false, response: { ... } }"
+    },
+    {
+      "name": "YARD class-level doc",
+      "max_score": 8,
+      "description": "lib/shipping_rates/calculator.rb has a YARD class-level summary comment"
+    },
+    {
+      "name": "YARD @param on self.call",
+      "max_score": 8,
+      "description": "self.call has a @param tag for the params argument"
+    },
+    {
+      "name": "YARD @option tags",
+      "max_score": 10,
+      "description": "self.call or initialize has @option tags for :origin, :destination, :weight_oz, and :carrier"
+    },
+    {
+      "name": "YARD @return on self.call",
+      "max_score": 8,
+      "description": "self.call has a @return [Hash] tag documenting the response shape"
+    },
+    {
+      "name": "No logic changes",
+      "max_score": 10,
+      "description": "The calculator.rb implementation logic is unchanged — only YARD comments were added"
+    },
+    {
+      "name": "Contributing section",
+      "max_score": 5,
+      "description": "README has a Contributing or Development section with at minimum a link to how to submit PRs"
+    },
+    {
+      "name": "English only",
+      "max_score": 3,
+      "description": "All documentation text (README and YARD) is written in English"
+    }
+  ]
+}

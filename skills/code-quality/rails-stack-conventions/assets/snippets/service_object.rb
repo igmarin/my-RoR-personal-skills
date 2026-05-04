@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Service object .call pattern
 class CreateOrder
   def self.call(attrs)

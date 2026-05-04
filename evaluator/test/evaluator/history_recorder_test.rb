@@ -22,14 +22,14 @@ class HistoryRecorderTest < Minitest::Test
   end
 
   def test_load_history_returns_parsed_json_when_valid
-    data = [{ timestamp: '2023-01-01', skill: 'test', summary: {} }]
+    data = [{ timestamp: '2023-01-01', source_path: 'test', summary: {} }]
     File.expects(:exist?).with(@history_file).returns(true)
     File.expects(:read).with(@history_file).returns(JSON.generate(data))
 
     result = Evaluator::HistoryRecorder.load_history
 
     assert_equal 1, result.size
-    assert_equal 'test', result.first[:skill]
+    assert_equal 'test', result.first[:source_path]
   end
 
   def test_summarize_handles_empty_tasks
@@ -70,17 +70,17 @@ class HistoryRecorderTest < Minitest::Test
     # Expect File.write with the new entry
     File.expects(:write).with do |path, content|
       path == @history_file &&
-        content.include?('"skill": "skills/test"') &&
+        content.include?('"source_path": "skills/test"') &&
         content.include?('"model": "gpt-4"') &&
         content.include?('"average_baseline": 80.0')
     end
 
-    Evaluator::HistoryRecorder.record(results, skill_path: 'skills/test', model: 'gpt-4')
+    Evaluator::HistoryRecorder.record(results, source_path: 'skills/test', model: 'gpt-4')
   end
 
   def test_record_does_nothing_on_failure
     results = { success: false }
     File.expects(:write).never
-    Evaluator::HistoryRecorder.record(results, skill_path: 'test', model: 'gpt-4')
+    Evaluator::HistoryRecorder.record(results, source_path: 'test', model: 'gpt-4')
   end
 end

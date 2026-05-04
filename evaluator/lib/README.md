@@ -7,7 +7,8 @@ This directory contains the core logic for the AI Agent Evaluation System.
 The system is built around several decoupled domains to ensure maintainability and separation of concerns:
 
 - **`Client`**: A lightweight wrapper around the LLM API (e.g., OpenAI) via Faraday.
-- **`ContextHydrator`**: Injects necessary context into the prompt, mapping instructions to XML blocks.
+- **`SourcePathResolver`**: Infers the source skill or workflow directory from an eval target, while still allowing explicit overrides.
+- **`ContextHydrator`**: Injects necessary context into the prompt, mapping source markdown files to XML blocks.
 - **`ReactAgent`** (in `lib/react_agent`): Implements the ReAct (Reasoning and Acting) loop, executing thoughts, actions, and observations.
 - **`Evaluator`** (in `lib/evaluator`): Manages the testing sandbox and the final evaluation (Judge) logic.
 - **`Tools`** (in `lib/tools`): Actionable capabilities the agent can use to interact with its environment.

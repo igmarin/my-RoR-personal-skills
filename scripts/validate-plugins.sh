@@ -280,31 +280,67 @@ done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.tessl/*" -
 
 info "Total SKILL.md files found: $skill_count"
 
-  # Cross-check: every skill dir with SKILL.md must be in tile.json.skills
-  section "tile.json ↔ Disk Skill Inventory Sync"
+SEARCH_ROOTS=()
+for dir in build skills workflows; do
+  if [ -d "$dir" ]; then
+    SEARCH_ROOTS+=("$dir")
+  fi
+done
 
-  if [ -f "tile.json" ]; then
+DISK_SKILL_DIRS=""
+if [ "${#SEARCH_ROOTS[@]}" -gt 0 ]; then
+  DISK_SKILL_DIRS=$(find "${SEARCH_ROOTS[@]}" -name "SKILL.md" -exec dirname {} \; | sort)
+fi
+
+# Cross-check: every public skill/workflow dir with SKILL.md must be in tile.json.skills
+section "tile.json ↔ Disk Skill Inventory Sync"
+
+if [ -f "tile.json" ]; then
+  TILE_SKILL_DIRS=$(jq -r '.skills | .[].path' tile.json 2>/dev/null | sed 's#/SKILL.md$##' | sort)
+
   while IFS= read -r dir; do
     skill_name=$(basename "$dir")
-    skill_path="${dir#./}/SKILL.md"
-    # Check if this path exists in tile.json values
-    if jq -r '.skills | .[].path' tile.json | grep -qx "$skill_path"; then
+    if printf '%s\n' "$TILE_SKILL_DIRS" | grep -qx "$dir"; then
       check_pass "tile.json includes skill: $skill_name"
     else
-      check_fail "tile.json missing skill present on disk: $skill_name (at $skill_path)"
+      check_fail "tile.json missing skill present on disk: $skill_name (at $dir/SKILL.md)"
     fi
-  done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.claude/*" -not -path "./.cursor/*" -not -path "./.windsurf/*" -not -path "./.tessl/*" -not -path "./node_modules/*" -exec dirname {} \; | sort)
+  done <<< "$DISK_SKILL_DIRS"
 
-  # And every tile.json.skills entry must exist on disk
-  while IFS= read -r skill_path; do
-    if [ -f "$skill_path" ]; then
-      skill_name=$(basename $(dirname "$skill_path"))
+  while IFS= read -r dir; do
+    if [ -f "$dir/SKILL.md" ]; then
+      skill_name=$(basename "$dir")
       check_pass "Disk has skill listed in tile.json: $skill_name"
     else
-      skill_name=$(basename $(dirname "$skill_path"))
-      check_fail "tile.json references missing skill: $skill_name (expected at $skill_path)"
+      skill_name=$(basename "$dir")
+      check_fail "tile.json references missing skill: $skill_name (expected at $dir/SKILL.md)"
     fi
-  done < <(jq -r '.skills | .[].path' tile.json 2>/dev/null | sort)
+  done <<< "$TILE_SKILL_DIRS"
+fi
+
+section ".claude-plugin/plugin.json ↔ Disk Skill Inventory Sync"
+
+if [ -f ".claude-plugin/plugin.json" ]; then
+  CLAUDE_SKILL_DIRS=$(jq -r '.skills[]' .claude-plugin/plugin.json 2>/dev/null | sed 's#^\./##' | sort)
+
+  while IFS= read -r dir; do
+    skill_name=$(basename "$dir")
+    if printf '%s\n' "$CLAUDE_SKILL_DIRS" | grep -qx "$dir"; then
+      check_pass ".claude-plugin/plugin.json includes skill: $skill_name"
+    else
+      check_fail ".claude-plugin/plugin.json missing skill present on disk: $skill_name (at $dir)"
+    fi
+  done <<< "$DISK_SKILL_DIRS"
+
+  while IFS= read -r dir; do
+    if [ -f "$dir/SKILL.md" ]; then
+      skill_name=$(basename "$dir")
+      check_pass "Disk has skill listed in .claude-plugin/plugin.json: $skill_name"
+    else
+      skill_name=$(basename "$dir")
+      check_fail ".claude-plugin/plugin.json references missing skill: $skill_name (expected at $dir/SKILL.md)"
+    fi
+  done <<< "$CLAUDE_SKILL_DIRS"
 fi
 
 # Summary

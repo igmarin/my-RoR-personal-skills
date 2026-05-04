@@ -13,16 +13,17 @@ module Evaluator
     # Records evaluation results into a historical benchmarks file.
     #
     # @param results [Hash] The results from a Runner.call.
-    # @param skill_path [String] The path to the skill that was tested.
+    # @param source_path [String] The resolved source path used for the evaluation.
     # @param model [String] The model name used for the evaluation.
     # @return [void]
-    def self.record(results, skill_path:, model:)
+    # @raise [SystemCallError] when the history file cannot be written.
+    def self.record(results, source_path:, model:)
       return unless results[:success]
 
       history = load_history
       entry = {
         timestamp: Time.now.iso8601,
-        skill: skill_path,
+        source_path: source_path,
         model: model,
         summary: summarize(results[:tasks])
       }

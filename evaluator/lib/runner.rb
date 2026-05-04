@@ -8,6 +8,7 @@ require_relative 'react_agent'
 require_relative 'evaluator/sandbox'
 require_relative 'evaluator/judge'
 require_relative 'evaluator/agent_runner'
+require_relative 'evaluator/source_path_resolver'
 
 module Evaluator
   # Orchestrates the entire evaluation process.
@@ -19,10 +20,11 @@ module Evaluator
     #
     # @param params [Hash] The configuration for the evaluation.
     # @option params [String] :eval_folder_path The path to the evaluation directory containing task and criteria.
-    # @option params [String] :skill_path The path to the skill being tested.
+    # @option params [String] :skill_path Optional override for the source directory being tested.
     # @option params [String, Pathname] :base_path (optional) The base path for relative file resolution.
     # @option params [Hash] :client_params (optional) Parameters to pass to the LLM client.
     # @return [Hash] A result hash with :success and :response payload containing the judge scores and diffs.
+    # @raise [ArgumentError] If the eval path does not match a supported source-path convention.
     def self.call(params)
       new(params).call
     end
@@ -43,6 +45,11 @@ module Evaluator
 
       return { success: false, response: { error: { message: "Evaluation path #{full_path} does not exist" } } } unless full_path.exist?
 
+      source_path = SourcePathResolver.call(
+        eval_folder_path: @eval_folder_path,
+        skill_path: @skill_path
+      )
+
       task_dirs = self.class.discover_task_dirs(full_path)
       if task_dirs.empty?
         return { success: false,
@@ -51,11 +58,12 @@ module Evaluator
 
       puts "Found #{task_dirs.size} tasks. Running evaluations in parallel (4 threads)..."
       results = Parallel.map(task_dirs, in_threads: 4) do |task_dir|
-        evaluate_task(task_dir)
+        evaluate_task(task_dir, source_path)
       end
 
       {
         success: true,
+        source_path: source_path,
         tasks: results
       }
     rescue StandardError => e
@@ -76,8 +84,10 @@ module Evaluator
     # Evaluates a single task within the given directory.
     #
     # @param full_eval_path [Pathname] The path to the evaluation directory.
+    # @param source_path [String] The resolved source directory used for context hydration.
     # @return [Hash] The result of the task evaluation.
-    def evaluate_task(full_eval_path)
+    # @raise [StandardError] If reading files or invoking AgentRunner.call or Judge.call fails and the error bubbles up.
+    def evaluate_task(full_eval_path, source_path)
       task_content = File.read(full_eval_path.join('task.md'))
       criteria_content = File.read(full_eval_path.join('criteria.json'))
 
@@ -93,7 +103,7 @@ module Evaluator
         full_eval_path: full_eval_path,
         task_content: task_content,
         client_params: @client_params,
-        skill_path: @skill_path,
+        source_path: source_path,
         base_path: @base_path
       )
 

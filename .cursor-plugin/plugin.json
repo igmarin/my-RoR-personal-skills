@@ -1,7 +1,7 @@
 {
   "name": "rails-agent-skills",
   "displayName": "Rails Agent Skills",
-  "description": "Curated library of 39 AI agent skills for Ruby on Rails development. Organized by category with 5 callable workflow skills.",
+  "description": "Curated library of 42 public AI agent skills for Ruby on Rails development, plus 5 callable workflow skills.",
   "version": "4.0.0",
   "author": {
     "name": "igmarin",

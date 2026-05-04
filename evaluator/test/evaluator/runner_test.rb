@@ -6,25 +6,24 @@ module Evaluator
   # Tests for Evaluator::Runner
   class RunnerTest < Minitest::Test
     def setup
-      @skill_path  = 'skills/patterns/ruby-service-objects'
-      @base_path   = Pathname.new(File.expand_path('../../../..', __dir__))
-      @tmp_dir     = Dir.mktmpdir
-      @eval_path   = Pathname.new(@tmp_dir).relative_path_from(@base_path).to_s
-      @full_eval_path = @base_path.join(@eval_path)
+      @tmp_dir = Pathname.new(Dir.mktmpdir('evaluator_runner_test'))
+      @base_path = @tmp_dir
 
-      # Create required files for the eval path
-      File.write(@full_eval_path.join('task.md'), 'Test task')
-      File.write(@full_eval_path.join('criteria.json'), '{}')
+      create_eval_fixture(
+        'evals/skills/patterns/ruby-service-objects/basic-service-object'
+      )
+      create_eval_fixture(
+        'evals/workflows/rails-tdd-loop/full-feature'
+      )
     end
 
     def teardown
-      FileUtils.rm_rf(@tmp_dir) if @tmp_dir && Dir.exist?(@tmp_dir)
+      FileUtils.rm_rf(@tmp_dir) if @tmp_dir&.exist?
     end
 
     def test_call_returns_failure_when_eval_path_does_not_exist
       result = Runner.call(
         eval_folder_path: 'evals/skills/nonexistent/path',
-        skill_path: @skill_path,
         base_path: @base_path
       )
 
@@ -32,41 +31,83 @@ module Evaluator
       assert_match(/does not exist/, result[:response][:error][:message])
     end
 
-    def test_call_delegates_to_agent_runner_and_judge
-      judge_result = '{"baseline_score":60,"context_score":85,"reasoning":"context is better"}'
-
-      # Use sequence of returns for the two calls (baseline then context)
-      AgentRunner.stubs(:call).returns(
-        ['baseline output', 'diff-baseline'],
-        ['context output', 'diff-context']
+    def test_call_infers_source_path_for_skill_evals
+      expect_single_task_run(
+        source_path: 'skills/patterns/ruby-service-objects'
       )
-      Judge.stubs(:call).returns(judge_result)
 
       result = Runner.call(
-        eval_folder_path: @eval_path,
-        skill_path: @skill_path,
+        eval_folder_path: 'evals/skills/patterns/ruby-service-objects/basic-service-object',
         base_path: @base_path
       )
 
       assert result[:success]
+      assert_equal 'skills/patterns/ruby-service-objects', result[:source_path]
       assert_equal 1, result[:tasks].size
-      task_result = result[:tasks].first
-
-      assert_equal 'diff-baseline', task_result[:baseline_diff]
-      assert_equal 'diff-context',  task_result[:context_diff]
-      assert_equal judge_result,    task_result[:judge_score]
     end
 
-    def test_call_returns_failure_on_unexpected_error
-      AgentRunner.stubs(:call).raises('boom')
+    def test_call_infers_source_path_for_workflow_evals
+      expect_single_task_run(
+        source_path: 'workflows/rails-tdd-loop'
+      )
+
       result = Runner.call(
-        eval_folder_path: @eval_path,
-        skill_path: @skill_path,
+        eval_folder_path: 'evals/workflows/rails-tdd-loop/full-feature',
+        base_path: @base_path
+      )
+
+      assert result[:success]
+      assert_equal 'workflows/rails-tdd-loop', result[:source_path]
+    end
+
+    def test_call_uses_explicit_source_path_override
+      expect_single_task_run(
+        source_path: 'skills/patterns/ruby-service-objects'
+      )
+
+      result = Runner.call(
+        eval_folder_path: 'evals/workflows/rails-tdd-loop/full-feature',
+        skill_path: 'skills/patterns/ruby-service-objects',
+        base_path: @base_path
+      )
+
+      assert result[:success]
+      assert_equal 'skills/patterns/ruby-service-objects', result[:source_path]
+    end
+
+    def test_call_returns_failure_when_source_path_cannot_be_inferred
+      create_eval_fixture('tmp/custom-evals/unmapped-task')
+
+      result = Runner.call(
+        eval_folder_path: 'tmp/custom-evals/unmapped-task',
         base_path: @base_path
       )
 
       refute result[:success]
-      assert_equal 'boom', result[:response][:error][:message]
+      assert_match(/could not infer/i, result[:response][:error][:message])
+    end
+
+    private
+
+    def create_eval_fixture(relative_path)
+      full_path = @base_path.join(relative_path)
+      full_path.mkpath
+      File.write(full_path.join('task.md'), 'Test task')
+      File.write(full_path.join('criteria.json'), '{}')
+    end
+
+    def expect_single_task_run(source_path:)
+      judge_result = '{"baseline_score":60,"context_score":85,"reasoning":"context is better"}'
+
+      AgentRunner.expects(:call).with(has_entry(mode: :baseline)).returns(
+        ['baseline output', 'diff-baseline']
+      )
+      AgentRunner.expects(:call).with do |params|
+        params[:mode] == :context &&
+          params[:source_path] == source_path &&
+          params[:base_path] == @base_path
+      end.returns(['context output', 'diff-context'])
+      Judge.expects(:call).returns(judge_result)
     end
   end
 end

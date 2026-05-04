@@ -1,47 +1,65 @@
 # Evaluator and Agents Roadmap
 
-This document outlines the step-by-step master plan to restructure the repository, build a custom Ruby evaluator, and transition from simple skills/workflows to fully autonomous agents.
+This roadmap now reflects the repository as it exists today: the evaluator already runs a ReAct loop, the repo already uses root `workflows/`, and the next step is hardening those foundations before any agent-framework expansion.
 
-## Phase 1: Structural Separation
+## Current State
 
-**Goal:** Clean up the repository base and prepare for scaling without breaking current integrations.
+- `workflows/` is already the published home for callable workflow skills.
+- `evals/` already mirrors the source layout with `evals/skills/` and `evals/workflows/`.
+- The evaluator already compares a baseline run against a context-hydrated ReAct run.
+- MCP exposure, manifests, and docs still need enforcement so they match the on-disk topology consistently.
 
-1. **Create the `workflows/` directory**: At the root of the repository, separating orchestrators from atomic skills.
-2. **Migrate Orchestrators**: Move all orchestrator folders from `skills/workflows/` to the new `/workflows/` directory.
-3. **Update Manifests**: Modify `tile.json`, `.claude-plugin`, and validation scripts to read `.md` files from both `skills/` and `workflows/`.
-4. **Reorganize `evals/` (Structural Mirror)**:
-   - Create `evals/skills/` and `evals/workflows/`.
-   - Move current test folders to match the source structure (e.g., `evals/api-versioning-with-controller-inheritan` moves to `evals/skills/api/api-versioning/`).
+## Phase 3A: Hardening and Enforcement Gate
 
-## Phase 2: Ruby Evaluator V1 (One-Shot)
+**Goal:** Make the current evaluator and published skill surface internally consistent before new architecture work begins.
 
-**Goal:** Solve Tessl's context disconnection and gain independence.
+### Mandatory fixes in this gate
 
-1. **Scaffold the Evaluator**: Create an `evaluator/` (or `runner/`) folder at the root, initialized as a standalone Ruby app with its own `Gemfile`.
-2. **XML Bundling Logic (Context Hydration)**:
-   - Write a script that maps a test (e.g., `workflows/rails-tdd-loop`) to its source folder.
-   - Read all `.md` files in that folder (`SKILL.md`, `EXAMPLES.md`, etc.) and bundle them into `<agent_context><file>...</file></agent_context>` tags.
-3. **One-Shot Execution**:
-   - **Baseline Call**: Send only `task.md` to the LLM API.
-   - **With Context Call**: Send `task.md` + the XML context bundle to the LLM API.
-4. **The Judge**: Send both responses and `criteria.json` to an LLM judge to obtain the final score.
-5. **Transition**: Validate the script locally and deprecate Tessl.
+1. **MCP topology enforcement**
+   - Discover published skills from `build/` and `skills/<category>/<skill>/`.
+   - Discover workflows from `workflows/<workflow>/`.
+   - Discover docs from `docs/`.
+   - Keep supported Tessl tile discovery only as a compatibility path.
 
-## Phase 3: Consolidation and Extraction
+2. **Manifest and inventory enforcement**
+   - Publish every callable public skill consistently across `tile.json` and `.claude-plugin/plugin.json`.
+   - Keep `scripts/validate-plugins.sh` strict so disk-vs-manifest drift fails immediately.
+   - Treat `build/SKILL.md` as a first-class published skill.
 
-**Goal:** Stabilize the evaluation engine, automate execution, and expand coverage.
+3. **Evaluator source-path enforcement**
+   - Infer source paths directly from eval targets by convention.
+   - Keep `--skill` as an explicit override, not a mandatory input.
+   - Record the resolved source path actually used in reports and benchmark history.
 
-1. **Gemification**: Extract the stable `evaluator/` code into an independent Ruby gem (e.g., `agent_evaluator_core`) and install it back into the repository.
-2. **Robust Task Discovery**: Implement recursive discovery of `task.md` files. If a directory is targeted (e.g., `evals/skills/api`), the runner should detect and execute all nested evaluation tasks.
-3. **Parallel Execution**: Implement a parallel runner to handle high-volume evaluations, ensuring the full suite can be validated in minutes rather than hours.
-4. **CI/CD Integration**: Connect the evaluator to GitHub Actions to run on every PR, preventing regressions in skill effectiveness.
-5. **Reporting & Benchmarking**: Generate structured JSON/HTML reports and maintain a history of scores to track improvements in agent performance over time.
-6. **Complete Coverage**: Write missing `task.md` and `criteria.json` for all 39 skills and critical workflows.
+4. **Documentation alignment**
+   - Remove stale `.windsurf/workflows` assumptions from runtime docs.
+   - Describe the evaluator as ReAct-based, not one-shot.
+   - Keep roadmap language aligned with the real repo structure and current evaluator behavior.
 
-## Phase 4: The Transition to Agents
+### Exit criteria
 
-**Goal:** Move from static prompt execution to an interactive multi-agent system.
+- MCP resources, manifest inventories, evaluator source mapping, and roadmap docs all describe the same topology.
+- `scripts/validate-plugins.sh` passes with no inventory exceptions.
+- Evaluator and MCP tests cover the enforced conventions.
 
-1. **Engine Evolution**: Use the evaluator gem's foundation (API calling, parsing, context hydration) to build a custom Agent Framework (or expand the current `mcp_server`).
-2. **Interactive Loop**: Modify the engine to run continuous, interactive processes with OS access (reading terminal outputs like RSpec or Bullet).
-3. **The Final Rename**: Once the framework can instantiate a "Supervisor" agent to direct a "Developer" agent autonomously, rename the `workflows/` directory to `agents/`.
+## Phase 3B: Standalone Evaluator Extraction
+
+**Goal:** Extract the hardened evaluator into a standalone gem only after the enforcement gate is complete.
+
+1. Extract the stabilized evaluator code into an independent Ruby gem.
+2. Re-integrate it into this repository as a dependency with the same ReAct behavior.
+3. Preserve convention-based source resolution and benchmark history during the extraction.
+
+This extraction is intentionally *after* the hardening batch so the gem boundary is cut from stable behavior, not from drifting assumptions.
+
+## Phase 4: Agent Transition Work
+
+**Goal:** Expand from a hardened ReAct evaluator into richer agent execution only after Phase 3A and Phase 3B are complete.
+
+1. Reuse the evaluator's ReAct runtime, tool execution, and context hydration as the foundation.
+2. Add longer-lived interactive execution, richer observability, and more agent-oriented orchestration.
+3. Evaluate whether the eventual agent framework should extend the evaluator, the MCP layer, or a new runtime boundary.
+
+## Guiding Rule
+
+Do not start Phase 4 work while topology, manifest publication, evaluator source mapping, and roadmap docs still disagree. Hardening comes first, extraction comes second, and agent expansion comes last.

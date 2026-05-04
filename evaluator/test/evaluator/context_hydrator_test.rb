@@ -10,7 +10,7 @@ module Evaluator
         File.write(File.join(dir, 'test.md'), 'Dummy skill content')
 
         # Act
-        result = ContextHydrator.call(skill_path: '.', base_path: Pathname.new(dir))
+        result = ContextHydrator.call(source_path: '.', base_path: Pathname.new(dir))
 
         # Assert
         assert result[:success]
@@ -22,7 +22,7 @@ module Evaluator
 
     def test_call_returns_error_on_failure
       # Act
-      result = ContextHydrator.call(skill_path: 'non_existent_path')
+      result = ContextHydrator.call(source_path: 'non_existent_path')
 
       # Assert
       refute result[:success]

@@ -111,6 +111,8 @@ module Evaluator
         conn = Faraday.new(url: base_url) do |f|
           f.request :json
           f.response :json
+          f.options.open_timeout = 5 # seconds
+          f.options.timeout = 10 # seconds
         end
 
         conn.post(request_path) do |req|
@@ -125,7 +127,17 @@ module Evaluator
       def handle_response(response)
         return failure_response(response) unless response.success?
 
-        { success: true, response: { message: extract_message(response.body) } }
+        message = extract_message(response.body)
+        return missing_message_response(response) if message.nil? || (message.is_a?(Hash) && message.empty?)
+
+        { success: true, response: { message: message } }
+      end
+
+      # Returns a standardized failure response when the LLM returns no message.
+      # @param _response [Faraday::Response]
+      # @return [Hash]
+      def missing_message_response(_response)
+        { success: false, response: { error: { message: 'LLM response missing message content' } } }
       end
 
       # Returns a standardized failure response based on the Faraday response.

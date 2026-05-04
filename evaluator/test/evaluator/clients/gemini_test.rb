@@ -13,6 +13,7 @@ module Evaluator
       def test_call_returns_message_content_on_success
         # Arrange
         Config.setup do |config|
+          config.set_provider_api_key(:gemini, 'test_gemini_key')
           config.set_provider_project_id(:gemini, 'test-project')
           config.set_provider_location(:gemini, 'us-central1')
         end
@@ -99,6 +100,7 @@ module Evaluator
       def test_call_returns_error_on_api_failure
         # Arrange
         Config.setup do |config|
+          config.set_provider_api_key(:gemini, 'test_gemini_key')
           config.set_provider_project_id(:gemini, 'test-project')
           config.set_provider_location(:gemini, 'us-central1')
         end

@@ -37,6 +37,7 @@ detectors:
       - "Evaluator::AgentRunner#print_header"
       - "Evaluator::Config#load_and_merge_json"
       - "Evaluator::Clients::Providers::Gemini#initialize"
+      - "Evaluator::Clients::BaseClient#execute_request"
   UncommunicativeVariableName:
     accept:
       - e
@@ -63,5 +64,6 @@ detectors:
   NilCheck:
     exclude:
       - "Evaluator::ReactAgent#call"
+      - "Evaluator::Clients::BaseClient#handle_response"
   LongParameterList:
     max_params: 5

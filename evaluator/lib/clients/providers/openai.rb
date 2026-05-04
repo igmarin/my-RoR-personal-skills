@@ -17,8 +17,8 @@ module Evaluator
         # @param options [Hash]
         def initialize(system_prompt:, messages:, tools: [], **options)
           super
-          @api_key = @config.api_key
-          @model = @config.model
+          @api_key = options[:api_key] || @config.api_key
+          @model = options[:model] || @config.model
         end
 
         protected

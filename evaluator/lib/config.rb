@@ -90,19 +90,27 @@ module Evaluator
       def load_and_merge_json(path)
         data = JSON.parse(File.read(path), symbolize_names: true)
 
+        unless data.is_a?(Hash)
+          warn "Warning: Config file at #{path} is not a valid JSON hash. Skipping."
+          return
+        end
+
         @current_llm_provider = data[:current_llm_provider].to_sym if data[:current_llm_provider]
         @max_execution_time = data[:max_execution_time] if data[:max_execution_time]
         @allowed_commands = data[:allowed_commands] if data[:allowed_commands]
 
-        providers = data[:providers]
-        return unless providers
+        providers_data = data[:providers]
+        unless providers_data.is_a?(Hash)
+          warn "Warning: 'providers' section in config file at #{path} is not a valid hash. Skipping provider merge."
+          return
+        end
 
-        providers.each do |provider, config|
+        providers_data.each do |provider, config|
           @llm_providers_config[provider] ||= {}
           @llm_providers_config[provider].merge!(config)
         end
-      rescue JSON::ParserError => e
-        warn "Warning: Failed to parse config file at #{path}: #{e.message}"
+      rescue JSON::ParserError
+        warn "Warning: Failed to parse config file at #{path}. It might be malformed or empty."
       end
 
       # Applies environment variable overrides (highest priority).

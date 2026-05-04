@@ -42,7 +42,7 @@ module Evaluator
 
         # @return [Boolean]
         def valid_config?
-          @api_key && @project_id && @location
+          !@api_key.to_s.strip.empty? && !@project_id.to_s.strip.empty? && !@location.to_s.strip.empty?
         end
 
         # @return [Hash]
@@ -56,9 +56,9 @@ module Evaluator
         # @return [Array<String>]
         def missing_config_keys
           missing = []
-          missing << 'GEMINI_API_KEY' unless @api_key
-          missing << 'GEMINI_PROJECT_ID' unless @project_id
-          missing << 'GEMINI_LOCATION' unless @location
+          missing << 'GEMINI_API_KEY' if @api_key.to_s.strip.empty?
+          missing << 'GEMINI_PROJECT_ID' if @project_id.to_s.strip.empty?
+          missing << 'GEMINI_LOCATION' if @location.to_s.strip.empty?
           missing
         end
       end

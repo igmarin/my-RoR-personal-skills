@@ -49,6 +49,7 @@ module McpSkills
 
       skill_files.map(&:dirname)
                  .reject { |dir| EXCLUDED_DIRS.include?(dir.basename.to_s) }
+                 .uniq
                  .sort
     end
 

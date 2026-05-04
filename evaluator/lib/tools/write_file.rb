@@ -39,7 +39,12 @@ module Evaluator
 
         target = secure_path(path, working_dir_path)
         target.dirname.mkpath
-        target.write(content)
+        # Re-verify path after mkpath to mitigate TOCTOU vulnerabilities
+        target = secure_path(path, working_dir_path)
+
+        File.open(target, File::WRONLY | File::CREAT | File::TRUNC, 0o644) do |f|
+          f.write(content)
+        end
         "Successfully wrote to #{path}"
       end
 
@@ -62,8 +67,6 @@ module Evaluator
           raise ArgumentError, "Path traversal attempt: #{path}" if normalized.include?('..')
 
           raise ArgumentError, "Backslashes are not allowed in path: #{path}" if normalized.include?('\\')
-
-          raise ArgumentError, "More than one dot is not allowed in path: #{path}" if normalized.count('.') > 1
 
           return if normalized.match?(%r{\A[a-zA-Z0-9._\-/]+\z})
 

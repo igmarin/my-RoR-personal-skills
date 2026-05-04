@@ -53,9 +53,8 @@ module Evaluator
 
           normalized = path.strip
           return 'Error: Invalid path. Path must not be empty.' if normalized.empty?
-          raise ArgumentError, "Path traversal attempt: #{path}" if normalized.include?('/') || normalized.include?('\\')
-          return 'Error: Invalid path. More than one dot is not allowed.' if normalized.count('.') > 1
-          return 'Error: Invalid path. Allowed characters are letters, numbers, dot, underscore, and hyphen.' unless normalized.match?(/\A[a-zA-Z0-9._-]+\z/)
+          raise ArgumentError, "Path traversal attempt: #{path}" if normalized.include?('..') || normalized.include?('\\')
+          return 'Error: Invalid path. Allowed characters are letters, numbers, dot, underscore, hyphen, and slash.' unless normalized.match?(%r{\A[a-zA-Z0-9._\-/]+\z})
 
           nil
         end

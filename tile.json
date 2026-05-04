@@ -47,19 +47,19 @@
       "path": "skills/code-quality/rails-code-review/SKILL.md"
     },
     "rails-engines-flow": {
-      "path": "skills/workflows/rails-engines-flow/SKILL.md"
+      "path": "workflows/rails-engines-flow/SKILL.md"
     },
     "rails-quality-flow": {
-      "path": "skills/workflows/rails-quality-flow/SKILL.md"
+      "path": "workflows/rails-quality-flow/SKILL.md"
     },
     "rails-review-flow": {
-      "path": "skills/workflows/rails-review-flow/SKILL.md"
+      "path": "workflows/rails-review-flow/SKILL.md"
     },
     "rails-setup-flow": {
-      "path": "skills/workflows/rails-setup-flow/SKILL.md"
+      "path": "workflows/rails-setup-flow/SKILL.md"
     },
     "rails-tdd-loop": {
-      "path": "skills/workflows/rails-tdd-loop/SKILL.md"
+      "path": "workflows/rails-tdd-loop/SKILL.md"
     },
     "rails-context-engineering": {
       "path": "skills/context/rails-context-engineering/SKILL.md"

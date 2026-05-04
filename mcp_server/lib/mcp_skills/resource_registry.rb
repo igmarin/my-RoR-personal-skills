@@ -45,11 +45,12 @@ module McpSkills
     def skill_dirs
       # Find SKILL.md files in both root directories and tessl tiles
       skill_files = @project_root.glob('*/SKILL.md') +
-                   @project_root.glob('.tessl/tiles/igmarin/rails-agent-skills/*/SKILL.md')
-      
+                    @project_root.glob('.tessl/tiles/*/*/*/SKILL.md')
+
       skill_files.map(&:dirname)
-                .reject { |dir| EXCLUDED_DIRS.include?(dir.basename.to_s) }
-                .sort
+                 .reject { |dir| EXCLUDED_DIRS.include?(dir.basename.to_s) }
+                 .uniq { |dir| dir.basename.to_s }
+                 .sort_by { |dir| dir.basename.to_s }
     end
 
     def doc_resources

@@ -55,15 +55,15 @@ flowchart TD
 
 ## Docs vs. Callable Workflow Skills
 
-This directory contains **reference guides** describing each stage. For **executable orchestration**, use the callable workflow skills in `skills/workflows/`:
+This directory contains **reference guides** describing each stage. For **executable orchestration**, use the callable workflow skills in `workflows/`:
 
 | Stage Doc | Callable Skill | Status |
 |-----------|----------------|--------|
-| [development.md](development.md) | [`rails-tdd-loop`](../../skills/workflows/rails-tdd-loop/SKILL.md) | Active |
-| [review.md](review.md) | [`rails-review-flow`](../../skills/workflows/rails-review-flow/SKILL.md) | Active |
-| [setup.md](setup.md) | [`rails-setup-flow`](../../skills/workflows/rails-setup-flow/SKILL.md) | Active |
-| [quality.md](quality.md) | [`rails-quality-flow`](../../skills/workflows/rails-quality-flow/SKILL.md) | Active |
-| [engines.md](engines.md) | [`rails-engines-flow`](../../skills/workflows/rails-engines-flow/SKILL.md) | Active |
+| [development.md](development.md) | [`rails-tdd-loop`](../../workflows/rails-tdd-loop/SKILL.md) | Active |
+| [review.md](review.md) | [`rails-review-flow`](../../workflows/rails-review-flow/SKILL.md) | Active |
+| [setup.md](setup.md) | [`rails-setup-flow`](../../workflows/rails-setup-flow/SKILL.md) | Active |
+| [quality.md](quality.md) | [`rails-quality-flow`](../../workflows/rails-quality-flow/SKILL.md) | Active |
+| [engines.md](engines.md) | [`rails-engines-flow`](../../workflows/rails-engines-flow/SKILL.md) | Active |
 | [discovery.md](discovery.md) | *(none — linear, no orchestration needed)* | Doc only |
 | [planning.md](planning.md) | *(none — linear, no orchestration needed)* | Doc only |
 

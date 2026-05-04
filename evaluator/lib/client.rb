@@ -1,71 +1,67 @@
 # frozen_string_literal: true
 
-require 'faraday'
-require 'json'
-require 'dotenv/load'
 require_relative 'config'
+require_relative 'clients/providers/openai'
+require_relative 'clients/providers/gemini'
+require_relative 'clients/providers/null_client'
 
 module Evaluator
-  # Handles communication with the OpenAI API.
-  # Wraps requests to the chat completion endpoint and parses responses.
+  # Client is a factory that dispatches requests to the appropriate LLM provider client.
+  # Following ruby-service-objects and yard-documentation standards.
   class Client
-    API_FAILED = 'API Request failed'
-
-    # Sends a chat completion request to the API.
-    #
-    # @param params [Hash] The configuration for the API call.
-    # @option params [String] :system_prompt The system instruction for the LLM.
-    # @option params [Array<Hash>] :messages The list of conversation messages.
-    # @option params [Array<Hash>] :tools (optional) Array of tool definitions the model can use.
-    # @option params [String] :api_key (optional) The API key to use. Falls back to Config.openai_api_key.
-    # @option params [String] :model (optional) The model name to use. Defaults to Config.model.
-    # @return [Hash] A hash containing `:success` (Boolean) and `:response` (Hash).
-    def self.call(params)
-      new(params).call
-    end
-
-    # @param params [Hash] The configuration for the API call.
-    def initialize(params)
-      @api_key = params[:api_key] || Evaluator::Config.openai_api_key
-      @model = params[:model] || Evaluator::Config.model
-      @system_prompt = params[:system_prompt]
-      @messages = params[:messages]
-      @tools = params[:tools]
-    end
-
-    # Executes the HTTP request.
-    #
-    # @return [Hash] The standardized result hash indicating success or failure.
-    def call
-      return { success: false, response: { error: { message: 'OPENAI_API_KEY is not set' } } } unless @api_key
-
-      conn = Faraday.new(url: 'https://api.openai.com') do |f|
-        f.request :json
-        f.response :json
+    class << self
+      # Dispatches the call to the configured LLM provider using keyword arguments.
+      #
+      # @param system_prompt [String] The system instruction for the LLM.
+      # @param messages [Array<Hash>] The list of conversation messages.
+      # @param tools [Array<Hash>] (optional) Array of tool definitions.
+      # @param options [Hash] (optional) Additional provider-specific options.
+      # @return [Hash] with :success [Boolean] and :response [Hash] keys.
+      def call(system_prompt:, messages:, tools: [], **options)
+        provider_client_class.call(
+          system_prompt: system_prompt,
+          messages: messages,
+          tools: tools,
+          **options
+        )
+      rescue StandardError => e
+        log_dispatch_error(e)
+        { success: false, response: { error: { message: "LLM Dispatch Error: #{e.message}" } } }
       end
 
-      body = {
-        model: @model,
-        messages: [{ role: 'system', content: @system_prompt }] + @messages
-      }
-      body[:tools] = @tools if @tools && !@tools.empty?
+      private
 
-      response = conn.post('/v1/chat/completions') do |req|
-        req.headers['Authorization'] = "Bearer #{@api_key}"
-        req.headers['Content-Type'] = 'application/json'
-        req.body = body.to_json
+      # Maps the current provider to its implementation class.
+      # Returns NullClient if no match is found (Null Object Pattern).
+      #
+      # @return [Class]
+      def provider_client_class
+        case Evaluator::Config.current_llm_provider
+        when :openai
+          Evaluator::Clients::Providers::OpenAI
+        when :gemini
+          Evaluator::Clients::Providers::Gemini
+        else
+          Evaluator::Clients::Providers::NullClient
+        end
       end
 
-      unless response.success?
-        error_msg = "#{API_FAILED}: #{response.status} - #{response.body}"
-        return { success: false, response: { error: { message: error_msg } } }
-      end
+      # Logs dispatch-level errors.
+      #
+      # @param error [StandardError]
+      def log_dispatch_error(error)
+        message = "LLM Client Dispatch Error: #{error.message}"
+        backtrace = error.backtrace.first(5).join("\n")
 
-      message = response.body.dig('choices', 0, 'message')
-      { success: true, response: { message: message } }
-    rescue StandardError => e
-      Rails.logger.error("Client Error: #{e.message}") if defined?(Rails)
-      { success: false, response: { error: { message: e.message } } }
+        logger = defined?(Rails) ? Rails.logger : nil
+        if logger
+          logger.error(message)
+          logger.error(backtrace)
+        else
+          warn(message)
+          warn(backtrace)
+        end
+      end
     end
   end
 end

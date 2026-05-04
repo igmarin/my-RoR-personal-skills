@@ -14,11 +14,10 @@ module Evaluator
       # @return [Hash] Step outcome containing :continue (boolean), :result (hash, if finished), and :messages.
       def self.call(messages, config)
         client_result = Client.call(
-          config[:client_params].merge(
-            system_prompt: config[:system_prompt],
-            messages: messages,
-            tools: Tools.definitions
-          )
+          system_prompt: config[:system_prompt],
+          messages: messages,
+          tools: Tools.definitions,
+          **config[:client_params]
         )
 
         return { continue: false, result: client_result } unless client_result[:success]

@@ -68,10 +68,9 @@ module Evaluator
       PROMPT
 
       judge_result = Client.call(
-        @client_params.merge(
-          system_prompt: system_prompt,
-          messages: [{ role: 'user', content: prompt }]
-        )
+        system_prompt: system_prompt,
+        messages: [{ role: 'user', content: prompt }],
+        **@client_params
       )
 
       response = judge_result[:response]

@@ -5,7 +5,9 @@ require 'test_helper'
 module Evaluator
   class GemspecTest < Minitest::Test
     def setup
-      @spec = Gem::Specification.load(File.expand_path('../../agent_evaluator.gemspec', __dir__))
+      Dir.chdir(File.expand_path('../../..', __dir__)) do
+        @spec = Gem::Specification.load('evaluator/agent_evaluator.gemspec')
+      end
     end
 
     def test_package_metadata_points_to_project_sources
@@ -18,6 +20,11 @@ module Evaluator
     def test_package_includes_readme_and_license
       assert_includes @spec.files, 'README.md'
       assert_includes @spec.files, 'LICENSE'
+    end
+
+    def test_package_includes_evaluator_lib_files_when_loaded_from_repo_root
+      assert_includes @spec.files, 'lib/evaluator/version.rb'
+      assert_includes @spec.files, 'lib/runner.rb'
     end
   end
 end

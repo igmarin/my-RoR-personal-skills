@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent correctly scopes Turbo Frames to partial page regions rather than using them for full-page navigation, and verifies that frames have appropriate ids and are validated for correct DOM presence.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Frame not for nav",
+      "description": "turbo_frame_tag does NOT wrap the site-wide navigation, the entire <body>, or full page layout elements — it is scoped to a partial region",
+      "max_score": 12
+    },
+    {
+      "name": "Scoped frame regions",
+      "description": "turbo_frame_tag is used to wrap only the targeted partial-update region (e.g., a detail panel or a list item) and NOT a full page section containing unrelated links",
+      "max_score": 12
+    },
+    {
+      "name": "Matching frame ids",
+      "description": "The turbo_frame_tag id on the index/listing page matches the id inside the linked-to partial or response view (frame ids are consistent across the request-response pair)",
+      "max_score": 11
+    },
+    {
+      "name": "Frame id documented",
+      "description": "The IMPLEMENTATION_NOTES document names the frame id(s) in use and explains which region they scope",
+      "max_score": 8
+    },
+    {
+      "name": "HTML-first base",
+      "description": "The code or documentation shows that the feature started from a working plain-HTML implementation (the link navigates to the product detail page without JavaScript)",
+      "max_score": 11
+    },
+    {
+      "name": "HTML fallback described",
+      "description": "IMPLEMENTATION_NOTES describes the behavior when JavaScript is disabled — the link navigates normally to the full detail page",
+      "max_score": 9
+    },
+    {
+      "name": "Lazy loading placeholder",
+      "description": "If a frame uses lazy loading (loading: :lazy with src:), a placeholder or loading indicator is included inside the frame tag",
+      "max_score": 7
+    },
+    {
+      "name": "No navigation frame abuse",
+      "description": "Does NOT use turbo_frame_tag or data-turbo-frame to drive page-to-page navigation that would be better handled as a standard link or redirect",
+      "max_score": 11
+    },
+    {
+      "name": "Frame validation noted",
+      "description": "IMPLEMENTATION_NOTES or code comments mention confirming that the <turbo-frame> element with the correct id appears in the rendered DOM",
+      "max_score": 9
+    },
+    {
+      "name": "Correct link in frame",
+      "description": "Links inside a turbo_frame_tag target only the same frame (or explicitly use data-turbo-frame=\"_top\" only when full-page navigation is intentionally needed)",
+      "max_score": 10
+    }
+  ]
+}

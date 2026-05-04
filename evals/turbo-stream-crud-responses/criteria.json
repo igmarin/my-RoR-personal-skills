@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent correctly implements Turbo Stream responses for controller actions, creating the right view templates, using respond_to with format.turbo_stream, and using the correct turbo_stream helper actions for DOM manipulation.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "respond_to turbo_stream",
+      "description": "The controller action includes a respond_to block that contains format.turbo_stream (in addition to format.html)",
+      "max_score": 10
+    },
+    {
+      "name": "create stream template",
+      "description": "A .turbo_stream.erb view template file is created for the create (or relevant) action (e.g. create.turbo_stream.erb)",
+      "max_score": 10
+    },
+    {
+      "name": "update stream template",
+      "description": "A .turbo_stream.erb view template file is created for the update action",
+      "max_score": 8
+    },
+    {
+      "name": "destroy stream template",
+      "description": "A .turbo_stream.erb view template file is created for the destroy action",
+      "max_score": 8
+    },
+    {
+      "name": "turbo_stream append",
+      "description": "Uses turbo_stream.append (or turbo_stream.prepend) in the create stream template to add a new item to a DOM list",
+      "max_score": 10
+    },
+    {
+      "name": "turbo_stream replace",
+      "description": "Uses turbo_stream.replace in the update stream template to replace an existing DOM element",
+      "max_score": 10
+    },
+    {
+      "name": "turbo_stream remove",
+      "description": "Uses turbo_stream.remove in the destroy stream template to remove a DOM element",
+      "max_score": 10
+    },
+    {
+      "name": "turbo_frame wraps list",
+      "description": "A turbo_frame_tag wraps the list/container region (not the entire page layout), giving the Turbo Stream targets a DOM anchor",
+      "max_score": 8
+    },
+    {
+      "name": "HTML fallback present",
+      "description": "The format.html branch in respond_to redirects or renders (i.e., a fallback exists for non-Turbo requests)",
+      "max_score": 8
+    },
+    {
+      "name": "JS-disabled behavior noted",
+      "description": "The implementation notes, comments, or a README section confirms the feature works with JavaScript disabled (form submission still completes, list updates via full page load)",
+      "max_score": 9
+    },
+    {
+      "name": "No Turbo Frame for navigation",
+      "description": "turbo_frame_tag is NOT used to wrap site-wide navigation elements (header, nav bar, sidebar) or to drive page-to-page transitions",
+      "max_score": 9
+    }
+  ]
+}

@@ -22,12 +22,13 @@ module Evaluator
           working_dir_real = Pathname.new(working_dir_path).realpath
           working_dir_str = working_dir_real.to_s
 
-          # Use File.expand_path with a fixed base to resolve '..' and '.'
-          # Then wrap in Pathname for consistent API
-          expanded_path = File.expand_path(path, working_dir_str)
-          full_path = Pathname.new(expanded_path)
+          # Use Pathname#join and #cleanpath to resolve '..' and '.' safely
+          full_path = working_dir_real.join(path).cleanpath
 
-          raise ArgumentError, "Path traversal attempt: #{path}" unless full_path.to_s.start_with?(working_dir_str)
+          # Ensure the path is still within the working directory
+          # We check against the string representation and ensure it's not escaping
+          # by adding the separator to the prefix check.
+          raise ArgumentError, "Path traversal attempt: #{path}" unless full_path.to_s == working_dir_str || full_path.to_s.start_with?(working_dir_str + File::SEPARATOR)
 
           verify_symlink_safety!(full_path, working_dir_real, working_dir_str, path)
 

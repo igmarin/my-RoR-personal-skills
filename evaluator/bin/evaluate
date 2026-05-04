@@ -4,6 +4,7 @@
 require 'optparse'
 require 'json'
 require_relative '../lib/runner'
+require_relative '../lib/evaluator/history_recorder'
 
 options = {}
 OptionParser.new do |opts|
@@ -75,3 +76,9 @@ if options[:output]
   File.write(options[:output], JSON.pretty_generate(result))
   puts "\nReport saved to #{options[:output]}"
 end
+
+Evaluator::HistoryRecorder.record(
+  result,
+  skill_path: options[:skill],
+  model: Evaluator::Config.model
+)

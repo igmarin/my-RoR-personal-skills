@@ -15,7 +15,7 @@ module Evaluator
     # @option params [String] :skill_path Deprecated alias for `:source_path`.
     # @option params [Pathname, String] :base_path (optional) The base path to resolve the source directory against.
     # @return [Hash] A result hash with :success, and :response containing the XML formatted context.
-    # @raise [StandardError] when filesystem access fails before the error is normalized into the response hash.
+    # @raise [TypeError] when the provided source or base path cannot be converted into a pathname.
     def self.call(params)
       new(params).call
     end
@@ -31,7 +31,6 @@ module Evaluator
     # Performs the hydration process.
     #
     # @return [Hash] The standardized result hash indicating success or failure.
-    # @raise [StandardError] when filesystem access fails before the error is normalized into the response hash.
     def call
       return missing_path_result unless @source_path
 

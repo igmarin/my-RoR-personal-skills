@@ -17,6 +17,7 @@ module McpSkills
     # @param dir [Pathname] Directory to scan recursively for .md files.
     # @param prefix [String] Resource name prefix (e.g. 'doc' or 'workflow').
     # @return [void]
+    # @raise [TypeError] when `dir` cannot be converted into a pathname.
     def initialize(dir, prefix:)
       @dir = Pathname.new(dir)
       @prefix = prefix

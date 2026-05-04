@@ -34,7 +34,6 @@ module McpSkills
     # Performs path discovery for MCP resources.
     #
     # @return [Result] The discovered skill directories, workflow directories, and docs directory.
-    # @raise [TypeError] when one of the configured path roots cannot be converted into a pathname.
     def call
       Result.new(
         skill_dirs: discover_skill_dirs,
@@ -46,11 +45,28 @@ module McpSkills
     private
 
     def discover_skill_dirs
-      SKILL_PATTERNS.flat_map { |pattern| @project_root.glob(pattern) }
-                    .sort_by { |path| [sort_weight(path), path.to_s] }
-                    .map(&:dirname)
-                    .reject { |dir| EXCLUDED_DIRS.include?(dir.basename.to_s) }
-                    .uniq { |dir| dir.basename.to_s }
+      grouped_dirs = SKILL_PATTERNS.flat_map { |pattern| @project_root.glob(pattern) }
+                                  .sort_by { |path| [sort_weight(path), path.to_s] }
+                                  .map(&:dirname)
+                                  .reject { |dir| EXCLUDED_DIRS.include?(dir.basename.to_s) }
+                                  .group_by { |dir| dir.basename.to_s }
+
+      grouped_dirs.values.flat_map { |dirs| deduplicate_dirs(dirs) }
+    end
+
+    def deduplicate_dirs(dirs)
+      non_tessl_dirs, tessl_dirs = dirs.partition { |dir| sort_weight(dir) == 0 }
+      warn_on_duplicate_non_tessl_dirs(non_tessl_dirs)
+
+      return non_tessl_dirs if non_tessl_dirs.any?
+
+      tessl_dirs.first ? [tessl_dirs.first] : []
+    end
+
+    def warn_on_duplicate_non_tessl_dirs(non_tessl_dirs)
+      return unless non_tessl_dirs.size > 1
+
+      warn "Duplicate published skill names detected: #{non_tessl_dirs.map(&:to_s).join(', ')}"
     end
 
     def discover_workflow_dirs

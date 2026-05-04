@@ -13,6 +13,7 @@ module McpSkills
     class NotFoundError < StandardError; end
 
     # @param project_root [Pathname, String] Root of the rails-agent-skills repository.
+    # @raise [TypeError] if `project_root` is not a valid path.
     def initialize(project_root)
       @project_root = Pathname.new(project_root)
       @discovery = ResourceDiscovery.call(@project_root)
@@ -20,6 +21,8 @@ module McpSkills
 
     # Returns all MCP::Resource objects (skills + docs + workflows).
     # @return [Array<MCP::Resource>]
+    # @raise [Errno::EACCES] when a published resource cannot be accessed.
+    # @raise [Errno::ENOENT] when a published resource disappears during registry construction.
     def all_resources
       skill_resources + doc_resources + workflow_resources
     end

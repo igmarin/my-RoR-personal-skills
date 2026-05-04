@@ -18,6 +18,7 @@ module Evaluator
     # @param stdout [#puts, #write] Output stream for user-visible messages.
     # @return [Integer] Shell-compatible exit code.
     # @raise [OptionParser::ParseError] when invalid CLI flags are provided.
+    # @raise [SystemCallError] if writing output fails.
     def self.call(argv, stdout: $stdout)
       new(argv, stdout: stdout).call
     end
@@ -103,7 +104,13 @@ module Evaluator
     end
 
     def print_task_result(task_result)
-      parsed_judge = JSON.parse(task_result[:judge_score])
+      parsed_judge = parse_judge_score(task_result[:judge_score])
+      unless parsed_judge
+        @stdout.puts 'Could not parse judge JSON response. Raw output:'
+        @stdout.puts(task_result[:judge_score] || 'nil')
+        return
+      end
+
       @stdout.puts "Baseline Score: #{parsed_judge['baseline_score']}/100"
       @stdout.puts "Context Score:  #{parsed_judge['context_score']}/100"
       @stdout.puts "\nReasoning:"
@@ -119,6 +126,15 @@ module Evaluator
     rescue JSON::ParserError
       @stdout.puts 'Could not parse judge JSON response. Raw output:'
       @stdout.puts task_result[:judge_score]
+    end
+
+    def parse_judge_score(judge_score)
+      case judge_score
+      when String
+        JSON.parse(judge_score)
+      when Hash
+        judge_score.transform_keys(&:to_s)
+      end
     end
 
     def persist_output(result)

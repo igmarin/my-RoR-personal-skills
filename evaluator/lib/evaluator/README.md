@@ -13,6 +13,7 @@ The `Evaluator` namespace is responsible for creating a safe, observable environ
 - **Mechanism**: Orchestrates the communication between the `ReactAgent`, the `SourcePathResolver`, and the `ContextHydrator`.
 
 ### `SourcePathResolver`
+
 - **Purpose**: Resolve the source skill or workflow directory for an eval target without requiring callers to pass `--skill` in the common case.
 - **Mechanism**: Maps `evals/skills/...` to `skills/...` and `evals/workflows/...` to `workflows/...`, while honoring explicit overrides.
 

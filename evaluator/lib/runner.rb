@@ -24,6 +24,7 @@ module Evaluator
     # @option params [String, Pathname] :base_path (optional) The base path for relative file resolution.
     # @option params [Hash] :client_params (optional) Parameters to pass to the LLM client.
     # @return [Hash] A result hash with :success and :response payload containing the judge scores and diffs.
+    # @raise [ArgumentError] If the eval path does not match a supported source-path convention.
     def self.call(params)
       new(params).call
     end
@@ -85,6 +86,7 @@ module Evaluator
     # @param full_eval_path [Pathname] The path to the evaluation directory.
     # @param source_path [String] The resolved source directory used for context hydration.
     # @return [Hash] The result of the task evaluation.
+    # @raise [StandardError] If reading files or invoking AgentRunner.call or Judge.call fails and the error bubbles up.
     def evaluate_task(full_eval_path, source_path)
       task_content = File.read(full_eval_path.join('task.md'))
       criteria_content = File.read(full_eval_path.join('criteria.json'))

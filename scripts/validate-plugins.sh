@@ -280,7 +280,17 @@ done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.tessl/*" -
 
 info "Total SKILL.md files found: $skill_count"
 
-DISK_SKILL_DIRS=$(find build skills workflows -name "SKILL.md" -exec dirname {} \; | sort)
+SEARCH_ROOTS=()
+for dir in build skills workflows; do
+  if [ -d "$dir" ]; then
+    SEARCH_ROOTS+=("$dir")
+  fi
+done
+
+DISK_SKILL_DIRS=""
+if [ "${#SEARCH_ROOTS[@]}" -gt 0 ]; then
+  DISK_SKILL_DIRS=$(find "${SEARCH_ROOTS[@]}" -name "SKILL.md" -exec dirname {} \; | sort)
+fi
 
 # Cross-check: every public skill/workflow dir with SKILL.md must be in tile.json.skills
 section "tile.json ↔ Disk Skill Inventory Sync"

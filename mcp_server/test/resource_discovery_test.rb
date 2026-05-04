@@ -34,4 +34,19 @@ class ResourceDiscoveryTest < Minitest::Test
 
     assert_equal 1, skill_names.count('rails-code-review')
   end
+
+  def test_keeps_non_tessl_duplicates_in_different_categories
+    duplicate_dir = Pathname.new(@tmpdir).join('skills', 'testing', 'rails-code-review')
+    duplicate_dir.mkpath
+    duplicate_dir.join('SKILL.md').write('# rails-code-review testing variant')
+
+    discovery = McpSkills::ResourceDiscovery.call(@tmpdir)
+    matching_dirs = discovery.skill_dirs.select { |dir| dir.basename.to_s == 'rails-code-review' }
+
+    assert_equal 2, matching_dirs.size
+    assert_includes matching_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s },
+                    'skills/code-quality/rails-code-review'
+    assert_includes matching_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s },
+                    'skills/testing/rails-code-review'
+  end
 end

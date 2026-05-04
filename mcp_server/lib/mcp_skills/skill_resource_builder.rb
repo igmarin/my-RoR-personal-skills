@@ -21,6 +21,7 @@ module McpSkills
     # @param skill_dir [Pathname] Path to the skill or workflow directory.
     # @param prefix [String] Resource name prefix (for example `skill` or `workflow`).
     # @return [void]
+    # @raise [TypeError] when `skill_dir` cannot be converted into a pathname.
     def initialize(skill_dir, prefix:)
       @skill_dir = skill_dir
       @prefix = prefix

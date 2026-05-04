@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Ismael Marin']
   spec.email         = ['ismael.marin@gmail.com']
   spec.summary       = 'Compare LLM agent performance with and without skill context.'
+  spec.homepage      = 'https://github.com/igmarin/rails-agent-skills'
   spec.description   = <<~DESC
     AgentEvaluator orchestrates side-by-side evaluation runs of an LLM coding agent
     (baseline vs. skill-hydrated) inside isolated git sandboxes, then scores the
@@ -16,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.1'
 
-  spec.files         = Dir['lib/**/*.rb', 'bin/*', 'README.md', 'LICENSE']
+  spec.files         = Dir.chdir(__dir__) { Dir['lib/**/*.rb', 'bin/*', 'README.md', 'LICENSE'] }
   spec.bindir        = 'bin'
   spec.executables   = ['evaluate']
   spec.require_paths = ['lib']
@@ -28,4 +29,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'json',     '~> 2.19'
   spec.add_dependency 'parallel', '~> 1.26'
   spec.metadata['rubygems_mfa_required'] = 'true'
+  spec.metadata['source_code_uri'] = 'https://github.com/igmarin/rails-agent-skills/tree/main/evaluator'
 end

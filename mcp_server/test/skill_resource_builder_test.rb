@@ -54,4 +54,10 @@ class SkillResourceBuilderTest < Minitest::Test
       assert r.uri.end_with?('.md'), "Expected only .md files, got: #{r.uri}"
     end
   end
+
+  def test_builds_workflow_resources_with_custom_prefix
+    resources = McpSkills::SkillResourceBuilder.call(@skill_dir, prefix: 'workflow')
+    workflow_resource = resources.find { |r| r.name == 'workflow/rails-code-review' }
+    refute_nil workflow_resource
+  end
 end

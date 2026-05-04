@@ -3,19 +3,19 @@
 require 'pathname'
 require_relative 'skill_resource_builder'
 require_relative 'doc_resource_builder'
+require_relative 'resource_discovery'
 
 module McpSkills
   # Single source of truth for all MCP resources exposed by this server.
-  # Scans the repository root for skill directories, docs/, and .windsurf/workflows/.
-  # Zero hardcoded skill names — any new skill directory with SKILL.md is auto-discovered.
+  # Scans the repository root for published skills, workflows, and docs.
+  # Published locations are discovered centrally so runtime and docs stay aligned.
   class ResourceRegistry
     class NotFoundError < StandardError; end
-
-    EXCLUDED_DIRS = %w[skill-template rails-agent-skills mcp_server].freeze
 
     # @param project_root [Pathname, String] Root of the rails-agent-skills repository.
     def initialize(project_root)
       @project_root = Pathname.new(project_root)
+      @discovery = ResourceDiscovery.call(@project_root)
     end
 
     # Returns all MCP::Resource objects (skills + docs + workflows).
@@ -39,26 +39,15 @@ module McpSkills
     private
 
     def skill_resources
-      skill_dirs.flat_map { |dir| SkillResourceBuilder.call(dir) }
-    end
-
-    def skill_dirs
-      # Find SKILL.md files in both root directories and tessl tiles
-      skill_files = @project_root.glob('*/SKILL.md') +
-                    @project_root.glob('.tessl/tiles/*/*/*/SKILL.md')
-
-      skill_files.map(&:dirname)
-                 .reject { |dir| EXCLUDED_DIRS.include?(dir.basename.to_s) }
-                 .uniq { |dir| dir.basename.to_s }
-                 .sort_by { |dir| dir.basename.to_s }
+      @discovery.skill_dirs.flat_map { |dir| SkillResourceBuilder.call(dir) }
     end
 
     def doc_resources
-      DocResourceBuilder.call(@project_root.join('docs'), prefix: 'doc')
+      DocResourceBuilder.call(@discovery.docs_dir, prefix: 'doc')
     end
 
     def workflow_resources
-      DocResourceBuilder.call(@project_root.join('.windsurf', 'workflows'), prefix: 'workflow')
+      @discovery.workflow_dirs.flat_map { |dir| SkillResourceBuilder.call(dir, prefix: 'workflow') }
     end
   end
 end

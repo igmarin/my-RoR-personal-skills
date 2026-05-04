@@ -36,7 +36,7 @@ module Evaluator
         full_eval_path: @full_eval_path,
         task_content: @task_content,
         client_params: {},
-        skill_path: 'skills/patterns/ruby-service-objects',
+        source_path: 'skills/patterns/ruby-service-objects',
         base_path: Pathname.new('.')
       )
 

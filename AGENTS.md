@@ -4,7 +4,7 @@ This file tells AI agents how to use this repository effectively.
 
 ## What This Repository Is
 
-A curated library of 39 AI agent skills for Ruby on Rails development. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
+A curated library of 42 public AI agent skills for Ruby on Rails development, plus 5 callable workflows. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
 
 ## How Skills Are Organized
 

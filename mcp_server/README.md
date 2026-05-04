@@ -20,9 +20,9 @@ Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/rub
 
 | Type | Prefix | Source |
 |------|--------|--------|
-| **Resources** | `skill/<name>` | Every `SKILL.md` + support files (`EXAMPLES.md`, `TESTING.md`, `PATTERNS.md`, `HEURISTICS.md`, `TASK_TEMPLATES.md`) in each skill directory |
-| **Resources** | `doc/<name>` | All `*.md` files under `docs/` |
-| **Resources** | `workflow/<name>` | All `*.md` files under `.windsurf/workflows/` |
+| **Resources** | `skill/<name>` | Every published `SKILL.md` + support files in `build/`, `skills/<category>/<skill>/`, and supported Tessl tile mirrors |
+| **Resources** | `doc/<name>` | All `*.md` files under `docs/`, including nested docs such as `docs/workflows/*.md` |
+| **Resources** | `workflow/<name>` | Every workflow directory under `workflows/<workflow>/`, exposed from its `SKILL.md` plus supported companion files |
 | **Tool** | `use_skill` | Invocable tool: given a `skill_name`, returns the full `SKILL.md` content |
 
 Adding a new skill directory to the repo automatically makes it available — no server changes needed.
@@ -41,8 +41,9 @@ mcp_server/
 ├── lib/
 │   └── mcp_skills/
 │       ├── resource_registry.rb       # Service: discovers all resources (skills + docs + workflows)
-│       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for skills
-│       ├── doc_resource_builder.rb    # Service: builds MCP::Resource objects for docs/workflows
+│       ├── resource_discovery.rb      # Service: resolves published skill/workflow topology
+│       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for skills/workflows
+│       ├── doc_resource_builder.rb    # Service: builds MCP::Resource objects for docs
 │       └── skill_tool.rb             # MCP::Tool: 'use_skill' invocable by the agent
 └── test/
     ├── test_helper.rb
@@ -54,9 +55,10 @@ mcp_server/
 
 **Service objects:**
 
-- **`McpSkills::ResourceRegistry`** — scans the repo for all exposable files. Single source of truth. Zero hardcoded skill names.
-- **`McpSkills::SkillResourceBuilder`** — maps a skill directory path to an `MCP::Resource` with `file://` URI and `skill/` name prefix.
-- **`McpSkills::DocResourceBuilder`** — same for `docs/` and `.windsurf/workflows/` with `doc/` and `workflow/` prefixes.
+- **`McpSkills::ResourceRegistry`** — scans the repo for all exposable files. Single source of truth for the published resource set.
+- **`McpSkills::ResourceDiscovery`** — resolves the published topology for root `build/`, nested `skills/`, root `workflows/`, and `docs/`.
+- **`McpSkills::SkillResourceBuilder`** — maps a skill or workflow directory path to an `MCP::Resource` with `file://` URI and a configurable `skill/` or `workflow/` name prefix.
+- **`McpSkills::DocResourceBuilder`** — builds `doc/` resources for markdown files anywhere under `docs/`.
 - **`McpSkills::SkillTool`** — `MCP::Tool` subclass. `call(skill_name:)` reads and returns the `SKILL.md` content.
 
 ---
@@ -222,7 +224,7 @@ Tests are written with Minitest: each file validates real behavior of a service 
 
 ## Auto-discovery of new skills
 
-`ResourceRegistry` uses glob patterns (`**/SKILL.md`, `docs/**/*.md`, `.windsurf/workflows/*.md`). When you add a new skill directory with a `SKILL.md`, it appears in `resources/list` on the next server start — no code changes required.
+`ResourceRegistry` uses explicit topology discovery for `build/SKILL.md`, `skills/*/*/SKILL.md`, `workflows/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published skill, workflow, or doc file in those locations, it appears in `resources/list` on the next server start — no code changes required.
 
 ---
 

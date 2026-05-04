@@ -23,6 +23,7 @@ class ResourceRegistryTest < Minitest::Test
     assert_includes names, 'skill/rails-code-review'
     assert_includes names, 'skill/rails-tdd-slices'
     assert_includes names, 'skill/ruby-service-objects'
+    assert_includes names, 'skill/build'
   end
 
   def test_all_resources_includes_support_files
@@ -38,7 +39,12 @@ class ResourceRegistryTest < Minitest::Test
 
   def test_all_resources_includes_workflow_resources
     names = @registry.all_resources.map(&:name)
-    assert names.any? { |n| n.start_with?('workflow/') }, 'Should include workflow resources'
+    assert_includes names, 'workflow/rails-review-flow'
+  end
+
+  def test_all_resources_includes_nested_doc_resources
+    names = @registry.all_resources.map(&:name)
+    assert_includes names, 'doc/workflows/discovery'
   end
 
   def test_skill_template_is_excluded
@@ -67,6 +73,16 @@ class ResourceRegistryTest < Minitest::Test
     assert_includes result.first[:text], 'rails-code-review'
   end
 
+  def test_read_returns_workflow_content
+    workflow_uri = @registry.all_resources
+                            .find { |r| r.name == 'workflow/rails-review-flow' }
+                            &.uri
+    refute_nil workflow_uri, 'Expected to find workflow/rails-review-flow resource'
+
+    result = @registry.read(workflow_uri)
+    assert_includes result.first[:text], 'rails-review-flow'
+  end
+
   def test_read_raises_for_unknown_uri
     assert_raises(McpSkills::ResourceRegistry::NotFoundError) do
       @registry.read('file:///nonexistent/path/SKILL.md')
@@ -74,7 +90,7 @@ class ResourceRegistryTest < Minitest::Test
   end
 
   def test_new_skill_dir_auto_discovered
-    new_skill = Pathname.new(@tmpdir).join('my-new-skill')
+    new_skill = Pathname.new(@tmpdir).join('skills', 'custom', 'my-new-skill')
     new_skill.mkpath
     new_skill.join('SKILL.md').write('# My New Skill')
 
@@ -88,10 +104,15 @@ class ResourceRegistryTest < Minitest::Test
 
     # Mock glob to return duplicate paths
     def project_root.glob(pattern)
-      if pattern == '*/SKILL.md'
-        [join('rails-code-review', 'SKILL.md')]
-      elsif pattern == '.tessl/tiles/*/*/*/SKILL.md'
+      case pattern
+      when 'skills/*/*/SKILL.md'
+        [join('skills', 'code-quality', 'rails-code-review', 'SKILL.md')]
+      when '.tessl/tiles/*/*/*/SKILL.md'
         [join('.tessl', 'tiles', 'owner', 'repo', 'rails-code-review', 'SKILL.md')]
+      when 'build/SKILL.md'
+        []
+      when 'workflows/*/SKILL.md'
+        []
       else
         []
       end

@@ -27,3 +27,6 @@ tmp/
 node_modules/
 .windsurfrules
 .markdownlint.yaml
+
+# Ruby package artifacts
+*.gem

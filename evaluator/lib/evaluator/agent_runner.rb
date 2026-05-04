@@ -17,7 +17,7 @@ module Evaluator
     # @option params [Pathname] :full_eval_path The path to the evaluation directory.
     # @option params [String] :task_content The task description.
     # @option params [Hash] :client_params Parameters for the LLM client.
-    # @option params [String] :skill_path Required if mode is `:context`.
+    # @option params [String] :source_path Required if mode is `:context`.
     # @option params [Pathname] :base_path Required if mode is `:context`.
     # @return [Array<String, String>] The agent's final answer and the git diff.
     def self.call(params)
@@ -31,7 +31,7 @@ module Evaluator
       @task_content = params.fetch(:task_content)
       @client_params = params.fetch(:client_params, {})
 
-      @skill_path = params[:skill_path]
+      @source_path = params[:source_path]
       @base_path = params[:base_path]
     end
 
@@ -80,7 +80,7 @@ module Evaluator
           Your job is to read the task, modify the codebase using the tools provided to meet the requirements, and then explain what you did.
         PROMPT
       else
-        hydrator_result = ContextHydrator.call(skill_path: @skill_path, base_path: @base_path)
+        hydrator_result = ContextHydrator.call(source_path: @source_path, base_path: @base_path)
         context_xml = hydrator_result[:success] ? hydrator_result[:response][:context] : ''
 
         <<~PROMPT

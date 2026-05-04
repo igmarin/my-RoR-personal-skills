@@ -10,29 +10,40 @@ module McpSkills
   class SkillResourceBuilder
     SUPPORT_FILES = %w[EXAMPLES.md TESTING.md PATTERNS.md HEURISTICS.md TASK_TEMPLATES.md].freeze
 
-    # @param skill_dir [Pathname] Path to the skill directory.
+    # @param skill_dir [Pathname, String] Path to the skill or workflow directory.
+    # @param prefix [String] Resource name prefix (for example `skill` or `workflow`).
     # @return [Array<MCP::Resource>]
-    def self.call(skill_dir)
-      new(Pathname.new(skill_dir)).build
+    # @raise [TypeError] when `skill_dir` cannot be converted into a pathname.
+    def self.call(skill_dir, prefix: 'skill')
+      new(Pathname.new(skill_dir), prefix: prefix).build
     end
 
-    def initialize(skill_dir)
+    # @param skill_dir [Pathname] Path to the skill or workflow directory.
+    # @param prefix [String] Resource name prefix (for example `skill` or `workflow`).
+    # @return [void]
+    # @raise [TypeError] when `skill_dir` cannot be converted into a pathname.
+    def initialize(skill_dir, prefix:)
       @skill_dir = skill_dir
+      @prefix = prefix
       @skill_name = @skill_dir.basename.to_s
     end
 
+    # Builds the MCP resources for the configured directory.
+    #
+    # @return [Array<MCP::Resource>] One primary resource plus any supported markdown companions.
+    # @raise [Errno::ENOENT] when a discovered markdown file disappears before its real path is resolved.
     def build
       resources = []
 
       skill_md = @skill_dir.join('SKILL.md')
-      resources << build_resource(skill_md, "skill/#{@skill_name}") if skill_md.exist?
+      resources << build_resource(skill_md, "#{@prefix}/#{@skill_name}") if skill_md.exist?
 
       SUPPORT_FILES.each do |filename|
         path = @skill_dir.join(filename)
         next unless path.exist?
 
         key = filename.sub(/\.md$/i, '').downcase
-        resources << build_resource(path, "skill/#{@skill_name}/#{key}")
+        resources << build_resource(path, "#{@prefix}/#{@skill_name}/#{key}")
       end
 
       resources

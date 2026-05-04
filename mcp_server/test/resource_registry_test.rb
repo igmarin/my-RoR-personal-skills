@@ -89,7 +89,9 @@ class ResourceRegistryTest < Minitest::Test
     # Mock glob to return duplicate paths
     def project_root.glob(pattern)
       if pattern == '*/SKILL.md'
-        [join('rails-code-review', 'SKILL.md'), join('rails-code-review', 'SKILL.md')]
+        [join('rails-code-review', 'SKILL.md')]
+      elsif pattern == '.tessl/tiles/*/*/*/SKILL.md'
+        [join('.tessl', 'tiles', 'owner', 'repo', 'rails-code-review', 'SKILL.md')]
       else
         []
       end
@@ -100,5 +102,6 @@ class ResourceRegistryTest < Minitest::Test
 
     names = skill_resources.map(&:name)
     assert_equal names.uniq.length, names.length, 'Resources should be deduplicated'
+    assert_equal 1, names.count('skill/rails-code-review')
   end
 end

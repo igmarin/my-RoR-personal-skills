@@ -57,15 +57,17 @@ module Evaluator
 
       def test_secure_path_prevents_prefix_bypass
         # Base path: /tmp/sandbox
-        # Requested path: /tmp/sandbox-escaped/file.txt
+        # Requested path: ../sandbox-escaped/file.txt
         # Ensure it doesn't allow it just because it starts with "/tmp/sandbox"
 
+        sandbox_name = @working_dir.basename.to_s
         escaped_dir = Pathname.new("#{@working_dir}-escaped")
         escaped_dir.mkpath
         begin
-          assert_raises(ArgumentError) do
-            Base.send(:secure_path, "#{@working_dir}-escaped/file.txt", @working_dir)
+          error = assert_raises(ArgumentError) do
+            Base.send(:secure_path, "../#{sandbox_name}-escaped/file.txt", @working_dir)
           end
+          assert_match(/Path traversal attempt/, error.message)
         ensure
           escaped_dir.rmtree if escaped_dir.exist?
         end
@@ -90,6 +92,20 @@ module Evaluator
         ensure
           external_dir.rmtree if external_dir.exist?
         end
+      end
+
+      def test_verify_symlink_safety_rejects_dangling_symlink
+        subdir = @working_dir.join('safe_dir')
+        subdir.mkpath
+
+        # Create a dangling symlink
+        dangling_symlink = subdir.join('broken_link')
+        File.symlink('/does/not/exist/literally/anywhere', dangling_symlink.to_s)
+
+        error = assert_raises(ArgumentError) do
+          Base.send(:secure_path, 'safe_dir/broken_link/file.txt', @working_dir)
+        end
+        assert_match(/Dangling symlink/, error.message)
       end
     end
   end

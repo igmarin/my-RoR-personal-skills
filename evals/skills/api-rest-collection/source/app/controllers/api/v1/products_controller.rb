@@ -12,6 +12,7 @@ module Api
       end
 
       # GET /api/v1/products/:id
+      # @raise [ActiveRecord::RecordNotFound] when the product cannot be found
       def show
         render json: @product
       end
@@ -28,6 +29,7 @@ module Api
       end
 
       # PUT /api/v1/products/:id
+      # @raise [ActiveRecord::RecordNotFound] when the product cannot be found
       def update
         if @product.update(product_params)
           render json: @product
@@ -37,6 +39,7 @@ module Api
       end
 
       # DELETE /api/v1/products/:id
+      # @raise [ActiveRecord::RecordNotFound] when the product cannot be found
       def destroy
         @product.destroy
         head :no_content
@@ -46,7 +49,14 @@ module Api
 
       def set_product
         @product = Product.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
+      rescue ActiveRecord::RecordNotFound => e
+        if defined?(Rails) && Rails.logger
+          Rails.logger.error(e.message)
+          Rails.logger.error(e.backtrace.first(5).join("\n"))
+        else
+          warn(e.message)
+          warn(e.backtrace.first(5).join("\n"))
+        end
         render json: { error: 'Product not found' }, status: :not_found
       end
 

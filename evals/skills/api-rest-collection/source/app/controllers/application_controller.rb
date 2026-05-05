@@ -9,10 +9,10 @@ class ApplicationController < ActionController::Base
   attr_reader :_rendered
 
   def params
-    @params ||= {}
+    @params ||= ActionController::Parameters.new({})
   end
 
   def set_params(p)
-    @_params = p
+    @params = ActionController::Parameters.new(p)
   end
 end

@@ -93,11 +93,13 @@ This extraction ensures the gem boundary is cut from stable behavior and acts pu
 With the completion of Phase 3B, the architecture is now split into two distinct concerns:
 
 ### 1. The Engine: `rails-agent-eval`
+
 - **Home:** [igmarin/rails-agent-eval](https://github.com/igmarin/rails-agent-eval)
 - **Focus:** Phase 4 implementation (Observability, VCR, Trace JSON, and native sandbox hardening).
 - **Usage:** Distributed as a gem for use in any skill library.
 
 ### 2. The Library: `rails-agent-skills` (This Repo)
+
 - **Home:** [igmarin/rails-agent-skills](https://github.com/igmarin/rails-agent-skills)
 - **Focus:**
     - **Eval Coverage:** Expand the `evals/` directory to cover all 42+ skills and 5 workflows.

@@ -8,7 +8,7 @@ class Product
       send("#{k}=", v) if respond_to?("#{k}=")
     end
     @errors = {}
-    @id = rand(1000)
+    @id ||= rand(1000)
   end
 
   def save
@@ -21,6 +21,16 @@ class Product
   end
 
   def self.find(id)
+    # Simulate RecordNotFound for ID 999
+    if id.to_i == 999
+      # Ensure ActiveRecord is available or define a shim for testing
+      error_class = if defined?(ActiveRecord::RecordNotFound)
+                      ActiveRecord::RecordNotFound
+                    else
+                      Class.new(StandardError)
+                    end
+      raise error_class, "Couldn't find Product with 'id'=#{id}"
+    end
     new(id: id, name: 'Sample Product', price: 29.99)
   end
 

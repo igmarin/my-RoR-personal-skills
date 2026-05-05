@@ -9,7 +9,7 @@ class OrdersController < ApplicationController
     quantity = params[:quantity].to_i
 
     if product_id.nil? || quantity <= 0
-      render json: { error: 'Invalid product or quantity' }, status: 400
+      render json: { error: 'Invalid product or quantity' }, status: :bad_request
       return
     end
 
@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
     inventory_available = check_inventory(product_id, quantity)
 
     unless inventory_available
-      render json: { error: 'Not enough inventory' }, status: 422
+      render json: { error: 'Not enough inventory' }, status: :unprocessable_entity
       return
     end
 
@@ -49,9 +49,9 @@ class OrdersController < ApplicationController
       render json: {
         message: 'Order created successfully',
         order: { id: order.id, total_price: total_price, status: order.status }
-      }, status: 201
+      }, status: :created
     else
-      render json: { error: 'Failed to create order' }, status: 500
+      render json: { error: 'Failed to create order' }, status: :internal_server_error
     end
   end
 

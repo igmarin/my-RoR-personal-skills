@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 # The evaluation engine for Rails Agent Skills
-gem 'rails-agent-eval', github: 'igmarin/rails-agent-eval'
+gem 'rails-agent-eval', github: 'igmarin/rails-agent-eval', ref: '3f4583cb67a8dc6cac1dbe3edd731634c0c8dd34'
 
 group :development, :test do
   gem 'rake'

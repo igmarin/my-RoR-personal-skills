@@ -14,6 +14,6 @@ class ApplicationController
   end
 
   def set_params(p)
-    @_params = p
+    @params = p
   end
 end

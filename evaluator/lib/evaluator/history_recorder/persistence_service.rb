@@ -1,4 +1,4 @@
-# frozen_string_literal: true'
+# frozen_string_literal: true
 
 require 'json'
 require 'date'
@@ -43,84 +43,6 @@ module Evaluator
         log_error(e)
         false
       end
-
-      # Determines the best writable path for benchmarks.json.
-      #
-      # @return [String, nil] Path to writable file, or nil if none found.
-      def self.determine_history_file
-        # 1. Check ENV variable first
-        env_history_file = ENV.fetch('EVALUATOR_HISTORY_FILE', nil)
-        return env_history_file if env_history_file && !env_history_file.to_s.strip.empty?
-
-        # 2. Try current working directory (for backward compat)
-        cwd_path = File.join(Dir.pwd, 'benchmarks.json')
-        return cwd_path if writable?(cwd_path)
-
-        # 3. Try user's local share directory
-        home_dir = Dir.home
-        local_path = File.join(home_dir, '.local', 'share', 'agent_evaluator', 'benchmarks.json')
-        return local_path if prepare_and_writable?(local_path)
-
-        # 4. Try XDG data home
-        xdg_data_home = ENV.fetch('XDG_DATA_HOME', File.join(home_dir, '.local', 'share'))
-        xdg_path = File.join(xdg_data_home, 'agent_evaluator', 'benchmarks.json')
-        return xdg_path if prepare_and_writable?(xdg_path)
-
-        warn('Warning: Could not find writable location for benchmarks.json')
-        nil
-      end
-
-      # Checks if a path is writable, creating parent dirs if needed.
-      #
-      # @param path [String] The path to check.
-      # @return [Boolean]
-      def self.prepare_and_writable?(path)
-        dir_name = File.dirname(path)
-        FileUtils.mkpath(dir_name)
-        File.writable?(dir_name)
-      rescue StandardError => e
-        log_error(e)
-        false
-      end
-
-      # Checks if a file location is writable.
-      #
-      # @param path [String] The path to check.
-      # @return [Boolean]
-      def self.writable?(path)
-        File.writable?(File.dirname(path))
-      rescue StandardError => e
-        log_error(e)
-        false
-      end
-
-      # Loads existing history from the benchmarks file.
-      #
-      # @param path [String] The path to the history file.
-      # @return [Array<Hash>] The list of historical evaluation entries.
-      def self.load_history(path = HISTORY_FILE)
-        return [] unless File.exist?(path)
-
-        JSON.parse(File.read(path), symbolize_names: true)
-      rescue StandardError => e
-        log_error(e) unless e.is_a?(JSON::ParserError)
-        []
-      end
-
-      # Logs errors with backtrace.
-      #
-      # @param exception [StandardError]
-      def self.log_error(exception)
-        msg = "#{exception.message}\n#{exception.backtrace.first(5).join("\n")}"
-        if defined?(Rails)
-          Rails.logger.error(msg)
-        else
-          warn("HistoryRecorder Error: #{msg}")
-        end
-      end
-    end
-  end
-end
 
       # Determines the best writable path for benchmarks.json.
       #

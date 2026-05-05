@@ -12,7 +12,7 @@ module Evaluator
     class BaseClient
       API_FAILED = 'API Request failed'
 
-      attr_reader :config, :messages, :system_prompt, :tools
+      attr_reader :config, :messages, :system_prompt, :tools, :api_key, :model
 
       # Standard entry point for the service object.
       #
@@ -40,6 +40,8 @@ module Evaluator
         @tools = tools
         @options = options
         @config = Evaluator::Config
+        @api_key = options[:api_key] || @config.api_key
+        @model = options[:model] || @config.model
       end
 
       # Executes the request flow: configuration -> request -> response handling.
@@ -72,7 +74,7 @@ module Evaluator
       # @return [Hash]
       def request_headers
         {
-          'Authorization' => "Bearer #{@config.api_key}",
+          'Authorization' => "Bearer #{@api_key}",
           'Content-Type' => 'application/json'
         }
       end
@@ -80,22 +82,16 @@ module Evaluator
       # @return [Hash]
       def request_body
         body = {
-          model: model_name,
+          model: @model,
           messages: [{ role: 'system', content: @system_prompt }] + @messages
         }
         body[:tools] = @tools if @tools && !@tools.empty?
         body
       end
 
-      # Abstract method: must return the provider-specific model name.
-      # @return [String]
-      def model_name
-        @config.model
-      end
-
       # @return [Boolean]
       def valid_config?
-        !!@config.api_key
+        !!@api_key
       end
 
       # @return [Hash]

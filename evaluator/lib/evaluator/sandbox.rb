@@ -31,6 +31,8 @@ module Evaluator
         FileUtils.cp_r(Dir.glob("#{@source_dir}/*"), sandbox_dir)
 
         system('git init --quiet', chdir: sandbox_dir)
+        system('git config user.email "evaluator@tessl.io"', chdir: sandbox_dir)
+        system('git config user.name "Evaluator Sandbox"', chdir: sandbox_dir)
         system('git add .', chdir: sandbox_dir)
         system("git commit --quiet -m 'Initial commit'", chdir: sandbox_dir)
 
@@ -43,6 +45,9 @@ module Evaluator
     # @param sandbox_dir [String] The path to the sandbox directory.
     # @return [String] The git diff, or a message indicating no changes.
     def self.capture_diff(sandbox_dir)
+      # Check if we are in a git repo and have at least one commit
+      return 'No code changes made.' unless File.directory?(File.join(sandbox_dir, '.git'))
+
       system('git add .', chdir: sandbox_dir)
       diff = `cd #{sandbox_dir} && git diff --cached`
       diff.strip.empty? ? 'No code changes made.' : diff

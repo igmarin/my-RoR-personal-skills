@@ -8,19 +8,6 @@ module Evaluator
       # OpenAI-specific LLM client.
       # Inherits common logic from BaseClient.
       class OpenAI < BaseClient
-        attr_reader :api_key, :model
-
-        # Initializes the OpenAI client.
-        # @param system_prompt [String]
-        # @param messages [Array<Hash>]
-        # @param tools [Array<Hash>]
-        # @param options [Hash]
-        def initialize(system_prompt:, messages:, tools: [], **options)
-          super
-          @api_key = options[:api_key] || @config.api_key
-          @model = options[:model] || @config.model
-        end
-
         protected
 
         # @return [String]

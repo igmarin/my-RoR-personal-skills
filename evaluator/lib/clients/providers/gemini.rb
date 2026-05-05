@@ -8,7 +8,7 @@ module Evaluator
       # Gemini-specific LLM client using the OpenAI-compatible endpoint.
       # Inherits common logic from BaseClient.
       class Gemini < BaseClient
-        attr_reader :api_key, :model, :location, :project_id
+        attr_reader :location, :project_id
 
         # Initializes the Gemini client.
         # @param system_prompt [String]
@@ -17,10 +17,8 @@ module Evaluator
         # @param options [Hash]
         def initialize(system_prompt:, messages:, tools: [], **options)
           super
-          @api_key = @config.api_key
-          @model = @config.model
-          @location = @config.llm_providers_config.dig(:gemini, :location)
-          @project_id = @config.llm_providers_config.dig(:gemini, :project_id)
+          @location = options[:location] || @config.llm_providers_config.dig(:gemini, :location)
+          @project_id = options[:project_id] || @config.llm_providers_config.dig(:gemini, :project_id)
         end
 
         protected

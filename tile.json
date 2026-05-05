@@ -1,6 +1,6 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "summary": "Curated library of 42 public AI agent skills for Ruby on Rails development, plus 5 callable workflow skills. Organized by category: planning, testing, code-quality, ddd, engines, infrastructure, api, patterns, context, orchestration, and workflows. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and TDD automation.",
   "docs": "docs/index.md",
   "skills": {

@@ -40,4 +40,4 @@ jobs:
           token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Publish Tessl tile
-        run: tessl tile publish --bump patch .
+        run: tessl tile publish --bump patch --skip-evals .

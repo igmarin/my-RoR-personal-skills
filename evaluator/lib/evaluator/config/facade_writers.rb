@@ -51,7 +51,7 @@ module Evaluator
       # Sets the current LLM provider.
       #
       # @param value [String, Symbol] provider name
-      # @return [String, Symbol] assigned provider name
+      # @return [Symbol, nil] assigned provider name
       def current_llm_provider=(value)
         store.assign_current_llm_provider(value)
       end

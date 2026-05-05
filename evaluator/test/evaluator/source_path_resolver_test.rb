@@ -20,6 +20,14 @@ module Evaluator
       assert_equal 'skills/code-quality/rails-code-review', resolved
     end
 
+    def test_infers_skill_source_path_from_private_evals_path
+      resolved = SourcePathResolver.call(
+        eval_folder_path: 'private-evals/skills/code-quality/rails-code-review/review-order'
+      )
+
+      assert_equal 'skills/code-quality/rails-code-review', resolved
+    end
+
     def test_infers_workflow_source_path_from_eval_path
       resolved = SourcePathResolver.call(
         eval_folder_path: 'evals/workflows/rails-tdd-loop/full-feature'

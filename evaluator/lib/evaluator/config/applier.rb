@@ -8,7 +8,7 @@ module Evaluator
       #
       # @param store [Store] mutable configuration store
       # @param data [Hash] normalized configuration values
-      # @return [void]
+      # @return [Hash] result envelope with applied status
       def self.call(store:, data:)
         new(store:, data:).call
       end
@@ -25,26 +25,41 @@ module Evaluator
 
       # Applies configuration values to the configured store.
       #
-      # @return [void]
+      # @return [Hash] result envelope with applied status
       def call
         apply_scalar_values
         apply_provider_values
+        { success: true, response: { applied: true } }
+      rescue StandardError => e
+        { success: false, response: { error: { message: e.message } } }
       end
 
       private
 
       def apply_scalar_values
-        @store.assign_current_llm_provider(@data[:current_llm_provider].to_sym) if @data.key?(:current_llm_provider)
+        assign_current_provider
         @store.assign_max_execution_time(@data[:max_execution_time]) if @data.key?(:max_execution_time)
         @store.assign_allowed_commands(@data[:allowed_commands]) if @data.key?(:allowed_commands)
       end
 
       def apply_provider_values
         if @data.key?(:llm_providers_config)
-          @store.replace_provider_config(Marshal.load(Marshal.dump(@data[:llm_providers_config])))
+          @store.replace_provider_config(copied_provider_config)
         else
           @store.apply_provider_config(@data[:providers] || {})
         end
+      end
+
+      def assign_current_provider
+        provider = @data.fetch(:current_llm_provider) { return }
+        provider_name = provider.to_s.strip
+        return if provider_name.empty?
+
+        @store.assign_current_llm_provider(provider_name.to_sym)
+      end
+
+      def copied_provider_config
+        @data[:llm_providers_config].transform_values(&:dup)
       end
     end
   end

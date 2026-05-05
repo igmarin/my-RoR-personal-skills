@@ -32,6 +32,7 @@ module Evaluator
       #
       # @yieldparam config [Class] the Config class facade
       # @return [void]
+      # @raise [StandardError] if the user-supplied block raises
       def setup
         yield(self)
       end
@@ -50,17 +51,18 @@ module Evaluator
       private
 
       def apply_defaults
-        apply_config(Config::Defaults.call)
+        apply_config(Config::Defaults.call[:response][:config])
       end
 
       def apply_json_config
         config_paths.each do |path|
-          apply_config(Config::JsonLoader.call(path)) if path.exist?
+          apply_config_result(Config::JsonLoader.call(path)) if path.exist?
         end
       end
 
       def apply_env_overrides
-        store.apply_provider_config(Config::EnvOverrides.call)
+        result = Config::EnvOverrides.call
+        store.apply_provider_config(result[:response][:overrides]) if result[:success]
       end
 
       def config_paths
@@ -72,6 +74,10 @@ module Evaluator
 
       def apply_config(data)
         Config::Applier.call(store:, data:)
+      end
+
+      def apply_config_result(result)
+        apply_config(result[:response][:config]) if result[:success]
       end
     end
 

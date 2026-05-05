@@ -9,8 +9,7 @@ module Evaluator
       # Loads a JSON config file into a normalized hash.
       #
       # @param path [Pathname] path to the JSON configuration file
-      # @return [Hash] normalized configuration values
-      # @raise [Errno::ENOENT] if the file disappears before it can be read
+      # @return [Hash] result envelope with normalized configuration values
       def self.call(path)
         new(path).call
       end
@@ -25,24 +24,26 @@ module Evaluator
 
       # Loads a JSON config file into a normalized hash.
       #
-      # @return [Hash] normalized configuration values
-      # @raise [Errno::ENOENT] if the file disappears before it can be read
+      # @return [Hash] result envelope with normalized configuration values
       def call
         data = JSON.parse(File.read(@path), symbolize_names: true)
         return warn_invalid_config unless data.is_a?(Hash)
 
-        data.slice(:current_llm_provider, :max_execution_time, :allowed_commands)
-            .merge(providers: normalized_providers(data[:providers]))
-      rescue JSON::ParserError
-        warn "Warning: Failed to parse config file at #{@path}. It might be malformed or empty."
-        {}
+        success(data.slice(:current_llm_provider, :max_execution_time, :allowed_commands)
+                    .compact
+                    .merge(providers: normalized_providers(data[:providers])))
+      rescue JSON::ParserError => e
+        log_parse_error(e)
+        failure('Failed to parse config file')
+      rescue StandardError => e
+        failure(e.message)
       end
 
       private
 
       def warn_invalid_config
         warn "Warning: Config file at #{@path} is not a valid JSON hash. Skipping."
-        {}
+        failure('Config file is not a valid JSON hash')
       end
 
       def normalized_providers(providers_data)
@@ -61,6 +62,21 @@ module Evaluator
       def warn_invalid_providers
         warn "Warning: 'providers' section in config file at #{@path} is not a valid hash. Skipping provider merge."
         {}
+      end
+
+      def log_parse_error(error)
+        warn "Warning: Failed to parse config file at #{@path}. It might be malformed or empty."
+        warn error.message
+        backtrace = Array(error.backtrace).first(5)
+        warn backtrace.join("\n") unless backtrace.empty?
+      end
+
+      def success(config)
+        { success: true, response: { config: config } }
+      end
+
+      def failure(message)
+        { success: false, response: { error: { message: message } } }
       end
     end
   end

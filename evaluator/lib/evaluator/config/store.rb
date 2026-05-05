@@ -65,9 +65,10 @@ module Evaluator
       # Sets the current provider.
       #
       # @param value [String, Symbol] provider name
-      # @return [String, Symbol] assigned provider
+      # @return [Symbol, nil] assigned provider
       def assign_current_llm_provider(value)
-        @current_llm_provider = value
+        [value.to_s.strip].grep_v('').each { |provider_name| @current_llm_provider = provider_name.to_sym }
+        @current_llm_provider
       end
 
       # Sets maximum command execution time.

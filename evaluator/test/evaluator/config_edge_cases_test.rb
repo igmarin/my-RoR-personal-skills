@@ -2,12 +2,25 @@
 
 require 'test_helper'
 require 'tmpdir'
+require 'fileutils'
 
 module Evaluator
   class ConfigEdgeCasesTest < Minitest::Test
     def setup
-      Config.reset
-      Config.current_llm_provider = :openai
+      @home_dir = Dir.mktmpdir
+      @local_dir = Dir.mktmpdir
+      Dir.stubs(:home).returns(@home_dir)
+
+      Dir.chdir(@local_dir) do
+        Config.reset
+        Config.current_llm_provider = :openai
+      end
+    end
+
+    def teardown
+      Dir.unstub(:home)
+      FileUtils.rm_rf(@home_dir)
+      FileUtils.rm_rf(@local_dir)
     end
 
     def test_gemini_environment_overrides_file_values
@@ -66,6 +79,21 @@ module Evaluator
       Config.set_provider_api_key(:custom, 'custom-key')
 
       assert_equal({ model: 'custom-model', api_key: 'custom-key' }, Config.llm_providers_config[:custom])
+    end
+
+    def test_string_provider_writer_normalizes_to_symbol
+      Config.current_llm_provider = 'openai'
+
+      assert_equal :openai, Config.current_llm_provider
+      assert_equal 'gpt-4o', Config.model
+    end
+
+    def test_null_current_provider_config_is_ignored
+      with_local_config(current_llm_provider: nil) do
+        Config.reset
+
+        assert_equal :openai, Config.current_llm_provider
+      end
     end
 
     private

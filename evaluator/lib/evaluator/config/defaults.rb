@@ -6,8 +6,15 @@ module Evaluator
     class Defaults
       # Returns the default configuration values.
       #
-      # @return [Hash] default provider, timeout, command, and provider settings
+      # @return [Hash] result envelope with default provider, timeout, command, and provider settings
       def self.call
+        { success: true, response: { config: config } }
+      end
+
+      # Builds the raw default configuration hash.
+      #
+      # @return [Hash] default provider, timeout, command, and provider settings
+      def self.config
         {
           current_llm_provider: :openai,
           max_execution_time: 30,

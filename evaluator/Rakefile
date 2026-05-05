@@ -30,7 +30,8 @@ namespace :package do
     gem_path = FileList['agent_evaluator-*.gem'].max_by { |path| File.mtime(path) }
     abort('No built evaluator gem found') unless gem_path
 
-    Evaluator::PackageVerifier.call(package_path: gem_path)
+    result = Evaluator::PackageVerifier.call(package_path: gem_path)
+    abort(result[:response][:error][:message]) unless result[:success]
   end
 end
 

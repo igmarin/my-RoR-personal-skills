@@ -15,7 +15,7 @@ module Evaluator
       # Returns provider overrides from the given environment.
       #
       # @param env [Hash] environment-like object keyed by variable name
-      # @return [Hash] provider configuration overrides
+      # @return [Hash] result envelope with provider configuration overrides
       def self.call(env: ENV)
         new(env:).call
       end
@@ -30,12 +30,11 @@ module Evaluator
 
       # Returns provider overrides from configured environment variables.
       #
-      # @return [Hash] provider configuration overrides
+      # @return [Hash] result envelope with provider configuration overrides
       def call
-        ENV_TO_PROVIDER_SETTINGS.each_with_object(ProviderOverrides.new) do |(env_key, (provider, setting)), overrides|
-          value = @env.fetch(env_key, nil)
-          overrides.assign(provider, setting, value) if value
-        end.to_h
+        { success: true, response: { overrides: provider_overrides } }
+      rescue StandardError => e
+        { success: false, response: { error: { message: e.message } } }
       end
 
       # Mutable accumulator for provider override hashes.
@@ -62,6 +61,15 @@ module Evaluator
         def provider_overrides(provider)
           to_h.fetch(provider) { to_h[provider] = {} }
         end
+      end
+
+      private
+
+      def provider_overrides
+        ENV_TO_PROVIDER_SETTINGS.each_with_object(ProviderOverrides.new) do |(env_key, (provider, setting)), overrides|
+          value = @env.fetch(env_key, nil)
+          overrides.assign(provider, setting, value) if value
+        end.to_h
       end
     end
   end

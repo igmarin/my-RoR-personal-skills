@@ -14,12 +14,12 @@ Rails Agent Evaluator is a specialized tool for measuring and comparing how an L
 ## How It Works
 
 The evaluator follows a systematic process for each task:
-1. **Isolation**: Executes the task in a Git‑sandboxed directory.
+1. **Isolation**: Executes the task in a Git-sandboxed directory.
 2. **Baseline Run**: Runs the agent without any extra context.
 3. **Hydrated Run**: Injects specific skill/workflow context via XML and runs the agent.
 4. **Grading**: Uses a "Judge" LLM to compare both results against a set of `criteria.json` and provide a score.
 
-See the [Architecture Guide](docs/architecture.md) for deeper technical details.
+See [Architecture Guide](docs/architecture.md) for more technical details.
 
 ## Installation
 
@@ -41,10 +41,10 @@ gem install ./agent_evaluator-*.gem
 
 The evaluator uses a hierarchical configuration system. It looks for settings in this order of precedence (highest to lowest):
 
-1. **Environment Variables** – e.g. `OPENAI_API_KEY`, `GEMINI_API_KEY`, `GEMINI_LOCATION`, etc.
-2. **Local Config** – `evaluator.json` in the current working directory.
-3. **Global Config** – `~/.evaluator.json` in your home directory.
-4. **Code Defaults** – hard‑coded fallbacks in `lib/config.rb`.
+1. **Environment Variables**: `OPENAI_API_KEY`, `GEMINI_API_KEY`, `GEMINI_LOCATION`, etc.
+2. **Local Config**: `evaluator.json` in the current working directory.
+3. **Global Config**: `~/.evaluator.json` in your home directory.
+4. **Code Defaults**: Hardcoded fallbacks in `lib/config.rb`.
 
 ### Sample `evaluator.json`
 
@@ -63,7 +63,7 @@ The evaluator uses a hierarchical configuration system. It looks for settings in
 
 ## Usage
 
-Run an evaluation target with convention‑based source inference:
+Run an evaluation target with convention-based source inference:
 
 ```bash
 bin/evaluate --eval ../private-evals/skills/patterns/ruby-service-objects/call-pattern-and-response-format
@@ -87,27 +87,4 @@ bundle exec rake reek
 bundle exec rake package:verify
 ```
 
-The default rake task runs RuboCop, Reek, and the test suite. `package:verify` builds the gem and checks that required release files are present. All new code must follow the project’s TDD and engineering standards.
-
-## Supported LLM Providers
-
-- **OpenAI** – default configuration uses `gpt-4o`.
-- **Gemini** – default configuration uses `gemini-1.5-flash-latest`.
-- **Ollama** – newly added provider for open‑source models (e.g., Qwen 3.5). Configure via:
-
-```yaml
-llm_providers_config:
-  ollama:
-    api_key: null # usually not required
-    model: qwen:7b
-    base_url: http://localhost:11434
-```
-
-## Adding New Providers
-
-To add another open‑source provider:
-1. Create a class under `evaluator/lib/clients/providers/` extending `BaseClient`.
-2. Implement `base_url`, `request_path`, and `config_error`.
-3. Add a default entry in `defaults.rb`.
-4. Register the provider in `client.rb`’s `provider_client_class` case statement.
-5. Add tests and update documentation.
+The default rake task runs RuboCop, Reek, and the test suite. `package:verify` builds the gem and checks that required release files are present. All new code must follow the project's TDD and engineering standards.

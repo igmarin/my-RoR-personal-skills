@@ -26,7 +26,8 @@ module Evaluator
               model: 'gemini-1.5-flash-latest',
               location: 'us-central1',
               project_id: nil
-            }
+            },
+            ollama: { api_key: nil, model: 'qwen:7b', base_url: nil }
           }
         }
       end

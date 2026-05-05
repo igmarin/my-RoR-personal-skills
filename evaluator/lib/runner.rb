@@ -45,11 +45,6 @@ module Evaluator
 
       return { success: false, response: { error: { message: "Evaluation path #{full_path} does not exist" } } } unless full_path.exist?
 
-      source_path = SourcePathResolver.call(
-        eval_folder_path: @eval_folder_path,
-        skill_path: @skill_path
-      )
-
       task_dirs = self.class.discover_task_dirs(full_path)
       if task_dirs.empty?
         return { success: false,
@@ -58,12 +53,12 @@ module Evaluator
 
       puts "Found #{task_dirs.size} tasks. Running evaluations in parallel (4 threads)..."
       results = Parallel.map(task_dirs, in_threads: 4) do |task_dir|
-        evaluate_task(task_dir, source_path)
+        evaluate_task(task_dir)
       end
 
       {
         success: true,
-        source_path: source_path,
+        source_path: @skill_path || 'multiple (batch run)',
         tasks: results
       }
     rescue StandardError => e
@@ -84,12 +79,17 @@ module Evaluator
     # Evaluates a single task within the given directory.
     #
     # @param full_eval_path [Pathname] The path to the evaluation directory.
-    # @param source_path [String] The resolved source directory used for context hydration.
     # @return [Hash] The result of the task evaluation.
     # @raise [StandardError] If reading files or invoking AgentRunner.call or Judge.call fails and the error bubbles up.
-    def evaluate_task(full_eval_path, source_path)
+    def evaluate_task(full_eval_path)
       task_content = File.read(full_eval_path.join('task.md'))
       criteria_content = File.read(full_eval_path.join('criteria.json'))
+      relative_path = full_eval_path.relative_path_from(@base_path)
+
+      source_path = SourcePathResolver.call(
+        eval_folder_path: relative_path.to_s,
+        skill_path: @skill_path
+      )
 
       baseline_result, baseline_code_diff = AgentRunner.call(
         mode: :baseline,
@@ -98,16 +98,21 @@ module Evaluator
         client_params: @client_params
       )
 
-      context_result, context_code_diff = AgentRunner.call(
-        mode: :context,
-        full_eval_path: full_eval_path,
-        task_content: task_content,
-        client_params: @client_params,
-        source_path: source_path,
-        base_path: @base_path
-      )
+      if source_path
+        context_result, context_code_diff = AgentRunner.call(
+          mode: :context,
+          full_eval_path: full_eval_path,
+          task_content: task_content,
+          client_params: @client_params,
+          source_path: source_path,
+          base_path: @base_path
+        )
+      else
+        puts "Warning: No source path inferred for #{relative_path}. Skipping context run."
+        context_result = 'Skipped: No source path inferred'
+        context_code_diff = ''
+      end
 
-      relative_path = full_eval_path.relative_path_from(@base_path)
       print_judge_header(relative_path)
       judge_score = Judge.call(task_content, criteria_content, baseline_code_diff, context_code_diff, @client_params)
 

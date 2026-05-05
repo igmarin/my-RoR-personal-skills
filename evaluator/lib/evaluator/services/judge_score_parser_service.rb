@@ -19,6 +19,7 @@ module Evaluator
       # @return [Hash] Standardized response hash with format:
       #   - { success: true, response: Hash } on success
       #   - { success: false, response: { error: { message: String } } on failure
+      # @raise [JSON::ParserError] raised when the judge_score string contains invalid JSON (rescued internally)
       def self.call(judge_score)
         new(judge_score).call
       end
@@ -29,6 +30,7 @@ module Evaluator
       end
 
       # @return [Hash] { success: Boolean, response: Hash }
+      # @raise [JSON::ParserError] raised when the judge_score string contains invalid JSON (rescued internally)
       def call
         case @judge_score
         when String
@@ -47,10 +49,14 @@ module Evaluator
         { success: false, response: { error: { message: PARSE_ERROR } } }
       end
 
-      # @return [Hash, nil] Parsed JSON hash or nil if parsing fails
+      # @return [Hash, nil] Parsed JSON hash or nil if parsing fails or not a Hash
       def parse_string_input
-        cleaned_score = @judge_score.gsub(/\A```json\s*/, '').gsub(/\s*```\z/, '')
-        JSON.parse(cleaned_score)
+        # Remove markdown code blocks and extra whitespace
+        cleaned_score = @judge_score.strip
+        cleaned_score = cleaned_score.gsub(/\A```json\s*|\s*```\z/, '').strip
+
+        parsed = JSON.parse(cleaned_score)
+        parsed.is_a?(Hash) ? parsed : nil
       rescue JSON::ParserError
         nil
       end

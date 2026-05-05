@@ -34,7 +34,7 @@ module Evaluator
     # @raise [OptionParser::ParseError] when invalid CLI flags are provided.
     # @raise [SystemCallError] when the optional JSON output file cannot be written.
     def call
-      return 1 unless parse_options && validate_options?
+      return 1 unless parse_options? && validate_options?
 
       result = run_evaluation
       return 1 unless result[:success]
@@ -52,10 +52,16 @@ module Evaluator
 
     private
 
-    def parse_options
+    def parse_options?
       options_result = Services::OptionParserService.call(@argv)
       @options = options_result[:response]
-      options_result[:success]
+
+      unless options_result[:success]
+        @stdout.puts "Error: #{@options[:error][:message]}"
+        return false
+      end
+
+      true
     end
 
     def validate_options?

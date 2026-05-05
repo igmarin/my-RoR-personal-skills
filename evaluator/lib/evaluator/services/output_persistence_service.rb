@@ -51,7 +51,7 @@ module Evaluator
         write_json_file
 
         { success: true, response: { message: "Report saved to #{@output_path}" } }
-      rescue SystemCallError => e
+      rescue SystemCallError, JSON::GeneratorError => e
         { success: false, response: { error: { message: "#{WRITE_ERROR}: #{e.message}" } } }
       end
 
@@ -68,7 +68,7 @@ module Evaluator
       #
       # @raise [SystemCallError] when file write operation fails
       def write_json_file
-        File.write(@output_path, JSON.pretty_generate(@result))
+        File.write(@output_path, JSON.generate(@result, pretty: true))
       end
     end
   end

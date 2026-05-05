@@ -143,6 +143,7 @@ module Evaluator
       end
 
       # Extracts the message hash from the provider's specific response body structure.
+      # Default implementation for OpenAI-compatible APIs.
       # @param body [Hash] The parsed JSON response body.
       # @return [Hash]
       def extract_message(body)

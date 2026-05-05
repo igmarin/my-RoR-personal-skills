@@ -2,12 +2,13 @@
 
 require 'json'
 require 'date'
+require 'fileutils'
 
 # Top-level namespace for the Rails Agent Evaluator.
 module Evaluator
   # Records evaluation results into a historical benchmarks file.
   class HistoryRecorder
-    # The file where historical benchmarks are stored.
+    # The default file where historical benchmarks are stored.
     HISTORY_FILE = File.join(__dir__, '../../benchmarks.json')
 
     # Records evaluation results into a historical benchmarks file.
@@ -20,7 +21,11 @@ module Evaluator
     def self.record(results, source_path:, model:)
       return unless results[:success]
 
-      history = load_history
+      # Choose writable path first
+      history_file = determine_history_file
+      return unless history_file
+
+      history = load_history(history_file)
       entry = {
         timestamp: Time.now.iso8601,
         source_path: source_path,
@@ -30,12 +35,11 @@ module Evaluator
 
       history << entry
 
-      # Choose writable path
-      history_file = determine_history_file
-      return unless history_file
-
       File.write(history_file, JSON.pretty_generate(history))
       puts "History recorded to #{history_file}"
+    rescue StandardError => e
+      log_error(e)
+      false
     end
 
     # Determines the best writable path for benchmarks.json
@@ -71,8 +75,9 @@ module Evaluator
     def self.prepare_and_writable?(path)
       dir_name = File.dirname(path)
       FileUtils.mkpath(dir_name)
-      !File.writable?(dir_name)
-    rescue StandardError
+      File.writable?(dir_name)
+    rescue StandardError => e
+      log_error(e)
       false
     end
 
@@ -82,18 +87,21 @@ module Evaluator
     # @return [Boolean]
     def self.writable?(path)
       File.writable?(File.dirname(path))
-    rescue StandardError
+    rescue StandardError => e
+      log_error(e)
       false
     end
 
     # Loads existing history from the benchmarks file.
     #
+    # @param path [String] The path to the history file.
     # @return [Array<Hash>] The list of historical evaluation entries.
-    def self.load_history
-      return [] unless File.exist?(HISTORY_FILE)
+    def self.load_history(path = HISTORY_FILE)
+      return [] unless File.exist?(path)
 
-      JSON.parse(File.read(HISTORY_FILE), symbolize_names: true)
-    rescue JSON::ParserError
+      JSON.parse(File.read(path), symbolize_names: true)
+    rescue StandardError => e
+      log_error(e) unless e.is_a?(JSON::ParserError)
       []
     end
 
@@ -107,6 +115,19 @@ module Evaluator
       scores = tasks.map { |task| normalize_score(task[:judge_score]) }
       calculate_summary(scores)
     end
+
+    # Logs errors with backtrace
+    #
+    # @param exception [StandardError]
+    def self.log_error(exception)
+      msg = "#{exception.message}\n#{exception.backtrace.first(5).join("\n")}"
+      if defined?(Rails)
+        Rails.logger.error(msg)
+      else
+        warn("HistoryRecorder Error: #{msg}")
+      end
+    end
+    private_class_method :log_error
 
     class << self
       private

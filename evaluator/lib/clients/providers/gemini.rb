@@ -15,6 +15,7 @@ module Evaluator
         # @param messages [Array<Hash>]
         # @param tools [Array<Hash>]
         # @param options [Hash]
+        # @raise [StandardError] if configuration is invalid (handled gracefully in call)
         def initialize(system_prompt:, messages:, tools: [], **options)
           super
           config = Evaluator::Config
@@ -34,6 +35,8 @@ module Evaluator
           "/v1/projects/#{@project_id}/locations/#{@location}/endpoints/openapi/chat/completions"
         end
 
+        # Model name is not used in OpenAI-compatible endpoint
+        # Kept for potential future use with native Gemini API
         # @return [String]
         def model_name
           "google/#{@model}"
@@ -47,7 +50,12 @@ module Evaluator
         # @return [Hash]
         def config_error
           missing = missing_config_keys
-          { success: false, response: { error: { message: "#{missing.join(' and ')} not set for Gemini" } } }
+          message = if missing.length > 1
+                      "#{missing[0...-1].join(', ')}, and #{missing[-1]} not set for Gemini"
+                    else
+                      "#{missing.first} not set for Gemini"
+                    end
+          { success: false, response: { error: { message: message } } }
         end
 
         private

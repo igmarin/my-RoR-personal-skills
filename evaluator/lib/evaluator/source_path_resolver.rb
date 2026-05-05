@@ -18,13 +18,13 @@ module Evaluator
 
       segments = eval_folder_path.to_s.split('/').reject(&:empty?)
 
-      if (index = segments.index('skills'))
+      if (index = segments.rindex('skills'))
         skill_cat = segments[index + 1]
         skill_name = segments[index + 2]
         return "skills/#{skill_cat}/#{skill_name}" if skill_cat && skill_name
       end
 
-      if (index = segments.index('workflows'))
+      if (index = segments.rindex('workflows'))
         workflow_name = segments[index + 1]
         return "workflows/#{workflow_name}" if workflow_name
       end

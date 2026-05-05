@@ -41,17 +41,19 @@ module Evaluator
     def call
       print_header
 
-      Sandbox.run(@full_eval_path) do |sandbox_dir|
+      Sandbox.run(@full_eval_path) do |sandbox|
+        working_dir = sandbox.path
         agent_result = ReactAgent.call(
           client_params: @client_params,
-          working_dir: sandbox_dir,
+          working_dir: working_dir,
+          container_id: sandbox.container_id,
           system_prompt: build_system_prompt,
           initial_prompt: @task_content
         )
 
         response = agent_result[:response]
         final_answer = agent_result[:success] ? response[:content] : "Error: #{response[:error][:message]}"
-        [final_answer, Sandbox.capture_diff(sandbox_dir)]
+        [final_answer, Sandbox.capture_diff(working_dir)]
       end
     end
 

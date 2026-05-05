@@ -19,9 +19,10 @@ module Evaluator
     # @param name [String] The name of the tool to execute (e.g., 'read_file').
     # @param arguments [String] A JSON string containing the arguments for the tool.
     # @param working_dir [String] The base directory in which the tool should operate.
+    # @param container_id [String, nil] The Docker container ID for isolated execution.
     # @return [String] The result of the tool execution, or an error message.
-    def self.execute(name, arguments, working_dir)
-      Dispatcher.call(name, arguments, working_dir)
+    def self.execute(name, arguments, working_dir, container_id = nil)
+      Dispatcher.call(name, arguments, working_dir, container_id)
     end
   end
 end

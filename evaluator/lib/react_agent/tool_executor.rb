@@ -11,8 +11,9 @@ module Evaluator
       #
       # @param tool_calls [Array<Hash>] The tool calls requested by the LLM.
       # @param working_dir [String] The directory where tools should operate.
+      # @param container_id [String, nil] The Docker container ID for isolated execution.
       # @return [Array<Hash>] An array of message hashes containing tool results.
-      def self.call(tool_calls, working_dir)
+      def self.call(tool_calls, working_dir, container_id = nil)
         tool_calls.map do |tool_call|
           function_name = tool_call.dig('function', 'name')
           arguments = tool_call.dig('function', 'arguments')
@@ -20,7 +21,7 @@ module Evaluator
           puts "=== Calling Tool: #{function_name} ==="
           puts "Args: #{arguments}"
 
-          result = Tools.execute(function_name, arguments, working_dir)
+          result = Tools.execute(function_name, arguments, working_dir, container_id)
 
           {
             role: 'tool',

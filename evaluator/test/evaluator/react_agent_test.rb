@@ -9,7 +9,8 @@ module Evaluator
       expected_config = {
         system_prompt: 'System',
         client_params: { model: 'test' },
-        working_dir: '/tmp'
+        working_dir: '/tmp',
+        container_id: nil
       }
 
       ReactAgent::LoopRunner.expects(:call).with('Initial', 5, expected_config).returns({ success: true })

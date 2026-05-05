@@ -29,6 +29,7 @@ module Evaluator
       @initial_prompt = params[:initial_prompt]
       @max_iterations = params[:max_iterations] || 10
       @working_dir = params[:working_dir] || Dir.pwd
+      @container_id = params[:container_id]
       @client_params = params[:client_params] || {}
     end
 
@@ -46,7 +47,8 @@ module Evaluator
       {
         system_prompt: @system_prompt,
         client_params: @client_params,
-        working_dir: @working_dir
+        working_dir: @working_dir,
+        container_id: @container_id
       }
     end
   end

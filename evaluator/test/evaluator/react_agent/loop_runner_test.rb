@@ -34,7 +34,7 @@ module Evaluator
         { success: true, response: { message: { 'content' => 'Final Answer after tool' } } }
       )
 
-      Tools.expects(:execute).with('run_command', '{"command":"echo 1"}', anything).returns('Tool Result')
+      Tools.expects(:execute).with('run_command', '{"command":"echo 1"}', anything, nil).returns('Tool Result')
 
       # Act
       result = ReactAgent::LoopRunner.call('Initial', 10, { working_dir: Dir.pwd, client_params: {} })

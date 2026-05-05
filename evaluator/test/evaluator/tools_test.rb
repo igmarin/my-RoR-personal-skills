@@ -12,7 +12,7 @@ module Evaluator
     end
 
     def test_execute_delegates_to_dispatcher
-      Tools::Dispatcher.expects(:call).with('read_file', '{}', '/tmp').returns('result')
+      Tools::Dispatcher.expects(:call).with('read_file', '{}', '/tmp', nil).returns('result')
 
       assert_equal 'result', Tools.execute('read_file', '{}', '/tmp')
     end

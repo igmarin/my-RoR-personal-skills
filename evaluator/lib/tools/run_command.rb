@@ -28,16 +28,17 @@ module Evaluator
         }
       end
 
-      # Executes a shell command within the working directory.
+      # Executes a shell command within the working directory (host or container).
       #
       # Tokenizes the command string before execution so that arguments are passed
       # directly to the OS without shell interpretation, preventing shell injection.
       #
       # @param command [String] The command to run (e.g. "rspec spec/models").
-      # @param working_dir_path [Pathname] The directory in which to run the command.
+      # @param working_dir_path [Pathname] The host directory (ignored if container_id present).
+      # @param container_id [String, nil] The Docker container ID for isolated execution.
       # @return [String] A formatted string containing the exit status, STDOUT, and STDERR.
       # @raise [Timeout::Error] Internally rescued; returns a timeout message string.
-      def self.call(command, working_dir_path)
+      def self.call(command, working_dir_path, container_id = nil)
         argv = command.shellsplit
         base_cmd = argv.first
         allowed = Evaluator::Config.allowed_commands
@@ -45,7 +46,15 @@ module Evaluator
 
         max_time = Evaluator::Config.max_execution_time
         Timeout.timeout(max_time) do
-          stdout_str, stderr_str, status = Open3.capture3(*argv, chdir: working_dir_path.to_s)
+          stdout_str, stderr_str, status = if container_id
+                                             # Execute inside the Docker container
+                                             # Environment is naturally scrubbed as docker exec doesn't inherit host ENV
+                                             docker_cmd = ['docker', 'exec', '-w', '/sandbox', container_id] + argv
+                                             Open3.capture3(*docker_cmd)
+                                           else
+                                             # Fallback to host execution
+                                             Open3.capture3(*argv, chdir: working_dir_path.to_s)
+                                           end
           <<~RESULT
             Exit Status: #{status.exitstatus}
             STDOUT:

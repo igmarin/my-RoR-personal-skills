@@ -35,7 +35,7 @@ module Evaluator
           puts content
         end
 
-        messages.concat(ToolExecutor.call(tool_calls, config[:working_dir]))
+        messages.concat(ToolExecutor.call(tool_calls, config[:working_dir], config[:container_id]))
 
         { continue: true, messages: messages }
       end

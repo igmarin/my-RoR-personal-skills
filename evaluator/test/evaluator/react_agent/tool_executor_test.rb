@@ -10,7 +10,7 @@ module Evaluator
           { 'id' => 'call_1', 'function' => { 'name' => 'read_file', 'arguments' => '{"path":"test.txt"}' } }
         ]
 
-        Tools.expects(:execute).with('read_file', '{"path":"test.txt"}', Dir.pwd).returns('file content')
+        Tools.expects(:execute).with('read_file', '{"path":"test.txt"}', Dir.pwd, nil).returns('file content')
 
         result = ToolExecutor.call(tool_calls, Dir.pwd)
 

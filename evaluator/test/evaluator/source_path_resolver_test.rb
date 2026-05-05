@@ -29,12 +29,10 @@ module Evaluator
       assert_equal 'skills/patterns/ruby-service-objects', resolved
     end
 
-    def test_raises_for_unmapped_eval_path_without_override
-      error = assert_raises(ArgumentError) do
-        SourcePathResolver.call(eval_folder_path: 'tmp/custom-evals/example')
-      end
+    def test_returns_nil_for_unmapped_eval_path_without_override
+      resolved = SourcePathResolver.call(eval_folder_path: 'tmp/custom-evals/example')
 
-      assert_match(/could not infer/i, error.message)
+      assert_nil resolved
     end
   end
 end

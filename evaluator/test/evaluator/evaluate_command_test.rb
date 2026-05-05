@@ -11,7 +11,7 @@ module Evaluator
 
     def test_call_accepts_eval_without_explicit_skill_override
       Runner.expects(:call).with(has_entries(
-                                   eval_folder_path: 'evals/skills/patterns/ruby-service-objects/basic-service-object',
+                                   eval_folder_path: File.expand_path('evals/skills/patterns/ruby-service-objects/basic-service-object'),
                                    skill_path: nil
                                  )).returns(success_result('skills/patterns/ruby-service-objects'))
       HistoryRecorder.expects(:record).with(
@@ -30,8 +30,8 @@ module Evaluator
 
     def test_call_passes_explicit_skill_override_through_to_runner
       Runner.expects(:call).with(has_entries(
-                                   eval_folder_path: 'evals/workflows/rails-tdd-loop/full-feature',
-                                   skill_path: 'skills/patterns/ruby-service-objects'
+                                   eval_folder_path: File.expand_path('evals/workflows/rails-tdd-loop/full-feature'),
+                                   skill_path: File.expand_path('skills/patterns/ruby-service-objects')
                                  )).returns(success_result('skills/patterns/ruby-service-objects'))
       HistoryRecorder.expects(:record).with(
         has_entries(success: true),
@@ -61,7 +61,7 @@ module Evaluator
     end
 
     def test_call_handles_hash_judge_scores_without_json_parse
-      Runner.expects(:call).returns(
+      Runner.expects(:call).with(has_entry(eval_folder_path: File.expand_path('evals/skills/example'))).returns(
         success_result('skills/patterns/ruby-service-objects').merge(
           tasks: [task_result(judge_score: { 'baseline_score' => 70, 'context_score' => 90, 'reasoning' => 'hash result' })]
         )
@@ -76,7 +76,7 @@ module Evaluator
     end
 
     def test_call_handles_nil_judge_scores_without_type_error
-      Runner.expects(:call).returns(
+      Runner.expects(:call).with(has_entry(eval_folder_path: File.expand_path('evals/skills/example'))).returns(
         success_result('skills/patterns/ruby-service-objects').merge(
           tasks: [task_result(judge_score: nil)]
         )

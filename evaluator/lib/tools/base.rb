@@ -56,13 +56,14 @@ module Evaluator
         end
 
         def verify_component_safety!(component, working_dir_str, original_path)
-          return unless component.exist? || component.symlink?
+          is_symlink = component.symlink?
+          return unless component.exist? || is_symlink
 
           begin
             real = component.realpath
             raise ArgumentError, "Symlink escapes sandbox: #{original_path}" unless inside_dir?(real.to_s, working_dir_str)
           rescue Errno::ENOENT
-            raise ArgumentError, "Dangling symlink: #{original_path}" if component.symlink?
+            raise ArgumentError, "Dangling symlink: #{original_path}" if is_symlink
           end
         end
       end

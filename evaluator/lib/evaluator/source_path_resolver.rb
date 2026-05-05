@@ -19,15 +19,20 @@ module Evaluator
 
       segments = eval_folder_path.to_s.split('/').reject(&:empty?)
 
-      if (index = segments.index('skills')) && segments[index + 1] && segments[index + 2]
-        return "skills/#{segments[index + 1]}/#{segments[index + 2]}"
+      if (index = segments.index('skills'))
+        skill_cat = segments[index + 1]
+        skill_name = segments[index + 2]
+        return "skills/#{skill_cat}/#{skill_name}" if skill_cat && skill_name
       end
 
-      if (index = segments.index('workflows')) && segments[index + 1]
-        return "workflows/#{segments[index + 1]}"
+      if (index = segments.index('workflows'))
+        workflow_name = segments[index + 1]
+        return "workflows/#{workflow_name}" if workflow_name
       end
 
-      raise ArgumentError, "Could not infer source path from eval target: #{eval_folder_path}"
+      # Return nil if we can't infer a specific skill/workflow (e.g. batch run on a category)
+      # The Runner or Hydrator will handle the lack of context.
+      nil
     end
   end
 end

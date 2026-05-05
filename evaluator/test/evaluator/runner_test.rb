@@ -75,16 +75,20 @@ module Evaluator
       assert_equal 'skills/patterns/ruby-service-objects', result[:source_path]
     end
 
-    def test_call_returns_failure_when_source_path_cannot_be_inferred
+    def test_call_succeeds_without_context_when_source_path_cannot_be_inferred
       create_eval_fixture('tmp/custom-evals/unmapped-task')
+
+      # Should run in baseline-only or at least not fail during inference
+      AgentRunner.expects(:call).at_least_once.returns(%w[output diff])
+      Judge.expects(:call).at_least_once.returns('{}')
 
       result = Runner.call(
         eval_folder_path: 'tmp/custom-evals/unmapped-task',
         base_path: @base_path
       )
 
-      refute result[:success]
-      assert_match(/could not infer/i, result[:response][:error][:message])
+      assert result[:success]
+      assert_nil result[:source_path]
     end
 
     private

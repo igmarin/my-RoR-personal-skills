@@ -3,7 +3,7 @@
 require_relative 'lib/evaluator/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'rails-agent-evaluator'
+  spec.name          = 'agent_evaluator'
   spec.version       = Evaluator::VERSION
   spec.authors       = ['Ismael Marin']
   spec.email         = ['ismael.marin@gmail.com']

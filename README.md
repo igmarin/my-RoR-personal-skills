@@ -430,6 +430,30 @@ Tests are a **gate** between planning and implementation. See [docs/workflows/](
 
 For guidance on skill authoring, refer to the [Skill Design Principles](docs/skill-design-principles.md) and the [Skill Template](docs/skill-template.md).
 
+## Testing & Validation
+
+This repository uses the [rails-agent-eval](https://github.com/igmarin/rails-agent-eval) engine to validate that skills and workflows perform as expected.
+
+### 1. Install Dependencies
+
+```bash
+bundle install
+```
+
+### 2. Run Evaluations
+
+You can run individual evaluations or batches using the `evaluate` command:
+
+```bash
+# Evaluate a single skill scenario
+bundle exec evaluate --eval evals/skills/ruby-service-objects/basic-service-object
+
+# Evaluate a workflow
+bundle exec evaluate --eval evals/workflows/rails-tdd-loop/full-feature
+```
+
+Gold-standard evaluation scenarios are stored in the `evals/` directory.
+
 ## Acknowledgments
 
 Huge thanks to **[Mumo Carlos (@mumoc)](https://github.com/mumoc)**. His mentorship has shaped my growth as a developer and influenced many of the habits and practices reflected in this library — not only the **ticket-planning** workflow he shared, but the broader discipline around quality, clarity, and thoughtful use of tools. This repo and the learning behind it would not be what they are without him.

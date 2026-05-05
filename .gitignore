@@ -6,7 +6,6 @@
 # Gold-standard evaluation scenarios are committed
 # Temporary or private sandbox runs are ignored
 evals/tmp/
-evaluator/evals/tmp/
 private-evals/
 tmp/
 .Gemfile.lock

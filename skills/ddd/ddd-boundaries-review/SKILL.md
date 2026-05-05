@@ -78,8 +78,6 @@ rg 'Fleet::[A-Z]' app/services/billing/
 rg 'after_(create|update|save).*Job|after_(create|update|save).*Mailer' app/models/
 ```
 
-See [EXAMPLES.md](./EXAMPLES.md) for a worked leakage example, a sample finding block, and pitfalls.
-
 ## Integration
 
 | Skill | When to chain |
@@ -88,3 +86,29 @@ See [EXAMPLES.md](./EXAMPLES.md) for a worked leakage example, a sample finding 
 | **ddd-rails-modeling** | When a context is clear and needs entities/value objects/services modeled cleanly |
 | **rails-architecture-review** | When the same problem also needs a broader Rails structure review |
 | **refactor-safely** | When the recommended improvement needs incremental extraction instead of a rewrite |
+
+---
+
+## Appendix: Worked Leakage Example
+
+> Consult this section when you need a concrete model for structuring a finding.
+
+**Scenario:** A `Fleet::Vehicle` model has an `after_save` callback that calls `Billing::Invoice.generate_for(self)`. The Fleet context is directly triggering billing logic, leaking into Billing's responsibility.
+
+**Sample finding block:**
+
+```
+Severity: High
+Contexts involved: Fleet, Billing
+Leaked term / ownership conflict: Fleet::Vehicle owns invoice generation trigger; Billing should own when invoices are created.
+Why the current boundary is risky: Changes to billing rules require modifying a Fleet model, coupling release cycles and obscuring business rules.
+Smallest credible improvement: Replace the callback with a domain event (VehicleCheckedIn) published by Fleet and subscribed to by Billing. Fleet emits facts; Billing decides what to do with them.
+```
+
+## Appendix: Common Pitfalls
+
+> Consult this section when a proposed boundary change feels off but you cannot name why.
+
+- Treating a shared database table as proof of a shared context — storage and domain boundaries are independent concerns.
+- Splitting into new contexts before the business language is stable enough to name them clearly.
+- Mistaking a large Rails namespace for a bounded context without checking whether it has a single, coherent set of rules and an identifiable owner.

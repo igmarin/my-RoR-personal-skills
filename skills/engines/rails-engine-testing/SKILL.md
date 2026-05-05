@@ -90,14 +90,12 @@ RSpec.describe MyEngine::Configuration do
 end
 ```
 
-For generator and reload-safety spec examples, see [EXAMPLES.md](./EXAMPLES.md).
+For generator and reload-safety spec examples, see [assets/examples.md](assets/examples.md).
 
 ## Pitfalls
 
 | Pitfall | What to do |
 |---------|------------|
-| No dummy app | Unit tests alone cannot prove mount and integration; generate one at `spec/dummy` |
-| Testing against real host | Use `spec/dummy`; real host apps are environment-specific and slow |
 | Skipping reload-safety tests | Add regression coverage for decorators and patches in development |
 | Tests pass only with specific Rails version | Run a version matrix; pin nothing unless required |
 | Request specs use stubs instead of real wiring | Mount the engine in dummy and call through it |

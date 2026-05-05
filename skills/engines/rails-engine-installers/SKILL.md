@@ -80,7 +80,7 @@ it 'does not duplicate the route mount on rerun' do
 end
 ```
 
-See [EXAMPLES.md](./EXAMPLES.md) for a full generator class and complete spec suite.
+See [EXAMPLES.md](./EXAMPLES.md) for a full generator class and complete spec suite, including migration copy helpers and multi-step install scenarios.
 
 ## Generator Checklist
 

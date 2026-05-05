@@ -65,9 +65,81 @@ module PricingCalculator
 end
 ```
 
-No qualifying context or unknown variant → `NullService`. For full BaseService and NullService implementations, see [IMPLEMENTATION.md](./IMPLEMENTATION.md).
+No qualifying context or unknown variant → `NullService`.
 
-## 2. Usage
+## 2. BaseService
+
+```ruby
+# frozen_string_literal: true
+
+module PricingCalculator
+  class BaseService
+    def initialize(order)
+      @order = order
+    end
+
+    def calculate
+      return nil unless should_calculate?
+
+      compute_result
+    end
+
+    private
+
+    def should_calculate?
+      @order.present?
+    end
+
+    def compute_result
+      raise NotImplementedError, "#{self.class}#compute_result must be implemented"
+    end
+  end
+end
+```
+
+## 3. NullService
+
+```ruby
+# frozen_string_literal: true
+
+module PricingCalculator
+  class NullService < BaseService
+    private
+
+    def should_calculate?
+      false
+    end
+
+    def compute_result
+      nil
+    end
+  end
+end
+```
+
+## 4. Concrete Service Example
+
+```ruby
+# frozen_string_literal: true
+
+module PricingCalculator
+  class StandardPricingService < BaseService
+    private
+
+    def should_calculate?
+      super && @order.plan.name == 'standard'
+    end
+
+    def compute_result
+      @order.base_price * 1.0
+    end
+  end
+end
+```
+
+Always call `super` in `should_calculate?` to preserve the base guard.
+
+## 5. Usage
 
 ```ruby
 price = PricingCalculator::Factory.for(order).calculate
@@ -75,27 +147,11 @@ price = PricingCalculator::Factory.for(order).calculate
 
 **Single entry point rule:** `Factory.for(entity)` is the **only** permitted access path. Clients never instantiate service classes directly. If you see `StandardPricingService.new(order)` outside of `Factory`, that is a bug — route through the factory.
 
-## 3. Tests (RSpec)
+## 6. Tests (RSpec)
 
-**Factory dispatch (all branches):**
+See [assets/examples.md](assets/examples.md) for complete, copy-paste-ready RSpec examples for the Factory, NullService, and each concrete service.
 
-```ruby
-RSpec.describe PricingCalculator::Factory do
-  describe '.for' do
-    it 'returns NullService when plan is nil' do
-      order = create(:order, plan: nil)
-      expect(described_class.for(order)).to be_a(PricingCalculator::NullService)
-    end
-
-    it 'returns StandardPricingService for standard plan' do
-      order = create(:order, plan: create(:plan, name: 'standard', active: true))
-      expect(described_class.for(order)).to be_a(PricingCalculator::StandardPricingService)
-    end
-  end
-end
-```
-
-Cover inactive plan, each variant, and unknown variant. See [TESTING.md](./TESTING.md) for NullService and concrete service specs.
+Each spec suite must cover: inactive plan, nil plan, each named variant, and unknown variant. Mirror the same context structure across all concrete services.
 
 ## Pitfalls
 
@@ -104,6 +160,7 @@ Cover inactive plan, each variant, and unknown variant. See [TESTING.md](./TESTI
 | SERVICE_MAP key mismatch | Verify keys match exactly what is stored in the database — typos cause silent NullService fallbacks |
 | Missing NullService spec | Always add a spec context for unknown/nil variants or tests will never catch the fallback regression |
 | Direct service instantiation (`ServiceClass.new(entity)`) | Route through `Factory.for(entity)` — it is the sole public entry point; direct instantiation bypasses the NullService safety net |
+| Forgetting `super` in concrete `should_calculate?` | Always call `super` — skipping it removes the base nil/presence guard |
 
 ## Integration
 

@@ -30,18 +30,17 @@ If the user already has a plan, **do not re-plan** unless there is a material ga
 
 ### 2. Classify each ticket before drafting it
 
-Assign these planning attributes to each ticket:
+Assign these core planning attributes to each ticket:
 
 | Attribute | Values |
 |-----------|--------|
-| `area` | `backend` \| `web` \| `mobile` \| `cross-platform` \| `external` |
 | `type` | `Story` \| `Task` |
-| `dependency_level` | `unblocked` \| `blocked` |
+| `area` | `backend` \| `web` \| `mobile` \| `cross-platform` \| `external` |
 | `execution_order` | `foundation` \| `api` \| `client` \| `follow-up` |
-| `coordination_need` | `single-team` \| `multi-team` |
-| `external_dependency` | `yes` \| `no` |
-| `urgency` | `normal` \| `priority` |
+| `dependency_level` | `unblocked` \| `blocked` |
 | `target_bucket` | `ready-to-refine` \| `next-dev-sprint` \| `later` |
+
+Additional attributes to apply when relevant: `coordination_need` (`single-team` | `multi-team`), `external_dependency` (`yes` | `no`), `urgency` (`normal` | `priority`).
 
 Backend/API enablers generally come before dependent web/mobile tickets.
 
@@ -69,7 +68,7 @@ Use this section order:
 | **Dependencies** | Note blockers |
 | **Technical Notes** | Implementation details that affect sequencing or scoping only |
 
-Keep the main sections business-facing. Do not restate the background in the summary or repeat the AC in Technical Notes.
+Keep the main sections business-facing.
 
 ### 5. Output: drafts or create in the issue tracker
 

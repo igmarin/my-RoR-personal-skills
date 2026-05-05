@@ -2,10 +2,12 @@
 name: rails-review-response
 license: MIT
 description: >
-  Use when you have received code review feedback on Rails code and need to decide
-  what to implement, how to respond, and in what order. Covers evaluating reviewer
+  Applies when a developer has received code review feedback on Rails code and needs to decide
+  what to implement, how to respond, and in what order. Use when addressing PR comments,
+  pull request feedback, or review comments on Rails code. Covers evaluating reviewer
   suggestions, pushing back with technical reasoning, avoiding performative agreement,
   implementing feedback safely one item at a time, and triggering a re-review when needed.
+  Trigger scenarios: respond to reviewer, address review comments, handle pull request feedback.
 ---
 
 # Rails Review Response
@@ -36,8 +38,8 @@ These responses skip verification and add zero signal:
 
 | Forbidden | Why |
 |-----------|-----|
-| "You're absolutely right!" | Performative — confirms nothing was verified |
-| "Great point!" / "Excellent feedback!" | Performative — signals compliance, not understanding |
+| "You're absolutely right!" | Performative — nothing was verified |
+| "Great point!" / "Excellent feedback!" | Signals compliance, not understanding |
 | "Let me implement that now" | Skips verification — reviewer may lack codebase context |
 | "I'll fix all of these" | Batch commitment before evaluating each item individually |
 
@@ -91,23 +93,17 @@ After implementing feedback, decide whether to request a re-review:
 | Only Nice to have or cosmetic fixes | Comment what was done — no re-review needed |
 | Architecture or class structure changed | Request re-review — mandatory |
 
-## Common Mistakes
+## Common Mistakes & Red Flags
 
-| Mistake | Reality |
-|---------|---------|
-| Implementing all feedback immediately | Verify each item first — some suggestions may be wrong |
+| Mistake / Red Flag | Reality |
+|--------------------|----------|
+| Implementing feedback before reading all of it | Read everything before reacting — HARD-GATE step 1 |
 | Treating all feedback as equally urgent | Classify by severity — Critical before cosmetic |
 | Closing review comments without verifying | Comment what you checked and why you agree or disagree |
+| "Fixed!" comment with no technical explanation | Always state what was checked and why the fix is correct |
+| All review comments closed without any pushback | May indicate blind compliance — verify each item independently |
 | Skipping re-review after Critical fixes | A fix can introduce new issues — re-review is mandatory |
 | Asking for re-review after cosmetic changes | Wastes reviewer time — only request when logic changed |
-
-## Red Flags
-
-- Implementing feedback before reading all of it
-- "Fixed!" comment with no technical explanation
-- All review comments closed without any pushback (may indicate blind compliance)
-- Tests not run after implementing a fix
-- Re-review skipped after a Critical item was addressed
 
 ## Integration
 

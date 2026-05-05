@@ -4,10 +4,10 @@ license: MIT
 description: >
   Complete code quality workflow for Rails projects. Enforces naming conventions, reduces duplication,
   extracts methods and service objects, reduces complexity, and generates YARD docstrings and inline
-  comments across the full codebase. Use this composite workflow instead of individual refactoring or
-  documentation skills when a full production-readiness review is needed end-to-end. Use when: code review prep,
-  before PR, refactor safely, add documentation, quality check, quality audit, full Rails quality sweep,
-  production-ready review.
+  comments across the full codebase. Use this composite end-to-end workflow instead of individual
+  refactoring or documentation skills when the full three-phase production-readiness review is needed
+  together in one pass. Use when: code review prep, before PR, full Rails quality sweep, quality audit,
+  production-ready review, end-to-end quality check.
 keywords: rails, quality, conventions, refactoring, documentation, yard, review
 ---
 
@@ -21,14 +21,12 @@ Orchestrates systematic code quality checks, safe refactoring, and documentation
 
 Check code against Rails standards via **skills/code-quality/rails-code-conventions** (DRY/YAGNI/PORO/CoC/KISS compliance, linter as style source of truth, structured logging) and **skills/code-quality/rails-stack-conventions** (Rails + PostgreSQL patterns, Hotwire + Tailwind conventions, security best practices).
 
-**Example violation and fix:**
+**Example — DRY violation extracted to shared PORO:**
 ```ruby
-# Violation (DRY): duplicated discount logic across OrderService and CartService
-def apply_discount(price, pct)  # repeated verbatim in two classes
-  price - (price * pct / 100.0)
-end
+# Before: discount logic duplicated across OrderService and CartService
+def apply_discount(price, pct) = price - (price * pct / 100.0)
 
-# Fix: extract to shared PORO
+# After
 class DiscountCalculator
   def self.apply(price, pct) = price - (price * pct / 100.0)
 end
@@ -62,14 +60,13 @@ Document public APIs via **skills/patterns/yard-documentation** (annotate all pu
 
 ---
 
-## Quick Reference
+## When to Use This vs. Individual Skills
 
-```
-Before PR?        → rails-code-conventions → yard-documentation
-Need to refactor? → refactor-safely → rails-code-conventions
-Quality audit?    → rails-code-conventions → rails-stack-conventions
-Not sure?         → rails-skills-orchestrator
-```
+- **Full pre-PR sweep (all three phases):** Use this skill.
+- **Only fix linting / conventions:** Use `rails-code-conventions`.
+- **Only refactor a specific file:** Use `refactor-safely`.
+- **Only add YARD docs:** Use `yard-documentation`.
+- **Not sure which skill applies:** Use `rails-skills-orchestrator`.
 
 ## HARD-GATE: Quality Before Merge
 
@@ -84,7 +81,6 @@ Plus: YARD docs complete for all public APIs.
 
 ## Output Style
 
-**Quality Report:**
 ```markdown
 # Quality Report — [Date]
 
@@ -94,9 +90,7 @@ Plus: YARD docs complete for all public APIs.
 - [ ] YAGNI: Remove unused method `calculate_total`?
 
 ## Refactoring
-- Characterization tests: 5 added
-- Methods extracted: 3
-- All tests passing: YES
+- Characterization tests added, methods extracted, all tests passing
 
 ## Documentation
 - YARD coverage: 87% (improved from 65%)

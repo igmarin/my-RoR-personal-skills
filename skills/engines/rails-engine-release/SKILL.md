@@ -13,8 +13,6 @@ description: >
 
 Use this skill when the task is to ship a Rails engine as a gem or prepare a new version.
 
-Release work should make upgrades predictable for host applications.
-
 ## HARD-GATE
 
 **DO NOT release without updating CHANGELOG and version file.**
@@ -67,15 +65,15 @@ Load these files only when their specific content is needed:
 
 ## Output Style
 
-When asked to prepare a release, produce a release summary ready for team lead review, with code blocks for all file changes. It MUST include:
+When asked to prepare a release, produce a release summary ready for team lead review, with code blocks for all file changes. Required deliverables:
 
-1. **Version bump recommendation** — New version (patch/minor/major) with explicit reasoning
-2. **Version constant** — Updated `lib/<engine>/version.rb` with the new `VERSION = "x.y.z"`
-3. **CHANGELOG entries** — User-facing changes under Added/Changed/Fixed/Deprecated headers
-4. **Upgrade notes** — Steps host apps must take (config changes, migration steps, dependency updates)
-5. **Gemspec verification** — Confirm metadata, files, and dependencies match tested Rails/Ruby versions
-6. **Test suite status** — Confirm `bundle exec rspec` passes before proceeding to build
-7. **Release blockers** — Open issues preventing release, or explicitly state "No blockers"
+1. **Version bump recommendation** — patch/minor/major with explicit reasoning
+2. **Version constant** — updated `lib/<engine>/version.rb`
+3. **CHANGELOG entries** — under Added/Changed/Fixed/Deprecated headers
+4. **Upgrade notes** — host app steps (config, migrations, dependencies)
+5. **Gemspec verification** — metadata, files, and dependency ranges confirmed
+6. **Test suite status** — pass/fail result of `bundle exec rspec`
+7. **Release blockers** — open issues, or explicitly "No blockers"
 
 ## Integration
 

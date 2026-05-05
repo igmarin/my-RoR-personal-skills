@@ -112,8 +112,6 @@ end
 
 ### Field-Level Authorization
 
-Type-level auth alone is insufficient — add field-level guards for sensitive fields:
-
 ```ruby
 field :internal_notes, String, null: true do
   guard -> (_obj, _args, ctx) { ctx[:current_user]&.admin? }
@@ -123,8 +121,6 @@ end
 For Pundit: `authorize! object, to: :read?, with: OrderPolicy` in the resolver's `resolve` method.
 
 ## Schema safeguards
-
-Configure **production introspection** and **query limits** on `AppSchema` in one place:
 
 ```ruby
 class AppSchema < GraphQL::Schema
@@ -138,8 +134,6 @@ end
 Adjust depth/complexity to your API; document the chosen limits in the PR or schema comments if non-default.
 
 ## Error Handling
-
-Mutations must return a structured response — never raise unhandled exceptions to the client:
 
 ```ruby
 class Mutations::CreateOrder < Mutations::BaseMutation

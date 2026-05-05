@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.1'
 
-  spec.files         = Dir.chdir(__dir__) { Dir['lib/**/*.rb', 'bin/*', 'README.md', 'LICENSE'] }
+  spec.files         = Dir.chdir(__dir__) { Dir['lib/**/*.rb', 'bin/*', 'docs/**/*.md', 'README.md', 'LICENSE'] }
   spec.bindir        = 'bin'
   spec.executables   = ['evaluate']
   spec.require_paths = ['lib']

@@ -6,12 +6,14 @@ This guide explains how to run evaluations and how to create new evaluation task
 
 The primary tool for running evaluations is the `bin/evaluate` script.
 
+Generated eval scenarios are intentionally not bundled with the public repository. Store private/generated scenarios outside tracked paths, for example under the ignored root-level `private-evals/` directory. Public examples must be original or permissively licensed and must document their provenance.
+
 ### Basic Usage
 
 To run a specific evaluation task:
 
 ```bash
-bin/evaluate --eval ../evals/skills/api/rails-graphql-best-practices/graphql-n-1-prevention-field-auth-and-mu
+bin/evaluate --eval ../private-evals/skills/api/rails-graphql-best-practices/graphql-n-1-prevention-field-auth-and-mu
 ```
 
 ### Batch Processing
@@ -19,7 +21,7 @@ bin/evaluate --eval ../evals/skills/api/rails-graphql-best-practices/graphql-n-1
 To run all evaluations within a category:
 
 ```bash
-bin/evaluate --eval ../evals/skills/api
+bin/evaluate --eval ../private-evals/skills/api
 ```
 
 The evaluator will recursively find all `task.md` files in the directory and execute them in parallel.
@@ -29,7 +31,7 @@ The evaluator will recursively find all `task.md` files in the directory and exe
 By default, the evaluator infers the skill path from the evaluation path. If you need to test an evaluation against a different skill:
 
 ```bash
-bin/evaluate --eval ../evals/skills/patterns/ruby-service-objects/call-pattern-and-response-format --skill skills/custom-skill
+bin/evaluate --eval ../private-evals/skills/patterns/ruby-service-objects/call-pattern-and-response-format --skill ../skills/custom-skill
 ```
 
 ## Creating New Evaluations
@@ -46,8 +48,6 @@ This file contains the instructions for the AI agent. It should describe a speci
 - Specify the desired outcome.
 
 ### 2. The Criteria (`criteria.json`)
-
-This file defines the grading rubric used by the LLM Judge.
 
 This file defines the grading rubric used by the LLM Judge.
 
@@ -82,4 +82,4 @@ Skills are isolated blocks of logic (e.g., a specific API pattern). Evaluations 
 
 Workflows are sequences of skills or complex orchestrations (e.g., the full TDD loop). Evaluations for workflows should focus on the process, the ordering of tasks, and the successful completion of a multi-step objective.
 
-When running a workflow evaluation, ensure the `--eval` path points to the `evals/workflows/` directory.
+When running a workflow evaluation, ensure the `--eval` path points to a workflow eval directory such as `../private-evals/workflows/`.

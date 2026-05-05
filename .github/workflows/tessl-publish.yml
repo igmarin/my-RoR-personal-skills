@@ -8,7 +8,6 @@ on:
       - 'skills/**'
       - 'workflows/**'
       - 'docs/**'
-      - 'evals/**'
       - 'tile.json'
       - 'tessl.json'
       - 'scripts/validate-plugins.sh'

@@ -3,7 +3,9 @@
 .agents/*
 # Claude Code internal state (worktrees, plans, session data)
 .claude/
-evals/worst-cases/*
+evals/
+evaluator/evals/
+private-evals/
 tmp/
 .Gemfile.lock
 .agents/skills/

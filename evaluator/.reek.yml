@@ -16,6 +16,8 @@ directories:
       enabled: false
     UncommunicativeVariableName:
       enabled: false
+    ControlParameter:
+      enabled: false
 
 detectors:
   InstanceVariableAssumption:
@@ -28,6 +30,7 @@ detectors:
   ControlParameter:
     exclude:
       - "Evaluator::Tools::Base"
+      - "Evaluator::EvaluateCommand#print_parse_error"
   DuplicateMethodCall:
     exclude:
       - "Evaluator::Client#call"
@@ -38,6 +41,12 @@ detectors:
       - "Evaluator::Config#load_and_merge_json"
       - "Evaluator::Clients::Providers::Gemini#initialize"
       - "Evaluator::Clients::BaseClient#execute_request"
+      - "Evaluator::Tools::WriteFile#self.call"
+      - "Evaluator::SourcePathResolver#self.call"
+      - "Evaluator::EvaluateCommand#print_task_result"
+      - "Evaluator::EvaluateCommand#print_task_diffs"
+      - "Evaluator::Runner#evaluate_task"
+      - "Evaluator::Tools::Base#verify_component_safety!"
   UncommunicativeVariableName:
     accept:
       - e
@@ -61,9 +70,18 @@ detectors:
       - "Evaluator::Clients::BaseClient#extract_message"
       - "Evaluator::Clients::Providers::OpenAI#extract_message"
       - "Evaluator::Clients::Providers::Gemini#extract_message"
+      - "Evaluator::EvaluateCommand#parse_judge_score"
   NilCheck:
     exclude:
       - "Evaluator::ReactAgent#call"
       - "Evaluator::Clients::BaseClient#handle_response"
+      - "Evaluator::SourcePathResolver#self.call"
+      - "Evaluator::EvaluateCommand#call"
+      - "Evaluator::EvaluateCommand#print_task_result"
+      - "Evaluator::HistoryRecorder#normalize_score"
+      - "Evaluator::HistoryRecorder#self.summarize"
+  NestedIterators:
+    exclude:
+      - "Evaluator::EvaluateCommand#parse_options"
   LongParameterList:
     max_params: 5

@@ -41,15 +41,17 @@ module Evaluator
     def call
       parse_options
 
-      if @options[:eval].nil?
+      eval_path = @options[:eval]
+      if eval_path.nil?
         @stdout.puts 'Error: The --eval option is required.'
         @stdout.puts 'Example: bin/evaluate -e evals/skills/infrastructure/rails-api-versioning/api-versioning-with-controller-inheritan'
         return 1
       end
 
+      skill_option = @options[:skill]
       result = Evaluator::Runner.call(
-        eval_folder_path: @options[:eval],
-        skill_path: @options[:skill]
+        eval_folder_path: File.expand_path(eval_path),
+        skill_path: skill_option ? File.expand_path(skill_option) : nil
       )
 
       print_results(result)
@@ -104,28 +106,44 @@ module Evaluator
     end
 
     def print_task_result(task_result)
-      parsed_judge = parse_judge_score(task_result[:judge_score])
+      score_payload = task_result[:judge_score]
+      parsed_judge = parse_judge_score(score_payload)
       unless parsed_judge
-        @stdout.puts 'Could not parse judge JSON response. Raw output:'
-        @stdout.puts(task_result[:judge_score] || 'nil')
+        print_parse_error(score_payload)
         return
       end
 
+      print_judge_summary(parsed_judge)
+      print_task_diffs(task_result)
+    rescue JSON::ParserError
+      print_parse_error(task_result[:judge_score])
+    end
+
+    def print_parse_error(raw_score)
+      @stdout.puts 'Could not parse judge JSON response. Raw output:'
+      @stdout.puts(raw_score || 'nil')
+    end
+
+    def print_judge_summary(parsed_judge)
       @stdout.puts "Baseline Score: #{parsed_judge['baseline_score']}/100"
       @stdout.puts "Context Score:  #{parsed_judge['context_score']}/100"
       @stdout.puts "\nReasoning:"
       @stdout.puts parsed_judge['reasoning']
-      @stdout.puts "\n========================================="
-      @stdout.puts "  BASELINE CHANGES: #{task_result[:path]}  "
-      @stdout.puts "=========================================\n"
+    end
+
+    def print_task_diffs(task_result)
+      path = task_result[:path]
+      sep_newline = "\n========================================="
+      sep_plain = "=========================================\n"
+
+      @stdout.puts sep_newline
+      @stdout.puts "  BASELINE CHANGES: #{path}  "
+      @stdout.puts sep_plain
       @stdout.puts task_result[:baseline_diff]
-      @stdout.puts "\n========================================="
-      @stdout.puts "   CONTEXT CHANGES: #{task_result[:path]}  "
-      @stdout.puts "=========================================\n"
+      @stdout.puts sep_newline
+      @stdout.puts "   CONTEXT CHANGES: #{path}  "
+      @stdout.puts sep_plain
       @stdout.puts task_result[:context_diff]
-    rescue JSON::ParserError
-      @stdout.puts 'Could not parse judge JSON response. Raw output:'
-      @stdout.puts task_result[:judge_score]
     end
 
     def parse_judge_score(judge_score)
@@ -138,10 +156,11 @@ module Evaluator
     end
 
     def persist_output(result)
-      return unless @options[:output]
+      output_path = @options[:output]
+      return unless output_path
 
-      File.write(@options[:output], JSON.pretty_generate(result))
-      @stdout.puts "\nReport saved to #{@options[:output]}"
+      File.write(output_path, JSON.pretty_generate(result))
+      @stdout.puts "\nReport saved to #{output_path}"
     end
   end
 end

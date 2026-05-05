@@ -29,12 +29,18 @@ module Evaluator
       assert_equal 'skills/patterns/ruby-service-objects', resolved
     end
 
-    def test_raises_for_unmapped_eval_path_without_override
-      error = assert_raises(ArgumentError) do
-        SourcePathResolver.call(eval_folder_path: 'tmp/custom-evals/example')
-      end
+    def test_returns_nil_for_unmapped_eval_path_without_override
+      resolved = SourcePathResolver.call(eval_folder_path: 'tmp/custom-evals/example')
 
-      assert_match(/could not infer/i, error.message)
+      assert_nil resolved
+    end
+
+    def test_handles_absolute_paths_with_ambiguous_segments
+      # Simulate an absolute path where 'skills' appears early in the parent directories
+      absolute_path = '/Users/ismael/my-skills/rails-agent-skills/evals/skills/api/graphql-best-practices'
+      resolved = SourcePathResolver.call(eval_folder_path: absolute_path)
+
+      assert_equal 'skills/api/graphql-best-practices', resolved
     end
   end
 end

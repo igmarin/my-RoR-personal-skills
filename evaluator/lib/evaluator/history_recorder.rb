@@ -79,14 +79,19 @@ module Evaluator
       # @return [Hash] Summary statistics.
       def calculate_summary(scores)
         count = scores.size
-        total_baseline = scores.sum { |s| (s[:baseline_score] || 0).to_f }
-        total_context = scores.sum { |s| (s[:context_score] || 0).to_f }
+        baseline_total = 0.0
+        context_total = 0.0
+
+        scores.each do |score|
+          baseline_total += (score[:baseline_score] || 0).to_f
+          context_total += (score[:context_score] || 0).to_f
+        end
 
         {
           task_count: count,
-          average_baseline: (total_baseline / count).round(2),
-          average_context: (total_context / count).round(2),
-          improvement: ((total_context - total_baseline) / count).round(2)
+          average_baseline: (baseline_total / count).round(2),
+          average_context: (context_total / count).round(2),
+          improvement: ((context_total - baseline_total) / count).round(2)
         }
       end
     end

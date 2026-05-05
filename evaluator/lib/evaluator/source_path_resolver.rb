@@ -7,8 +7,7 @@ module Evaluator
     #
     # @param eval_folder_path [String] Relative path to the eval directory.
     # @param skill_path [String, nil] Optional explicit override for the source directory.
-    # @return [String] The resolved source path relative to the evaluator repo root.
-    # @raise [ArgumentError] when the eval path does not match a supported convention.
+    # @return [String, nil] The resolved source path relative to the evaluator repo root, or nil if unmappable.
     # @example Infer a skill source path
     #   Evaluator::SourcePathResolver.call(
     #     eval_folder_path: 'evals/skills/code-quality/rails-code-review/review-order'
@@ -19,15 +18,20 @@ module Evaluator
 
       segments = eval_folder_path.to_s.split('/').reject(&:empty?)
 
-      if (index = segments.index('skills')) && segments[index + 1] && segments[index + 2]
-        return "skills/#{segments[index + 1]}/#{segments[index + 2]}"
+      if (index = segments.rindex('skills'))
+        skill_cat = segments[index + 1]
+        skill_name = segments[index + 2]
+        return "skills/#{skill_cat}/#{skill_name}" if skill_cat && skill_name
       end
 
-      if (index = segments.index('workflows')) && segments[index + 1]
-        return "workflows/#{segments[index + 1]}"
+      if (index = segments.rindex('workflows'))
+        workflow_name = segments[index + 1]
+        return "workflows/#{workflow_name}" if workflow_name
       end
 
-      raise ArgumentError, "Could not infer source path from eval target: #{eval_folder_path}"
+      # Return nil if we can't infer a specific skill/workflow (e.g. batch run on a category)
+      # The Runner or Hydrator will handle the lack of context.
+      nil
     end
   end
 end

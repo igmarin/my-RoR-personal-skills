@@ -6,26 +6,26 @@ module Evaluator
   class SourcePathResolverTest < Minitest::Test
     def test_infers_skill_source_path_from_eval_path
       resolved = SourcePathResolver.call(
-        eval_folder_path: 'evals/skills/code-quality/rails-code-review/review-order'
+        eval_folder_path: 'evals/skills/rails-code-review/review-order'
       )
 
-      assert_equal 'skills/code-quality/rails-code-review', resolved
+      assert_equal 'skills/rails-code-review', resolved
     end
 
     def test_infers_skill_source_path_from_evaluator_eval_path
       resolved = SourcePathResolver.call(
-        eval_folder_path: 'evaluator/evals/skills/code-quality/rails-code-review/review-order'
+        eval_folder_path: 'evaluator/evals/skills/rails-code-review/review-order'
       )
 
-      assert_equal 'skills/code-quality/rails-code-review', resolved
+      assert_equal 'skills/rails-code-review', resolved
     end
 
     def test_infers_skill_source_path_from_private_evals_path
       resolved = SourcePathResolver.call(
-        eval_folder_path: 'private-evals/skills/code-quality/rails-code-review/review-order'
+        eval_folder_path: 'private-evals/skills/rails-code-review/review-order'
       )
 
-      assert_equal 'skills/code-quality/rails-code-review', resolved
+      assert_equal 'skills/rails-code-review', resolved
     end
 
     def test_infers_workflow_source_path_from_eval_path
@@ -53,10 +53,10 @@ module Evaluator
 
     def test_handles_absolute_paths_with_ambiguous_segments
       # Simulate an absolute path where 'skills' appears early in the parent directories
-      absolute_path = '/Users/ismael/my-skills/rails-agent-skills/evaluator/evals/skills/api/graphql-best-practices'
+      absolute_path = '/Users/ismael/my-skills/rails-agent-skills/evaluator/evals/skills/graphql-best-practices/some-eval'
       resolved = SourcePathResolver.call(eval_folder_path: absolute_path)
 
-      assert_equal 'skills/api/graphql-best-practices', resolved
+      assert_equal 'skills/graphql-best-practices', resolved
     end
   end
 end

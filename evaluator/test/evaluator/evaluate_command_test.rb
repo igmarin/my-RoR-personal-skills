@@ -75,6 +75,22 @@ module Evaluator
       assert_match(/hash result/, @stdout.string)
     end
 
+    def test_call_parses_json_string_with_markdown_backticks
+      raw_score = "```json\n{\"baseline_score\": 75, \"context_score\": 95, \"reasoning\": \"parsed markdown\"}\n```"
+      Runner.expects(:call).with(has_entry(eval_folder_path: File.expand_path('evals/skills/example'))).returns(
+        success_result('skills/patterns/ruby-service-objects').merge(
+          tasks: [task_result(judge_score: raw_score)]
+        )
+      )
+      HistoryRecorder.expects(:record)
+
+      exit_code = EvaluateCommand.call(%w[--eval evals/skills/example], stdout: @stdout)
+
+      assert_equal 0, exit_code
+      assert_match(%r{Baseline Score: 75/100}, @stdout.string)
+      assert_match(/parsed markdown/, @stdout.string)
+    end
+
     def test_call_handles_nil_judge_scores_without_type_error
       Runner.expects(:call).with(has_entry(eval_folder_path: File.expand_path('evals/skills/example'))).returns(
         success_result('skills/patterns/ruby-service-objects').merge(

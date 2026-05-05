@@ -10,7 +10,7 @@ module Evaluator
       @base_path = @tmp_dir
 
       create_eval_fixture(
-        'evals/skills/patterns/ruby-service-objects/basic-service-object'
+        'evals/skills/ruby-service-objects/basic-service-object'
       )
       create_eval_fixture(
         'evals/workflows/rails-tdd-loop/full-feature'
@@ -33,18 +33,18 @@ module Evaluator
 
     def test_call_infers_source_path_for_skill_evals
       expect_single_task_run(
-        source_path: 'skills/patterns/ruby-service-objects'
+        source_path: 'skills/ruby-service-objects'
       )
 
       result = Runner.call(
-        eval_folder_path: 'evals/skills/patterns/ruby-service-objects/basic-service-object',
+        eval_folder_path: 'evals/skills/ruby-service-objects/basic-service-object',
         base_path: @base_path
       )
 
       assert result[:success]
       assert_equal 'multiple (batch run)', result[:source_path]
       assert_equal 1, result[:tasks].size
-      assert_equal 'skills/patterns/ruby-service-objects', SourcePathResolver.call(eval_folder_path: result[:tasks].first[:path])
+      assert_equal 'skills/ruby-service-objects', SourcePathResolver.call(eval_folder_path: result[:tasks].first[:path])
     end
 
     def test_call_infers_source_path_for_workflow_evals
@@ -63,17 +63,17 @@ module Evaluator
 
     def test_call_uses_explicit_source_path_override
       expect_single_task_run(
-        source_path: 'skills/patterns/ruby-service-objects'
+        source_path: 'skills/ruby-service-objects'
       )
 
       result = Runner.call(
         eval_folder_path: 'evals/workflows/rails-tdd-loop/full-feature',
-        skill_path: 'skills/patterns/ruby-service-objects',
+        skill_path: 'skills/ruby-service-objects',
         base_path: @base_path
       )
 
       assert result[:success]
-      assert_equal 'skills/patterns/ruby-service-objects', result[:source_path]
+      assert_equal 'skills/ruby-service-objects', result[:source_path]
     end
 
     def test_call_succeeds_without_context_when_source_path_cannot_be_inferred

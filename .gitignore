@@ -30,3 +30,7 @@ node_modules/
 
 # Ruby package artifacts
 *.gem
+
+# Public root-level skill. Override common global build/ ignores.
+!build/
+!build/SKILL.md

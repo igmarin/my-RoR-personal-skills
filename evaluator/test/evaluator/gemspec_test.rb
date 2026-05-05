@@ -6,13 +6,13 @@ module Evaluator
   class GemspecTest < Minitest::Test
     def setup
       Dir.chdir(File.expand_path('../../..', __dir__)) do
-        @spec = Gem::Specification.load('evaluator/agent_evaluator.gemspec')
+        @spec = Gem::Specification.load('evaluator/rails-agent-eval.gemspec')
       end
     end
 
     def test_package_metadata_points_to_project_sources
-      assert_equal 'https://github.com/igmarin/rails-agent-skills', @spec.homepage
-      assert_equal 'https://github.com/igmarin/rails-agent-skills/tree/main/evaluator',
+      assert_equal 'https://github.com/igmarin/rails-agent-eval', @spec.homepage
+      assert_equal 'https://github.com/igmarin/rails-agent-eval',
                    @spec.metadata['source_code_uri']
       assert_equal 'true', @spec.metadata['rubygems_mfa_required']
     end

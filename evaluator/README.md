@@ -1,90 +1,60 @@
-# Rails Agent Evaluator
+# rails-agent-eval
 
-Rails Agent Evaluator is a specialized tool for measuring and comparing how an LLM coding agent performs with and without Rails skill context. It enables data-driven optimization of prompt engineering and skill design by providing empirical scores across isolated evaluation tasks.
+`rails-agent-eval` is a standalone evaluation engine designed to validate AI agent skills and workflows. It orchestrates side-by-side execution runs (baseline vs. context-hydrated) within isolated Git sandboxes and uses an LLM judge to score the results based on predefined criteria.
 
-## Table of Contents
+This engine is the core validation tool for the [rails-agent-skills](https://github.com/igmarin/rails-agent-skills) library.
 
-1. [How It Works](#how-it-works)
-2. [Installation](#installation)
-3. [Configuration](#configuration)
-4. [Usage](#usage)
-5. [Documentation](#documentation)
-6. [Development](#development)
+## Features
 
-## How It Works
-
-The evaluator follows a systematic process for each task:
-1. **Isolation**: Executes the task in a Git-sandboxed directory.
-2. **Baseline Run**: Runs the agent without any extra context.
-3. **Hydrated Run**: Injects specific skill/workflow context via XML and runs the agent.
-4. **Grading**: Uses a "Judge" LLM to compare both results against a set of `criteria.json` and provide a score.
-
-See [Architecture Guide](docs/architecture.md) for more technical details.
+- **Side-by-Side Evaluation**: Compare an agent's performance with and without specific skill context.
+- **Isolated Sandboxes**: Every run happens in a temporary Git repository to ensure clean, traceable diffs.
+- **LLM-Powered Judging**: Automatic scoring of code changes against task-specific criteria.
+- **ReAct Loop**: Uses a sophisticated Thought/Tool/Observation loop for complex multi-step tasks.
+- **Support for Skills & Workflows**: Handles both atomic tools and multi-stage instruction sets.
 
 ## Installation
 
-Ensure you have Ruby installed, then from the `evaluator/` directory:
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'rails-agent-eval', github: 'igmarin/rails-agent-eval'
+```
+
+And then execute:
 
 ```bash
-cd evaluator
 bundle install
-```
-
-To build and install the gem locally:
-
-```bash
-gem build agent_evaluator.gemspec
-gem install ./agent_evaluator-*.gem
-```
-
-## Configuration
-
-The evaluator uses a hierarchical configuration system. It looks for settings in this order of precedence (highest to lowest):
-
-1. **Environment Variables**: `OPENAI_API_KEY`, `GEMINI_API_KEY`, `GEMINI_LOCATION`, etc.
-2. **Local Config**: `evaluator.json` in the current working directory.
-3. **Global Config**: `~/.evaluator.json` in your home directory.
-4. **Code Defaults**: Hardcoded fallbacks in `lib/config.rb`.
-
-### Sample `evaluator.json`
-
-```json
-{
-  "current_llm_provider": "gemini",
-  "providers": {
-    "gemini": {
-      "model": "gemini-1.5-flash-latest",
-      "location": "us-central1",
-      "project_id": "your-project-id"
-    }
-  }
-}
 ```
 
 ## Usage
 
-Run an evaluation target with convention-based source inference:
+### 1. Define your Evals
 
-```bash
-bin/evaluate --eval ../private-evals/skills/patterns/ruby-service-objects/call-pattern-and-response-format
+Create an evaluation scenario directory with two files:
+- `task.md`: The instruction for the agent.
+- `criteria.json`: The scoring rules for the LLM judge.
+
+Example structure:
+```text
+evals/
+└── my-skill/
+    └── scenario-1/
+        ├── task.md
+        └── criteria.json
 ```
 
-Generated eval scenarios are not bundled in this public repository. Keep local generated scenarios in an ignored directory such as `private-evals/`, or add only original/permissively licensed examples with documented provenance.
+### 2. Run the Evaluator
 
-For more advanced usage and how to write tests, see the [Testing Guide](docs/testing-guide.md).
+Use the `evaluate` CLI tool:
 
-## Documentation
-
-- [Architecture Guide](docs/architecture.md): Deep dive into internal components.
-- [Testing Guide](docs/testing-guide.md): How to create and run evaluation tasks.
+```bash
+bundle exec evaluate --eval evals/my-skill/scenario-1 --skill skills/my-skill
+```
 
 ## Development
 
-```bash
-bundle exec rake test
-bundle exec rake rubocop
-bundle exec rake reek
-bundle exec rake package:verify
-```
+After cloning the repo, run `bundle install` to install dependencies. Then, run `bundle exec rake test` to run the tests.
 
-The default rake task runs RuboCop, Reek, and the test suite. `package:verify` builds the gem and checks that required release files are present. All new code must follow the project's TDD and engineering standards.
+## License
+
+The gem is available as open source under the terms of the [MIT License](LICENSE).

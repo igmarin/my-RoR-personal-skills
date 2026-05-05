@@ -1,0 +1,57 @@
+[
+  {
+    "timestamp": "2026-05-05T02:35:02-06:00",
+    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-safely",
+    "model": "gpt-4o",
+    "summary": {
+      "task_count": 1,
+      "average_baseline": 0.0,
+      "average_context": 0.0,
+      "improvement": 0.0
+    }
+  },
+  {
+    "timestamp": "2026-05-05T02:36:26-06:00",
+    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-safely",
+    "model": "gpt-4o",
+    "summary": {
+      "task_count": 1,
+      "average_baseline": 0.0,
+      "average_context": 0.0,
+      "improvement": 0.0
+    }
+  },
+  {
+    "timestamp": "2026-05-05T02:40:09-06:00",
+    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-safely",
+    "model": "gpt-4o",
+    "summary": {
+      "task_count": 1,
+      "average_baseline": 0.0,
+      "average_context": 0.0,
+      "improvement": 0.0
+    }
+  },
+  {
+    "timestamp": "2026-05-05T03:02:30-06:00",
+    "source_path": "multiple (batch run)",
+    "model": "gpt-4o",
+    "summary": {
+      "task_count": 1,
+      "average_baseline": 0.0,
+      "average_context": 0.0,
+      "improvement": 0.0
+    }
+  },
+  {
+    "timestamp": "2026-05-05T08:02:44-06:00",
+    "source_path": "multiple (batch run)",
+    "model": "gpt-4o",
+    "summary": {
+      "task_count": 1,
+      "average_baseline": 0.0,
+      "average_context": 0.0,
+      "improvement": 0.0
+    }
+  }
+]

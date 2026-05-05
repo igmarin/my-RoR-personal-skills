@@ -1,0 +1,34 @@
+{
+  "criteria": [
+    {
+      "name": "Collection Structure",
+      "description": "The generated Postman Collection must be valid v2.1 format with proper info, item structure, and variable definitions.",
+      "weight": 20
+    },
+    {
+      "name": "Endpoint Coverage",
+      "description": "All 5 endpoints (index, show, create, update, destroy) must be present in the collection with correct HTTP methods.",
+      "weight": 25
+    },
+    {
+      "name": "Request Configuration",
+      "description": "Each request must have proper URL, method, headers (Content-Type: application/json), and body where applicable (POST/PUT).",
+      "weight": 20
+    },
+    {
+      "name": "Example Data",
+      "description": "Requests should include example data in the request body (for POST/PUT) and path parameters (for show/update/destroy) with meaningful test values.",
+      "weight": 15
+    },
+    {
+      "name": "Descriptions and Documentation",
+      "description": "Each request should have a meaningful description, and the collection should have overall documentation describing its purpose.",
+      "weight": 10
+    },
+    {
+      "name": "Test Scripts",
+      "description": "At least some requests should include test scripts (e.g., pm.test()) to validate responses.",
+      "weight": 10
+    }
+  ]
+}

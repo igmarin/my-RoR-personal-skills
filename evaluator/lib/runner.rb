@@ -33,7 +33,7 @@ module Evaluator
     def initialize(params)
       @eval_folder_path = params[:eval_folder_path]
       @skill_path = params[:skill_path]
-      @base_path = params[:base_path] || Pathname.new(File.expand_path('../../', __dir__))
+      @base_path = params[:base_path] || Pathname.new(Dir.pwd)
       @client_params = params[:client_params] || {}
     end
 

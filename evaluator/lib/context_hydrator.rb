@@ -25,7 +25,7 @@ module Evaluator
     # @raise [TypeError] when the provided source or base path cannot be converted into a pathname.
     def initialize(params)
       @source_path = params[:source_path] || params[:skill_path]
-      @base_path = params[:base_path] || Pathname.new(File.expand_path('../../', __dir__))
+      @base_path = params[:base_path] || Pathname.new(Dir.pwd)
     end
 
     # Performs the hydration process.

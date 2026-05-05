@@ -49,22 +49,41 @@ This roadmap now reflects the repository as it exists today: the evaluator alrea
 - Evaluator and MCP tests cover the enforced conventions.
 - Public eval fixtures have documented provenance and are not Tessl-generated outputs.
 
-## Phase 3B: Standalone Evaluator Extraction
+## Phase 3B: Standalone Evaluator Extraction ✅ COMPLETE
 
 **Goal:** Extract the hardened evaluator into a standalone gem only after the enforcement gate is complete.
 
 1. Extract the stabilized evaluator code into an independent Ruby gem.
-2. Re-integrate it into this repository as a dependency with the same ReAct behavior.
-3. Preserve convention-based source resolution and benchmark history during the extraction.
+2. Move the `evaluator/` directory to its own repository to act as a standalone engine.
+3. Re-integrate it into this repository as a dependency with the same ReAct behavior.
+4. Preserve convention-based source resolution and benchmark history during the extraction.
 
-This extraction is intentionally *after* the hardening batch so the gem boundary is cut from stable behavior, not from drifting assumptions.
+This extraction ensures the gem boundary is cut from stable behavior and acts purely as an execution engine, while host repositories own their domain-specific evaluation fixtures.
 
 ## Phase 4: Agent Transition Work ✅ READY!
 
-**Goal:** Expand from a hardened ReAct evaluator into richer agent execution only after Phase 3A and Phase 3B are complete.
+**Goal:** Expand from a hardened ReAct evaluator into richer agent execution. Architecturally, this phase focuses on observability, best practices, and deterministic testing to elevate the evaluator into a robust agent framework.
 
 ### Next steps:
 
-## Guiding Rule
+1. **Sandbox Isolation (Native Engine Model)**
+   - **Decision:** Docker is *not* required for local development and evaluation.
+   - **Implementation:** Rely on native Ruby `Dir.mktmpdir` for isolated sandbox environments. This ensures frictionless cross-platform execution and simpler CI integration without the overhead of container management.
+   - **Environment:** If the sandbox execution needs specific tools (e.g., Ruby versions, Postgres), it uses the host's existing environment or standard CI ephemeral VMs.
 
-Do not start Phase 4 work while topology, manifest publication, evaluator source mapping, and roadmap docs still disagree. Hardening comes first, extraction comes second, and agent expansion comes last.
+2. **Eval Topology & Ownership**
+   - **Responsibility:** The `evaluator` gem is a generic execution engine.
+   - **Ownership:** Host repositories (like `rails-agent-skills`) own their specific `evals/` directories containing `task.md` and `criteria.json`. 
+   - **Git Tracking:** Gold-standard evaluation scenarios are committed to the host repository, while temporary sandbox runs remain ignored.
+
+3. **Workflow Evaluation**
+   - **Unified Engine:** Workflows (multi-step skill sequences) are evaluated using the exact same ReAct agent loop as atomic skills.
+   - **Definition:** A workflow evaluation is defined by a broader `task.md` and a more comprehensive `criteria.json` that expects multiple milestones to be completed in a single run.
+
+4. **Best Practices & Determinism (Testing)**
+   - Introduce strict `VCR` or `WebMock` recording for all LLM network interactions within the evaluator's test suite.
+   - Ensure the test suite remains fast, deterministic, offline-capable, and immune to API usage costs or network flakiness.
+
+5. **Observability & Traceability (Debugging)**
+   - Enhance the `HistoryRecorder` to generate detailed, structured execution traces (Trace JSON) for each evaluation run.
+   - Traces must capture the full prompt history, exact tool inputs and outputs, step-by-step durations, and token usage metrics alongside the final judge score.

@@ -1,0 +1,34 @@
+{
+  "criteria": [
+    {
+      "name": "Characterization Tests First",
+      "description": "The agent must write RSpec tests for the existing controller behavior BEFORE altering the controller's logic.",
+      "weight": 25
+    },
+    {
+      "name": "Test Coverage",
+      "description": "The tests must cover both the happy path (successful order creation) and the failure path (e.g., inventory failure).",
+      "weight": 15
+    },
+    {
+      "name": "Extraction and Delegation",
+      "description": "The core business logic must be moved from the controller into a distinct Service Object, leaving a skinny controller that primarily handles HTTP concerns and delegates to the service.",
+      "weight": 25
+    },
+    {
+      "name": "Behavior Preservation",
+      "description": "The underlying business logic, responses, and HTTP status codes must remain identical to the original implementation.",
+      "weight": 15
+    },
+    {
+      "name": "Single Responsibility Principle (SRP)",
+      "description": "The newly extracted Service Object must adhere to the Single Responsibility Principle.",
+      "weight": 10
+    },
+    {
+      "name": "YARD Documentation",
+      "description": "The extracted public methods in the new Service Object must be documented using correct YARD tags.",
+      "weight": 10
+    }
+  ]
+}

@@ -29,7 +29,7 @@ The evaluator will recursively find all `task.md` files in the directory and exe
 By default, the evaluator infers the skill path from the evaluation path. If you need to test an evaluation against a different skill:
 
 ```bash
-bin/evaluate --eval ../evals/skills/patterns/ruby-service-objects/call-pattern-and-response-format --skill skills/custom-skill
+bin/evaluate --eval ../evals/skills/patterns/ruby-service-objects/call-pattern-and-response-format --skill ../skills/custom-skill
 ```
 
 ## Creating New Evaluations
@@ -46,8 +46,6 @@ This file contains the instructions for the AI agent. It should describe a speci
 - Specify the desired outcome.
 
 ### 2. The Criteria (`criteria.json`)
-
-This file defines the grading rubric used by the LLM Judge.
 
 This file defines the grading rubric used by the LLM Judge.
 

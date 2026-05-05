@@ -1,18 +1,32 @@
-name: Agent Skills Evaluation
+name: Evaluator Gem
 
 on:
   pull_request:
     paths:
-      - 'skills/**'
-      - 'evals/**'
       - 'evaluator/**'
+      - '.github/workflows/agent-evaluations.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'evaluator/**'
+      - '.github/workflows/agent-evaluations.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: evaluator-gem-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  evaluate:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -21,17 +35,10 @@ jobs:
           bundler-cache: true
           working-directory: evaluator
 
-#      - name: Run Evaluator
-#        env:
-#          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-#        run: |
-#          # Run evaluations for the changed skills
-#          # For now, we run all skills to ensure full coverage as per Phase 3
-#          ./evaluator/bin/evaluate -e evals/skills -s skills -o evaluation-report.json
-#
-#      - name: Upload Report
-#        if: always()
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: evaluation-report
-#          path: evaluation-report.json
+      - name: Run evaluator quality gate
+        working-directory: evaluator
+        run: bundle exec rake
+
+      - name: Verify evaluator package
+        working-directory: evaluator
+        run: bundle exec rake package:verify

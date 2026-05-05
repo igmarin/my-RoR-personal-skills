@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'lib/agent_evaluator'
+
 require 'rake/testtask'
 require 'rubocop/rake_task'
 
@@ -10,5 +12,20 @@ Rake::TestTask.new(:test) do |t|
 end
 
 RuboCop::RakeTask.new(:rubocop)
+
+namespace :package do
+  desc 'Build the evaluator gem'
+  task :build do
+    sh 'gem build agent_evaluator.gemspec'
+  end
+
+  desc 'Verify the evaluator gem contains required release files'
+  task verify: :build do
+    gem_path = FileList['agent_evaluator-*.gem'].max_by { |path| File.mtime(path) }
+    abort('No built evaluator gem found') unless gem_path
+
+    Evaluator::PackageVerifier.call(package_path: gem_path)
+  end
+end
 
 task default: %i[rubocop test]

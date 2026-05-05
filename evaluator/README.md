@@ -34,7 +34,7 @@ To build and install the gem locally:
 
 ```bash
 gem build agent_evaluator.gemspec
-gem install ./agent_evaluator-0.1.0.gem
+gem install ./agent_evaluator-*.gem
 ```
 
 ## Configuration
@@ -81,6 +81,7 @@ For more advanced usage and how to write tests, see the [Testing Guide](docs/tes
 ```bash
 bundle exec rake test
 bundle exec rake rubocop
+bundle exec rake package:verify
 ```
 
-The default rake task runs RuboCop and the test suite. All new code must follow the project's TDD and engineering standards.
+The default rake task runs RuboCop and the test suite. `package:verify` builds the gem and checks that required release files are present. All new code must follow the project's TDD and engineering standards.

@@ -22,10 +22,26 @@ module Evaluator
           '/v1/chat/completions'
         end
 
-        # Error returned when the base URL or model is not configured.
+        # Error returned when the model is not configured.
         # @return [Hash]
         def config_error
-          { success: false, response: { error: { message: "OLLAMA_BASE_URL or model not set in config for Ollama" } } }
+          { success: false, response: { error: { message: 'model not set in config for Ollama' } } }
+        end
+
+        # Ollama does not require an API key; validation only checks for a model.
+        # @return [Boolean]
+        def valid_config?
+          !!@model && !@model.to_s.empty?
+        end
+
+        # Request headers omit Authorization if no API key is set.
+        # @return [Hash]
+        def request_headers
+          headers = { 'Content-Type' => 'application/json' }
+          if @api_key && !@api_key.to_s.empty?
+            headers['Authorization'] = "Bearer #{@api_key}"
+          end
+          headers
         end
       end
     end

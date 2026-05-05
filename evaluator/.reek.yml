@@ -25,7 +25,6 @@ detectors:
       - "Evaluator::Config"
       - "Evaluator::Clients::Providers::OpenAI"
       - "Evaluator::Clients::Providers::Gemini"
-      - "Evaluator::Clients::Providers::Ollama"
   MissingSafeMethod:
     enabled: false
   ControlParameter:
@@ -71,7 +70,6 @@ detectors:
       - "Evaluator::Clients::BaseClient#extract_message"
       - "Evaluator::Clients::Providers::OpenAI#extract_message"
       - "Evaluator::Clients::Providers::Gemini#extract_message"
-      - "Evaluator::Clients::Providers::Ollama#base_url"
       - "Evaluator::EvaluateCommand#parse_judge_score"
   NilCheck:
     exclude:

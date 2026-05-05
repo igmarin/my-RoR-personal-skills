@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # frozen_string_literal: true'
 
 require 'json'
@@ -13,7 +15,7 @@ module Evaluator
       # @param tasks [Array<Hash>] The list of task results.
       # @return [Hash] A summary of scores including averages and improvement.
       def self.summarize(tasks)
-        return {} if tasks.nil? || tasks.empty?
+        return {} if Array(tasks).empty?
 
         scores = tasks.map { |task| normalize_score(task[:judge_score]) }
         calculate_summary(scores)
@@ -25,7 +27,7 @@ module Evaluator
       # @return [Hash] The normalized score with :baseline_score and :context_score.
       # @raise [JSON::ParserError] raised when the judge_score string contains invalid JSON (rescued internally).
       def self.normalize_score(raw_score)
-        return {} if raw_score.nil?
+        return {} unless raw_score
         return raw_score if raw_score.is_a?(Hash)
 
         begin

@@ -9,6 +9,9 @@ AllCops:
   NewCops: enable
   Exclude:
     - 'evals/**/*'
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - 'tmp/**/*'
 
 Metrics/MethodLength:
   Max: 60

@@ -10,10 +10,17 @@ module Evaluator
       class Ollama < BaseClient
         protected
 
-        # Base URL for the Ollama service. Can be overridden via the OLLAMA_BASE_URL env var.
+        # Base URL for the Ollama service.
+        # Checks the OLLAMA_BASE_URL env var, then the evaluator config, then falls back to localhost.
         # @return [String]
         def base_url
-          ENV['OLLAMA_BASE_URL'] || 'http://localhost:11434'
+          env_url = ENV['OLLAMA_BASE_URL']
+          return env_url unless env_url.to_s.empty?
+
+          config_url = Evaluator::Config.llm_providers_config.dig(:ollama, :base_url)
+          return config_url unless config_url.to_s.empty?
+
+          'http://localhost:11434'
         end
 
         # Path for chat completions. Ollama follows the OpenAI compatible endpoint.
@@ -38,9 +45,7 @@ module Evaluator
         # @return [Hash]
         def request_headers
           headers = { 'Content-Type' => 'application/json' }
-          if @api_key && !@api_key.to_s.empty?
-            headers['Authorization'] = "Bearer #{@api_key}"
-          end
+          headers['Authorization'] = "Bearer #{@api_key}" if @api_key && !@api_key.to_s.empty?
           headers
         end
       end

@@ -69,10 +69,11 @@ class HistoryRecorderTest < Minitest::Test
 
     # Expect File.write with the new entry
     File.expects(:write).with do |path, content|
-      path == @history_file &&
+      path.end_with?('benchmarks.json') &&
         content.include?('"source_path": "skills/test"') &&
         content.include?('"model": "gpt-4"') &&
-        content.include?('"average_baseline": 80.0')
+        content.include?('"average_baseline": 80.0') &&
+        content.include?('"improvement": 10.0')
     end
 
     Evaluator::HistoryRecorder.record(results, source_path: 'skills/test', model: 'gpt-4')

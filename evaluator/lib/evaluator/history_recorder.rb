@@ -29,8 +29,61 @@ module Evaluator
       }
 
       history << entry
-      File.write(HISTORY_FILE, JSON.pretty_generate(history))
-      puts "History recorded to #{HISTORY_FILE}"
+
+      # Choose writable path
+      history_file = determine_history_file
+      return unless history_file
+
+      File.write(history_file, JSON.pretty_generate(history))
+      puts "History recorded to #{history_file}"
+    end
+
+    # Determines the best writable path for benchmarks.json
+    #
+    # @return [String, nil] Path to writable file, or nil if none found.
+    def self.determine_history_file
+      # 1. Check ENV variable first
+      env_history_file = ENV.fetch('EVALUATOR_HISTORY_FILE', nil)
+      return env_history_file if env_history_file && !env_history_file.to_s.strip.empty?
+
+      # 2. Try current working directory (for backward compat)
+      cwd_path = File.join(Dir.pwd, 'benchmarks.json')
+      return cwd_path if writable?(cwd_path)
+
+      # 3. Try user's local share directory
+      home_dir = Dir.home
+      local_path = File.join(home_dir, '.local', 'share', 'agent_evaluator', 'benchmarks.json')
+      return local_path if prepare_and_writable?(local_path)
+
+      # 4. Try XDG data home
+      xdg_data_home = ENV.fetch('XDG_DATA_HOME', File.join(home_dir, '.local', 'share'))
+      xdg_path = File.join(xdg_data_home, 'agent_evaluator', 'benchmarks.json')
+      return xdg_path if prepare_and_writable?(xdg_path)
+
+      warn('Warning: Could not find writable location for benchmarks.json')
+      nil
+    end
+
+    # Checks if a path is writable, creating parent dirs if needed.
+    #
+    # @param path [String] The path to check.
+    # @return [Boolean]
+    def self.prepare_and_writable?(path)
+      dir_name = File.dirname(path)
+      FileUtils.mkpath(dir_name)
+      !File.writable?(dir_name)
+    rescue StandardError
+      false
+    end
+
+    # Checks if a file location is writable.
+    #
+    # @param path [String] The path to check.
+    # @return [Boolean]
+    def self.writable?(path)
+      File.writable?(File.dirname(path))
+    rescue StandardError
+      false
     end
 
     # Loads existing history from the benchmarks file.

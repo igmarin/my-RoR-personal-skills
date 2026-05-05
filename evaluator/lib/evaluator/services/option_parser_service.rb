@@ -56,20 +56,26 @@ module Evaluator
       def create_option_parser
         OptionParser.new do |opts|
           opts.banner = 'Usage: evaluate [options]'
+          define_options(opts)
+        end
+      end
 
-          opts.on('-e', '--eval FOLDER',
-                  'Path to the eval folder (for example evals/skills/... or evals/workflows/...)') do |eval_path|
-            @options[:eval] = eval_path
-          end
+      # Defines the CLI options for the parser.
+      #
+      # @param opts [OptionParser] The OptionParser instance.
+      def define_options(opts)
+        opts.on('-e', '--eval FOLDER',
+                'Path to the eval folder (for example evals/skills/... or evals/workflows/...)') do |eval_path|
+          @options[:eval] = eval_path
+        end
 
-          opts.on('-s', '--skill FOLDER',
-                  'Optional override for the source skill/workflow folder to hydrate from') do |skill_path|
-            @options[:skill] = skill_path
-          end
+        opts.on('-s', '--skill FOLDER',
+                'Optional override for the source skill/workflow folder to hydrate from') do |skill_path|
+          @options[:skill] = skill_path
+        end
 
-          opts.on('-o', '--output FILE', 'Path to save the JSON report') do |output_path|
-            @options[:output] = output_path
-          end
+        opts.on('-o', '--output FILE', 'Path to save the JSON report') do |output_path|
+          @options[:output] = output_path
         end
       end
     end

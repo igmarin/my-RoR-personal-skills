@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'judge_score_parser_service'
+
 module Evaluator
   module Services
     # Service object for printing formatted evaluation results to stdout.
@@ -65,23 +67,22 @@ module Evaluator
       # @param task_result [Hash] Individual task result containing judge scores and diffs
       def print_task_result(task_result)
         score_payload = task_result[:judge_score]
-        parsed_judge = JudgeScoreParserService.call(score_payload)
+        parser_class = Evaluator::Services::JudgeScoreParserService
+        parsed_judge = parser_class.call(score_payload)
 
         unless parsed_judge[:success]
-          print_parse_error(score_payload)
+          print_parse_error
+          @stdout.puts(score_payload || 'nil')
           return
         end
 
         print_judge_summary(parsed_judge[:response])
-        print_task_diffs(task_result)
+        print_task_diffs(task_result[:path], task_result[:baseline_diff], task_result[:context_diff])
       end
 
       # Prints an error message when judge score parsing fails.
-      #
-      # @param raw_score [String, nil] The raw score that failed to parse
-      def print_parse_error(raw_score)
+      def print_parse_error
         @stdout.puts 'Could not parse judge JSON response. Raw output:'
-        @stdout.puts(raw_score || 'nil')
       end
 
       # Prints the judge score summary including baseline and context scores.
@@ -96,20 +97,27 @@ module Evaluator
 
       # Prints the baseline and context diffs for a task.
       #
-      # @param task_result [Hash] Task result containing diff information
-      def print_task_diffs(task_result)
-        path = task_result[:path]
+      # @param path [String] The file path associated with the diff
+      # @param baseline_diff [String] The diff content for the baseline
+      # @param context_diff [String] The diff content for the context
+      def print_task_diffs(path, baseline_diff, context_diff)
+        print_diff_section('BASELINE CHANGES', path, baseline_diff)
+        print_diff_section('CONTEXT CHANGES', path, context_diff)
+      end
+
+      # Prints a formatted diff section with a banner.
+      #
+      # @param title [String] The title for the diff section (e.g., 'BASELINE CHANGES')
+      # @param path [String] The file path associated with the diff
+      # @param diff [String] The diff content to print
+      def print_diff_section(title, path, diff)
         sep_newline = "\n========================================="
         sep_plain = "=========================================\n"
 
         @stdout.puts sep_newline
-        @stdout.puts "  BASELINE CHANGES: #{path}  "
+        @stdout.puts "  #{title}: #{path}  "
         @stdout.puts sep_plain
-        @stdout.puts task_result[:baseline_diff]
-        @stdout.puts sep_newline
-        @stdout.puts "   CONTEXT CHANGES: #{path}  "
-        @stdout.puts sep_plain
-        @stdout.puts task_result[:context_diff]
+        @stdout.puts diff
       end
     end
   end

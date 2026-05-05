@@ -45,7 +45,7 @@ module Evaluator
       #   - { success: false, response: { error: { message: String } } } on failure
       # @raise [SystemCallError] when file system operations fail (handled internally)
       def call
-        return { success: true, response: {} } if @output_path.nil? || @output_path.empty?
+        return { success: true, response: {} } if @output_path.to_s.empty?
 
         ensure_directory_exists
         write_json_file

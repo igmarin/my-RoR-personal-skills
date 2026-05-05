@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../runner'
-require_relative 'history_recorder'
 require_relative 'services/option_parser_service'
 require_relative 'services/result_printer_service'
 require_relative 'services/output_persistence_service'
@@ -26,6 +25,7 @@ module Evaluator
     def initialize(argv, stdout:)
       @argv = argv
       @stdout = stdout
+      @options = nil
     end
 
     # Executes the command by orchestrating service objects.
@@ -34,36 +34,13 @@ module Evaluator
     # @raise [OptionParser::ParseError] when invalid CLI flags are provided.
     # @raise [SystemCallError] when the optional JSON output file cannot be written.
     def call
-      # Parse CLI options
-      options_result = Services::OptionParserService.call(@argv)
-      return options_result[:success] ? 0 : 1 unless options_result[:success]
+      return 1 unless parse_options && validate_options?
 
-      options = options_result[:response]
-
-      # Validate required eval option
-      eval_path = options[:eval]
-      if eval_path.nil?
-        @stdout.puts 'Error: The --eval option is required.'
-        @stdout.puts 'Example: bin/evaluate -e evals/skills/infrastructure/rails-api-versioning/api-versioning-with-controller-inheritan'
-        return 1
-      end
-
-      # Run the evaluation
-      result = Evaluator::Runner.call(
-        eval_folder_path: File.expand_path(eval_path),
-        skill_path: options[:skill] ? File.expand_path(options[:skill]) : nil
-      )
-
-      # Print results using the result printer service
-      Services::ResultPrinterService.call(result, stdout: @stdout)
-
-      # Return early if evaluation failed
+      result = run_evaluation
       return 1 unless result[:success]
 
-      # Persist output if requested
-      Services::OutputPersistenceService.call(result, output_path: options[:output])
+      return 1 unless persist_output?(result)
 
-      # Record history
       Evaluator::HistoryRecorder.record(
         result,
         source_path: result[:source_path],
@@ -71,6 +48,47 @@ module Evaluator
       )
 
       0
+    end
+
+    private
+
+    def parse_options
+      options_result = Services::OptionParserService.call(@argv)
+      @options = options_result[:response]
+      options_result[:success]
+    end
+
+    def validate_options?
+      eval_path = @options[:eval]
+      return true if eval_path
+
+      @stdout.puts 'Error: The --eval option is required.'
+      @stdout.puts 'Example: bin/evaluate -e evals/skills/infrastructure/rails-api-versioning/api-versioning-with-controller-inheritan'
+      false
+    end
+
+    def run_evaluation
+      skill_option = @options[:skill]
+      result = Evaluator::Runner.call(
+        eval_folder_path: File.expand_path(@options[:eval]),
+        skill_path: skill_option ? File.expand_path(skill_option) : nil
+      )
+      Services::ResultPrinterService.call(result, stdout: @stdout)
+      result
+    end
+
+    def persist_output?(result)
+      output_result = Services::OutputPersistenceService.call(result, output_path: @options[:output])
+      output_response = output_result[:response]
+      message = output_response[:message]
+
+      if output_result[:success]
+        @stdout.puts(message) if message
+        true
+      else
+        @stdout.puts "Error saving report: #{output_response[:error][:message]}"
+        false
+      end
     end
   end
 end

@@ -12,7 +12,7 @@ module Evaluator
     class BaseClient
       API_FAILED = 'API Request failed'
 
-      attr_reader :config, :messages, :system_prompt, :tools, :api_key, :model
+      attr_reader :messages, :system_prompt, :tools, :api_key, :model
 
       # Standard entry point for the service object.
       #
@@ -38,10 +38,8 @@ module Evaluator
         @system_prompt = system_prompt
         @messages = messages
         @tools = tools
-        @options = options
-        @config = Evaluator::Config
-        @api_key = options[:api_key] || @config.api_key
-        @model = options[:model] || @config.model
+        @api_key = options[:api_key] || Evaluator::Config.api_key
+        @model = options[:model] || Evaluator::Config.model
       end
 
       # Executes the request flow: configuration -> request -> response handling.

@@ -17,8 +17,9 @@ module Evaluator
         # @param options [Hash]
         def initialize(system_prompt:, messages:, tools: [], **options)
           super
-          @location = options[:location] || @config.llm_providers_config.dig(:gemini, :location)
-          @project_id = options[:project_id] || @config.llm_providers_config.dig(:gemini, :project_id)
+          config = Evaluator::Config
+          @location = options[:location] || config.llm_providers_config.dig(:gemini, :location)
+          @project_id = options[:project_id] || config.llm_providers_config.dig(:gemini, :project_id)
         end
 
         protected

@@ -7,8 +7,7 @@ module Evaluator
     #
     # @param eval_folder_path [String] Relative path to the eval directory.
     # @param skill_path [String, nil] Optional explicit override for the source directory.
-    # @return [String] The resolved source path relative to the evaluator repo root.
-    # @raise [ArgumentError] when the eval path does not match a supported convention.
+    # @return [String, nil] The resolved source path relative to the evaluator repo root, or nil if unmappable.
     # @example Infer a skill source path
     #   Evaluator::SourcePathResolver.call(
     #     eval_folder_path: 'evals/skills/code-quality/rails-code-review/review-order'

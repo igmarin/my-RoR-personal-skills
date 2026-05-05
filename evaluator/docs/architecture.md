@@ -15,21 +15,25 @@ The Rails Agent Evaluator is designed to provide a reproducible and isolated env
 ## Key Components
 
 ### `Evaluator::Runner`
+
 - Handles task discovery using `Dir.glob`.
 - Orchestrates parallel execution using the `parallel` gem.
 - Aggregates results and generates reports.
 
 ### `Evaluator::Sandbox`
+
 - Uses `Dir.mktmpdir` for isolation.
 - Captures state changes using `git diff`.
 - Cleans up automatically after execution.
 
 ### `Evaluator::ReactAgent`
+
 - Implements a stateful loop.
 - Supports tool usage (e.g., `read_file`, `write_file`, `run_shell_command`).
 - Manages conversation history.
 
 ### `Evaluator::Clients::BaseClient`
+
 - Implements the **Template Method** pattern.
 - Handles Faraday connection setup and timeouts.
 - Centralizes error logging and response normalization.

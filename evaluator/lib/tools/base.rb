@@ -63,7 +63,8 @@ module Evaluator
             real = component.realpath
             raise ArgumentError, "Symlink escapes sandbox: #{original_path}" unless inside_dir?(real.to_s, working_dir_str)
           rescue Errno::ENOENT
-            raise ArgumentError, "Dangling symlink: #{original_path}" if is_symlink
+            # Re-check symlink status to avoid TOCTOU if the file was replaced between initial check and realpath
+            raise ArgumentError, "Dangling symlink: #{original_path}" if component.symlink?
           end
         end
       end

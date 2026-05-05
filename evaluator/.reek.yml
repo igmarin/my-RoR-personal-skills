@@ -45,6 +45,8 @@ detectors:
       - "Evaluator::SourcePathResolver#self.call"
       - "Evaluator::EvaluateCommand#print_task_result"
       - "Evaluator::EvaluateCommand#print_task_diffs"
+      - "Evaluator::Runner#evaluate_task"
+      - "Evaluator::Tools::Base#verify_component_safety!"
   UncommunicativeVariableName:
     accept:
       - e
@@ -70,7 +72,14 @@ detectors:
       - "Evaluator::Clients::Providers::Gemini#extract_message"
       - "Evaluator::EvaluateCommand#parse_judge_score"
   NilCheck:
-    enabled: false
+    exclude:
+      - "Evaluator::ReactAgent#call"
+      - "Evaluator::Clients::BaseClient#handle_response"
+      - "Evaluator::SourcePathResolver#self.call"
+      - "Evaluator::EvaluateCommand#call"
+      - "Evaluator::EvaluateCommand#print_task_result"
+      - "Evaluator::HistoryRecorder#normalize_score"
+      - "Evaluator::HistoryRecorder#self.summarize"
   NestedIterators:
     exclude:
       - "Evaluator::EvaluateCommand#parse_options"

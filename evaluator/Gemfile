@@ -8,6 +8,7 @@ gemspec
 group :development, :test do
   gem 'minitest', '~> 5.0'
   gem 'mocha', '~> 2.1'
+  gem 'panolint', '~> 0.1.6', require: false
   gem 'rake', '~> 13.4'
   gem 'reek', '~> 6.5'
   gem 'rubocop', '~> 1.70', require: false

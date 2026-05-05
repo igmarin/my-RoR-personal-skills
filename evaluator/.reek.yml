@@ -18,6 +18,12 @@ directories:
       enabled: false
     ControlParameter:
       enabled: false
+    TooManyMethods:
+      enabled: false
+    UnusedParameters:
+      enabled: false
+    UncommunicativeMethodName:
+      enabled: false
 
 detectors:
   InstanceVariableAssumption:

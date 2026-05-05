@@ -42,6 +42,6 @@ The Rails Agent Evaluator is designed to provide a reproducible and isolated env
 
 The evaluator relies on a strict directory mirroring convention:
 - **Source**: `skills/<category>/<skill_name>`
-- **Eval**: `evals/skills/<category>/<skill_name>/<task_name>`
+- **Eval**: `private-evals/skills/<category>/<skill_name>/<task_name>` or another local path containing `evals/skills/...`
 
 This mirroring allows the `Runner` to automatically find the correct context to hydrate for any given evaluation task.

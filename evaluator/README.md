@@ -66,8 +66,10 @@ The evaluator uses a hierarchical configuration system. It looks for settings in
 Run an evaluation target with convention-based source inference:
 
 ```bash
-bin/evaluate --eval ../evals/skills/patterns/ruby-service-objects/call-pattern-and-response-format
+bin/evaluate --eval ../private-evals/skills/patterns/ruby-service-objects/call-pattern-and-response-format
 ```
+
+Generated eval scenarios are not bundled in this public repository. Keep local generated scenarios in an ignored directory such as `private-evals/`, or add only original/permissively licensed examples with documented provenance.
 
 For more advanced usage and how to write tests, see the [Testing Guide](docs/testing-guide.md).
 
@@ -81,7 +83,8 @@ For more advanced usage and how to write tests, see the [Testing Guide](docs/tes
 ```bash
 bundle exec rake test
 bundle exec rake rubocop
+bundle exec rake reek
 bundle exec rake package:verify
 ```
 
-The default rake task runs RuboCop and the test suite. `package:verify` builds the gem and checks that required release files are present. All new code must follow the project's TDD and engineering standards.
+The default rake task runs RuboCop, Reek, and the test suite. `package:verify` builds the gem and checks that required release files are present. All new code must follow the project's TDD and engineering standards.

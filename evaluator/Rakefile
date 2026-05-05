@@ -3,6 +3,7 @@
 require_relative 'lib/agent_evaluator'
 
 require 'rake/testtask'
+require 'reek/rake/task'
 require 'rubocop/rake_task'
 
 Rake::TestTask.new(:test) do |t|
@@ -12,6 +13,11 @@ Rake::TestTask.new(:test) do |t|
 end
 
 RuboCop::RakeTask.new(:rubocop)
+
+Reek::Rake::Task.new(:reek) do |t|
+  t.config_file = '.reek.yml'
+  t.source_files = 'lib'
+end
 
 namespace :package do
   desc 'Build the evaluator gem'
@@ -28,4 +34,4 @@ namespace :package do
   end
 end
 
-task default: %i[rubocop test]
+task default: %i[rubocop reek test]

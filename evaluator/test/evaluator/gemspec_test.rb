@@ -26,5 +26,10 @@ module Evaluator
       assert_includes @spec.files, 'lib/evaluator/version.rb'
       assert_includes @spec.files, 'lib/runner.rb'
     end
+
+    def test_package_includes_readme_linked_docs
+      assert_includes @spec.files, 'docs/architecture.md'
+      assert_includes @spec.files, 'docs/testing-guide.md'
+    end
   end
 end

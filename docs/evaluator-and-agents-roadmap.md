@@ -5,7 +5,7 @@ This roadmap now reflects the repository as it exists today: the evaluator alrea
 ## Current State
 
 - `workflows/` is already the published home for callable workflow skills.
-- `evals/` already mirrors the source layout with `evals/skills/` and `evals/workflows/`.
+- Public Tessl-generated eval scenarios have been removed from the repository; future public eval examples must be original or permissively licensed with clear provenance.
 - The evaluator already compares a baseline run against a context-hydrated ReAct run.
 - MCP exposure, manifests, and docs still need enforcement so they match the on-disk topology consistently.
 
@@ -31,7 +31,12 @@ This roadmap now reflects the repository as it exists today: the evaluator alrea
    - Keep `--skill` as an explicit override, not a mandatory input.
    - Record the resolved source path actually used in reports and benchmark history.
 
-4. **Documentation alignment**
+4. **Eval provenance enforcement**
+   - Keep generated or third-party eval scenarios out of the public repository unless their provenance and license are explicit.
+   - Use ignored local folders for private/generated eval runs.
+   - Add at least one original public eval example before advertising bundled evaluator fixtures.
+
+5. **Documentation alignment**
    - Remove stale `.windsurf/workflows` assumptions from runtime docs.
    - Describe the evaluator as ReAct-based, not one-shot.
    - Keep roadmap language aligned with the real repo structure and current evaluator behavior.
@@ -41,6 +46,7 @@ This roadmap now reflects the repository as it exists today: the evaluator alrea
 - MCP resources, manifest inventories, evaluator source mapping, and roadmap docs all describe the same topology.
 - `scripts/validate-plugins.sh` passes with no inventory exceptions.
 - Evaluator and MCP tests cover the enforced conventions.
+- Public eval fixtures have documented provenance and are not Tessl-generated outputs.
 
 ## Phase 3B: Standalone Evaluator Extraction
 

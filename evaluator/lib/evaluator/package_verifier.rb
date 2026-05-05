@@ -13,6 +13,8 @@ module Evaluator
       README.md
       LICENSE
       bin/evaluate
+      docs/architecture.md
+      docs/testing-guide.md
       lib/agent_evaluator.rb
       lib/evaluator/config/applier.rb
       lib/evaluator/config/defaults.rb

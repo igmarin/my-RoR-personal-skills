@@ -8,7 +8,7 @@ module Evaluator
   # Records evaluation results into a historical benchmarks file.
   class HistoryRecorder
     # The file where historical benchmarks are stored.
-    HISTORY_FILE = 'benchmarks.json'
+    HISTORY_FILE = File.join(__dir__, '../../benchmarks.json')
 
     # Records evaluation results into a historical benchmarks file.
     #

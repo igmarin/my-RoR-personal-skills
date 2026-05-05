@@ -7,13 +7,14 @@ This roadmap now reflects the repository as it exists today: the evaluator alrea
 - `workflows/` is already the published home for callable workflow skills.
 - Public Tessl-generated eval scenarios have been removed from the repository; future public eval examples must be original or permissively licensed with clear provenance.
 - The evaluator already compares a baseline run against a context-hydrated ReAct run.
-- MCP exposure, manifests, and docs still need enforcement so they match the on-disk topology consistently.
+- MCP exposure, manifests, and docs are now enforced to match the on-disk topology consistently.
+- Phase 3A and 3B are COMPLETE.
 
-## Phase 3A: Hardening and Enforcement Gate
+## Phase 3A: Hardening and Enforcement Gate ✅ COMPLETE
 
 **Goal:** Make the current evaluator and published skill surface internally consistent before new architecture work begins.
 
-### Mandatory fixes in this gate
+### Completed fixes in this gate
 
 1. **MCP topology enforcement**
    - Discover published skills from `build/` and `skills/<category>/<skill>/`.
@@ -58,13 +59,11 @@ This roadmap now reflects the repository as it exists today: the evaluator alrea
 
 This extraction is intentionally *after* the hardening batch so the gem boundary is cut from stable behavior, not from drifting assumptions.
 
-## Phase 4: Agent Transition Work
+## Phase 4: Agent Transition Work ✅ READY!
 
 **Goal:** Expand from a hardened ReAct evaluator into richer agent execution only after Phase 3A and Phase 3B are complete.
 
-1. Reuse the evaluator's ReAct runtime, tool execution, and context hydration as the foundation.
-2. Add longer-lived interactive execution, richer observability, and more agent-oriented orchestration.
-3. Evaluate whether the eventual agent framework should extend the evaluator, the MCP layer, or a new runtime boundary.
+### Next steps:
 
 ## Guiding Rule
 

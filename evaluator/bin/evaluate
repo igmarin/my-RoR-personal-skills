@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-load File.expand_path("../lib/agent_evaluator.rb", __dir__)'
+load File.expand_path('../lib/agent_evaluator.rb', __dir__)
 
 exit Evaluator::EvaluateCommand.call(ARGV)

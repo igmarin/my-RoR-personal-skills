@@ -38,14 +38,14 @@ module Evaluator
 
       category = remaining[0]
       skill_name = remaining[1]
-      "skills/#{category}/#{skill_name}" if category && skill_name
+      "skills/#{category}/#{skill_name}"
     end
 
     private_class_method def self.resolve_new_format_skills(remaining)
       return nil unless remaining.size >= 1
 
       skill_name = remaining[0]
-      "skills/#{skill_name}" if skill_name
+      "skills/#{skill_name}"
     end
 
     private_class_method def self.resolve_workflows_path(segments)

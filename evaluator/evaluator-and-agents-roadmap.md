@@ -65,6 +65,13 @@ This extraction is intentionally *after* the hardening batch so the gem boundary
 
 ### Next steps:
 
+1. **Implement Step 2: Best Practices & Determinism (Testing)**
+   - Integrate `VCR` and `WebMock` into the test suite.
+   - Record baseline interactions for current skills and workflows.
+2. **Implement Step 3: Observability & Traceability (Debugging)**
+   - Expand `HistoryRecorder` to capture full ReAct traces.
+   - Create a standardized Trace JSON schema.
+
 1. **Security & Sandbox Isolation (Host/Guest Pattern)**
    - Implement strict Docker containerization for the Agent's sandbox environment.
    - **Secrets Management:** The `ReactAgent`'s "brain" (LLM client orchestration) must run on the host with the API keys, while its "hands" (shell commands via the `run_shell_command` tool) must execute strictly inside the Docker container.

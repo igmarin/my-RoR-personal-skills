@@ -57,12 +57,16 @@ module Evaluator
       end
 
       def test_call_with_write_permission_error
-        output_path = '/root/cannot_write_here.json'
+        output_path = File.join(@temp_dir, 'no_permission.json')
+
+        # Stub File.write to raise a permission error
+        File.expects(:write).with(output_path, anything).raises(Errno::EACCES, 'Permission denied')
 
         result = OutputPersistenceService.call(@result, output_path: output_path)
 
         refute result[:success]
         assert_includes result[:response][:error][:message], 'Failed to write output file'
+        assert_includes result[:response][:error][:message], 'Permission denied'
       end
 
       def test_call_with_complex_result_data

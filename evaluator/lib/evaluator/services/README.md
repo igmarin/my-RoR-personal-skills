@@ -5,6 +5,7 @@ This module contains service objects that implement the Single Responsibility Pr
 ## Services Overview
 
 ### OptionParserService
+
 Handles parsing of CLI arguments using Ruby's OptionParser. Provides standardized error handling for invalid flags and missing arguments.
 
 **Responsibilities:**
@@ -13,12 +14,14 @@ Handles parsing of CLI arguments using Ruby's OptionParser. Provides standardize
 - Return standardized success/error responses
 
 **Usage:**
+
 ```ruby
 result = OptionParserService.call(['-e', 'evals/test', '-o', 'output.json'])
 # => { success: true, response: { eval: 'evals/test', output: 'output.json' } }
 ```
 
 ### JudgeScoreParserService
+
 Parses judge score responses from evaluation results. Handles JSON strings with optional markdown code blocks, Hash inputs, and provides error handling for malformed data.
 
 **Responsibilities:**
@@ -27,12 +30,14 @@ Parses judge score responses from evaluation results. Handles JSON strings with 
 - Handle malformed data gracefully
 
 **Usage:**
+
 ```ruby
 result = JudgeScoreParserService.call('{"baseline_score": 80, "context_score": 90}')
 # => { success: true, response: { "baseline_score" => 80, "context_score" => 90 } }
 ```
 
 ### ResultPrinterService
+
 Formats and prints evaluation results to stdout. Handles both successful evaluations and error cases with proper formatting.
 
 **Responsibilities:**
@@ -42,12 +47,14 @@ Formats and prints evaluation results to stdout. Handles both successful evaluat
 - Handle parse errors gracefully
 
 **Usage:**
+
 ```ruby
 result = ResultPrinterService.call(evaluation_result, stdout: string_io)
 # => { success: true, response: {} }
 ```
 
 ### OutputPersistenceService
+
 Persists evaluation results to JSON files with proper formatting and directory creation.
 
 **Responsibilities:**
@@ -56,6 +63,7 @@ Persists evaluation results to JSON files with proper formatting and directory c
 - Handle file system errors gracefully
 
 **Usage:**
+
 ```ruby
 result = OutputPersistenceService.call(evaluation_result, output_path: 'output.json')
 # => { success: true, response: { message: 'Report saved to output.json' } }

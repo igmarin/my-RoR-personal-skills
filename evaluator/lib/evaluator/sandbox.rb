@@ -16,6 +16,8 @@ module Evaluator
     # @param source_dir [String, Pathname] The directory to copy into the sandbox.
     # @yieldparam sandbox [Evaluator::Sandbox] The sandbox instance.
     # @return [Object] The result of the yielded block.
+    # @raise [SystemCallError] when file operations or directory creation fails.
+    # @raise [RuntimeError] when Docker commands fail.
     def self.run(source_dir, &)
       new(source_dir).run(&)
     end
@@ -31,10 +33,12 @@ module Evaluator
     #
     # @yieldparam sandbox [Evaluator::Sandbox] The sandbox instance.
     # @return [Object] The result of the yielded block.
+    # @raise [SystemCallError] when file operations or directory creation fails.
+    # @raise [RuntimeError] when Docker commands fail.
     def run
       Dir.mktmpdir('evaluator_sandbox_') do |sandbox_dir|
         @path = sandbox_dir
-        FileUtils.cp_r(Dir.glob("#{@source_dir}/*"), sandbox_dir)
+        FileUtils.cp_r(Dir.glob(File.join(@source_dir, '*')), sandbox_dir)
 
         setup_git
 
@@ -51,40 +55,58 @@ module Evaluator
     #
     # @param sandbox_dir [String] The path to the sandbox directory.
     # @return [String] The git diff, or a message indicating no changes.
+    # @raise [SystemCallError] when git commands fail.
     def self.capture_diff(sandbox_dir)
       # Check if we are in a git repo and have at least one commit
       return 'No code changes made.' unless File.directory?(File.join(sandbox_dir, '.git'))
 
-      system('git add .', chdir: sandbox_dir)
-      diff = `cd #{sandbox_dir} && git diff --cached`
+      raise "Failed to stage changes in #{sandbox_dir}" unless system('git', 'add', '.', chdir: sandbox_dir)
+
+      diff, status = Open3.capture2('git', 'diff', '--cached', chdir: sandbox_dir)
+      raise "Failed to capture diff in #{sandbox_dir}" unless status.success?
+
       diff.strip.empty? ? 'No code changes made.' : diff
     end
 
     private
 
     def setup_git
-      system('git init --quiet', chdir: @path)
-      system('git config user.email "evaluator@tessl.io"', chdir: @path)
-      system('git config user.name "Evaluator Sandbox"', chdir: @path)
-      system('git add .', chdir: @path)
-      system("git commit --quiet -m 'Initial commit'", chdir: @path)
+      cmds = [
+        ['git', 'init', '--quiet'],
+        ['git', 'config', 'user.email', 'evaluator@tessl.io'],
+        ['git', 'config', 'user.name', 'Evaluator Sandbox'],
+        ['git', 'add', '.'],
+        ['git', 'commit', '--quiet', '-m', 'Initial commit']
+      ]
+
+      cmds.each do |argv|
+        raise "Git command failed: #{argv.join(' ')}" unless system(*argv, chdir: @path)
+      end
     end
 
     def start_container
       image_name = 'evaluator-sandbox'
-      # Build image if missing (fast if already built)
       docker_dir = File.expand_path('docker', __dir__)
-      system("docker build -t #{image_name} #{docker_dir} --quiet")
+
+      # Build image if missing
+      raise "Failed to build Docker image #{image_name}" unless system('docker', 'build', '-t', image_name, docker_dir, '--quiet')
 
       # Start a detached container mounting the sandbox dir to /sandbox
-      @container_id = `docker run -d --rm -v #{@path}:/sandbox #{image_name}`.strip
+      stdout, stderr, status = Open3.capture3(
+        'docker', 'run', '-d', '--rm', '-v', "#{@path}:/sandbox", image_name
+      )
+
+      raise "Failed to start Docker container: #{stderr}" unless status.success?
+
+      @container_id = stdout.strip
     end
 
     def stop_container
       return unless @container_id
 
       # Stop and remove the container (it's --rm so stopping also removes it)
-      system("docker stop #{@container_id}", out: File::NULL, err: File::NULL)
+      # We don't fail-fast on stop to avoid swallowing the original error if this is in an ensure block
+      system('docker', 'stop', @container_id, out: File::NULL, err: File::NULL)
     end
   end
 end

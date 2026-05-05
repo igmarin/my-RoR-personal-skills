@@ -44,7 +44,7 @@ module Evaluator
         assert_equal :openai, config[:current_llm_provider]
       end
 
-      def test_default_max_execution_time_is_30
+      def test_default_max_execution_time_value
         config = Defaults.config
 
         assert_equal 30, config[:max_execution_time]

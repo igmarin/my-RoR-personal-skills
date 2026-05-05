@@ -17,6 +17,7 @@ module Evaluator
       # @param working_dir [String] The base directory in which the tool should operate.
       # @param container_id [String, nil] The Docker container ID for isolated execution.
       # @return [String] The result of the tool execution, or an error message.
+      # @raise [StandardError] when execution or argument parsing fails (rescued internally)
       def self.call(name, arguments, working_dir, container_id = nil)
         args = ArgumentParser.call(arguments)
         return args if args.is_a?(String) # Returns the error message if parsing failed
@@ -25,11 +26,21 @@ module Evaluator
 
         execute_tool(name, args, working_dir_path, container_id)
       rescue StandardError => e
+        log_error(e)
         "Error executing tool: #{e.message}"
       end
 
       class << self
         private
+
+        def log_error(exception)
+          msg = "#{exception.message}\n#{exception.backtrace.first(5).join("\n")}"
+          if defined?(Rails)
+            Rails.logger.error(msg)
+          else
+            warn("Dispatcher Error: #{msg}")
+          end
+        end
 
         def execute_tool(name, args, working_dir_path, container_id)
           path = args['path']

@@ -12,6 +12,14 @@ module Evaluator
       assert_equal 'skills/rails-code-review', resolved
     end
 
+    def test_infers_old_format_skill_source_path
+      resolved = SourcePathResolver.call(
+        eval_folder_path: 'evals/skills/security/authentication/login-eval'
+      )
+
+      assert_equal 'skills/security/authentication', resolved
+    end
+
     def test_infers_skill_source_path_from_evaluator_eval_path
       resolved = SourcePathResolver.call(
         eval_folder_path: 'evaluator/evals/skills/rails-code-review/review-order'

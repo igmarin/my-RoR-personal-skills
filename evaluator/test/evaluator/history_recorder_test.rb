@@ -63,18 +63,29 @@ class HistoryRecorderTest < Minitest::Test
       success: true,
       tasks: [{ judge_score: '{"baseline_score": 80, "context_score": 90}' }]
     }
+    fixed_path = '/tmp/benchmarks.json'
 
-    # Mock load_history to return empty
-    Evaluator::HistoryRecorder.stubs(:load_history).returns([])
+    # Stub determine_history_file to return a known path
+    Evaluator::HistoryRecorder.stubs(:determine_history_file).returns(fixed_path)
 
-    # Expect File.write with the new entry
-    File.expects(:write).with do |path, content|
-      path.end_with?('benchmarks.json') &&
-        content.include?('"source_path": "skills/test"') &&
-        content.include?('"model": "gpt-4"') &&
-        content.include?('"average_baseline": 80.0') &&
-        content.include?('"improvement": 10.0')
-    end
+    # Mock load_history to return empty list for the specific path
+    Evaluator::HistoryRecorder.stubs(:load_history).with(fixed_path).returns([])
+
+    # Expect File.write with the new entry to the fixed path
+    File.expects(:write).with(fixed_path, regexp_matches(%r{"source_path": "skills/test"})).once
+    File.expects(:write).with(fixed_path, regexp_matches(/"model": "gpt-4"/)).once
+    File.expects(:write).with(fixed_path, regexp_matches(/"average_baseline": 80.0/)).once
+    File.expects(:write).with(fixed_path, regexp_matches(/"improvement": 10.0/)).once
+
+    # NOTE: File.expects with multiple expectations on same file might be tricky if it's one call.
+    # Actually record calls File.write exactly once. So I should combine them.
+    File.unstub(:write)
+    File.expects(:write).with(fixed_path, all_of(
+                                            regexp_matches(%r{"source_path": "skills/test"}),
+                                            regexp_matches(/"model": "gpt-4"/),
+                                            regexp_matches(/"average_baseline": 80.0/),
+                                            regexp_matches(/"improvement": 10.0/)
+                                          )).returns(true)
 
     Evaluator::HistoryRecorder.record(results, source_path: 'skills/test', model: 'gpt-4')
   end

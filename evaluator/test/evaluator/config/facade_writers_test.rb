@@ -11,7 +11,8 @@ module Evaluator
       end
 
       def teardown
-        Config.unstub(:store) if Config.respond_to?(:unstub)
+        # Clean up by removing the constant if it exists
+        Object.send(:remove_const, :Rails) if Object.const_defined?(:Rails)
       end
 
       def test_set_provider_api_key_calls_store

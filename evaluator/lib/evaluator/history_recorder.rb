@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'json'
 require 'date'
 require_relative 'history_recorder/persistence_service'

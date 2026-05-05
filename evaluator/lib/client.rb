@@ -3,6 +3,7 @@
 require_relative 'config'
 require_relative 'clients/providers/openai'
 require_relative 'clients/providers/gemini'
+require_relative 'clients/providers/ollama'
 require_relative 'clients/providers/null_client'
 
 module Evaluator
@@ -41,6 +42,8 @@ module Evaluator
           Evaluator::Clients::Providers::OpenAI
         when :gemini
           Evaluator::Clients::Providers::Gemini
+        when :ollama
+          Evaluator::Clients::Providers::Ollama
         else
           Evaluator::Clients::Providers::NullClient
         end

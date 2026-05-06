@@ -27,14 +27,26 @@ jobs:
           echo "$dirs" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Review changed skills
+      - name: Review and Eval changed skills
         if: steps.changed.outputs.dirs != ''
         run: |
           while IFS= read -r dir; do
             [ -z "$dir" ] && continue
             [ ! -d "$dir" ] && echo "Skipping $dir (directory not found)" && continue
-            echo "── Reviewing $dir ──"
-            cd "$dir"
-            tessl skill review
-            cd -
+            echo "── Processing $dir ──"
+
+            # 1. Static Review with optimization
+            tessl skill review "$dir/SKILL.md" --optimize
+
+            # 2. Dynamic Evaluation
+            echo "🧪 Generating evaluation scenario..."
+            tessl scenario generate "$dir/SKILL.md" --count=1
+
+            echo "📥 Downloading scenario..."
+            tessl scenario download --last
+
+            echo "🚀 Running evaluation..."
+            tessl eval run ./evals
+            # Cleanup for the next iteration
+            rm -rf ./evals/*
           done <<< "${{ steps.changed.outputs.dirs }}"

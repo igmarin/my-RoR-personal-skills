@@ -178,7 +178,7 @@ Restart RubyMine.
 For environments without Ruby, or for containerized deployment:
 
 ```bash
-cd mcp_server
+# From the root of the repository:
 docker build -t rails-agent-skills-mcp .
 docker run --rm -i rails-agent-skills-mcp
 ```

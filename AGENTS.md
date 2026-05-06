@@ -99,6 +99,7 @@ Skills are scored on two axes: **skill-specific criteria** AND **model performan
 
 ## Key Constraints
 
+- **The `evals/` directory is READ-ONLY.** These files contain intentional bugs, missing documentation, or non-standard patterns used to evaluate agent performance. Never "fix" or "improve" files in `evals/` unless explicitly instructed to update a test case scenario.
 - Do not generate tickets unless the user asks explicitly — `ticket-planning` is optional.
 - Do not skip the verify-failure step in the TDD gate.
 - Do not add repositories, aggregates, or domain events just because a task looks "DDD" — see `ddd-rails-modeling`.

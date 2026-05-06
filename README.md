@@ -238,7 +238,18 @@ gh skill update --unpin
 
 ## Platforms & Quick Start
 
-To integrate these skills with your preferred AI development environment (Gemini CLI, Cursor, Windsurf, Claude Code, Codex, or RubyMine), refer to the **[Implementation Guide](docs/implementation-guide.md)**.
+To integrate these skills with your preferred AI development environment, refer to the **[Implementation Guide](docs/implementation-guide.md)**.
+
+### Platform Integration Overview
+
+| Platform | Recommended Integration | Key Step |
+|----------|-------------------------|----------|
+| **Gemini CLI** | Standard Plugin | Add repository path to `plugins` config |
+| **Cursor** | MCP Server / Rules | Add MCP URL or link `SKILL.md` in `.cursorrules` |
+| **Windsurf** | MCP Server | Register the Ruby MCP server in `mcp_config.json` |
+| **Claude Code** | MCP Server | Use `mcp add` with the included `Dockerfile` |
+| **Codex / OpenCode** | System Prompts | Point the agent to the `skills/` directory via workspace settings |
+| **RubyMine** | MCP Server | Configure via the Language Server Protocol settings |
 
 The guide covers both the **MCP server** (recommended — on-demand, saves tokens) and **symlink** approaches for each platform.
 
@@ -406,6 +417,15 @@ graph TB
 
 Each skill is a `SKILL.md` file in its own directory. For detailed conventions and structure, refer to the [Skill Design Principles](docs/skill-design-principles.md).
 
+### Skills vs. Workflows
+
+This library differentiates between two types of agent capabilities:
+
+-   **Skills (`skills/`):** Atomic, specialized modules (e.g., `rails-code-review`, `yard-documentation`). These are optimized for static analysis and "one-shot" tasks.
+-   **Workflows (`workflows/`):** Higher-level orchestrators (e.g., `rails-tdd-loop`) that chain multiple skills together. 
+    -   **Important:** Workflows require an agent with **ReAct capabilities** (like the Gemini CLI, Claude Code, or Cursor with workspace context). They are designed to read multiple files, execute shell commands, and manage state across several turns. 
+    -   *Note on Scoring:* While platform static analysis might score workflows lower due to their dependency on external files, their actual performance is validated dynamically using our custom ReAct evaluation tool.
+
 ## Typical Workflows
 
 Tests are a **gate** between planning and implementation. See [docs/workflows/](docs/workflows/) for full diagrams.
@@ -446,19 +466,19 @@ You can run individual evaluations or batches using the `evaluate` command:
 
 ```bash
 # Evaluate a single skill scenario
-bundle exec evaluate --eval evals/skill-api-rest-collection
+bundle exec evaluate --eval personal-evals/skill-api-rest-collection
 
 # Evaluate a workflow
-bundle exec evaluate --eval evals/skill-refactor-safely-controller-extraction
+bundle exec evaluate --eval personal-evals/skill-refactor-safely-controller-extraction
 ```
 
-Gold-standard evaluation scenarios are stored in the `evals/` directory.
+Gold-standard evaluation scenarios are stored in the `personal-evals/` directory.
 
 ### 3. Eval Integrity & Read-Only Constraints
 
-The `evals/` directory is **READ-ONLY**. These files contain intentional bugs, missing documentation, or non-standard patterns used to evaluate agent performance.
+The `personal-evals/` directory is **READ-ONLY**. These files contain intentional bugs, missing documentation, or non-standard patterns used to evaluate agent performance.
 
-- **Do NOT "fix" or "improve" files in `evals/`** unless explicitly instructed to update a test case scenario.
+- **Do NOT "fix" or "improve" files in `personal-evals/`** unless explicitly instructed to update a test case scenario.
 - External review tools (like CodeRabbit) are configured to ignore this directory via `.coderabbit.yml`.
 - This ensures evaluation scores remain a valid measure of an agent's ability to handle real-world "messy" codebases.
 

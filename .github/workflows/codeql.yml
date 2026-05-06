@@ -26,6 +26,9 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ruby
+          config: |
+            paths-ignore:
+              - 'evals/**'
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4

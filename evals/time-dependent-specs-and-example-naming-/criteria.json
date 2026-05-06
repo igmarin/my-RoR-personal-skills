@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent follows RSpec best practices for time-dependent model specs: using travel_to/freeze_time instead of hardcoded past dates, present-tense example names with no 'should' or 'and', correct let/let! discipline, and preferring build over create for factory usage.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Frozen string pragma",
+      "description": "The spec file begins with `# frozen_string_literal: true` as its very first line",
+      "max_score": 5
+    },
+    {
+      "name": "Full constant path describe",
+      "description": "Uses `RSpec.describe Subscription` (constant reference, not a string)",
+      "max_score": 5
+    },
+    {
+      "name": "travel_to or freeze_time usage",
+      "description": "Uses `travel_to` or `freeze_time` to control time in at least one time-dependent example (trial?, expired?, days_remaining, active?)",
+      "max_score": 20
+    },
+    {
+      "name": "No hardcoded past dates",
+      "description": "Does NOT use expressions like `X.days.ago` or `Time.now - X` as static record attributes to simulate time passage — instead uses time travel helpers",
+      "max_score": 15
+    },
+    {
+      "name": "No 'should' in examples",
+      "description": "No it/specify description string contains 'should'",
+      "max_score": 10
+    },
+    {
+      "name": "No 'and' in examples",
+      "description": "No it/specify description string contains the word 'and' (case-insensitive, word boundary)",
+      "max_score": 10
+    },
+    {
+      "name": "context 'when' naming",
+      "description": "Uses `context 'when ...'` or `context 'with ...'` for scenario variations (e.g. before/after expiry, within/outside trial window)",
+      "max_score": 10
+    },
+    {
+      "name": "Prefer build over create",
+      "description": "Factory calls use `build` or `build_stubbed` rather than `create` for at least one subscription record where persistence is not required",
+      "max_score": 10
+    },
+    {
+      "name": "let not let! for non-prerequisite data",
+      "description": "Subscription test data is defined with `let` (lazy), not `let!`, unless there is a clear reason the object must exist before the test body runs",
+      "max_score": 10
+    },
+    {
+      "name": "Method-level describe blocks",
+      "description": "Each predicate method (trial?, expired?, days_remaining, active?) has its own `describe '#method?'` block",
+      "max_score": 5
+    }
+  ]
+}

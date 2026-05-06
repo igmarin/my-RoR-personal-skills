@@ -46,16 +46,16 @@ module McpSkills
 
     def discover_skill_dirs
       grouped_dirs = SKILL_PATTERNS.flat_map { |pattern| @project_root.glob(pattern) }
-                                  .sort_by { |path| [sort_weight(path), path.to_s] }
-                                  .map(&:dirname)
-                                  .reject { |dir| EXCLUDED_DIRS.include?(dir.basename.to_s) }
-                                  .group_by { |dir| dir.basename.to_s }
+                                   .sort_by { |path| [sort_weight(path), path.to_s] }
+                                   .map(&:dirname)
+                                   .reject { |dir| EXCLUDED_DIRS.include?(dir.basename.to_s) }
+                                   .group_by { |dir| dir.basename.to_s }
 
       grouped_dirs.values.flat_map { |dirs| deduplicate_dirs(dirs) }
     end
 
     def deduplicate_dirs(dirs)
-      non_tessl_dirs, tessl_dirs = dirs.partition { |dir| sort_weight(dir) == 0 }
+      non_tessl_dirs, tessl_dirs = dirs.partition { |dir| sort_weight(dir).zero? }
       warn_on_duplicate_non_tessl_dirs(non_tessl_dirs)
 
       return non_tessl_dirs if non_tessl_dirs.any?

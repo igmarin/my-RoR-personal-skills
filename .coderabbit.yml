@@ -1,0 +1,9 @@
+# CodeRabbit Configuration
+# https://docs.coderabbit.ai/configuration/coderabbit-yml
+
+# The evals/ directory contains intentional "broken" or "non-standard" code
+# used to test agent performance. These must remain as-is.
+reviews:
+  path_filters:
+    - "!evals/**"
+    - "**/*"

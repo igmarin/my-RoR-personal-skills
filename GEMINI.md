@@ -161,11 +161,10 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 **Refactoring:**
 `refactor-safely` → **[GATE: characterization tests pass]** → refactor → verify tests still pass
 
-## Code Quality Defaults
+## Project Constraints
 
-These apply to ALL generated Ruby/Rails code regardless of which skill is active:
-
-**Service response format:** Always return `{ success: bool, response: { ... } }` — data under `response:`, errors under `response: { error: { message: '...' } }`.
+- **The `evals/` directory is READ-ONLY.** These files contain intentional bugs, missing documentation, or non-standard patterns used to evaluate agent performance. Never "fix" or "improve" files in `evals/` unless explicitly instructed to update a test case scenario.
+- **Service response format:** Always return `{ success: bool, response: { ... } }` — data under `response:`, errors under `response: { error: { message: '...' } }`.
 
 **Ruby files:** Every `.rb` file begins with `# frozen_string_literal: true`.
 

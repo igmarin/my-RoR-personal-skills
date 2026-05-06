@@ -446,10 +446,10 @@ You can run individual evaluations or batches using the `evaluate` command:
 
 ```bash
 # Evaluate a single skill scenario
-bundle exec evaluate --eval evals/skills/ruby-service-objects/basic-service-object
+bundle exec evaluate --eval evals/skill-api-rest-collection
 
 # Evaluate a workflow
-bundle exec evaluate --eval evals/workflows/rails-tdd-loop/full-feature
+bundle exec evaluate --eval evals/skill-refactor-safely-controller-extraction
 ```
 
 Gold-standard evaluation scenarios are stored in the `evals/` directory.

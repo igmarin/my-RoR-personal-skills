@@ -3,23 +3,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-
-bootstrap_skill_content=$(cat "${PLUGIN_ROOT}/rails-skills-orchestrator/SKILL.md" 2>&1 || echo "Error reading rails-skills-orchestrator skill")
-
-escape_for_json() {
-    local s="$1"
-    s="${s//\\/\\\\}"
-    s="${s//\"/\\\"}"
-    s="${s//$'\n'/\\n}"
-    s="${s//$'\r'/\\r}"
-    s="${s//$'\t'/\\t}"
-    printf '%s' "$s"
-}
-
-bootstrap_skill_escaped=$(escape_for_json "$bootstrap_skill_content")
-session_context="<IMPORTANT>\nYou have access to Rails development skills.\n\n**Below is the skill discovery guide - read it to understand available skills:**\n\n${bootstrap_skill_escaped}\n</IMPORTANT>"
+session_context="<IMPORTANT>\nYou have access to Rails Agent Skills via MCP.\nUse the 'use_skill' MCP tool to dynamically load the skill you need.\nReview docs/reference/skill-catalog.md for the full list of available skills.\n</IMPORTANT>"
 
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
   cat <<EOF

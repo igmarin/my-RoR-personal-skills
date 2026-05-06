@@ -74,7 +74,13 @@ Prioritize architectural risks over style comments. The main review targets are 
 
 ## Severity Tiers
 
-See [FINDINGS.md](./FINDINGS.md) for the full High / Medium / Low severity lists and Common Fixes. Flag High findings first — they cause production failures. Low findings are style; do not surface them before architecture issues.
+See [FINDINGS.md](./FINDINGS.md) for the full High / Medium / Low severity lists and Common Fixes if available. Otherwise apply these inline definitions:
+
+- **High** — causes production failures or breaks host integration (e.g., direct host constant coupling, unsafe boot-time side effects, irreversible migrations without a `down` method).
+- **Medium** — degrades maintainability or makes the engine fragile across host apps (e.g., undocumented configuration seams, missing install generator, no dummy app).
+- **Low** — style or minor clarity issues; do not surface before architecture findings.
+
+Flag High findings first. Do not surface Low findings before architecture issues.
 
 ## Output Format
 
@@ -118,6 +124,8 @@ class MyEngine::SomeService
 end
 ```
 
+See [assets/examples.md](assets/examples.md) for additional annotated examples if available.
+
 ## Integration
 
 | Skill | When to chain |
@@ -125,7 +133,3 @@ end
 | rails-engine-author | When implementing suggested fixes or refactoring the engine |
 | rails-engine-testing | When adding missing dummy-app or integration coverage |
 | rails-engine-compatibility | When assessing Rails/Ruby version support or deprecation impact |
-
-## Assets
-
-- [assets/examples.md](assets/examples.md)

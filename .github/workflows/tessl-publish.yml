@@ -8,6 +8,7 @@ on:
       - 'skills/**'
       - 'workflows/**'
       - 'docs/**'
+      - 'evals/**'
       - 'tile.json'
       - 'tessl.json'
       - 'scripts/validate-plugins.sh'
@@ -39,4 +40,4 @@ jobs:
           token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Publish Tessl tile
-        run: tessl tile publish --bump patch --skip-evals .
+        run: tessl tile publish --bump patch .

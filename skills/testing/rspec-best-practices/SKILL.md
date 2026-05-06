@@ -28,7 +28,7 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 | Service specs | **Required:** `describe '.call'` and `subject(:result)` for the primary invocation |
 | `let` vs `let!` | Default to `let`; `let!` ONLY when object must exist before example runs |
 | External service mocking | `allow(ServiceClass).to receive(:method)` — **not** `instance_double`; `instance_double` only for injected collaborators |
-| Example names | Present tense: `it 'returns the user'`, never `it 'should ...'`; **NEVER contains the word "and"** — split into separate examples |
+| Example names | Present tense: `it 'returns the user'`; **NEVER** `it 'should ...'`; **NEVER** contains `and` — see [One Behavior Per Example](#one-behavior-per-example) |
 | `aggregate_failures` | Use when asserting multiple related items in one example |
 
 ## TDD Workflow
@@ -80,21 +80,18 @@ RSpec.describe Invoices::MarkOverdue do
 end
 ```
 
-→ Full examples: `EXAMPLES.md` | Copy-paste templates: `assets/spec_templates.md`
-
 ## Shared Examples
 
-Use only when the same behavioural contract applies to multiple subjects without per-example `let` overrides. Avoid when each context needs different setup — that signals a wrong abstraction. → Example in `EXAMPLES.md`
+Use only when the same behavioural contract applies to multiple subjects without per-example `let` overrides. Avoid when each context needs different setup — that signals a wrong abstraction.
 
-## One Behavior Per Example — NEVER "and" in Example Names
+## One Behavior Per Example
 
-The word **"and"** in an `it` / `specify` description means the example is asserting two behaviors. Split it. One behavior per example. Applies to every spec type — model, request, service, job, mailer, system.
+The word **"and"** in an `it` / `specify` description signals two behaviors in one example. Split it every time — no exceptions for any spec type (model, request, service, job, mailer, system).
 
 ```ruby
 # BAD — two assertions; if the first fails, the second never runs
 it 'returns 201 and creates the record' do; end
 it 'saves the order and sends the confirmation email' do; end
-it 'updates the user and logs the change' do; end
 
 # GOOD — one observable outcome per example
 it 'returns 201' do; end
@@ -104,7 +101,7 @@ it 'saves the order' do; end
 it 'sends the confirmation email' do; end
 ```
 
-**Self-check before finalizing any spec:** scan every `it '...'` / `it "..."` / `specify '...'` string for the word `and` (case-insensitive, word-boundary). Every hit is a split — no exceptions for "convenience" examples like `'returns nil and does not raise'`.
+**Self-check before finalizing any spec:** scan every `it '...'` / `it "..."` / `specify '...'` string for `and` (case-insensitive, word-boundary). Every hit is a required split.
 
 ## Output Style
 
@@ -117,7 +114,7 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 5. **`context 'when ...'` / `context 'with ...'`** for scenario variations — never use `context` to group methods.
 6. **`let` for test data**, `let!` ONLY when the object must exist before the action under test.
 7. **No `let_it_be`** unless the project already depends on `test-prof` (check `Gemfile.lock` first).
-8. **NO "and" in any example description** — split on every occurrence (see section above). This is the most-missed rule; do an explicit scan before returning the spec.
+8. **NO "and" in any example description** — see [One Behavior Per Example](#one-behavior-per-example). Perform an explicit scan before returning the spec.
 9. **`subject(:result) { ... }`** for service / PORO specs invoking `.call`.
 10. **`travel_to` / `freeze_time`** for any time-dependent assertion — never set past `Time.now` or stub `Time.current` directly.
 11. **External boundaries mocked** at the class-method level (`allow(SomeClient).to receive(:method)`); ActiveRecord finders are NEVER mocked.
@@ -133,8 +130,3 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 | DB state bleed | Transactional fixtures or `DatabaseCleaner`; never share `let!` across contexts |
 | Race conditions | Explicit Capybara waits; avoid `sleep` |
 | Imprecise assertions | `change.from().to()` over final state; exact values over `be_truthy`/`be_falsey`; never assert `updated_at` |
-
-## Assets
-
-- [EXAMPLES.md](EXAMPLES.md)
-- [assets/spec_templates.md](assets/spec_templates.md)

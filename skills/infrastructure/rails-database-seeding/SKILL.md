@@ -4,8 +4,10 @@ license: MIT
 description: >
   Manage development and test data in Rails. Covers fixtures vs seeds,
   seeding strategies for different environments, test data factories,
-  and production-like data generation. Trigger words: seeds, fixtures,
-  seeding, database seed, test data, development data, db:seed.
+  and production-like data generation. Use when the user asks about setting
+  up seed data, creating test fixtures, or generating development data in a
+  Rails application. Trigger words: seeds, fixtures, seeding, database seed,
+  test data, development data, db:seed.
 ---
 
 # Rails Database Seeding

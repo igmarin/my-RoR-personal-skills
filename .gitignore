@@ -9,6 +9,7 @@ evals/tmp/
 private-evals/
 tmp/
 .Gemfile.lock
+.Gemfile
 .agents/skills/
 
 # IDE / AI assistant configs (personal, not shared)

@@ -75,44 +75,19 @@ See [references/strategies.md](references/strategies.md) for a full URL path vs.
 
 ## Deprecation
 
-Define the `Deprecatable` concern to emit `Sunset` and `Deprecation` response headers. The inline implementation below is the canonical reference; a copy also lives in `app/controllers/concerns/deprecatable.rb`.
-
-```ruby
-# app/controllers/concerns/deprecatable.rb
-module Deprecatable
-  extend ActiveSupport::Concern
-
-  included do
-    before_action :set_deprecation_headers
-  end
-
-  private
-
-  def set_deprecation_headers
-    sunset_date = self.class.sunset_date
-    response.set_header("Deprecation", "true")
-    response.set_header("Sunset", sunset_date.httpdate) if sunset_date
-    Rails.logger.warn "[DEPRECATED] #{controller_path}##{action_name} called — sunset: #{sunset_date}"
-  end
-
-  class_methods do
-    def sunset_date
-      nil # Override per controller, e.g.: -> { Date.new(2025, 6, 1) }
-    end
-  end
-end
-```
-
-Include it in any controller version due for retirement:
+Include the `Deprecatable` concern (defined in `app/controllers/concerns/deprecatable.rb`) in any controller version due for retirement. It emits `Sunset` and `Deprecation` response headers automatically via a `before_action`.
 
 ```ruby
 module V1
   class UsersController < ApplicationController
     include Deprecatable
-    # ...
+    # Override sunset_date on the class to set the retirement date:
+    # def self.sunset_date = Date.new(2025, 6, 1)
   end
 end
 ```
+
+See `app/controllers/concerns/deprecatable.rb` for the full implementation with logging.
 
 ## Verification
 
@@ -131,5 +106,3 @@ See [EXAMPLES.md](EXAMPLES.md) for complete code including:
 - Deprecatable concern with logging
 - Backward compatibility specs
 - Client request examples
-
-See [references/strategies.md](references/strategies.md) for URL path vs header versioning comparison.

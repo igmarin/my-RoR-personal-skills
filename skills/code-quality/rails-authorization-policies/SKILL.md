@@ -79,7 +79,7 @@ end
 
 Cover every role (admin, owner, guest) in both policy specs and request specs.
 
-### Inline Policy Spec Example (Pundit)
+### Minimal Pundit policy spec
 
 ```ruby
 RSpec.describe PostPolicy do
@@ -106,6 +106,6 @@ end
 ```
 
 See [EXAMPLES.md](EXAMPLES.md) for complete testing examples including:
-- Policy specs with `permit_action` matchers
+- Policy specs with `permit_action` matchers (admin, owner, and guest contexts)
 - Request specs with role matrix
 - Shared examples for reusable patterns

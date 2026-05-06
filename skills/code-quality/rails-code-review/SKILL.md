@@ -7,31 +7,20 @@ description: >
   routing, ActiveRecord, security, caching, and background jobs. Use when
   reviewing existing Rails code for quality, conducting a PR review, or
   doing a code review on Ruby on Rails (RoR) code.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
 
 # Rails Code Review (The Rails Way)
 
-When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **rails-code-conventions** (principles, logging, path rules) and **rails-stack-conventions** (stack-specific UI and Rails patterns).
+When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **rails-code-conventions** and **rails-stack-conventions**.
 
 **Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.
 
-## Pre-flight Checks
-
-Before starting the review, verify the following:
-
-- **Rails project detected**: Confirm you're in a Rails application (check for `config/application.rb`, `Gemfile` with `rails`, or `bin/rails`)
-- **Diff available**: Ensure you have access to the code changes (git diff, PR diff, or file paths)
-- **Files exist**: Verify all files referenced in the diff exist in the repository
-- **Review scope clear**: Confirm whether reviewing a full PR, a specific feature, or targeted files
-
-**If pre-flight checks fail**:
-- Not a Rails project → Use appropriate review skill for the technology stack
-- No diff available → Request the diff or file paths from the user
-- Files missing → Flag as Critical and request clarification before proceeding
-
 ## HARD-GATE: After implementation (before PR)
 
-```
+```text
 After green tests + linters pass + YARD + doc updates:
 1. Self-review the full branch diff using the Review Order below.
 2. Fix Critical items; resolve or ticket Suggestion items.
@@ -43,59 +32,44 @@ generate-tasks must include a "Code review before merge" task.
 
 | Area | Key Checks |
 |------|------------|
-| Routing | RESTful, shallow nesting, named routes, constraints |
-| Controllers | Skinny, strong params, `before_action` scoping |
-| Models | Structure order, `inverse_of`, enum values, scopes over callbacks |
-| Queries | N+1 prevention, `exists?` over `present?`, `find_each` for batches |
-| Migrations | Reversible, indexed, foreign keys, concurrent indexes |
-| Security | Strong params, parameterized queries, no `html_safe` abuse |
-| Caching | Fragment caching, nested caching, ETags |
+| Routing | RESTful, shallow nesting, named routes |
+| Controllers | Skinny, strong params, scoped `before_action` |
+| Models | Structure order, enums, scopes, `inverse_of` |
+| Queries | N+1 prevention, `exists?`, `find_each` batches |
+| Migrations | Reversible, concurrent indexes on large tables |
+| Security | Strong params, no `html_safe` on user input |
 | Jobs | Idempotent, retriable, appropriate backend |
 
 ## Review Order
 
-Work through the diff in this sequence. Deep criteria: [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md). One-page PR baseline: [assets/checklist.md](./assets/checklist.md). Finding examples (JSON + comment shape): [assets/examples.md](./assets/examples.md).
+Work through the diff in this sequence. Detailed criteria: [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md).
 
 Configuration → Routing → Controllers → Views → Models → Associations → Queries → Migrations → Validations → I18n → Sessions → Security → Caching → Jobs → Tests
 
 **Edge case handling:**
-- **Empty diff**: If no files changed, state "No code changes to review" and skip to conclusion
-- **Large diff (>50 files)**: Prioritize Critical checks first, then sample key files for Suggestion items; flag for targeted follow-up review
-- **Single file change**: Apply all relevant review areas to that file; don't skip areas just because diff is small
-- **Test-only changes**: Focus on test quality, coverage, and test organization; skip application code checks
+- **Empty diff**: State "No code changes to review" and stop.
+- **Large diff (>50 files)**: Prioritize **Critical** checks first; sample key files for **Suggestion** items.
+- **Single file**: Apply all relevant review areas to that file.
+- **Test-only changes**: Focus on test quality and organization.
 
-**Critical checks to spot immediately:**
+## Severity Levels
 
-```ruby
-# N+1 — one query per record in a collection
-posts.each { |post| post.author.name }       # Bad
-posts.includes(:author).each { |post| post.author.name }  # Good
+Use **only** these labels:
 
-# Privilege escalation via permit!
-params.require(:user).permit!                # Bad — never in production
-params.require(:user).permit(:name, :email)  # Good
-```
+- **`Critical`** — security, data loss, crash, or **Always Critical** (see below). Block merge.
+- **`Suggestion`** — conventions, performance, or "Thin controller -> fat model" anti-patterns.
+- **`Nice to have`** — small style or micro-optimization.
 
-**Always Critical (flag every occurrence as `Critical`):**
-
-- `params.require(...).permit!` — mass-assignment / privilege escalation
-- `html_safe` or `raw` applied to user-supplied content — XSS
-- Missing authorization check on a sensitive action
-- **Business logic inside a controller action** — pricing, tax, discount, multi-step workflow, or any domain calculation inline. A controller action that does more than coordinate (call one service, render response) is `Critical`, not a Suggestion.
+### Always Critical (flag every occurrence):
+- `params.require(...).permit!` — privilege escalation
+- `html_safe` or `raw` on user-supplied content — XSS
+- **Business logic inside a controller action** — pricing, tax, or domain calculation
 - Unparameterized / string-interpolated SQL — injection
 - Destructive migration without a safe path on large tables
 
-## Severity levels
+## Output Style
 
-Use **only** these labels (no High/Low, P0–P2, etc.): **`Critical`** | **`Suggestion`** | **`Nice to have`**.
-
-- **Critical** — security, data loss, crash, or any **Always Critical** rule → block merge; re-diff after fix.
-- **Suggestion** — conventions / performance → fix in PR, or ticket if redesign is large.
-- **Nice to have** — small style or micro-optimization → optional for the author.
-
-## Output style
-
-Group findings under `### Critical` / `### Suggestion` / `### Nice to have` (omit empty sections). Do not use a single flat list mixed by severity.
+Group findings by severity. See [assets/examples.md](./assets/examples.md) for JSON/PR comment shapes.
 
 ```text
 ## Review — <PR title or area>
@@ -104,44 +78,28 @@ Group findings under `### Critical` / `### Suggestion` / `### Nice to have` (omi
 - [path/to/file.rb:LINE] (Area) One-line risk. **Mitigation:** concrete next step.
 
 ### Suggestion
-- [path/to/file.rb:LINE] (Area) … **Mitigation:** …
+- [path/to/file.rb:LINE] (Area) ... **Mitigation:** ...
 
-### Nice to have
-- …
-
-**Actions required:** <one line per severity level that appeared — e.g. Critical → block merge + re-review; Suggestion → …>
+**Actions required:** <one line per severity level found — e.g. Critical -> block merge>
 ```
 
-**Template rules:** each bullet is `[file:line] (Area)` + risk + **`Mitigation:`** (required). Tag **(Area)** from: Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests — across the whole review, cover **≥4** distinct areas when the diff touches that many surfaces.
+**Tag (Area) from:** Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Cover **≥4** distinct areas if applicable.
 
-**Output validation:**
-- Verify all file paths in `[file:line]` references exist in the repository
-- Ensure line numbers are within the valid range for each file
-- Check that each finding includes a required **`Mitigation:`** field
-- Confirm severity sections are properly categorized
-- Validate that `Actions required:` section summarizes all findings accurately
+## Re-review Criteria
 
-**If file references are invalid:**
-- Skip the finding and note: `[path/to/file.rb:LINE] — File not found in repository, skipping`
-- Request clarification from the user before including in final review
-
-## Re-review before merge
-
-Re-diff the branch after **any** Critical fix (mandatory), after **>3** Suggestion fixes or any logic/architecture change during feedback (recommended), or whenever the fix could alter queries, auth, or migrations. Skip only for **Nice to have**-only feedback or trivial one-line edits with **no** behavior change.
-
-## Review anti-patterns (adds to checklist, does not replace it)
-
-- **Thin controller → fat model:** extract orchestration to **services** (PORO / `*.call`), not giant model methods.
-- **N+1 in dev:** small seeds hide N+1 — if associations run inside a loop, count queries (request spec, rack-mini-profiler, logs) instead of assuming “it’s fast here.”
-- **Hot-table migrations:** add concurrent indexes and heavy backfills in **separate** deploy steps from reversible schema changes (chain **rails-migration-safety** when unsure).
-- **Callbacks vs jobs:** persistence hooks only; external I/O and multi-step workflows belong in services/jobs with clear idempotency.
+Re-diff the branch after:
+1. **Any** Critical fix (mandatory).
+2. **>3** Suggestion fixes or any architecture change.
+3. Changes affecting queries, auth, or migrations.
 
 ## Integration
 
 | Skill | When to chain |
 |-------|---------------|
-| **rails-review-response** | When the developer receives feedback and must decide what to implement |
+| **rails-review-response** | When receiving feedback and deciding implementation |
 | **rails-architecture-review** | When review reveals structural problems |
-| **rails-security-review** | When review reveals security concerns |
 | **rails-migration-safety** | When reviewing migrations on large tables |
-| **refactor-safely** | When review suggests refactoring |
+
+## Assets
+- [assets/checklist.md](assets/checklist.md)
+- [assets/examples.md](assets/examples.md)

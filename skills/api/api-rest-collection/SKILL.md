@@ -40,19 +40,34 @@ After generating or updating the collection, validate the output:
 - Verify the collection can be imported into a compatible API client (e.g. Postman) without errors.
 - Confirm all new or changed endpoints are represented and that `{{base_url}}` (or equivalent) is used consistently.
 
-## Collection Structure
+## Collection Structure (Postman v2.1)
 
-Minimum per request — `method`, `url` with `{{base_url}}`, headers, body for POST/PUT:
+Ensure the collection includes the `info` block and uses `{{base_url}}`:
 
 ```json
 {
-  "name": "Create order",
-  "request": {
-    "method": "POST",
-    "header": [{ "key": "Content-Type", "value": "application/json" }],
-    "url": "{{base_url}}/orders",
-    "body": { "mode": "raw", "raw": "{\"product_id\": 1}" }
-  }
+  "info": {
+    "name": "Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create order",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "url": "{{base_url}}/orders",
+        "body": { "mode": "raw", "raw": "{\"product_id\": 1}" }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000" },
+    { "key": "auth_token", "value": "" }
+  ]
 }
 ```
 

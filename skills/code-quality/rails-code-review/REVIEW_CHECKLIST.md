@@ -87,9 +87,8 @@ Full per-area check criteria for use during the 15-step Review Order.
 - Retriable: appropriate retry/discard strategy
 - Correct queue and backend for the job's priority
 
-## 15. Testing (RSpec)
-- Descriptive `describe`/`context`/`it` blocks
-- `let`/`let!` for test data setup
-- FactoryBot for fixtures
-- Shared examples for repeated patterns
-- External services mocked at boundary
+## 16. Review Anti-patterns
+- **Thin controller → fat model:** extract orchestration to **services** (PORO / `*.call`), not giant model methods.
+- **N+1 in dev:** small seeds hide N+1 — if associations run inside a loop, count queries (request spec, rack-mini-profiler, logs) instead of assuming “it’s fast here.”
+- **Hot-table migrations:** add concurrent indexes and heavy backfills in **separate** deploy steps from reversible schema changes.
+- **Callbacks vs jobs:** persistence hooks only; external I/O and multi-step workflows belong in services/jobs with clear idempotency.

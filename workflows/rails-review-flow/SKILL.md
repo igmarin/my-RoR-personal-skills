@@ -4,8 +4,10 @@ license: MIT
 description: >
   Multi-pass Rails code review workflow that identifies bugs, security vulnerabilities, and architectural issues; assigns severity levels (Critical, Suggestion, Nice-to-have); and generates actionable review comments with a mandatory re-review loop for Critical findings. Use for full PR review workflows, multi-pass security or architecture audits, or implementing and verifying responses to review feedback. Trigger: review this PR, full code review, multi-pass review, audit security vulnerabilities, review architecture, respond to review feedback, implement review fixes.
 keywords: rails, review, audit, security, architecture, workflow, pr, feedback
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Review Flow — Complete Review Workflow
 
 Orchestrates systematic code review with optional deep dives for security/architecture and response handling.

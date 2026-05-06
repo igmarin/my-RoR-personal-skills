@@ -7,6 +7,9 @@ description: >
   specify the return type and structure (e.g., return [Hash] with :success and :response
   keys). List each exception separately with its own raise tag. Trigger words: YARD, inline docs,
   method documentation, API docs, public interface, rdoc, return tag, raise tag.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
 # YARD Documentation
 

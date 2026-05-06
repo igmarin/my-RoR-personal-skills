@@ -7,6 +7,7 @@ description: >
   Collection v2.1) so the new or changed endpoints can be tested. Trigger words:
   endpoint, API route, controller action, API collection, request collection.
 metadata:
+  user-invocable: "true"
   version: 1.0.0
 ---
 # REST API Collection
@@ -22,7 +23,8 @@ metadata:
 | Location | One file per app or engine — `docs/api-collections/<app-or-engine-name>.json` or `spec/fixtures/api-collections/`; if a collection folder already exists, update the existing file |
 | Language | All request names, descriptions, and variable names must be in **English** |
 | Variables | Use `{{base_url}}` for the base URL so the collection works across environments |
-| Per request | method, URL (with variables for base URL), headers (Content-Type, Authorization if needed), body example when applicable |
+| Per request | method, URL, headers, body, **description**, and **test scripts** (e.g. `pm.response.to.have.status(200)`) |
+| Folders | Group related endpoints into folders using nested `item` arrays |
 | Validation | See validation steps in the HARD-GATE section below |
 
 ## HARD-GATE: Generate on Endpoint Change
@@ -31,6 +33,8 @@ metadata:
 When you create or modify a REST API endpoint (new or changed route and controller action),
 you MUST also create or update the corresponding API collection file so the
 flow can be tested. Do not leave the collection missing or outdated.
+
+Each request MUST include a description and at least one basic test script (e.g. status code check).
 
 EXCEPTION: GraphQL endpoints — use rails-graphql-best-practices instead.
 ```
@@ -42,31 +46,41 @@ After generating or updating the collection, validate the output:
 
 ## Collection Structure (Postman v2.1)
 
-Ensure the collection includes the `info` block and uses `{{base_url}}`:
+Ensure the collection includes the `info` block, folders (nested `item` arrays), and `event` scripts:
 
 ```json
 {
   "info": {
-    "name": "Orders API",
+    "name": "Products API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Create order",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
-        ],
-        "url": "{{base_url}}/orders",
-        "body": { "mode": "raw", "raw": "{\"product_id\": 1}" }
-      }
+      "name": "Products",
+      "item": [
+        {
+          "name": "List products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/products",
+            "description": "Returns a list of all products in the catalog."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('Status code is 200', () => { pm.response.to.have.status(200); });"],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
-    { "key": "base_url", "value": "http://localhost:3000" },
-    { "key": "auth_token", "value": "" }
+    { "key": "base_url", "value": "http://localhost:3000" }
   ]
 }
 ```

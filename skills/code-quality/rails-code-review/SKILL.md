@@ -11,7 +11,6 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
-
 # Rails Code Review (The Rails Way)
 
 When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **rails-code-conventions** and **rails-stack-conventions**.

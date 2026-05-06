@@ -9,8 +9,10 @@ description: >
   together in one pass. Use when: code review prep, before PR, full Rails quality sweep, quality audit,
   production-ready review, end-to-end quality check.
 keywords: rails, quality, conventions, refactoring, documentation, yard, review
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Quality Flow — Complete Quality Assurance Workflow
 
 Orchestrates systematic code quality checks, safe refactoring, and documentation updates across three phases. Use this instead of individual refactoring or documentation skills when full production-readiness is required end-to-end.

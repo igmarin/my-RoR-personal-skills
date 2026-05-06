@@ -8,6 +8,9 @@ description: >
   and publish commands. Trigger words: version bump, changelog, deprecation,
   gemspec, upgrade, migration guide, release, publish gem, ship gem, verify gemspec,
   test suite.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
 # Rails Engine Release
 

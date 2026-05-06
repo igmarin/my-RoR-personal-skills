@@ -7,8 +7,10 @@ description: >
   assertions, test-driven development discipline, and choosing the best first failing
   spec for Rails changes. Also applies when choosing between model, request, system,
   and job specs.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # RSpec Best Practices
 
 Use this skill when the task is to write, review, or clean up RSpec tests.

@@ -8,8 +8,10 @@ description: >
   suggestions, pushing back with technical reasoning, avoiding performative agreement,
   implementing feedback safely one item at a time, and triggering a re-review when needed.
   Trigger scenarios: respond to reviewer, address review comments, handle pull request feedback.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Review Response
 
 Use this skill when **you have received review feedback** on your own Rails code (PR comments, pair review, async review). This is the counterpart to **rails-code-review**, which covers *giving* a review.

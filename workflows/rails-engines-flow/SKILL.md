@@ -7,8 +7,10 @@ description: >
   Use when creating, extracting, or maintaining Rails engines. Trigger: create engine,
   extract engine, engine release, engine testing, mountable engine, gem extraction.
 keywords: rails, engine, workflow, gem, release, testing, extraction
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Engines Flow — Complete Engine Development Workflow
 
 Orchestrates the full lifecycle of Rails engine development from scaffolding to release.

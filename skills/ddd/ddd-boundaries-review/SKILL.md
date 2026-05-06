@@ -7,8 +7,10 @@ description: >
   ownership. Identifies misplaced domain models, detects cross-context coupling,
   names ownership conflicts, and recommends the smallest credible boundary
   improvement. Covers context mapping and leakage detection.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # DDD Boundaries Review
 
 Use this skill when the main problem is not syntax or style, but unclear domain boundaries.

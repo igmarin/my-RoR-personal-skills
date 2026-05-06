@@ -8,8 +8,10 @@ description: >
   for Rails-first workflows. Trigger words: DDD, shared vocabulary, define terms,
   bounded context naming, what should we call this, terminology alignment, DDD glossary,
   naming inconsistency.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # DDD Ubiquitous Language
 
 Use this skill when the domain language is fuzzy, overloaded, or inconsistent.

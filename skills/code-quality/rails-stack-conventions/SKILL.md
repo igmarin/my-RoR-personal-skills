@@ -8,8 +8,10 @@ description: >
   controllers, and Tailwind component patterns. Not for general Rails design
   principles — this skill is scoped to what changes based on this specific
   technology stack.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Stack Conventions
 
 When **writing or generating** code for this project, follow these conventions. Stack: Ruby on Rails, PostgreSQL, Hotwire (Turbo + Stimulus), Tailwind CSS.

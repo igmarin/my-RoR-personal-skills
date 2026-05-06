@@ -8,8 +8,10 @@ description: >
   SERVICE_MAP routing, and scaffolds RSpec tests per variant. Trigger words:
   design pattern, Ruby, dispatch table, polymorphism, no-op default, variant
   calculator, strategy pattern, factory pattern, null object pattern.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Strategy + Factory + Null Object Calculator Pattern
 
 One API for the client: `Calculator::Factory.for(entity).calculate`. The factory picks the strategy; NullService handles unknown variants safely.

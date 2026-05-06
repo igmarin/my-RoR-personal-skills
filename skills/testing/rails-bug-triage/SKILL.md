@@ -6,8 +6,10 @@ description: >
   Creates a failing RSpec reproduction test, isolates the broken code path, and
   produces a minimal fix plan. Trigger words: debug, broken, error, regression,
   stack trace, failing test, RSpec, bug report, Rails app.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Bug Triage
 
 Use this skill when a bug report exists but the right reproduction path and fix sequence are not yet clear.

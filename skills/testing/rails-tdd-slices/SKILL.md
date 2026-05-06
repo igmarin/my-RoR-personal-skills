@@ -7,8 +7,10 @@ description: >
   selection, system spec escalation, smallest safe slice planning, and
   Rails-first TDD sequencing. Trigger words: where to start testing, what test
   to write first, RSpec, test-driven development, TDD, first failing test.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails TDD Slices
 
 Use this skill when the hardest part of the task is deciding where TDD should start.

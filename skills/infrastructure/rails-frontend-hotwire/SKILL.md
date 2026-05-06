@@ -9,8 +9,10 @@ description: >
   interactive Rails UIs without heavy JavaScript frameworks, or wiring up
   Stimulus behavior to existing HTML. Trigger words: Hotwire, Turbo, Stimulus,
   Turbo Frames, Turbo Streams, progressive enhancement, SPA without JS.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Frontend Hotwire
 
 Build modern Rails frontends with Hotwire using progressive enhancement.

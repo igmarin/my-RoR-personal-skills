@@ -7,8 +7,10 @@ description: >
   architecture decisions. Recommends service object extractions, simplifies callback
   chains, identifies abstraction quality issues, and produces severity-classified
   findings with the smallest credible improvement for each.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Architecture Review
 
 Use this skill when the task is to review or improve the structure of a Rails application or library.

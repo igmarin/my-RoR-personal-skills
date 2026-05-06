@@ -10,8 +10,10 @@ description: >
   every step. Do NOT use for bug fixes or new features — those follow the TDD gate
   in rspec-best-practices. Do NOT mix structural changes with behavior changes in
   the same step.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Refactor Safely
 
 Use this skill when the task is to change structure without changing intended behavior.
@@ -134,10 +136,12 @@ Use support files for detailed guidance and examples:
 When asked to refactor:
 
 1. State the stable behavior that must not change.
-2. Propose the smallest safe sequence — each step extracts exactly ONE boundary (one class, one module, or one extracted delegation). A step that moves two abstractions is too large; split it.
+2. Propose the smallest safe sequence — each step extracts exactly ONE boundary. A step that moves two abstractions is too large; split it.
 3. Show the characterization test code in your output — do not touch any production file until the test exists and passes.
-4. **Compatibility shims (required when public interface changes):** For each shim, state: (a) what the shim is, (b) why it exists, (c) the specific condition under which it will be removed (e.g., "remove after all callers migrate to Orders::CreateOrder.call"). If no public interface changes, state "No compatibility shims needed — public interface unchanged."
-5. Follow Verification Protocol after each step — report evidence mid-sequence AND at the end.
+4. **Adhere to SRP:** Ensure the extracted object has a Single Responsibility.
+5. **YARD Documentation:** Include YARD tags for all public methods in the extracted object.
+6. **Compatibility shims (required when public interface changes):** For each shim, state: (a) what the shim is, (b) why it exists, (c) the specific condition under which it will be removed. If no public interface changes, state "No compatibility shims needed — public interface unchanged."
+7. Follow Verification Protocol after each step — report evidence mid-sequence AND at the end.
 
 ## Integration
 

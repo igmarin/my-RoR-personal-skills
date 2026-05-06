@@ -7,8 +7,10 @@ description: >
   compatibility across versions. Use when adding a new API version (v1, v2),
   planning API evolution, setting deprecation or sunset policies, or ensuring
   backward compatibility for existing consumers.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails API Versioning
 
 Implement versioning strategies for Rails APIs.

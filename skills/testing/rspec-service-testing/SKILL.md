@@ -6,8 +6,10 @@ description: >
   business logic in spec/services/. Covers instance_double, FactoryBot hash factories,
   shared_examples, subject/let blocks, context/describe structure, aggregate_failures,
   change matchers, travel_to, and error scenario testing.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # RSpec Service Testing
 
 Use this skill when writing tests for service classes under `spec/services/`.

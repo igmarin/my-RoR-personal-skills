@@ -8,8 +8,10 @@ description: >
   mountable engine setup, gem installation, engine onboarding,
   rails plugin installer, copy migrations, initializer generator,
   route mount setup, engine configuration generator.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Engine Installers
 
 Use this skill when the task is to design or review how a host app installs and configures a Rails engine — generating initializers, copying migrations, mounting routes, or exposing a single install command.

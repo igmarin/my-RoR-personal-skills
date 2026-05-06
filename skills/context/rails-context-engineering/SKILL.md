@@ -14,9 +14,9 @@ description: >
   drift, unclear spec, missing requirements, what does the codebase already
   use, match existing style.
 metadata:
+  user-invocable: "true"
   version: 1.0.0
 ---
-
 # Rails Context Engineering
 
 Load minimum context before any code, spec, or PRD in an existing Rails codebase. A fifteen-second read of `db/schema.rb`, `config/routes.rb`, and one neighbor saves a full retry.

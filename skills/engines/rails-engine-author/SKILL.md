@@ -6,6 +6,7 @@ description: >
   types (Plain, Railtie, Engine, Mountable), namespace isolation, host-app
   contract definition, and recommended file structure.
 metadata:
+  user-invocable: "true"
   version: 1.0.0
 ---
 # Rails Engine Author

@@ -9,10 +9,10 @@ description: >
   break this down, what's the best approach for this Rails work, not sure how to approach this,
   multi-step Rails task, complex Rails task, what should I do first.
 metadata:
+  user-invocable: "true"
   version: 1.0.0
   keywords: rails, ruby, tdd, testing, code-review, engines, ddd, orchestration, entry-point
 ---
-
 # Rails Skills Orchestrator
 
 Triages and decomposes any Ruby on Rails request into ordered sub-tasks, then delegates to the correct specialized skill. Enforces the Tests Gate Implementation mandate across all code-producing work.

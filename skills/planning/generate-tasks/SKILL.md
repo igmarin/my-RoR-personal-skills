@@ -12,8 +12,10 @@ description: >
   implementation plan, feature breakdown, todo list, project tasks, work plan, break
   down this PRD, generate tasks, feature branch, TDD, write spec, run spec fail, run
   spec pass.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Generating a Task List from Requirements
 
 ## Output Requirements (MUST Follow)

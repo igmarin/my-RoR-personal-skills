@@ -6,8 +6,10 @@ description: >
   locally. Covers Docker, environment variables, database, test suite, linters, and IDE.
   The agent does not read the user's repository or execute setup commands. Trigger words:
   onboarding, new dev, setup project, Docker, development environment, getting started.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Project Onboarding
 
 Emits a generic Rails onboarding runbook for the user to run locally.

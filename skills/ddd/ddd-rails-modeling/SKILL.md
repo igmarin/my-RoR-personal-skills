@@ -10,7 +10,6 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
-
 # DDD Rails Modeling
 
 **Core principle:** Model real domain pressure, not textbook DDD vocabulary.

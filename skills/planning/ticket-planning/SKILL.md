@@ -6,8 +6,10 @@ description: >
   Use when the user provides a plan and wants ticket drafts, wants help shaping
   a plan into tickets, wants sprint-placement guidance, or wants tickets created in
   an issue tracker after the plan is approved.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Ticket Planning
 
 Normalize inputs, classify each work item, apply title conventions, draft tickets in a standard structure, then either return markdown drafts or create issues in the issue tracker after explicit approval.

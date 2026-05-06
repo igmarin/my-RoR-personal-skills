@@ -8,7 +8,6 @@ metadata:
   user-invocable: "true"
   keywords: rails, tdd, workflow, feature, implementation, testing, orchestration
 ---
-
 # Rails TDD Loop — Complete Feature Workflow
 
 ## Workflow Phases

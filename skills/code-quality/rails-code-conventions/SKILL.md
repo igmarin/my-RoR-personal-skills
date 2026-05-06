@@ -9,8 +9,10 @@ description: >
   or refactoring Ruby on Rails code, or when asked about Rails best practices,
   clean code, or code quality. Trigger words: code review, refactor, RoR,
   clean code, best practices, Ruby on Rails conventions.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Code Conventions
 
 **Style source of truth:** Style and formatting defer to the project's configured linter(s). This skill adds **non-style behavior** and **architecture guidance** only. For Hotwire + Tailwind specifics, see **rails-stack-conventions**.

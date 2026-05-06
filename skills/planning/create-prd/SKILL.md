@@ -10,8 +10,10 @@ description: >
   surface, success metrics, and open questions for Rails-oriented workflows.
   Trigger words: PRD, product requirements, plan a feature, write a spec,
   requirements document, /tasks/ folder.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Generating a Product Requirements Document (PRD)
 
 Focus on *what* and *why*, not *how*. No code until the PRD is approved.

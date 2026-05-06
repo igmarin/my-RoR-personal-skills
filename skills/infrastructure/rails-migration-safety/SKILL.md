@@ -6,8 +6,10 @@ description: >
   constraints, backfills, renames, table rewrites, or concurrent operations. Covers phased
   rollouts, lock behavior, rollback strategy, strong_migrations compliance, and deployment
   ordering for schema changes.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Migration Safety
 
 Use this skill when schema changes must be safe in real environments.

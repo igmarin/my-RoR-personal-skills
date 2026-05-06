@@ -8,8 +8,10 @@ description: >
   up seed data, creating test fixtures, or generating development data in a
   Rails application. Trigger words: seeds, fixtures, seeding, database seed,
   test data, development data, db:seed.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Database Seeding
 
 Manage development and test data effectively.

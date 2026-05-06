@@ -10,8 +10,10 @@ description: >
   new Rails app, configure CI/CD, dev environment setup, rails new, Gemfile setup, .ruby-version,
   Ruby on Rails project bootstrap.
 keywords: rails, setup, onboarding, ci/cd, workflow, devops, configuration
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Setup Flow — Complete Project Setup Workflow
 
 Orchestrates the full Rails project setup from context gathering through CI/CD configuration.

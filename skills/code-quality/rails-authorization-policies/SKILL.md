@@ -7,8 +7,10 @@ description: >
   strategies. Use when the user needs to implement or troubleshoot authorization in
   a Rails app, set up user roles and permissions, or mentions Pundit, CanCanCan,
   policy objects, access control, roles, or permissions.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
 ---
-
 # Rails Authorization Policies
 
 Implement and test authorization patterns in Rails applications.

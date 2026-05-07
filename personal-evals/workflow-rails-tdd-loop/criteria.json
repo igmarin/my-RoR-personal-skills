@@ -1,0 +1,46 @@
+{
+  "context": "Evaluates the execution of the full Rails TDD Loop workflow: context loading, TDD hard-gates (test first, run fail), implementation proposal, minimal implementation, and post-implementation quality checks.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Phase 1: Context Loading",
+      "description": "The agent explicitly loads project context (schema, models, etc.) before writing the spec.",
+      "max_score": 10
+    },
+    {
+      "name": "HARD GATE: Test Written First",
+      "description": "The agent writes the RSpec test for `#discounted_price` BEFORE any implementation code.",
+      "max_score": 20
+    },
+    {
+      "name": "HARD GATE: Verified Failure",
+      "description": "The agent runs the spec and explicitly verifies it fails for the correct reason (e.g., `undefined method`).",
+      "max_score": 20
+    },
+    {
+      "name": "Phase 2: Implementation Proposal",
+      "description": "The agent proposes the implementation strategy in plain language before writing the code.",
+      "max_score": 10
+    },
+    {
+      "name": "Phase 2: Minimal Implementation",
+      "description": "The implementation code is the minimal required to pass the test and follows Rails conventions.",
+      "max_score": 10
+    },
+    {
+      "name": "Phase 4: YARD Documentation",
+      "description": "The implementation includes proper YARD documentation (@param, @return) for the new method.",
+      "max_score": 10
+    },
+    {
+      "name": "Phase 4: Self-Review",
+      "description": "The agent performs a self-review of the changes using the `rails-code-review` skill or checklist.",
+      "max_score": 10
+    },
+    {
+      "name": "Phase 4: Quality Checks",
+      "description": "The agent mentions or executes linters (rubocop) or the full test suite after implementation.",
+      "max_score": 10
+    }
+  ]
+}

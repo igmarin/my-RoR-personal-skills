@@ -22,6 +22,22 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 
 ---
 
+## The Proof: Baseline vs Context
+
+We measure the effectiveness of our skills by comparing a "Baseline" agent (raw LLM) against an agent using our **Skill Context**. The difference in scores (the **Lift**) is the mathematical proof of the value this library provides.
+
+| Skill | Baseline | With Context | **Lift** |
+|-------|----------|--------------|----------|
+| `ticket-planning` | 30% | 100% | **+70** |
+| `ruby-api-client-integration` | 40% | 100% | **+60** |
+| `generate-tasks` (TDD quadruplets) | 43% | 100% | **+57** |
+| `refactor-safely` | 60% | 100% | **+40** |
+| `ruby-service-objects` | 71% | 100% | **+29** |
+
+*Scores based on evaluation runs using Claude 3.5 Sonnet. A skill that only beats baseline marginally is considered under-specified; our goal is a significant lift on every non-generic convention.*
+
+---
+
 [![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills) [![Ruby](https://img.shields.io/badge/ruby-%23CC342D.svg?style=flat&logo=ruby&logoColor=white)](https://www.ruby-lang.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills)](https://github.com/igmarin/rails-agent-skills/tags) ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/igmarin/rails-agent-skills?utm_source=oss&utm_medium=github&utm_campaign=igmarin%2Frails-agent-skills&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ---

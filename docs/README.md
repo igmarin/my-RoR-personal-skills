@@ -32,6 +32,19 @@ Think of this as a decision map — not just docs. Pick your current stage and f
 
 ---
 
+## Evaluation Strategy: Baseline vs Context
+
+We don't just write skills; we validate their impact. Every skill in this library is measured against two scenarios:
+
+1.  **Baseline (Raw LLM):** How well does a base model (e.g., Sonnet 3.5) follow our conventions using only its general training data?
+2.  **With Context (Skill Loaded):** How well does the model perform when provided with the specific instructions and constraints in our `SKILL.md` files?
+
+The goal of every skill is to provide a significant **Lift** over the baseline. This ensures our library isn't just bloat, but a load-bearing beam for your engineering quality.
+
+*See [docs/skill-optimization-guide.md](skill-optimization-guide.md) for details on the scoring methodology.*
+
+---
+
 ## Quick Start
 
 If you're using AI agents in Rails, start here. This gives you the fastest path to the right workflow without guessing.

@@ -1,0 +1,31 @@
+{
+  "context": "Evaluates database migration safety: avoiding table locks on large tables, phased rollout strategy, and batch backfilling.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Avoids Table Rewrite Lock",
+      "description": "Does NOT attempt to add a NOT NULL column with a default in a single migration step.",
+      "max_score": 30
+    },
+    {
+      "name": "Phased Rollout Strategy",
+      "description": "Plans a multi-step process: add column (nullable) -> backfill -> add constraint.",
+      "max_score": 25
+    },
+    {
+      "name": "Batch Backfilling",
+      "description": "Provides a backfill script that uses batches (e.g., in_batches or find_in_batches) to avoid memory bloat/long transactions.",
+      "max_score": 20
+    },
+    {
+      "name": "Safe Constraint Addition",
+      "description": "Uses a safe method to add the NOT NULL constraint (e.g., using `validate: false` then `validate_constraint` in Postgres if applicable).",
+      "max_score": 15
+    },
+    {
+      "name": "Safety Rationale",
+      "description": "Correctly explains the risk of exclusive locks on large tables during DDL operations.",
+      "max_score": 10
+    }
+  ]
+}

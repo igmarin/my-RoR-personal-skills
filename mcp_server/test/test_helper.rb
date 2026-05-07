@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require 'pathname'
 require 'tmpdir'
 
 REPO_ROOT = Pathname.new(__dir__).join('..', '..').realpath

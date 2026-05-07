@@ -187,6 +187,8 @@ Adding a new skill directory automatically makes it available — no server chan
 
 See **[mcp_server/README.md](mcp_server/README.md)** for setup instructions (Windsurf, Cursor, Claude Code, RubyMine, Docker).
 
+> **Important:** When configuring MCP in external tools (like Cursor, Windsurf, OpenCode, etc.), always use **absolute paths** for `cwd` and `BUNDLE_GEMFILE` to avoid environment and timeout errors.
+
 ## Install via GitHub CLI
 
 Requires [GitHub CLI](https://cli.github.com/) v2.90.0+.

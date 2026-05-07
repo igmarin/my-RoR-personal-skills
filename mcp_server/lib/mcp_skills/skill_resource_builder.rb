@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'mcp'
-require 'pathname'
 
 module McpSkills
   # Builds MCP::Resource objects for a single skill directory.

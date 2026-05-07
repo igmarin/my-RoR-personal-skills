@@ -10,8 +10,8 @@ Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/rub
 
 | Requirement | Version |
 |-------------|---------|
-| Ruby | 3.1+ |
-| `mcp` gem | 0.13+ |
+| Ruby | 4.0+ |
+| `mcp` gem | 0.15+ |
 | Bundler | 2.x |
 
 ---
@@ -91,6 +91,8 @@ The repo includes a pre-populated `.mcp.json` at the root. When you open the clo
 
 For **global** setup (available in every project), add to `~/.claude/mcp.json`:
 
+> **Note:** Always use **absolute paths** to avoid "Gems not found" or timeout errors.
+
 ```json
 {
   "mcpServers": {
@@ -98,16 +100,14 @@ For **global** setup (available in every project), add to `~/.claude/mcp.json`:
       "type": "stdio",
       "command": "bundle",
       "args": ["exec", "ruby", "mcp_server/server.rb"],
-      "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+      "cwd": "/ABSOLUTE/PATH/TO/rails-agent-skills",
       "env": {
-        "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+        "BUNDLE_GEMFILE": "/ABSOLUTE/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
       }
     }
   }
 }
 ```
-
-Replace the path with your actual clone location, then start a new Claude Code session.
 
 ---
 
@@ -122,18 +122,14 @@ The config goes in your **global** Windsurf MCP file (`~/.codeium/windsurf/mcp_c
       "type": "stdio",
       "command": "bundle",
       "args": ["exec", "ruby", "mcp_server/server.rb"],
-      "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+      "cwd": "/ABSOLUTE/PATH/TO/rails-agent-skills",
       "env": {
-        "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+        "BUNDLE_GEMFILE": "/ABSOLUTE/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
       }
     }
   }
 }
 ```
-
-Reload Windsurf (`Cmd+Shift+P` → "Reload Window"). The server will appear in the MCP panel.
-
-> **Why `BUNDLE_GEMFILE`?** The server's `Gemfile` lives inside `mcp_server/`, not at the repo root. Setting this env var tells Bundler exactly which Gemfile to use regardless of working directory.
 
 ---
 
@@ -148,16 +144,26 @@ Open **Settings → MCP** (or edit `~/.cursor/mcp.json`) and add:
       "type": "stdio",
       "command": "bundle",
       "args": ["exec", "ruby", "mcp_server/server.rb"],
-      "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+      "cwd": "/ABSOLUTE/PATH/TO/rails-agent-skills",
       "env": {
-        "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+        "BUNDLE_GEMFILE": "/ABSOLUTE/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
       }
     }
   }
 }
 ```
 
-Restart Cursor.
+---
+
+## Troubleshooting: Gems not found or Timeout
+
+If you encounter errors like `Could not find 'mcp' (>= 0)` or the server times out:
+
+1. **Verify Absolute Paths:** Ensure `cwd` and `BUNDLE_GEMFILE` in your JSON config use absolute paths (e.g., `/Users/name/...` instead of `~/...`).
+2. **Pre-install Gems:** Run `cd mcp_server && bundle install` manually in your terminal to ensure the environment is ready.
+3. **Manual Test:** Run the following command from any directory to see if it starts without errors:
+   `BUNDLE_GEMFILE=/ABSOLUTE/PATH/TO/rails-agent-skills/mcp_server/Gemfile bundle exec ruby /ABSOLUTE/PATH/TO/rails-agent-skills/mcp_server/server.rb`
+4. **Environment Mismatch:** If you use a Ruby manager (rvm, rbenv, asdf), ensure the `command` in your config points to the correct `bundle` executable if `bundle` alone doesn't work.
 
 ---
 
@@ -170,6 +176,28 @@ Open **Settings → Tools → AI Assistant → Model Context Protocol** and add 
 - **Environment:** `BUNDLE_GEMFILE=/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile`
 
 Restart RubyMine.
+
+---
+
+## Other Providers (OpenCode, AntiGravity, etc.)
+
+For any other tool that supports the Model Context Protocol via stdio, use the following template. **Crucial:** Most external providers fail if you use relative paths or `~`, so always use **absolute paths**.
+
+```json
+{
+  "mcpServers": {
+    "rails-agent-skills": {
+      "type": "stdio",
+      "command": "bundle",
+      "args": ["exec", "ruby", "mcp_server/server.rb"],
+      "cwd": "/ABSOLUTE/PATH/TO/rails-agent-skills",
+      "env": {
+        "BUNDLE_GEMFILE": "/ABSOLUTE/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+      }
+    }
+  }
+}
+```
 
 ---
 

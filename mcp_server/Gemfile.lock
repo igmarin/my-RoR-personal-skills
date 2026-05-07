@@ -8,21 +8,21 @@ GEM
     json-schema (6.2.0)
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
-    mcp (0.13.0)
+    mcp (0.15.0)
       json-schema (>= 4.1)
-    minitest (6.0.3)
+    minitest (6.0.6)
       drb (~> 2.0)
       prism (~> 1.5)
     prism (1.9.0)
     public_suffix (7.0.5)
-    rake (13.3.1)
+    rake (13.4.2)
 
 PLATFORMS
   arm64-darwin-25
   ruby
 
 DEPENDENCIES
-  mcp
+  mcp (~> 0.15.0)
   minitest
   rake
 
@@ -31,11 +31,11 @@ CHECKSUMS
   bigdecimal (4.1.2) sha256=53d217666027eab4280346fba98e7d5b66baaae1b9c3c1c0ffe89d48188a3fbd
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   json-schema (6.2.0) sha256=e8bff46ed845a22c1ab2bd0d7eccf831c01fe23bb3920caa4c74db4306813666
-  mcp (0.13.0) sha256=8e5e72ec9cc8d37b048e41a4b469689c5897b4768843ef8e5eb36fa8897eb1d5
-  minitest (6.0.3) sha256=88ac8a1de36c00692420e7cb3cc11a0773bbcb126aee1c249f320160a7d11411
+  mcp (0.15.0) sha256=64e26fee4ab5a55aba8b166b516a87f663647608a9e11083bb57cb9c74a82def
+  minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   public_suffix (7.0.5) sha256=1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623
-  rake (13.3.1) sha256=8c9e89d09f66a26a01264e7e3480ec0607f0c497a861ef16063604b1b08eb19c
+  rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
 
 BUNDLED WITH
-  4.0.9
+  4.0.10

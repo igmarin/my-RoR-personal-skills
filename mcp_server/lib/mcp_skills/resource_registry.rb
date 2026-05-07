@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pathname'
 require_relative 'skill_resource_builder'
 require_relative 'doc_resource_builder'
 require_relative 'resource_discovery'

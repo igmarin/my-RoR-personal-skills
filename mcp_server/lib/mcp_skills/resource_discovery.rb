@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'pathname'
-
 module McpSkills
   # Discovers the repository paths that should be exposed through MCP resources.
   class ResourceDiscovery

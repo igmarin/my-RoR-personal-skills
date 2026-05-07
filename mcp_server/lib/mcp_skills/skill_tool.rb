@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'mcp'
-require 'pathname'
 
 module McpSkills
   # MCP Tool that returns the content of a SKILL.md given a skill name.

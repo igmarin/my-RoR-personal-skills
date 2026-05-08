@@ -103,5 +103,5 @@ Rails areas likely touched (no code — discovery only):
 
 Recommended next step: **generate-tasks** — break this PRD into implementation tasks with TDD gates.
 
-Alternative chain targets: `ticket-planning`, `rails-architecture-review`, `rails-stack-conventions`.
+Alternative chain targets: `plan-tickets`, `review-architecture`, `apply-stack-conventions`.
 ```

@@ -22,14 +22,14 @@ Wrote implementation code before the test? Delete it. Start over. No exceptions.
 For Claude Code, **workflow chaining is the primary mechanism**. Skills are building blocks — workflows are the story. The most common daily workflow:
 
 ```text
-rails-tdd-slices → write failing test
+plan-tests → write failing test
   → [CHECKPOINT: Test Feedback — confirm behavior, boundary, edge cases]
   → [CHECKPOINT: Implementation Proposal — confirm approach before coding]
   → implement (minimal code to pass test) → refactor
   → [GATE: Linters + Full Test Suite]
-  → yard-documentation
-  → rails-code-review (self-review)
-  → rails-review-response (when feedback is received)
+  → write-yard-docs
+  → code-review (self-review)
+  → respond-to-review (when feedback is received)
   → re-review if Critical findings were addressed
   → PR
 ```
@@ -45,121 +45,121 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 |-------|-------------|
 | `create-prd` | User asks to plan a feature or write requirements |
 | `generate-tasks` | User asks for implementation steps or task breakdown |
-| `ticket-planning` | User wants tickets from a plan |
+| `plan-tickets` | User wants tickets from a plan |
 
 ### Rails Code Quality
 | Skill | Use when... |
 |-------|-------------|
-| `rails-code-review` | Reviewing Rails PRs, controllers, models, migrations — giving a review |
-| `rails-review-response` | Received review feedback and need to evaluate, respond, or implement it |
-| `rails-architecture-review` | Reviewing app structure, boundaries, fat models/controllers |
-| `rails-security-review` | Checking auth, params, XSS, CSRF, SQLi |
-| `rails-migration-safety` | Planning or reviewing database migrations |
-| `rails-stack-conventions` | Writing new Rails code for PostgreSQL + Hotwire + Tailwind stack |
-| `rails-code-conventions` | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS, linter as style SoT, per-path rules |
-| `rails-background-jobs` | Adding or reviewing background jobs |
-| `rails-graphql-best-practices` | Building or reviewing GraphQL APIs with graphql-ruby |
-| `rails-authorization-policies` | Adding or reviewing roles/permissions (Pundit, CanCanCan, policy objects) |
-| `rails-performance-optimization` | Investigating N+1s, slow queries, profiling, caching, query plans |
-| `rails-api-versioning` | Versioning REST APIs, deprecation policies, v1/v2 routing |
-| `rails-database-seeding` | Designing seeds vs fixtures for dev/test data |
-| `rails-frontend-hotwire` | Turbo/Stimulus integration, frames, streams |
+| `code-review` | Reviewing Rails PRs, controllers, models, migrations — giving a review |
+| `respond-to-review` | Received review feedback and need to evaluate, respond, or implement it |
+| `review-architecture` | Reviewing app structure, boundaries, fat models/controllers |
+| `security-check` | Checking auth, params, XSS, CSRF, SQLi |
+| `review-migration` | Planning or reviewing database migrations |
+| `apply-stack-conventions` | Writing new Rails code for PostgreSQL + Hotwire + Tailwind stack |
+| `apply-code-conventions` | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS, linter as style SoT, per-path rules |
+| `implement-background-job` | Adding or reviewing background jobs |
+| `implement-graphql` | Building or reviewing GraphQL APIs with graphql-ruby |
+| `implement-authorization` | Adding or reviewing roles/permissions (Pundit, CanCanCan, policy objects) |
+| `optimize-performance` | Investigating N+1s, slow queries, profiling, caching, query plans |
+| `version-api` | Versioning REST APIs, deprecation policies, v1/v2 routing |
+| `seed-database` | Designing seeds vs fixtures for dev/test data |
+| `implement-hotwire` | Turbo/Stimulus integration, frames, streams |
 
 ### DDD & Domain Modeling
 | Skill | Use when... |
 |-------|-------------|
-| `ddd-ubiquitous-language` | Clarifying domain terms before modeling or refactoring |
-| `ddd-boundaries-review` | Reviewing bounded contexts and language leakage |
-| `ddd-rails-modeling` | Mapping DDD concepts to Rails models, services, value objects |
+| `define-domain-language` | Clarifying domain terms before modeling or refactoring |
+| `review-domain-boundaries` | Reviewing bounded contexts and language leakage |
+| `model-domain` | Mapping DDD concepts to Rails models, services, value objects |
 
 ### Ruby Patterns
 | Skill | Use when... |
 |-------|-------------|
-| `ruby-service-objects` | Creating service classes with `.call` pattern |
-| `ruby-api-client-integration` | Integrating external APIs (Auth/Client/Fetcher/Builder) |
-| `strategy-factory-null-calculator` | Building variant-based calculators |
-| `yard-documentation` | Writing or reviewing YARD docs |
+| `create-service-object` | Creating service classes with `.call` pattern |
+| `integrate-api-client` | Integrating external APIs (Auth/Client/Fetcher/Builder) |
+| `implement-calculator-pattern` | Building variant-based calculators |
+| `write-yard-docs` | Writing or reviewing YARD docs |
 
 ### Context & Setup
 | Skill | Use when... |
 |-------|-------------|
-| `rails-context-engineering` | Before any code/spec/PRD in an existing Rails codebase — loads schema, routes, nearest patterns, surfaces ambiguity |
-| `rails-project-onboarding` | First-time dev environment setup — Docker, env vars, database, test suite |
+| `load-context` | Before any code/spec/PRD in an existing Rails codebase — loads schema, routes, nearest patterns, surfaces ambiguity |
+| `setup-environment` | First-time dev environment setup — Docker, env vars, database, test suite |
 
 ### Testing
 | Skill | Use when... |
 |-------|-------------|
-| `rspec-best-practices` | Writing, reviewing, or cleaning up RSpec tests |
-| `rails-tdd-slices` | Choosing the best first failing spec for a Rails change |
-| `rails-bug-triage` | Turning a bug report into a failing spec and fix plan |
-| `rspec-service-testing` | Testing service objects |
+| `write-tests` | Writing, reviewing, or cleaning up RSpec tests |
+| `plan-tests` | Choosing the best first failing spec for a Rails change |
+| `triage-bug` | Turning a bug report into a failing spec and fix plan |
+| `test-service` | Testing service objects |
 
 ### Rails Engines
 | Skill | Use when... |
 |-------|-------------|
-| `rails-engine-author` | Creating or scaffolding a Rails engine |
-| `rails-engine-testing` | Setting up dummy app and engine specs |
-| `rails-engine-reviewer` | Reviewing an existing engine |
-| `rails-engine-release` | Preparing an engine release |
-| `rails-engine-docs` | Writing engine documentation |
-| `rails-engine-installers` | Creating install generators |
-| `rails-engine-extraction` | Extracting code from host app to engine |
-| `rails-engine-compatibility` | Ensuring cross-version compatibility |
-| `api-rest-collection` | Creating or updating Postman collections for REST API endpoints (not GraphQL) |
+| `create-engine` | Creating or scaffolding a Rails engine |
+| `test-engine` | Setting up dummy app and engine specs |
+| `review-engine` | Reviewing an existing engine |
+| `release-engine` | Preparing an engine release |
+| `document-engine` | Writing engine documentation |
+| `create-engine-installer` | Creating install generators |
+| `extract-engine` | Extracting code from host app to engine |
+| `upgrade-engine` | Ensuring cross-version compatibility |
+| `generate-api-collection` | Creating or updating Postman collections for REST API endpoints (not GraphQL) |
 
 ### Refactoring
 | Skill | Use when... |
 |-------|-------------|
-| `refactor-safely` | Restructuring code while preserving behavior |
+| `refactor-code` | Restructuring code while preserving behavior |
 
 ### Workflow Skills (Orchestrators)
 | Skill | Use when... |
 |-------|-------------|
-| `rails-tdd-loop` | Full TDD feature cycle: test → implement → review → PR |
-| `rails-review-flow` | Systematic PR review: review → deep dive → response |
-| `rails-setup-flow` | New project setup: context → onboarding → CI/CD |
-| `rails-quality-flow` | Pre-PR quality check: conventions → refactor → docs |
-| `rails-engines-flow` | Engine development: author → test → review → release |
+| `tdd-workflow` | Full TDD feature cycle: test → implement → review → PR |
+| `review-workflow` | Systematic PR review: review → deep dive → response |
+| `setup-workflow` | New project setup: context → onboarding → CI/CD |
+| `quality-workflow` | Pre-PR quality check: conventions → refactor → docs |
+| `engine-workflow` | Engine development: author → test → review → release |
 
 ## Skill Priority
 
-1. **TDD always** — `rspec-best-practices` applies whenever code is produced
-2. **Planning first** — `create-prd`, `generate-tasks` (optionally `ticket-planning`)
+1. **TDD always** — `write-tests` applies whenever code is produced
+2. **Planning first** — `create-prd`, `generate-tasks` (optionally `plan-tickets`)
 3. **Domain discovery next** — `ddd-*` skills when domain is the hard part
-4. **Process skills** — `refactor-safely`
+4. **Process skills** — `refactor-code`
 5. **Domain skills** — `rails-*`, `ruby-*` for specific implementation
 
 ## Typical Workflows
 
 **TDD Feature Loop** *(primary)*:
-`rails-tdd-slices` → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → `yard-documentation` → `rails-code-review` → `rails-review-response` (on feedback) → PR
+`plan-tests` → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → `write-yard-docs` → `code-review` → `respond-to-review` (on feedback) → PR
 
 **New feature:**
 `create-prd` → `generate-tasks` → *TDD Feature Loop*
 
 **DDD-first:**
-`create-prd` → `ddd-ubiquitous-language` → `ddd-boundaries-review` → `ddd-rails-modeling` → `generate-tasks` → *TDD Feature Loop*
+`create-prd` → `define-domain-language` → `review-domain-boundaries` → `model-domain` → `generate-tasks` → *TDD Feature Loop*
 
 **Code review + response:**
-`rails-code-review` → `rails-review-response` (on feedback) → re-review if Critical items addressed
+`code-review` → `respond-to-review` (on feedback) → re-review if Critical items addressed
 
 **Bug fix:**
-`rails-bug-triage` → `rails-tdd-slices` → **[GATE: failing reproduction spec]** → fix → verify test passes
+`triage-bug` → `plan-tests` → **[GATE: failing reproduction spec]** → fix → verify test passes
 
 **GraphQL feature:**
-`ddd-ubiquitous-language` → `rails-graphql-best-practices` → *TDD Feature Loop* → `rails-security-review`
+`define-domain-language` → `implement-graphql` → *TDD Feature Loop* → `security-check`
 
 **New engine:**
-`rails-engines-flow` (or atomic: `rails-engine-author` → **[GATE: engine specs]** → implement → `rails-engine-docs`)
+`engine-workflow` (or atomic: `create-engine` → **[GATE: engine specs]** → implement → `document-engine`)
 
 **Project setup:**
-`rails-setup-flow` (context → onboarding → CI/CD)
+`setup-workflow` (context → onboarding → CI/CD)
 
 **Quality before PR:**
-`rails-quality-flow` (conventions → refactor → docs)
+`quality-workflow` (conventions → refactor → docs)
 
 **Refactoring:**
-`refactor-safely` → **[GATE: characterization tests pass]** → refactor → verify tests still pass
+`refactor-code` → **[GATE: characterization tests pass]** → refactor → verify tests still pass
 
 ## Code Quality Defaults
 

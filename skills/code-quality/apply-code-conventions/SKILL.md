@@ -1,0 +1,163 @@
+---
+name: apply-code-conventions
+license: MIT
+description: >
+  A daily checklist for writing clean Rails code, covering design principles
+  (DRY, YAGNI, PORO, CoC, KISS), per-path rules (models, services, workers,
+  controllers), structured logging, and comment discipline. Defers style and
+  formatting to the project's configured linter(s). Use when writing, reviewing,
+  or refactoring Ruby on Rails code, or when asked about Rails best practices,
+  clean code, or code quality. Trigger words: code review, refactor, RoR,
+  clean code, best practices, Ruby on Rails conventions.
+metadata:
+  version: 1.0.0
+  user-invocable: "true"
+---
+# Apply Code Conventions
+
+**Style source of truth:** Style and formatting defer to the project's configured linter(s). This skill adds **non-style behavior** and **architecture guidance** only. For Hotwire + Tailwind specifics, see **apply-stack-conventions**.
+
+## Linter — initial analysis
+
+Detect → run → defer. Do not invent style rules.
+
+- Ruby: check for `.rubocop.yml` / `standard` gem → `bundle exec rubocop` or `bundle exec standardrb`
+- Frontend: check for `eslint.config.*`, `.eslintrc*`, `biome.json`, or `package.json` lint script → run accordingly
+- **If no config is found:** note this to the user — do not default to any tool.
+
+## Quick Reference
+
+| Topic | Rule |
+|-------|------|
+| Style/format | Project linter(s) — detect and run as above; do not invent style rules here |
+| Principles | DRY, YAGNI, PORO where it helps, CoC, KISS |
+| Comments / tags | Explain **why**; tagged notes need actionable context |
+| Logging | First arg: static string; second arg: hash with `event:` key; no interpolation; backtrace on errors |
+| Deep stacks | Chain **apply-stack-conventions** → domain skills (services, jobs, RSpec) |
+
+## Code Review / Refactoring Workflow
+
+When reviewing or refactoring Rails code, follow this sequence:
+
+1. **Run linter** — detect config, run the appropriate tool, note absence if none found.
+2. **Check area-specific rules** — apply the "Apply by area" table below to each changed path.
+3. **Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.
+4. **Chain to specialised skills** — use the Integration table to pull in deeper guidance (security, jobs, specs, etc.) as needed.
+
+## Comments and tagged notes
+
+Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY in these triggers; every tag carries actionable context (owner, ticket id, deadline, or next step). Naked tags (`# TODO: fix this`) fail review.
+
+| Trigger | Required tag |
+|---------|-------------|
+| Business-rule constant (rates, caps, thresholds) | `NOTE:` with the rule's source/owner |
+| Deferred work / known shortcut | `TODO:` with ticket or next step |
+| Workaround for a bug or external limitation | `HACK:` or `FIXME:` with the upstream issue |
+| Performance tradeoff or hot path | `OPTIMIZE:` with the measured concern |
+
+```ruby
+# BAD — naked tag, no context
+# TODO: fix this
+rate = TIER_RATES.fetch(tier, 0.0)
+
+# GOOD
+# NOTE: 50% cap set by Pricing policy v3 (PRI-118, owner: pricing-team).
+MAX_DISCOUNT = 0.50
+
+# GOOD — TODO with next step + dependency
+# TODO: replace TIER_RATES with DB-backed lookup (PRI-482; blocked on legal).
+rate = TIER_RATES.fetch(tier, 0.0)
+```
+
+## Structured Logging
+
+**MANDATORY SHAPE — every `Rails.logger.*` call uses exactly two positional arguments.**
+
+```text
+Rails.logger.<level>(static_string_message, { event: "dot.namespaced", ...domain_fields })
+#                    └── 1st arg: STRING ──┘  └─────────── 2nd arg: HASH ───────────┘
+```
+
+- **1st arg (string):** a static string literal — no interpolation, no variables. Log aggregators group on this dimension.
+- **2nd arg (hash):** first key is always `event:` with a dot-namespaced value (do NOT use `:type`, `:action`, or `:name`). All dynamic data goes here.
+- **Errors:** every `rescue` logs both `e.message` and `e.backtrace.first(5).join("\n")` as hash fields — backtrace is non-optional.
+
+```ruby
+# BAD — interpolation destroys log aggregator grouping; single-arg call loses structured fields
+Rails.logger.info("Processing order #{order.id}")
+Rails.logger.info(event: "order.processing_started", order_id: order.id)
+
+# GOOD
+Rails.logger.info("order.processing_started", {
+  event: "order.processing_started",
+  order_id: order.id,
+  user_id: user.id
+})
+
+# GOOD — error path with backtrace
+rescue StandardError => e
+  Rails.logger.error("order.processing_failed", {
+    event: "order.processing_failed",
+    order_id: order.id,
+    error: e.message,
+    backtrace: e.backtrace.first(5).join("\n")
+  })
+  raise
+end
+```
+
+## Apply by area (path patterns)
+
+Rules below apply **when those paths exist** in the project. If a path is absent, skip that row.
+
+| Area | Path pattern | Guidance |
+|------|--------------|----------|
+| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck` / `exists?` / `find_each`. N+1: run `bullet` → fix eager loads → re-run clean |
+| **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Depth: **implement-background-job** |
+| **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions + layer `rescue_from`; specs must cover rescue paths |
+| **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logs (see above); APM spans/tags on hot paths when stack has APM |
+| **Controllers** | `app/controllers/**/*_controller.rb` | Strong params; thin actions → services; IDOR / PII → **security-check** |
+| **Repositories** | `app/repositories/**/*.rb` | New repos only for SQL, caching, clear boundary, or external I/O — document **why** |
+| **RSpec** | `spec/**/*_spec.rb` | FactoryBot; request over controller specs; `env:` (or project pattern) for ENV; **`let` > `let!`** unless eager setup required; avoid heavy `before` when `let` is clearer |
+| **Serializers** | `app/serializers/**/*.rb` | Explicit keys; no N+1; preload associations passed in |
+| **Service objects** | `app/services/**/*.rb` | Single responsibility; `.call` / injected deps per **create-service-object**; after extract, specs + caller still green |
+| **SQL security** | Raw SQL anywhere | Bind params / `sanitize_sql_array`; whitelist dynamic `ORDER BY`; document **why** raw SQL |
+
+## RSpec and `let_it_be` (test-prof)
+
+Only recommend `let_it_be` if `test-prof` is already in `Gemfile.lock`. Otherwise default to `let`; reach for `let!` only when lazy evaluation would break the example. Don't introduce `test-prof` unless asked.
+
+## HARD-GATE: Tests Gate Implementation
+
+When this skill guides **new behavior**, the **tests gate** still applies:
+
+```text
+PRD → TASKS → TEST (write, run, fail) → IMPLEMENTATION → …
+```
+
+No implementation code before a failing test. See **write-tests** and **rails-agent-skills**.
+
+## Output Style
+
+Every Rails-code task lands these:
+
+1. **Comments** follow the **Comments and tagged notes** section: no what-comments; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) on every assumption, deferred work, or business-rule constant; every tag carries actionable context (owner, ticket id, deadline).
+2. **Logging** follows **Structured Logging** above — static first arg, hash second arg with `event:`, and a backtrace line on every error rescue.
+3. **Linter detection noted** — when reviewing or refactoring, state which linter config you detected (or its absence) before any style claim.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **apply-stack-conventions** | Stack-specific: PostgreSQL, Hotwire, Tailwind |
+| **model-domain** | When domain concepts and invariants need clearer Rails-first modeling choices |
+| **create-service-object** | Implementing or refining service objects |
+| **implement-background-job** | Workers, queues, retries, idempotency |
+| **write-tests** | Spec style, **tests gate** (red/green/refactor), request vs controller specs |
+| **security-check** | Controllers, params, IDOR, PII |
+| **code-review** | Full PR pass before merge |
+
+## Assets
+
+- [assets/checklist.md](assets/checklist.md)
+- [assets/snippets.md](assets/snippets.md)

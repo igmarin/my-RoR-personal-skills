@@ -18,31 +18,33 @@ Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/rub
 
 ## What it exposes
 
-| Type | Prefix | Source |
-|------|--------|--------|
-| **Resources** | `skill/<name>` | Every published `SKILL.md` + support files in `build/`, `skills/<category>/<skill>/`, and supported Tessl tile mirrors |
+| Type | Prefix / Name | Source |
+|------|---------------|--------|
 | **Resources** | `doc/<name>` | All `*.md` files under `docs/`, including nested docs such as `docs/workflows/*.md` |
 | **Resources** | `workflow/<name>` | Every workflow directory under `workflows/<workflow>/`, exposed from its `SKILL.md` plus supported companion files |
 | **Tool** | `use_skill` | Invocable tool: given a `skill_name`, returns the full `SKILL.md` content |
 
-Adding a new skill directory to the repo automatically makes it available — no server changes needed.
+Individual **Skills** are no longer exposed as resources to prevent context bloat. They are accessed exclusively via the `use_skill` tool.
+
+Adding a new skill directory to the repo automatically makes it available through `use_skill` — no server changes needed.
 
 ---
 
 ## Architecture
+
+The runtime code lives in `mcp_server/`, while the container build lives at [`../Dockerfile`](../Dockerfile) because the image needs the full repository checkout, including skills, workflows, and docs.
 
 ```text
 mcp_server/
 ├── server.rb                          # Entry point: MCP::Server + StdioTransport
 ├── Gemfile                            # gem 'mcp' (official SDK), minitest, rake
 ├── Rakefile                           # bundle exec rake test
-├── Dockerfile                         # Container image for Docker-based deployment
 ├── registry.json                      # Metadata for MCP registries (smithery.ai, glama.ai)
 ├── lib/
 │   └── mcp_skills/
-│       ├── resource_registry.rb       # Service: discovers all resources (skills + docs + workflows)
+│       ├── resource_registry.rb       # Service: discovers published docs and workflows
 │       ├── resource_discovery.rb      # Service: resolves published skill/workflow topology
-│       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for skills/workflows
+│       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for workflow markdown
 │       ├── doc_resource_builder.rb    # Service: builds MCP::Resource objects for docs
 │       └── skill_tool.rb             # MCP::Tool: 'use_skill' invocable by the agent
 └── test/
@@ -55,15 +57,15 @@ mcp_server/
 
 **Service objects:**
 
-- **`McpSkills::ResourceRegistry`** — scans the repo for all exposable files. Single source of truth for the published resource set.
+- **`McpSkills::ResourceRegistry`** — scans the repo for published docs and workflows. Single source of truth for the resource set.
 - **`McpSkills::ResourceDiscovery`** — resolves the published topology for root `build/`, nested `skills/`, root `workflows/`, and `docs/`.
-- **`McpSkills::SkillResourceBuilder`** — maps a skill or workflow directory path to an `MCP::Resource` with `file://` URI and a configurable `skill/` or `workflow/` name prefix.
+- **`McpSkills::SkillResourceBuilder`** — maps a workflow directory path to `MCP::Resource` objects with `file://` URIs and a configurable name prefix.
 - **`McpSkills::DocResourceBuilder`** — builds `doc/` resources for markdown files anywhere under `docs/`.
 - **`McpSkills::SkillTool`** — `MCP::Tool` subclass. `call(skill_name:)` reads and returns the `SKILL.md` content.
 
 ---
 
-## Getting started
+## Local Ruby/Bundler (Primary)
 
 ```bash
 git clone https://github.com/igmarin/rails-agent-skills.git ~/rails-agent-skills
@@ -201,9 +203,9 @@ For any other tool that supports the Model Context Protocol via stdio, use the f
 
 ---
 
-## Docker
+## Docker (Fallback)
 
-For environments without Ruby, or for containerized deployment:
+For environments without Ruby, or for containerized deployment, Docker remains the fallback path. The primary setup for this repo is still local Ruby/Bundler.
 
 ```bash
 # From the root of the repository:
@@ -234,8 +236,8 @@ The container uses stdio transport — wire it up the same way as the Ruby comma
 1. You open any Rails project in Windsurf (or Claude Code, Cursor, etc.).
 2. The IDE loads this MCP server from its config.
 3. You ask: *"I need to add a GraphQL mutation — which skill should I use?"*
-4. The agent calls `tools/call use_skill` with `skill_name: "rails-graphql-best-practices"`.
-5. The server reads `rails-graphql-best-practices/SKILL.md` and returns the full instructions.
+4. The agent calls `tools/call use_skill` with `skill_name: "implement-graphql"`.
+5. The server reads `implement-graphql/SKILL.md` and returns the full instructions.
 6. The agent follows the skill workflow without loading the entire repo into context.
 
 ---
@@ -252,7 +254,7 @@ Tests are written with Minitest: each file validates real behavior of a service 
 
 ## Auto-discovery of new skills
 
-`ResourceRegistry` uses explicit topology discovery for `build/SKILL.md`, `skills/*/*/SKILL.md`, `workflows/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published skill, workflow, or doc file in those locations, it appears in `resources/list` on the next server start — no code changes required.
+`ResourceRegistry` uses explicit topology discovery for `build/SKILL.md`, `skills/*/*/SKILL.md`, `workflows/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published workflow or doc file in those locations, it appears in `resources/list` on the next server start. Published skills become available through `use_skill` without any server code changes.
 
 ---
 

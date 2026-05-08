@@ -39,9 +39,9 @@ Every generated task list MUST contain the following elements (see [TASK_TEMPLAT
    - `X.Xb` Run spec — verify it **fails**
    - `X.Xc` Implement at `app/...`
    - `X.Xd` Run spec — verify it **passes**
-4. **YARD parent task** — Add YARD docs to new/changed public API; name each file (skill: yard-documentation)
+4. **YARD parent task** — Add YARD docs to new/changed public API; name each file (skill: write-yard-docs)
 5. **Documentation update task** — Update README, diagrams (Mermaid, ADRs), domain docs; list concrete paths
-6. **Code review gate** — Self-review via rails-code-review; fix blockers before opening PR
+6. **Code review gate** — Self-review via code-review; fix blockers before opening PR
 7. **Save location** — `tasks-[feature-name].md` in `/tasks/` folder
 
 ## Extended Resources (Load When Needed)
@@ -75,6 +75,6 @@ Load these files only when their specific guidance is required:
 | Skill | When to chain |
 |-------|---------------|
 | **create-prd** | Generate PRD first, then derive tasks from it |
-| **rails-tdd-slices** | When planning the best first failing spec for a Rails change |
-| **ticket-planning** | When the same initiative also needs ticket drafts |
-| **rails-bug-triage** | When the request starts from a bug report |
+| **plan-tests** | When planning the best first failing spec for a Rails change |
+| **plan-tickets** | When the same initiative also needs ticket drafts |
+| **triage-bug** | When the request starts from a bug report |

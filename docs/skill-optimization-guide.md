@@ -4,7 +4,7 @@ A systematic process for improving tessl evaluation scores across all skills in 
 
 ## Overview
 
-This guide provides a repeatable workflow for diagnosing and fixing skill evaluation failures. It was developed while optimizing `rails-engine-release` and is designed to be applicable to any skill in the library.
+This guide provides a repeatable workflow for diagnosing and fixing skill evaluation failures. It was developed while optimizing `release-engine` and is designed to be applicable to any skill in the library.
 
 ## Library Baseline — 2026-04-20
 
@@ -21,23 +21,23 @@ Per the library's eval strategy: *a skill that only beats baseline marginally is
 What this means in practice:
 
 - **Low-lift scenarios** (e.g. S23 Fitness Class Booking: 100% baseline, 100% with-context) — the base model already handles the convention. The matching skill is decorative for this case; keep it for edge-case coverage, not for lift.
-- **High-lift scenarios** (e.g. S32 ticket-planning: 30% → 100%, +70; S8 API client: 40% → 100%, +60) — the matching skill is doing real work. These skills are the library's load-bearing beams.
+- **High-lift scenarios** (e.g. S32 plan-tickets: 30% → 100%, +70; S8 API client: 40% → 100%, +60) — the matching skill is doing real work. These skills are the library's load-bearing beams.
 - **Zero-baseline criteria** (e.g. S24 Task 0.0 feature branch, TDD run-spec-fail, YARD gate — all 0% at baseline) are **training-knowledge gaps**, not signal problems. They exist only in this library. The with-context score is the true measure.
 
 ### Top-10 skills ranked by lift (what the library actually buys)
 
 | Scenario | Skill | Baseline | With ctx | Lift |
 |----------|-------|----------|----------|------|
-| S32 | ticket-planning | 30% | 100% | **+70** |
-| S8  | ruby-api-client-integration | 40% | 100% | **+60** |
+| S32 | plan-tickets | 30% | 100% | **+70** |
+| S8  | integrate-api-client | 40% | 100% | **+60** |
 | S24 | generate-tasks | 43% | 100% | **+57** |
-| S13 | ruby-api-client-integration | 45% | 100% | **+55** |
-| S4  | refactor-safely | 60% | 100% | **+40** |
+| S13 | integrate-api-client | 45% | 100% | **+55** |
+| S4  | refactor-code | 60% | 100% | **+40** |
 | S14 | create-prd | 62% | 100% | **+38** |
-| S10 | rails-code-conventions (logging + backtrace) | 65% | 100% | **+35** |
-| S3  | ruby-service-objects | 71% | 100% | **+29** |
-| S12 | rails-graphql-best-practices | 71% | 100% | **+27** |
-| S27 | yard-documentation (inline tagged notes) | 76% | 100% | **+24** |
+| S10 | apply-code-conventions (logging + backtrace) | 65% | 100% | **+35** |
+| S3  | create-service-object | 71% | 100% | **+29** |
+| S12 | implement-graphql | 71% | 100% | **+27** |
+| S27 | write-yard-docs (inline tagged notes) | 76% | 100% | **+24** |
 
 ### How to use this baseline in future optimization cycles
 
@@ -58,7 +58,7 @@ What this means in practice:
 Before running scenario evaluations, check the skill's intrinsic quality score:
 
 ```bash
-tessl skill review --optimize rails-engine-release
+tessl skill review --optimize release-engine
 ```
 
 This analyzes the skill file itself for:
@@ -105,7 +105,7 @@ For each failing criterion, determine the root cause:
 **Symptom**: Agent doesn't mention required element in output
 **Fix**: Add explicit requirement to **Output Style** section
 
-Example from `rails-engine-release`:
+Example from `release-engine`:
 ```markdown
 ## Output Style
 
@@ -170,7 +170,7 @@ Priority order for maximum score improvement:
 Run the evaluation again:
 
 ```bash
-tessl eval run --skill rails-engine-release
+tessl eval run --skill release-engine
 ```
 
 Verify both scenarios achieve 100% or acceptable threshold.
@@ -219,7 +219,7 @@ Iterate if needed: return to Step 1 with new scores.
    or explicitly state "No blockers"
 ```
 
-## Case Study: rails-engine-release
+## Case Study: release-engine
 
 ### Initial State
 

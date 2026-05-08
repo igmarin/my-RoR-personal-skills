@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mcp'
+require_relative 'resource_discovery'
 
 module McpSkills
   # MCP Tool that returns the content of a SKILL.md given a skill name.
@@ -14,7 +15,7 @@ module McpSkills
       properties: {
         'skill_name' => {
           type: 'string',
-          description: 'The directory name of the skill (e.g. "rails-code-review", "rspec-best-practices")'
+          description: 'The directory name of the skill (e.g. "code-review", "write-tests")'
         }
       },
       required: ['skill_name']
@@ -27,11 +28,25 @@ module McpSkills
       # @return [MCP::Tool::Response]
       def call(skill_name:, server_context:, project_root: nil)
         root = resolve_root(project_root)
-        skill_md = root.join(skill_name, 'SKILL.md')
+        discovery = ResourceDiscovery.call(root)
+        
+        # Clean up skill_name if the agent passes the full path
+        name = Pathname.new(skill_name).basename.to_s
+        
+        skill_dir = discovery.skill_dirs.find { |dir| dir.basename.to_s == name }
+        
+        unless skill_dir
+          return MCP::Tool::Response.new(
+            [{ type: 'text', text: "Skill '#{name}' not found." }],
+            error: true
+          )
+        end
+
+        skill_md = skill_dir.join('SKILL.md')
 
         unless skill_md.exist?
           return MCP::Tool::Response.new(
-            [{ type: 'text', text: "Skill '#{skill_name}' not found or has no SKILL.md." }],
+            [{ type: 'text', text: "Skill '#{name}' has no SKILL.md." }],
             error: true
           )
         end
@@ -40,7 +55,7 @@ module McpSkills
         MCP::Tool::Response.new([{ type: 'text', text: content }])
       rescue StandardError => e
         MCP::Tool::Response.new(
-          [{ type: 'text', text: "Error reading skill '#{skill_name}': #{e.message}" }],
+          [{ type: 'text', text: "Error reading skill '#{name || skill_name}': #{e.message}" }],
           error: true
         )
       end

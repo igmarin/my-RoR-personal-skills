@@ -29,6 +29,7 @@ jobs:
           config: |
             paths-ignore:
               - 'evals/**'
+              - 'personal-evals/**'
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4

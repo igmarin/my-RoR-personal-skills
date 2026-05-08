@@ -6,7 +6,8 @@ require_relative 'resource_discovery'
 
 module McpSkills
   # Single source of truth for all MCP resources exposed by this server.
-  # Scans the repository root for published skills, workflows, and docs.
+  # Scans the repository root for published workflows and docs.
+  # Skills are now exclusively exposed via the `use_skill` tool, not as resources.
   # Published locations are discovered centrally so runtime and docs stay aligned.
   class ResourceRegistry
     class NotFoundError < StandardError; end
@@ -18,12 +19,12 @@ module McpSkills
       @discovery = ResourceDiscovery.call(@project_root)
     end
 
-    # Returns all MCP::Resource objects (skills + docs + workflows).
+    # Returns all MCP::Resource objects (docs + workflows).
     # @return [Array<MCP::Resource>]
     # @raise [Errno::EACCES] when a published resource cannot be accessed.
     # @raise [Errno::ENOENT] when a published resource disappears during registry construction.
     def all_resources
-      skill_resources + doc_resources + workflow_resources
+      doc_resources + workflow_resources
     end
 
     # Reads a resource by URI and returns the MCP resources/read payload.
@@ -39,10 +40,6 @@ module McpSkills
     end
 
     private
-
-    def skill_resources
-      @discovery.skill_dirs.flat_map { |dir| SkillResourceBuilder.call(dir) }
-    end
 
     def doc_resources
       DocResourceBuilder.call(@discovery.docs_dir, prefix: 'doc')

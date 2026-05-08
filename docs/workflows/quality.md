@@ -10,7 +10,7 @@
 graph TB
     subgraph Prepare [🧪 Phase 1: Prepare]
         direction TB
-        A[Refactor needed] --> B[refactor-safely]
+        A[Refactor needed] --> B[refactor-code]
         B --> C[Characterization tests]
         C --> D{Tests pass?}
     end
@@ -29,7 +29,7 @@ graph TB
         H -- Yes --> E
     end
 
-    H -- No --> I[rails-code-review]
+    H -- No --> I[code-review]
 
     %% Styling
     style Prepare fill:#f5f5f5,stroke:#333,stroke-dasharray: 5 5
@@ -42,7 +42,7 @@ graph TB
 
 ---
 
-## refactor-safely
+## refactor-code
 
 **Goal:** Change structure without changing behavior.
 
@@ -57,7 +57,7 @@ graph TB
 
 ---
 
-## rails-code-conventions
+## apply-code-conventions
 
 **Goal:** Clean code following Rails principles.
 
@@ -81,7 +81,7 @@ graph TB
 
 ---
 
-## yard-documentation
+## write-yard-docs
 
 **Goal:** Document public API after implementation.
 
@@ -107,6 +107,6 @@ graph TB
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|
-| **refactor-safely** | Restructure preserving behavior | "refactor", "extract", "restructure" |
-| **rails-code-conventions** | Clean code principles | "code review", "conventions", "DRY", "YAGNI" |
-| **yard-documentation** | Inline API docs | "YARD", "documentation", "@param", "@return" |
+| **refactor-code** | Restructure preserving behavior | "refactor", "extract", "restructure" |
+| **apply-code-conventions** | Clean code principles | "code review", "conventions", "DRY", "YAGNI" |
+| **write-yard-docs** | Inline API docs | "YARD", "documentation", "@param", "@return" |

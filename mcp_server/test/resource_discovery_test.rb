@@ -17,36 +17,36 @@ class ResourceDiscoveryTest < Minitest::Test
   def test_discovers_nested_skills_and_root_build_skill
     skill_dirs = @discovery.skill_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s }
 
-    assert_includes skill_dirs, 'skills/code-quality/rails-code-review'
-    assert_includes skill_dirs, 'skills/testing/rails-tdd-slices'
-    assert_includes skill_dirs, 'skills/patterns/ruby-service-objects'
+    assert_includes skill_dirs, 'skills/code-quality/code-review'
+    assert_includes skill_dirs, 'skills/testing/plan-tests'
+    assert_includes skill_dirs, 'skills/patterns/create-service-object'
     assert_includes skill_dirs, 'build'
   end
 
   def test_discovers_root_workflows
     workflow_dirs = @discovery.workflow_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s }
 
-    assert_equal ['workflows/rails-review-flow'], workflow_dirs
+    assert_equal ['workflows/review-workflow'], workflow_dirs
   end
 
   def test_deduplicates_tessl_skill_duplicates_by_name
     skill_names = @discovery.skill_dirs.map(&:basename).map(&:to_s)
 
-    assert_equal 1, skill_names.count('rails-code-review')
+    assert_equal 1, skill_names.count('code-review')
   end
 
   def test_keeps_non_tessl_duplicates_in_different_categories
-    duplicate_dir = Pathname.new(@tmpdir).join('skills', 'testing', 'rails-code-review')
+    duplicate_dir = Pathname.new(@tmpdir).join('skills', 'testing', 'code-review')
     duplicate_dir.mkpath
-    duplicate_dir.join('SKILL.md').write('# rails-code-review testing variant')
+    duplicate_dir.join('SKILL.md').write('# code-review testing variant')
 
     discovery = McpSkills::ResourceDiscovery.call(@tmpdir)
-    matching_dirs = discovery.skill_dirs.select { |dir| dir.basename.to_s == 'rails-code-review' }
+    matching_dirs = discovery.skill_dirs.select { |dir| dir.basename.to_s == 'code-review' }
 
     assert_equal 2, matching_dirs.size
     assert_includes matching_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s },
-                    'skills/code-quality/rails-code-review'
+                    'skills/code-quality/code-review'
     assert_includes matching_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s },
-                    'skills/testing/rails-code-review'
+                    'skills/testing/code-review'
   end
 end

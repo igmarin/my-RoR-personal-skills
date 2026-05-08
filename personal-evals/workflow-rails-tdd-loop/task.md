@@ -30,4 +30,4 @@ end
 You must show your work as a sequence of thoughts and tool calls that mirror the **Rails TDD Loop** phases. Produce the following final artifacts:
 - `spec/models/product_spec.rb` (failing first, then passing)
 - `app/models/product.rb` (updated with implementation and YARD)
-- Self-review notes (via `rails-code-review`)
+- Self-review notes (via `code-review`)

@@ -1,7 +1,7 @@
 [
   {
     "timestamp": "2026-05-05T02:35:02-06:00",
-    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-safely",
+    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-code",
     "model": "gpt-4o",
     "summary": {
       "task_count": 1,
@@ -12,7 +12,7 @@
   },
   {
     "timestamp": "2026-05-05T02:36:26-06:00",
-    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-safely",
+    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-code",
     "model": "gpt-4o",
     "summary": {
       "task_count": 1,
@@ -23,7 +23,7 @@
   },
   {
     "timestamp": "2026-05-05T02:40:09-06:00",
-    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-safely",
+    "source_path": "/Users/igmarin/Developer/Personal/rails-agent-skills/refactor-code",
     "model": "gpt-4o",
     "summary": {
       "task_count": 1,

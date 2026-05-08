@@ -34,7 +34,7 @@
     },
     {
       "name": "Phase 4: Self-Review",
-      "description": "The agent performs a self-review of the changes using the `rails-code-review` skill or checklist.",
+      "description": "The agent performs a self-review of the changes using the `code-review` skill or checklist.",
       "max_score": 10
     },
     {

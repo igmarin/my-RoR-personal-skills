@@ -25,7 +25,7 @@ rails-agent-skills/
 │   ├── architecture.md
 │   ├── workflow-guide.md
 │   └── skill-template.md
-├── rails-skills-orchestrator/ # Bootstrap skill (loaded at session start)
+├── skill-router/ # Bootstrap skill (loaded at session start)
 │   └── SKILL.md
 ├── <skill-name>/            # One directory per skill
 │   ├── SKILL.md             # Main skill file (required)
@@ -163,31 +163,31 @@ description: >
 
 Follow exactly. Do not adapt away discipline.
 
-- `rspec-best-practices` (tests gate / TDD discipline)
-- `refactor-safely` (characterization tests hard-gate)
-- `rails-migration-safety` (phased rollout hard-gate)
+- `write-tests` (tests gate / TDD discipline)
+- `refactor-code` (characterization tests hard-gate)
+- `review-migration` (phased rollout hard-gate)
 
 ### Flexible Skills
 
 Adapt principles to context.
 
-- `rails-stack-conventions`
-- `rails-code-conventions`
-- `ticket-planning`
-- `ruby-service-objects`
-- `rails-background-jobs`
-- `ddd-rails-modeling`
+- `apply-stack-conventions`
+- `apply-code-conventions`
+- `plan-tickets`
+- `create-service-object`
+- `implement-background-job`
+- `model-domain`
 
 ### Review Skills
 
 Produce findings with severity levels.
 
-- `rails-code-review` — giving a review
-- `rails-review-response` — receiving and responding to feedback (split from `rails-code-review`)
-- `rails-architecture-review`
-- `rails-security-review`
-- `rails-engine-reviewer`
-- `ddd-boundaries-review`
+- `code-review` — giving a review
+- `respond-to-review` — receiving and responding to feedback (split from `code-review`)
+- `review-architecture`
+- `security-check`
+- `review-engine`
+- `review-domain-boundaries`
 
 ## Workflow Checkpoints
 
@@ -195,7 +195,7 @@ Beyond HARD-GATEs (which block entirely), some skills use **checkpoints** — ex
 
 ### Test Feedback Checkpoint
 
-Defined in: `rails-tdd-slices` (step after writing the first failing spec).
+Defined in: `plan-tests` (step after writing the first failing spec).
 
 Purpose: Present the failing test(s) to the user before implementation begins. Confirm:
 - Is the right behavior being tested?
@@ -206,7 +206,7 @@ Only proceed to the Implementation Proposal once the test design is approved.
 
 ### Implementation Proposal Checkpoint
 
-Defined in: `rspec-best-practices` (step in the gate cycle between test validation and implementation).
+Defined in: `write-tests` (step in the gate cycle between test validation and implementation).
 
 Purpose: Before writing implementation code, propose the approach in plain language:
 - Which classes and methods will be created or changed?
@@ -217,7 +217,7 @@ Wait for confirmation before writing code. This prevents surprise implementation
 
 ### Linters + Full Test Suite Gate
 
-Defined in: `docs/workflow-guide.md` (TDD Feature Loop), `rails-code-review`.
+Defined in: `docs/workflow-guide.md` (TDD Feature Loop), `code-review`.
 
 Purpose: Run linters (`bundle exec rubocop` or project equivalent) and the full test suite before proceeding to YARD documentation or PR. Fix all failures before continuing.
 

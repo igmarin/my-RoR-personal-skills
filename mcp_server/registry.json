@@ -17,7 +17,6 @@
     }
   ],
   "resources": [
-    { "prefix": "skill/*", "description": "SKILL.md + support files for each skill" },
     { "prefix": "doc/*", "description": "Documentation files from docs/" },
     { "prefix": "workflow/*", "description": "Workflow definition files" }
   ]

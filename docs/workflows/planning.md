@@ -10,7 +10,7 @@
 graph TB
     subgraph Define [📝 Phase 1: Define]
         direction TB
-        A[Feature idea] --> B[rails-context-engineering]
+        A[Feature idea] --> B[load-context]
         B --> C[create-prd]
         C --> D{PRD approved?}
         D -- No --> C
@@ -24,14 +24,14 @@ graph TB
 
     subgraph Design [🎯 Phase 3: Design - Optional]
         direction TB
-        F -- Yes --> G[ddd-ubiquitous-language]
-        G --> H[ddd-boundaries-review]
-        H --> I[ddd-rails-modeling]
+        F -- Yes --> G[define-domain-language]
+        G --> H[review-domain-boundaries]
+        H --> I[model-domain]
     end
 
     subgraph Track [🎫 Phase 4: Track - Optional]
         direction TB
-        F -- No --> J[ticket-planning]
+        F -- No --> J[plan-tickets]
         I --> J
     end
 
@@ -88,9 +88,9 @@ When the problem is the **domain itself**: ambiguous language, confusing ownersh
 
 ### DDD Sequence
 
-1. **ddd-ubiquitous-language**: Glossary, canonical terms, overloaded words
-2. **ddd-boundaries-review**: Bounded contexts, language leakage, ownership
-3. **ddd-rails-modeling**: Model, value object, service, repository, event — or simpler alternative
+1. **define-domain-language**: Glossary, canonical terms, overloaded words
+2. **review-domain-boundaries**: Bounded contexts, language leakage, ownership
+3. **model-domain**: Model, value object, service, repository, event — or simpler alternative
 
 **Key rules:**
 - Start with language and invariants, not patterns
@@ -99,7 +99,7 @@ When the problem is the **domain itself**: ambiguous language, confusing ownersh
 
 ---
 
-## Step 4 (optional): ticket-planning
+## Step 4 (optional): plan-tickets
 
 When the team uses an issue tracker (Jira, Linear, GitHub Issues).
 
@@ -113,9 +113,9 @@ When the team uses an issue tracker (Jira, Linear, GitHub Issues).
 
 | Planning output | Next step |
 |-----------------|-----------|
-| Tasks ready | `rails-tdd-slices` → [development](development.md) |
-| Need additional architecture | `rails-architecture-review` → [review](review.md) |
-| Need migration | `rails-migration-safety` → [development](development.md) |
+| Tasks ready | `plan-tests` → [development](development.md) |
+| Need additional architecture | `review-architecture` → [review](review.md) |
+| Need migration | `review-migration` → [development](development.md) |
 
 ---
 
@@ -125,10 +125,10 @@ When the team uses an issue tracker (Jira, Linear, GitHub Issues).
 |-------|-------------|---------------|
 | **create-prd** | Write requirements document | "plan feature", "create PRD", "requirements" |
 | **generate-tasks** | Break PRD into TDD tasks | "break into tasks", "implementation plan", "task list" |
-| **ticket-planning** | Create tracker tickets | "create tickets", "Jira", "Linear", "GitHub Issues" |
-| **ddd-ubiquitous-language** | Domain language glossary | "domain terms", "ubiquitous language", "what should we call this" |
-| **ddd-boundaries-review** | Bounded context review | "context boundaries", "language leakage", "ownership" |
-| **ddd-rails-modeling** | DDD → Rails mapping | "aggregate", "value object", "domain event", "repository" |
+| **plan-tickets** | Create tracker tickets | "create tickets", "Jira", "Linear", "GitHub Issues" |
+| **define-domain-language** | Domain language glossary | "domain terms", "ubiquitous language", "what should we call this" |
+| **review-domain-boundaries** | Bounded context review | "context boundaries", "language leakage", "ownership" |
+| **model-domain** | DDD → Rails mapping | "aggregate", "value object", "domain event", "repository" |
 
 ---
 
@@ -136,17 +136,17 @@ When the team uses an issue tracker (Jira, Linear, GitHub Issues).
 
 ### Standard Feature
 ```
-rails-context-engineering → create-prd → generate-tasks → rails-tdd-slices
+load-context → create-prd → generate-tasks → plan-tests
 ```
 
 ### Feature with DDD
 ```
-rails-context-engineering → create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → rails-tdd-slices
+load-context → create-prd → define-domain-language → review-domain-boundaries → model-domain → generate-tasks → plan-tests
 ```
 
 ### Planning with Tickets
 ```
-create-prd → generate-tasks → ticket-planning → tracker
+create-prd → generate-tasks → plan-tickets → tracker
 ```
 
 ---

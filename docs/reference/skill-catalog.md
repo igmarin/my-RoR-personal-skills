@@ -28,8 +28,8 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 
 | Skill | Description | Trigger Words |
 |-------|-------------|---------------|
-| **rails-context-engineering** | Load minimum context before coding (schema, routes, neighbors) | "load context", "before I code", "match existing style", "what does this codebase use" |
-| **rails-project-onboarding** *(NEW)* | Complete dev environment setup (Docker, env vars, db) | "onboarding", "new dev", "setup project", "Docker", "environment" |
+| **load-context** | Load minimum context before coding (schema, routes, neighbors) | "load context", "before I code", "match existing style", "what does this codebase use" |
+| **setup-environment** *(NEW)* | Complete dev environment setup (Docker, env vars, db) | "onboarding", "new dev", "setup project", "Docker", "environment" |
 
 ---
 
@@ -39,16 +39,16 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 |-------|-------------|---------------|
 | **create-prd** | Generate PRD with goals, user stories, requirements | "plan feature", "create PRD", "requirements", "feature spec" |
 | **generate-tasks** | Convert PRD into TDD-ready tasks with exact paths | "break into tasks", "implementation plan", "task list", "generate tasks" |
-| **ticket-planning** | Create tickets in issue tracker from plan | "create tickets", "Jira", "Linear", "GitHub Issues" |
-| **ddd-ubiquitous-language** | Domain terms glossary | "domain terms", "ubiquitous language", "what should we call this", "naming" |
-| **ddd-boundaries-review** | Review bounded contexts and language leakage | "context boundaries", "language leakage", "ownership", "cross-context" |
-| **ddd-rails-modeling** | Map DDD to Rails (models, services, VO) | "aggregate", "value object", "domain event", "repository", "DDD" |
+| **plan-tickets** | Create tickets in issue tracker from plan | "create tickets", "Jira", "Linear", "GitHub Issues" |
+| **define-domain-language** | Domain terms glossary | "domain terms", "ubiquitous language", "what should we call this", "naming" |
+| **review-domain-boundaries** | Review bounded contexts and language leakage | "context boundaries", "language leakage", "ownership", "cross-context" |
+| **model-domain** | Map DDD to Rails (models, services, VO) | "aggregate", "value object", "domain event", "repository", "DDD" |
 
 ---
 
 ## 20 — Setup & Configuration
 
-*No shipped skills in this stage yet. See [Roadmap](#proposed-new-skills-roadmap) for `rails-ci-cd-setup`.*
+*No shipped skills in this stage yet. See [Roadmap](#proposed-new-skills-roadmap) for `setup-ci-cd`.*
 
 ---
 
@@ -56,21 +56,21 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 
 | Skill | Description | Trigger Words |
 |-------|-------------|---------------|
-| **rails-tdd-slices** | Choose the best first failing spec | "where to start testing", "what test first", "TDD", "first failing spec" |
-| **rspec-best-practices** | TDD discipline, spec types, factory design | "write test", "RSpec", "test-driven", "spec type" |
-| **rspec-service-testing** | Service object specific testing | "test service", "spec/services", "service spec" |
-| **ruby-service-objects** | `.call` pattern, response contract, YARD | "create service", "extract service", ".call", "service object" |
-| **ruby-api-client-integration** | Layered architecture for external APIs | "API integration", "HTTP client", "external API", "third party" |
-| **rails-background-jobs** | Active Job, Solid Queue, Sidekiq, idempotency | "background job", "Active Job", "async", "Sidekiq", "worker" |
-| **rails-migration-safety** | Safe migrations for production | "migration", "add column", "index", "backfill", "zero-downtime" |
-| **rails-graphql-best-practices** | Schema design, N+1 prevention, auth | "GraphQL", "resolver", "mutation", "dataloader" |
-| **rails-bug-triage** | Bug diagnosis and reproduction | "bug", "debug", "fix", "broken", "error", "regression" |
-| **rails-authorization-policies** *(NEW)* | Pundit/CanCanCan, roles, permissions | "authorization", "Pundit", "CanCanCan", "roles", "permissions", "policy" |
-| **rails-performance-optimization** *(NEW)* | N+1s, profiling, caching, query optimization | "N+1", "slow", "performance", "optimize", "caching", "profiling" |
-| **rails-api-versioning** *(NEW)* | REST API versioning | "API version", "v1", "v2", "versioning", "deprecation" |
-| **rails-database-seeding** *(NEW)* | Fixtures vs Seeds for dev/test | "seeds", "fixtures", "test data", "development data" |
-| **rails-frontend-hotwire** *(NEW)* | Turbo/Stimulus integration | "Hotwire", "Turbo", "Stimulus", "SPA", "frames", "streams" |
-| **strategy-factory-null-calculator** | Variant-based calculators | "calculator", "strategy pattern", "factory", "dispatch", "variant" |
+| **plan-tests** | Choose the best first failing spec | "where to start testing", "what test first", "TDD", "first failing spec" |
+| **write-tests** | TDD discipline, spec types, factory design | "write test", "RSpec", "test-driven", "spec type" |
+| **test-service** | Service object specific testing | "test service", "spec/services", "service spec" |
+| **create-service-object** | `.call` pattern, response contract, YARD | "create service", "extract service", ".call", "service object" |
+| **integrate-api-client** | Layered architecture for external APIs | "API integration", "HTTP client", "external API", "third party" |
+| **implement-background-job** | Active Job, Solid Queue, Sidekiq, idempotency | "background job", "Active Job", "async", "Sidekiq", "worker" |
+| **review-migration** | Safe migrations for production | "migration", "add column", "index", "backfill", "zero-downtime" |
+| **implement-graphql** | Schema design, N+1 prevention, auth | "GraphQL", "resolver", "mutation", "dataloader" |
+| **triage-bug** | Bug diagnosis and reproduction | "bug", "debug", "fix", "broken", "error", "regression" |
+| **implement-authorization** *(NEW)* | Pundit/CanCanCan, roles, permissions | "authorization", "Pundit", "CanCanCan", "roles", "permissions", "policy" |
+| **optimize-performance** *(NEW)* | N+1s, profiling, caching, query optimization | "N+1", "slow", "performance", "optimize", "caching", "profiling" |
+| **version-api** *(NEW)* | REST API versioning | "API version", "v1", "v2", "versioning", "deprecation" |
+| **seed-database** *(NEW)* | Fixtures vs Seeds for dev/test | "seeds", "fixtures", "test data", "development data" |
+| **implement-hotwire** *(NEW)* | Turbo/Stimulus integration | "Hotwire", "Turbo", "Stimulus", "SPA", "frames", "streams" |
+| **implement-calculator-pattern** | Variant-based calculators | "calculator", "strategy pattern", "factory", "dispatch", "variant" |
 
 ---
 
@@ -78,10 +78,10 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 
 | Skill | Description | Trigger Words |
 |-------|-------------|---------------|
-| **refactor-safely** | Refactor preserving behavior | "refactor", "extract", "restructure", "clean up" |
-| **rails-code-conventions** | DRY/YAGNI/PORO/CoC/KISS by path | "code review", "conventions", "clean code", "DRY", "YAGNI" |
-| **yard-documentation** | Inline documentation with YARD | "YARD", "documentation", "@param", "@return", "inline docs" |
-| **rails-stack-conventions** | Stack-specific conventions (PostgreSQL, Hotwire, Tailwind) | "stack", "PostgreSQL", "Hotwire", "Tailwind", "conventions" |
+| **refactor-code** | Refactor preserving behavior | "refactor", "extract", "restructure", "clean up" |
+| **apply-code-conventions** | DRY/YAGNI/PORO/CoC/KISS by path | "code review", "conventions", "clean code", "DRY", "YAGNI" |
+| **write-yard-docs** | Inline documentation with YARD | "YARD", "documentation", "@param", "@return", "inline docs" |
+| **apply-stack-conventions** | Stack-specific conventions (PostgreSQL, Hotwire, Tailwind) | "stack", "PostgreSQL", "Hotwire", "Tailwind", "conventions" |
 
 ---
 
@@ -89,11 +89,11 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 
 | Skill | Description | Trigger Words |
 |-------|-------------|---------------|
-| **rails-code-review** | Systematic Rails PR review | "review PR", "code review", "check this code", "CR" |
-| **rails-review-response** | Respond to review feedback | "feedback", "review comments", "address feedback", "respond" |
-| **rails-security-review** | Deep security audit | "security", "audit", "vulnerability", "XSS", "SQL injection", "CSRF" |
-| **rails-architecture-review** | Structural boundary review | "architecture", "structure", "boundaries", "fat model", "extract" |
-| **api-rest-collection** | Generate Postman collections for APIs | "Postman", "API collection", "REST", "test endpoints" |
+| **code-review** | Systematic Rails PR review | "review PR", "code review", "check this code", "CR" |
+| **respond-to-review** | Respond to review feedback | "feedback", "review comments", "address feedback", "respond" |
+| **security-check** | Deep security audit | "security", "audit", "vulnerability", "XSS", "SQL injection", "CSRF" |
+| **review-architecture** | Structural boundary review | "architecture", "structure", "boundaries", "fat model", "extract" |
+| **generate-api-collection** | Generate Postman collections for APIs | "Postman", "API collection", "REST", "test endpoints" |
 
 ---
 
@@ -101,14 +101,14 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 
 | Skill | Description | Trigger Words |
 |-------|-------------|---------------|
-| **rails-engine-author** | Rails engine scaffolding | "create engine", "new engine", "mountable engine" |
-| **rails-engine-testing** | Engine testing setup | "test engine", "dummy app", "engine specs" |
-| **rails-engine-docs** | Engine documentation | "engine README", "install guide", "engine docs" |
-| **rails-engine-installers** | Install generators | "install generator", "engine setup", "copy migrations" |
-| **rails-engine-reviewer** | Complete engine review | "review engine", "engine quality", "engine audit" |
-| **rails-engine-release** | Versioned engine release | "release engine", "version bump", "publish gem", "changelog" |
-| **rails-engine-compatibility** | Cross-version compatibility | "Zeitwerk", "compatibility", "Rails upgrade", "cross-version" |
-| **rails-engine-extraction** | Extract code to engine | "extract to engine", "move feature", "host coupling" |
+| **create-engine** | Rails engine scaffolding | "create engine", "new engine", "mountable engine" |
+| **test-engine** | Engine testing setup | "test engine", "dummy app", "engine specs" |
+| **document-engine** | Engine documentation | "engine README", "install guide", "engine docs" |
+| **create-engine-installer** | Install generators | "install generator", "engine setup", "copy migrations" |
+| **review-engine** | Complete engine review | "review engine", "engine quality", "engine audit" |
+| **release-engine** | Versioned engine release | "release engine", "version bump", "publish gem", "changelog" |
+| **upgrade-engine** | Cross-version compatibility | "Zeitwerk", "compatibility", "Rails upgrade", "cross-version" |
+| **extract-engine** | Extract code to engine | "extract to engine", "move feature", "host coupling" |
 
 ---
 
@@ -118,21 +118,21 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 
 | You need... | Recommended Skill(s) |
 |-------------|----------------------|
-| **Understand codebase** | `rails-context-engineering` |
-| **New project setup** | `rails-project-onboarding` |
+| **Understand codebase** | `load-context` |
+| **New project setup** | `setup-environment` |
 | **Plan feature** | `create-prd` → `generate-tasks` |
-| **Start coding** | `rails-tdd-slices` → `rspec-best-practices` |
-| **Fix bug** | `rails-bug-triage` |
-| **Refactor** | `refactor-safely` |
-| **Create service** | `ruby-service-objects` |
-| **Integrate external API** | `ruby-api-client-integration` |
-| **Add auth/roles** | `rails-authorization-policies` |
-| **Optimize performance** | `rails-performance-optimization` |
-| **Create engine** | `rails-engine-author` |
-| **Review code** | `rails-code-review` |
-| **Respond to feedback** | `rails-review-response` |
-| **Setup CI/CD** | *(roadmap — `rails-ci-cd-setup`)* |
-| **Not sure** | `rails-skills-orchestrator` |
+| **Start coding** | `plan-tests` → `write-tests` |
+| **Fix bug** | `triage-bug` |
+| **Refactor** | `refactor-code` |
+| **Create service** | `create-service-object` |
+| **Integrate external API** | `integrate-api-client` |
+| **Add auth/roles** | `implement-authorization` |
+| **Optimize performance** | `optimize-performance` |
+| **Create engine** | `create-engine` |
+| **Review code** | `code-review` |
+| **Respond to feedback** | `respond-to-review` |
+| **Setup CI/CD** | *(roadmap — `setup-ci-cd`)* |
+| **Not sure** | `skill-router` |
 
 ---
 
@@ -140,7 +140,7 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 
 | Skill | Priority | Status |
 |-------|----------|--------|
-| rails-ci-cd-setup | 🔴 Critical | Not yet implemented |
+| setup-ci-cd | 🔴 Critical | Not yet implemented |
 
 ---
 
@@ -148,7 +148,7 @@ Complete catalog of 39 skills organized by development lifecycle stage and by ca
 
 - [Integration Matrix](integration-matrix.md) — Which skill connects to which
 - [Workflows Index](../workflows/) — Complete step-by-step flows
-- [Orchestrator](../../skills/orchestration/rails-skills-orchestrator/) — Entry skill when you don't know which to use
+- [Orchestrator](../../skills/orchestration/skill-router/) — Entry skill when you don't know which to use
 
 ---
 
@@ -160,75 +160,75 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **api-rest-collection** | `skills/api/api-rest-collection/` | Generate Postman collections for REST APIs |
-| **rails-graphql-best-practices** | `skills/api/rails-graphql-best-practices/` | Schema design, N+1 prevention, auth |
-| **ruby-api-client-integration** | `skills/api/ruby-api-client-integration/` | Layered architecture for external APIs |
+| **generate-api-collection** | `skills/api/generate-api-collection/` | Generate Postman collections for REST APIs |
+| **implement-graphql** | `skills/api/implement-graphql/` | Schema design, N+1 prevention, auth |
+| **integrate-api-client** | `skills/api/integrate-api-client/` | Layered architecture for external APIs |
 
 ### Context
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rails-context-engineering** | `skills/context/rails-context-engineering/` | Load minimum context before coding |
-| **rails-project-onboarding** | `skills/context/rails-project-onboarding/` | Complete dev environment setup |
+| **load-context** | `skills/context/load-context/` | Load minimum context before coding |
+| **setup-environment** | `skills/context/setup-environment/` | Complete dev environment setup |
 
 ### Code Quality
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rails-code-review** | `skills/code-quality/rails-code-review/` | Systematic Rails PR review |
-| **rails-review-response** | `skills/code-quality/rails-review-response/` | Respond to review feedback |
-| **rails-architecture-review** | `skills/code-quality/rails-architecture-review/` | Structural boundary review |
-| **rails-security-review** | `skills/code-quality/rails-security-review/` | Deep security audit |
-| **rails-stack-conventions** | `skills/code-quality/rails-stack-conventions/` | Stack-specific conventions |
-| **rails-code-conventions** | `skills/code-quality/rails-code-conventions/` | DRY/YAGNI/PORO/CoC/KISS by path |
-| **rails-authorization-policies** | `skills/code-quality/rails-authorization-policies/` | Pundit/CanCanCan, roles, permissions |
-| **refactor-safely** | `skills/code-quality/refactor-safely/` | Refactor preserving behavior |
+| **code-review** | `skills/code-quality/code-review/` | Systematic Rails PR review |
+| **respond-to-review** | `skills/code-quality/respond-to-review/` | Respond to review feedback |
+| **review-architecture** | `skills/code-quality/review-architecture/` | Structural boundary review |
+| **security-check** | `skills/code-quality/security-check/` | Deep security audit |
+| **apply-stack-conventions** | `skills/code-quality/apply-stack-conventions/` | Stack-specific conventions |
+| **apply-code-conventions** | `skills/code-quality/apply-code-conventions/` | DRY/YAGNI/PORO/CoC/KISS by path |
+| **implement-authorization** | `skills/code-quality/implement-authorization/` | Pundit/CanCanCan, roles, permissions |
+| **refactor-code** | `skills/code-quality/refactor-code/` | Refactor preserving behavior |
 
 ### DDD
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **ddd-ubiquitous-language** | `skills/ddd/ddd-ubiquitous-language/` | Domain terms glossary |
-| **ddd-boundaries-review** | `skills/ddd/ddd-boundaries-review/` | Review bounded contexts |
-| **ddd-rails-modeling** | `skills/ddd/ddd-rails-modeling/` | Map DDD to Rails |
+| **define-domain-language** | `skills/ddd/define-domain-language/` | Domain terms glossary |
+| **review-domain-boundaries** | `skills/ddd/review-domain-boundaries/` | Review bounded contexts |
+| **model-domain** | `skills/ddd/model-domain/` | Map DDD to Rails |
 
 ### Engines
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rails-engine-author** | `skills/engines/rails-engine-author/` | Rails engine scaffolding |
-| **rails-engine-testing** | `skills/engines/rails-engine-testing/` | Engine testing setup |
-| **rails-engine-reviewer** | `skills/engines/rails-engine-reviewer/` | Complete engine review |
-| **rails-engine-release** | `skills/engines/rails-engine-release/` | Versioned engine release |
-| **rails-engine-docs** | `skills/engines/rails-engine-docs/` | Engine documentation |
-| **rails-engine-installers** | `skills/engines/rails-engine-installers/` | Install generators |
-| **rails-engine-extraction** | `skills/engines/rails-engine-extraction/` | Extract code to engine |
-| **rails-engine-compatibility** | `skills/engines/rails-engine-compatibility/` | Cross-version compatibility |
+| **create-engine** | `skills/engines/create-engine/` | Rails engine scaffolding |
+| **test-engine** | `skills/engines/test-engine/` | Engine testing setup |
+| **review-engine** | `skills/engines/review-engine/` | Complete engine review |
+| **release-engine** | `skills/engines/release-engine/` | Versioned engine release |
+| **document-engine** | `skills/engines/document-engine/` | Engine documentation |
+| **create-engine-installer** | `skills/engines/create-engine-installer/` | Install generators |
+| **extract-engine** | `skills/engines/extract-engine/` | Extract code to engine |
+| **upgrade-engine** | `skills/engines/upgrade-engine/` | Cross-version compatibility |
 
 ### Infrastructure
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rails-migration-safety** | `skills/infrastructure/rails-migration-safety/` | Safe migrations for production |
-| **rails-background-jobs** | `skills/infrastructure/rails-background-jobs/` | Active Job, Solid Queue, Sidekiq |
-| **rails-database-seeding** | `skills/infrastructure/rails-database-seeding/` | Fixtures vs Seeds |
-| **rails-performance-optimization** | `skills/infrastructure/rails-performance-optimization/` | N+1s, profiling, caching |
-| **rails-api-versioning** | `skills/infrastructure/rails-api-versioning/` | REST API versioning |
-| **rails-frontend-hotwire** | `skills/infrastructure/rails-frontend-hotwire/` | Turbo/Stimulus integration |
+| **review-migration** | `skills/infrastructure/review-migration/` | Safe migrations for production |
+| **implement-background-job** | `skills/infrastructure/implement-background-job/` | Active Job, Solid Queue, Sidekiq |
+| **seed-database** | `skills/infrastructure/seed-database/` | Fixtures vs Seeds |
+| **optimize-performance** | `skills/infrastructure/optimize-performance/` | N+1s, profiling, caching |
+| **version-api** | `skills/infrastructure/version-api/` | REST API versioning |
+| **implement-hotwire** | `skills/infrastructure/implement-hotwire/` | Turbo/Stimulus integration |
 
 ### Orchestration
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rails-skills-orchestrator** | `skills/orchestration/rails-skills-orchestrator/` | Routes to correct specialized skill |
+| **skill-router** | `skills/orchestration/skill-router/` | Routes to correct specialized skill |
 
 ### Patterns
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **ruby-service-objects** | `skills/patterns/ruby-service-objects/` | `.call` pattern, response contract |
-| **strategy-factory-null-calculator** | `skills/patterns/strategy-factory-null-calculator/` | Variant-based calculators |
-| **yard-documentation** | `skills/patterns/yard-documentation/` | Inline documentation with YARD |
+| **create-service-object** | `skills/patterns/create-service-object/` | `.call` pattern, response contract |
+| **implement-calculator-pattern** | `skills/patterns/implement-calculator-pattern/` | Variant-based calculators |
+| **write-yard-docs** | `skills/patterns/write-yard-docs/` | Inline documentation with YARD |
 
 ### Planning
 
@@ -236,23 +236,23 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 |-------|------|-------------|
 | **create-prd** | `skills/planning/create-prd/` | Generate PRD with goals, user stories |
 | **generate-tasks** | `skills/planning/generate-tasks/` | Convert PRD into TDD-ready tasks |
-| **ticket-planning** | `skills/planning/ticket-planning/` | Create tickets in issue tracker |
+| **plan-tickets** | `skills/planning/plan-tickets/` | Create tickets in issue tracker |
 
 ### Testing
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rspec-best-practices** | `skills/testing/rspec-best-practices/` | TDD discipline, spec types |
-| **rspec-service-testing** | `skills/testing/rspec-service-testing/` | Service object specific testing |
-| **rails-tdd-slices** | `skills/testing/rails-tdd-slices/` | Choose the best first failing spec |
-| **rails-bug-triage** | `skills/testing/rails-bug-triage/` | Bug diagnosis and reproduction |
+| **write-tests** | `skills/testing/write-tests/` | TDD discipline, spec types |
+| **test-service** | `skills/testing/test-service/` | Service object specific testing |
+| **plan-tests** | `skills/testing/plan-tests/` | Choose the best first failing spec |
+| **triage-bug** | `skills/testing/triage-bug/` | Bug diagnosis and reproduction |
 
 ### Workflows
 
 | Skill | Path | Description |
 |-------|------|-------------|
-| **rails-tdd-loop** | `workflows/rails-tdd-loop/` | TDD feature loop: test → implement → review → PR |
-| **rails-review-flow** | `workflows/rails-review-flow/` | Systematic PR review: review → deep dive → response |
-| **rails-setup-flow** | `workflows/rails-setup-flow/` | Project setup: context → onboarding → CI/CD |
-| **rails-quality-flow** | `workflows/rails-quality-flow/` | Quality check: conventions → refactor → docs |
-| **rails-engines-flow** | `workflows/rails-engines-flow/` | Engine development: author → test → review → release |
+| **tdd-workflow** | `workflows/tdd-workflow/` | TDD feature loop: test → implement → review → PR |
+| **review-workflow** | `workflows/review-workflow/` | Systematic PR review: review → deep dive → response |
+| **setup-workflow** | `workflows/setup-workflow/` | Project setup: context → onboarding → CI/CD |
+| **quality-workflow** | `workflows/quality-workflow/` | Quality check: conventions → refactor → docs |
+| **engine-workflow** | `workflows/engine-workflow/` | Engine development: author → test → review → release |

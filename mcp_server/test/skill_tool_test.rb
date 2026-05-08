@@ -8,7 +8,7 @@ class SkillToolTest < Minitest::Test
     @tmpdir = Dir.mktmpdir('skill_tool_test')
     @base = Pathname.new(@tmpdir)
 
-    skill_dir = @base.join('rails-code-review')
+    skill_dir = @base.join('skills', 'test-category', 'code-review')
     skill_dir.mkpath
     skill_dir.join('SKILL.md').write('# Rails Code Review\nContent here.')
   end
@@ -19,7 +19,7 @@ class SkillToolTest < Minitest::Test
 
   def test_call_returns_skill_content
     result = McpSkills::SkillTool.call(
-      skill_name: 'rails-code-review',
+      skill_name: 'code-review',
       project_root: @base,
       server_context: {}
     )
@@ -39,7 +39,7 @@ class SkillToolTest < Minitest::Test
   end
 
   def test_call_returns_error_response_for_missing_skill_md
-    empty_skill = @base.join('empty-skill')
+    empty_skill = @base.join('skills', 'test-category', 'empty-skill')
     empty_skill.mkpath
 
     result = McpSkills::SkillTool.call(

@@ -1,24 +1,41 @@
-# Rails Agent Skills — documentation (tile)
+# Rails Agent Skills — Documentation Index
 
-Reference material for this tile: workflows, authoring, setup, and MCP. Linked from `tile.json` so Tessl validation can reach every doc in `docs/` and the MCP server notes.
+Master index for the Rails Agent Skills library. Start here to navigate the system.
 
-**How to read this:** start with the [Workflow guide](workflow-guide.md) if you want to **chain skills** in day-to-day Rails work; use the [Implementation guide](implementation-guide.md) if you are **installing or wiring** the plugin or tile. For a high-level overview of the repository, see the root [README](../README.md).
+## 🚀 Quick Start
 
-## Entry skill
+- **[Workflow Guide](workflow-guide.md)** — Narrative guide on how to chain skills in real-world scenarios.
+- **[Implementation Guide](implementation-guide.md)** — Installation (MCP Server) for Claude, Cursor, Windsurf, etc.
+- **[Skill Catalog](reference/skill-catalog.md)** — Complete list of all 39 skills and their triggers.
 
-- [rails-skills-orchestrator](../skills/orchestration/rails-skills-orchestrator/SKILL.md) — pick the right skill and enforce the tests-before-implementation gate
+---
 
-## Guides
+## 🛠️ Workflows by Stage
 
-- [Workflow guide](workflow-guide.md) — chaining skills in typical Rails workflows
-- [Architecture](architecture.md) — repository layout and `SKILL.md` structure
-- [Implementation guide](implementation-guide.md) — install paths and agent hooks
-- [Skill design principles](skill-design-principles.md)
-- [Skill optimization guide](skill-optimization-guide.md) — eval-driven loop: baseline-vs-context targets and how to lift skill scores
-- [Skill template](skill-template.md)
-- [VS Code setup](vs-code-setup.md)
-- [Plugin validation](plugin-validation.md)
+Detailed step-by-step guides for every development phase.
 
-## MCP server
+- [Discovery & Context](workflows/discovery.md)
+- [Planning & Design](workflows/planning.md)
+- [Development (TDD)](workflows/development.md)
+- [Code Quality & Refactoring](workflows/quality.md)
+- [Review & Security](workflows/review.md)
+- [Engine Development](workflows/engines.md)
+- [Setup & CI/CD](workflows/setup.md)
 
-- [MCP server README](../mcp_server/README.md)
+---
+
+## 📐 Architecture & Principles
+
+- [Skill Design Principles](skill-design-principles.md) — The "why" behind the skill structure.
+- [Architecture](architecture.md) — Repository layout and `SKILL.md` conventions.
+- [Skill Optimization](skill-optimization-guide.md) — Evaluation loop and scoring methodology.
+- [Skill Template](skill-template.md) — For contributing new skills.
+
+---
+
+## 🔧 Platform Setup
+
+- [Implementation Guide](implementation-guide.md) (Main)
+- [VS Code Setup](vs-code-setup.md)
+- [Plugin Validation](plugin-validation.md)
+- [MCP Server README](../mcp_server/README.md)

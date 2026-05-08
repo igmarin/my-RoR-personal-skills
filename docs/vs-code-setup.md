@@ -63,9 +63,9 @@ Cline reads skill definitions from the workspace. Create `.vscode/cline.config.j
 
 Alternatively, you can manually invoke skills by name in Cline's chat:
 - `/create-prd` — Start a new feature with PRD
-- `/rails-tdd-slices` — Begin TDD workflow
-- `/rails-code-review` — Self-review Rails code
-- `/yard-documentation` — Generate YARD docs
+- `/plan-tests` — Begin TDD workflow
+- `/code-review` — Self-review Rails code
+- `/write-yard-docs` — Generate YARD docs
 
 ### Step 4: Set Environment Variables
 
@@ -160,9 +160,9 @@ dark-mode: true
 custom-instructions: |
   You have access to Rails Agent Skills.
   Use these patterns when relevant:
-  - /rspec-best-practices for testing
-  - /rails-code-review for code quality
-  - /rails-tdd-slices for TDD workflows
+  - /write-tests for testing
+  - /code-review for code quality
+  - /plan-tests for TDD workflows
 ```
 
 ### Step 3: Invoke Skills
@@ -172,8 +172,8 @@ custom-instructions: |
 aider
 
 # Then in the aider prompt, reference skills:
-# /rails-tdd-slices what's the next failing test for user auth?
-# /rails-code-review review the authentication controller
+# /plan-tests what's the next failing test for user auth?
+# /code-review review the authentication controller
 ```
 
 ## Workflow Example: Cline + Rails Agent Skills
@@ -194,17 +194,17 @@ aider
 
 4. **Begin TDD loop**:
    ```
-   /rails-tdd-slices What's the first failing spec for JWT auth?
+   /plan-tests What's the first failing spec for JWT auth?
    ```
 
 5. **Code and review**:
    ```
-   /rails-code-review Review my authentication controller
+   /code-review Review my authentication controller
    ```
 
 6. **Document**:
    ```
-   /yard-documentation Generate docs for the Auth service
+   /write-yard-docs Generate docs for the Auth service
    ```
 
 ## Environment Setup
@@ -307,7 +307,7 @@ For Rails development with Rails Agent Skills:
 2. **Install and configure** with your API key
 3. **Open a Rails project** and try:
    ```
-   /rails-tdd-slices What's our first failing test?
+   /plan-tests What's our first failing test?
    ```
 4. **Follow the skill workflows** as suggested by the AI
 

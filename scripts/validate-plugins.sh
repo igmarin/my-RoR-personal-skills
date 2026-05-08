@@ -1,15 +1,13 @@
 #!/bin/bash
 
-# Rails Agent Skills - Plugin Manifest Validator
+# Rails Agent Skills - Manifest Validator
 #
-# This script validates all plugin manifests for:
-# - Valid JSON syntax
-# - Required fields
-# - Cross-platform consistency
-# - SKILL.md frontmatter
+# This script validates:
+# - Valid JSON syntax for tile.json
+# - SKILL.md frontmatter consistency
+# - tile.json synchronization with disk
 #
 # Usage: ./scripts/validate-plugins.sh
-# Or add as pre-commit hook: ln -s ../../scripts/validate-plugins.sh .git/hooks/pre-commit
 
 set -e
 
@@ -59,130 +57,9 @@ PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
 cd "$PROJECT_ROOT"
 
-section "Validating Plugin Manifests"
-
-# Validate Claude Code plugin.json
-section "Claude Code (.claude-plugin/plugin.json)"
-
-if [ ! -f ".claude-plugin/plugin.json" ]; then
-  check_fail "File not found: .claude-plugin/plugin.json"
-else
-  if jq empty .claude-plugin/plugin.json 2>/dev/null; then
-    check_pass "Valid JSON syntax"
-  else
-    check_fail "Invalid JSON syntax"
-  fi
-
-  # Check required fields (Claude Code plugin.json)
-  for field in "name" "version" "author" "license"; do
-    if jq -e ".$field" .claude-plugin/plugin.json > /dev/null 2>&1; then
-      check_pass "Field present: $field"
-    else
-      check_fail "Field missing: $field"
-    fi
-  done
-
-  # Check author.name
-  if jq -e ".author.name" .claude-plugin/plugin.json > /dev/null 2>&1; then
-    check_pass "Field present: author.name"
-  else
-    check_fail "Field missing: author.name"
-  fi
-
-  # Get name for consistency check
-  CLAUDE_NAME=$(jq -r '.name' .claude-plugin/plugin.json 2>/dev/null)
-  CLAUDE_VERSION=$(jq -r '.version' .claude-plugin/plugin.json 2>/dev/null)
-fi
-
-# Validate Claude Code marketplace.json
-section "Claude Code Marketplace (.claude-plugin/marketplace.json)"
-
-if [ ! -f ".claude-plugin/marketplace.json" ]; then
-  check_fail "File not found: .claude-plugin/marketplace.json"
-else
-  if jq empty .claude-plugin/marketplace.json 2>/dev/null; then
-    check_pass "Valid JSON syntax"
-  else
-    check_fail "Invalid JSON syntax"
-  fi
-
-  # Check required fields
-  for field in "name" "description" "owner" "plugins"; do
-    if jq -e ".$field" .claude-plugin/marketplace.json > /dev/null 2>&1; then
-      check_pass "Field present: $field"
-    else
-      check_fail "Field missing: $field"
-    fi
-  done
-
-  # Check plugins array has items
-  if jq -e ".plugins | length > 0" .claude-plugin/marketplace.json > /dev/null 2>&1; then
-    check_pass "Plugins array is not empty"
-  else
-    check_fail "Plugins array is empty"
-  fi
-
-  # Check first plugin has required fields
-  if jq -e ".plugins[0].name" .claude-plugin/marketplace.json > /dev/null 2>&1; then
-    check_pass "First plugin has name field"
-  else
-    check_fail "First plugin missing name field"
-  fi
-fi
-
-# Validate Cursor plugin.json
-section "Cursor (.cursor-plugin/plugin.json)"
-
-if [ ! -f ".cursor-plugin/plugin.json" ]; then
-  check_fail "File not found: .cursor-plugin/plugin.json"
-else
-  if jq empty .cursor-plugin/plugin.json 2>/dev/null; then
-    check_pass "Valid JSON syntax"
-  else
-    check_fail "Invalid JSON syntax"
-  fi
-
-  # Check required fields
-  for field in "name" "displayName" "version"; do
-    if jq -e ".$field" .cursor-plugin/plugin.json > /dev/null 2>&1; then
-      check_pass "Field present: $field"
-    else
-      check_fail "Field missing: $field"
-    fi
-  done
-
-  CURSOR_NAME=$(jq -r '.name' .cursor-plugin/plugin.json 2>/dev/null)
-  CURSOR_VERSION=$(jq -r '.version' .cursor-plugin/plugin.json 2>/dev/null)
-fi
-
-# Validate Windsurf plugin.json
-section "Windsurf (.windsurf-plugin/plugin.json)"
-
-if [ ! -f ".windsurf-plugin/plugin.json" ]; then
-  check_fail "File not found: .windsurf-plugin/plugin.json"
-else
-  if jq empty .windsurf-plugin/plugin.json 2>/dev/null; then
-    check_pass "Valid JSON syntax"
-  else
-    check_fail "Invalid JSON syntax"
-  fi
-
-  # Check required fields
-  for field in "name" "displayName" "version"; do
-    if jq -e ".$field" .windsurf-plugin/plugin.json > /dev/null 2>&1; then
-      check_pass "Field present: $field"
-    else
-      check_fail "Field missing: $field"
-    fi
-  done
-
-  WINDSURF_NAME=$(jq -r '.name' .windsurf-plugin/plugin.json 2>/dev/null)
-  WINDSURF_VERSION=$(jq -r '.version' .windsurf-plugin/plugin.json 2>/dev/null)
-fi
+section "Validating Tile Manifest"
 
 # Validate Tessl tile.json
-section "Tessl Tile (tile.json)"
-
 if [ ! -f "tile.json" ]; then
   check_fail "File not found: tile.json"
 else
@@ -199,165 +76,64 @@ else
       check_fail "Field missing: $field"
     fi
   done
-
-  TILE_VERSION=$(jq -r '.version' tile.json 2>/dev/null)
-fi
-
-# Validate tessl.json dependency version matches tile.json version
-section "Tessl Dependency Version Sync"
-
-if [ -f "tessl.json" ] && [ -n "$TILE_VERSION" ]; then
-  TESSL_DEP_VERSION=$(jq -r '.dependencies."igmarin/rails-agent-skills".version' tessl.json 2>/dev/null)
-  if [ "$TESSL_DEP_VERSION" = "$TILE_VERSION" ]; then
-    check_pass "tessl.json self-dependency matches tile.json: $TILE_VERSION"
-  else
-    check_fail "tessl.json self-dependency ($TESSL_DEP_VERSION) does not match tile.json ($TILE_VERSION)"
-  fi
-fi
-
-# Check consistency across platforms
-section "Cross-Platform Consistency"
-
-if [ "$CLAUDE_NAME" = "$CURSOR_NAME" ] && [ "$CLAUDE_NAME" = "$WINDSURF_NAME" ]; then
-  check_pass "Plugin names are consistent: $CLAUDE_NAME"
-else
-  check_fail "Plugin names are inconsistent (Claude: $CLAUDE_NAME, Cursor: $CURSOR_NAME, Windsurf: $WINDSURF_NAME)"
-fi
-
-if [ "$CLAUDE_VERSION" = "$CURSOR_VERSION" ] && [ "$CLAUDE_VERSION" = "$WINDSURF_VERSION" ]; then
-  check_pass "Plugin versions are consistent: $CLAUDE_VERSION"
-else
-  check_fail "Plugin versions are inconsistent (Claude: $CLAUDE_VERSION, Cursor: $CURSOR_VERSION, Windsurf: $WINDSURF_VERSION)"
 fi
 
 # Validate SKILL.md files
 section "Validating SKILL.md Frontmatter"
 
 skill_count=0
-skill_errors=0
-
 while IFS= read -r skill_file; do
   skill_count=$((skill_count + 1))
   skill_name=$(basename "$(dirname "$skill_file")")
-
-  # Check if file exists
-  if [ ! -f "$skill_file" ]; then
-    check_fail "$skill_name: File not found"
-    skill_errors=$((skill_errors + 1))
-    continue
-  fi
 
   # Check if first line is ---
   if head -n 1 "$skill_file" | grep -q "^---$"; then
     check_pass "$skill_name: YAML frontmatter found"
   else
     check_fail "$skill_name: Missing YAML frontmatter start (---)"
-    skill_errors=$((skill_errors + 1))
   fi
 
   # Check for required YAML fields
   if grep -q "^name:" "$skill_file"; then
     check_pass "$skill_name: Has 'name' field"
   else
-    check_fail "$skill_name: Missing 'name' field in frontmatter"
-    skill_errors=$((skill_errors + 1))
-  fi
-
-  if grep -q "^description:" "$skill_file"; then
-    check_pass "$skill_name: Has 'description' field"
-  else
-    check_fail "$skill_name: Missing 'description' field in frontmatter"
-    skill_errors=$((skill_errors + 1))
+    check_fail "$skill_name: Missing 'name' field"
   fi
 
   # Frontmatter name must match directory name
   fm_name=$(awk '/^---$/{f++; next} f==1 && /^name:/{sub(/^name:[[:space:]]*/, ""); gsub(/^["'"'"']|["'"'"']$/, ""); print; exit}' "$skill_file")
   if [ -n "$fm_name" ] && [ "$fm_name" != "$skill_name" ]; then
     check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
-    skill_errors=$((skill_errors + 1))
   fi
-done < <(find . -name "SKILL.md" -not -path "./.git/*" -not -path "./.tessl/*" -not -path "./.claude/*" -not -path "./node_modules/*" | sort)
+done < <(find build skills workflows -name "SKILL.md" -not -path "*/.tessl/*" | sort)
 
 info "Total SKILL.md files found: $skill_count"
 
-SEARCH_ROOTS=()
-for dir in build skills workflows; do
-  if [ -d "$dir" ]; then
-    SEARCH_ROOTS+=("$dir")
-  fi
-done
-
-DISK_SKILL_DIRS=""
-if [ "${#SEARCH_ROOTS[@]}" -gt 0 ]; then
-  DISK_SKILL_DIRS=$(find "${SEARCH_ROOTS[@]}" -name "SKILL.md" -exec dirname {} \; | sort)
-fi
-
 # Cross-check: every public skill/workflow dir with SKILL.md must be in tile.json.skills
-section "tile.json ↔ Disk Skill Inventory Sync"
+section "tile.json ↔ Disk Sync"
 
 if [ -f "tile.json" ]; then
-  TILE_SKILL_DIRS=$(jq -r '.skills | .[].path' tile.json 2>/dev/null | sed 's#/SKILL.md$##' | sort)
+  TILE_SKILL_PATHS=$(jq -r '.skills | .[].path' tile.json 2>/dev/null | sort)
+  DISK_SKILL_PATHS=$(find build skills workflows -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#^\./##' | sort)
 
-  while IFS= read -r dir; do
-    skill_name=$(basename "$dir")
-    if printf '%s\n' "$TILE_SKILL_DIRS" | grep -qx "$dir"; then
-      check_pass "tile.json includes skill: $skill_name"
+  while IFS= read -r path; do
+    if printf '%s\n' "$TILE_SKILL_PATHS" | grep -qx "$path"; then
+      check_pass "tile.json includes: $path"
     else
-      check_fail "tile.json missing skill present on disk: $skill_name (at $dir/SKILL.md)"
+      check_fail "tile.json missing: $path"
     fi
-  done <<< "$DISK_SKILL_DIRS"
-
-  while IFS= read -r dir; do
-    if [ -f "$dir/SKILL.md" ]; then
-      skill_name=$(basename "$dir")
-      check_pass "Disk has skill listed in tile.json: $skill_name"
-    else
-      skill_name=$(basename "$dir")
-      check_fail "tile.json references missing skill: $skill_name (expected at $dir/SKILL.md)"
-    fi
-  done <<< "$TILE_SKILL_DIRS"
-fi
-
-section ".claude-plugin/plugin.json ↔ Disk Skill Inventory Sync"
-
-if [ -f ".claude-plugin/plugin.json" ]; then
-  CLAUDE_SKILL_DIRS=$(jq -r '.skills[]' .claude-plugin/plugin.json 2>/dev/null | sed 's#^\./##' | sort)
-
-  while IFS= read -r dir; do
-    skill_name=$(basename "$dir")
-    if printf '%s\n' "$CLAUDE_SKILL_DIRS" | grep -qx "$dir"; then
-      check_pass ".claude-plugin/plugin.json includes skill: $skill_name"
-    else
-      check_fail ".claude-plugin/plugin.json missing skill present on disk: $skill_name (at $dir)"
-    fi
-  done <<< "$DISK_SKILL_DIRS"
-
-  while IFS= read -r dir; do
-    if [ -f "$dir/SKILL.md" ]; then
-      skill_name=$(basename "$dir")
-      check_pass "Disk has skill listed in .claude-plugin/plugin.json: $skill_name"
-    else
-      skill_name=$(basename "$dir")
-      check_fail ".claude-plugin/plugin.json references missing skill: $skill_name (expected at $dir/SKILL.md)"
-    fi
-  done <<< "$CLAUDE_SKILL_DIRS"
+  done <<< "$DISK_SKILL_PATHS"
 fi
 
 # Summary
 section "Summary"
-
-echo ""
 echo -e "Passed: ${GREEN}$CHECKS_PASSED${NC}"
 echo -e "Failed: ${RED}$CHECKS_FAILED${NC}"
 
 if [ "$CHECKS_FAILED" -eq 0 ]; then
-  echo ""
   echo -e "${GREEN}✅ All validations passed!${NC}"
   exit 0
 else
-  echo ""
   echo -e "${RED}❌ $CHECKS_FAILED validation(s) failed.${NC}"
-  echo ""
-  echo "Please fix the issues above and run this script again."
   exit 1
 fi

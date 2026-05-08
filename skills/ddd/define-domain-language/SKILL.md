@@ -88,3 +88,8 @@ See [assets/examples.md](assets/examples.md) for a full worked glossary example 
 ## Assets
 
 - [assets/examples.md](assets/examples.md)
+
+
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md)

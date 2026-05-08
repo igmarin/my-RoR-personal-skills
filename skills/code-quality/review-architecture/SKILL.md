@@ -99,3 +99,8 @@ Fix: keep only `AuditLog.create!` in the callback; move Slack/mailer to an expli
 | Conflating "concern used in one place" with "concern is bad" | The issue is single-use concerns that add indirection — the fix is inlining, not rewriting |
 | Proposing rewrites instead of smallest credible improvements | Each finding should recommend the minimal change that resolves the structural risk, not a full refactor |
 | Missing cross-layer constant reach | Check for models referencing controller constants or jobs referencing view helpers — these are High-severity coupling issues that are easy to overlook |
+
+
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md)

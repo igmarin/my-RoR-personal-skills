@@ -94,3 +94,9 @@ Additional MUSTs:
 | **triage-bug** / **refactor-code** | Context precedes reproduction or characterization tests |
 | **review-architecture** / **define-domain-language** | When context reveals boundary or naming drift |
  
+
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md)
+- [references/confusion-management.md](references/confusion-management.md)
+- [references/context-sources.md](references/context-sources.md)

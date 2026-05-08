@@ -157,3 +157,9 @@ When asked to refactor:
 - [EXAMPLES.md](./EXAMPLES.md)
 - [HEURISTICS.md](./HEURISTICS.md)
 - [INTEGRATION.md](./INTEGRATION.md)
+
+
+## Extended Resources
+
+- [assets/characterization_tests.md](assets/characterization_tests.md)
+- [assets/examples.md](assets/examples.md)

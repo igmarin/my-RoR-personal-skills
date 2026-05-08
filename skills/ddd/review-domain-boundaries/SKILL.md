@@ -114,3 +114,8 @@ Smallest credible improvement: Replace the callback with a domain event (Vehicle
 - Treating a shared database table as proof of a shared context — storage and domain boundaries are independent concerns.
 - Splitting into new contexts before the business language is stable enough to name them clearly.
 - Mistaking a large Rails namespace for a bounded context without checking whether it has a single, coherent set of rules and an identifiable owner.
+
+
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md)

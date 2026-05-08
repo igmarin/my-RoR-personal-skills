@@ -42,6 +42,40 @@ while IFS= read -r scenario_dir; do
       && pass "$relative_dir criteria.json is valid" \
       || fail "$relative_dir criteria.json failed validation"
   fi
+
+  if [[ -f "$scenario_dir/metadata.json" ]]; then
+    ruby -rjson -e '
+      root = ARGV.fetch(0)
+      scenario_dir = ARGV.fetch(1)
+      data = JSON.parse(File.read(File.join(scenario_dir, "metadata.json")))
+
+      required = %w[id target_type target_name context_mode tessl_export]
+      missing = required.reject { |key| data.key?(key) }
+      abort "missing required keys: #{missing.join(", ")}" unless missing.empty?
+
+      abort "id must match directory name" unless data.fetch("id") == File.basename(scenario_dir)
+      abort "target_type must be skill or workflow" unless %w[skill workflow].include?(data.fetch("target_type"))
+      abort "context_mode must be skill_bundle_xml" unless data.fetch("context_mode") == "skill_bundle_xml"
+
+      tessl_export = data.fetch("tessl_export")
+      abort "tessl_export.supported must be boolean" unless [true, false].include?(tessl_export["supported"])
+      abort "tessl_export.reason is required" if tessl_export["reason"].to_s.strip.empty?
+
+      target_name = data.fetch("target_name")
+      target_path =
+        if data.fetch("target_type") == "workflow"
+          File.join(root, "workflows", target_name, "SKILL.md")
+        else
+          candidates = Dir[File.join(root, "skills", "*", target_name, "SKILL.md")]
+          candidates << File.join(root, "build", "SKILL.md") if target_name == "build"
+          candidates.first
+        end
+
+      abort "target SKILL.md not found for #{target_name}" unless File.file?(target_path)
+    ' "$ROOT_DIR" "$scenario_dir" \
+      && pass "$relative_dir metadata.json is valid" \
+      || fail "$relative_dir metadata.json failed validation"
+  fi
 done < <(find personal-evals -mindepth 1 -maxdepth 1 -type d | sort)
 
 if [[ "$failures" -gt 0 ]]; then

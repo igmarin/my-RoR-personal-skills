@@ -18,8 +18,6 @@ class ResourceRegistryTest < Minitest::Test
     assert_instance_of Array, @registry.all_resources
   end
 
-
-
   def test_all_resources_includes_doc_resources
     names = @registry.all_resources.map(&:name)
     assert names.any? { |n| n.start_with?('doc/') }, 'Should include doc resources'
@@ -28,6 +26,11 @@ class ResourceRegistryTest < Minitest::Test
   def test_all_resources_includes_workflow_resources
     names = @registry.all_resources.map(&:name)
     assert_includes names, 'workflow/review-workflow'
+  end
+
+  def test_all_resources_excludes_skill_resources
+    names = @registry.all_resources.map(&:name)
+    refute names.any? { |n| n.start_with?('skill/') }, 'Skills should be loaded via use_skill, not published as resources'
   end
 
   def test_all_resources_includes_nested_doc_resources
@@ -52,7 +55,6 @@ class ResourceRegistryTest < Minitest::Test
     end
   end
 
-
   def test_read_returns_workflow_content
     workflow_uri = @registry.all_resources
                             .find { |r| r.name == 'workflow/review-workflow' }
@@ -68,6 +70,4 @@ class ResourceRegistryTest < Minitest::Test
       @registry.read('file:///nonexistent/path/SKILL.md')
     end
   end
-
-
 end

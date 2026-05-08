@@ -13,8 +13,9 @@
 
 2. **Eval Topology & Ownership**
    - **Responsibility:** The evaluation engine is a generic execution tool.
-   - **Ownership:** Host repositories (like `rails-agent-skills`) own their specific `evals/` directories containing `task.md` and `criteria.json`. 
-   - **Git Tracking:** Gold-standard evaluation scenarios are committed to the host repository, while temporary sandbox runs remain ignored.
+   - **Ownership:** Host repositories (like `rails-agent-skills`) own their specific `personal-evals/` directories containing `task.md` and `criteria.json`.
+   - **Git Tracking:** Open example scenarios are committed under `personal-evals/`, while root `evals/` is generated Tessl staging output and remains ignored.
+   - **Context Model:** The custom evaluator loads a full XML context bundle built from the target `SKILL.md` plus companion resources discovered by filesystem convention.
 
 3. **Workflow Evaluation**
    - **Unified Engine:** Workflows (multi-step skill sequences) are evaluated using the exact same ReAct agent loop as atomic skills.

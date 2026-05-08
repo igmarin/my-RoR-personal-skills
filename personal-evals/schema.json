@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Personal Eval Metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "target_type", "target_name", "context_mode", "tessl_export"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "target_type": {
+      "type": "string",
+      "enum": ["skill", "workflow"]
+    },
+    "target_name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "context_mode": {
+      "type": "string",
+      "enum": ["skill_bundle_xml"]
+    },
+    "requires_companion_resources": {
+      "type": "boolean",
+      "default": true
+    },
+    "tessl_export": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supported", "reason"],
+      "properties": {
+        "supported": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

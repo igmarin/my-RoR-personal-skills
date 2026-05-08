@@ -184,24 +184,26 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 
 ## MCP Server
 
-The recommended way to use this library is via the included Ruby MCP server. It exposes every skill, doc, and workflow as a named MCP resource — allowing agents to load only what they need, reducing token usage while improving accuracy and relevance.
+The recommended way to use this library is via the embedded Ruby MCP server. The primary setup is local Ruby/Bundler; Docker is supported as a fallback for environments that do not want a local Ruby toolchain.
+
+The `use_skill` tool loads individual skills on demand, while docs and workflows remain available as MCP resources. That keeps the runtime contract small while still making the full skill library available.
 
 ```text
 tools/call use_skill { "skill_name": "implement-graphql" }
 → returns full SKILL.md instructions
 ```
 
-Resources exposed:
+Published MCP surface:
 
 | Prefix            | Source                                     |
 | -------------------| --------------------------------------------|
-| `skill/<name>`    | `SKILL.md` + support files for every skill |
 | `doc/<name>`      | All files under `docs/`                    |
 | `workflow/<name>` | All workflow definitions                   |
+| `use_skill`       | Tool that returns the `SKILL.md` for a named skill |
 
-Adding a new skill directory automatically makes it available — no server changes needed.
+Adding a new skill directory automatically makes it available through `use_skill` — no server changes needed.
 
-See **[mcp_server/README.md](mcp_server/README.md)** for setup instructions (Windsurf, Cursor, Claude Code, RubyMine, Docker).
+See **[mcp_server/README.md](mcp_server/README.md)** for the canonical MCP setup instructions and Docker fallback. Use **[docs/implementation-guide.md](docs/implementation-guide.md)** for the broader platform overview and non-MCP alternatives.
 
 > **Important:** When configuring MCP in external tools (like Cursor, Windsurf, OpenCode, etc.), always use **absolute paths** for `cwd` and `BUNDLE_GEMFILE` to avoid environment and timeout errors.
 
@@ -265,11 +267,11 @@ To integrate these skills with your preferred AI development environment, refer 
 | **Gemini CLI** | Standard Plugin | Add repository path to `plugins` config |
 | **Cursor** | MCP Server / Rules | Add MCP URL or link `SKILL.md` in `.cursorrules` |
 | **Windsurf** | MCP Server | Register the Ruby MCP server in `mcp_config.json` |
-| **Claude Code** | MCP Server | Use `mcp add` with the included `Dockerfile` |
+| **Claude Code** | MCP Server | Open the repo with the bundled `.mcp.json`, or copy the same local Ruby server config globally |
 | **Codex / OpenCode** | System Prompts | Point the agent to the `skills/` directory via workspace settings |
 | **RubyMine** | MCP Server | Configure via the Language Server Protocol settings |
 
-The guide covers both the **MCP server** (recommended — on-demand, saves tokens) and **symlink** approaches for each platform.
+The guide covers the **MCP server** (recommended — on-demand, saves tokens), the Docker fallback, and the **symlink** approaches for each platform.
 
 ## Skills Catalog
 

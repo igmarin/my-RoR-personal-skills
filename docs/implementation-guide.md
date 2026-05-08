@@ -6,17 +6,19 @@ Step-by-step install and verification for the **`rails-agent-skills`** repositor
 - **How to chain skills:** [workflow-guide.md](workflow-guide.md)
 - **Skill file conventions:** [architecture.md](architecture.md)
 
-The recommended way to use this library is via the **MCP Server Approach**. This provides on-demand access to skills, saving tokens and ensuring your agent always uses the most up-to-date instructions without overwhelming its context window.
+The recommended way to use this library is via the **MCP Server Approach**. The primary path is the embedded Ruby/Bundler server in this repo. Docker remains available as a fallback for environments that do not want local Ruby setup.
 
 ---
 
 ## MCP Server (Recommended)
 
-The MCP server gives your AI assistant on-demand access to every skill, doc, and workflow. 
+The MCP server exposes docs and workflows as resources and loads skills on demand through the `use_skill` tool.
 
-### 1. Setup
+For complete MCP setup instructions, exact host-specific config snippets, and troubleshooting, see [mcp_server/README.md](../mcp_server/README.md). That file is the canonical source of truth for MCP setup.
 
-Clone the repo and install dependencies:
+### Local Ruby/Bundler (Primary)
+
+Clone the repo and install the MCP server dependencies:
 
 ```bash
 git clone https://github.com/igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
@@ -24,70 +26,11 @@ cd ~/skills/rails-agent-skills/mcp_server
 bundle install
 ```
 
-### 2. Platform Configuration
+Then configure your MCP host with the exact template from [mcp_server/README.md](../mcp_server/README.md). In Claude Code, opening the repo already picks up the bundled root `.mcp.json`.
 
-When configuring the server, **always use absolute paths** to avoid environment errors.
+### Docker fallback
 
-#### Claude Code
-
-Open `~/.claude/mcp.json` (global) or `.mcp.json` in your project root and add:
-
-```json
-{
-  "mcpServers": {
-    "rails-agent-skills": {
-      "type": "stdio",
-      "command": "bundle",
-      "args": ["exec", "ruby", "/Users/YOUR_USER/skills/rails-agent-skills/mcp_server/server.rb"],
-      "cwd": "/Users/YOUR_USER/skills/rails-agent-skills",
-      "env": {
-        "BUNDLE_GEMFILE": "/Users/YOUR_USER/skills/rails-agent-skills/mcp_server/Gemfile"
-      }
-    }
-  }
-}
-```
-
-#### Cursor & Windsurf
-
-**Windsurf** (`~/.codeium/windsurf/mcp_config.json`):
-**Cursor** (`~/.cursor/mcp.json` or **Settings → MCP**):
-
-Add the following configuration:
-
-```json
-{
-  "mcpServers": {
-    "rails-agent-skills": {
-      "type": "stdio",
-      "command": "bundle",
-      "args": ["exec", "ruby", "/Users/YOUR_USER/skills/rails-agent-skills/mcp_server/server.rb"],
-      "cwd": "/Users/YOUR_USER/skills/rails-agent-skills",
-      "env": {
-        "BUNDLE_GEMFILE": "/Users/YOUR_USER/skills/rails-agent-skills/mcp_server/Gemfile"
-      }
-    }
-  }
-}
-```
-
-#### OpenCode / Codex
-
-Use the CLI to add the server:
-
-```bash
-opencode mcp add
-```
-
-When prompted for the command, use:
-`env BUNDLE_GEMFILE=/Users/YOUR_USER/skills/rails-agent-skills/mcp_server/Gemfile bundle exec ruby /Users/YOUR_USER/skills/rails-agent-skills/mcp_server/server.rb`
-
-#### RubyMine
-
-1. Open **Settings → Tools → AI Assistant → Model Context Protocol**.
-2. Add a new server:
-   - **Command:** `bundle exec ruby /Users/YOUR_USER/skills/rails-agent-skills/mcp_server/server.rb`
-   - **Environment:** `BUNDLE_GEMFILE=/Users/YOUR_USER/skills/rails-agent-skills/mcp_server/Gemfile`
+If you do not want to manage a local Ruby toolchain, use the Docker fallback documented in [mcp_server/README.md](../mcp_server/README.md). Treat Docker as the fallback path; local Ruby/Bundler remains the primary setup for this repo.
 
 ---
 

@@ -5,7 +5,7 @@
   "context_mode": "skill_bundle_xml",
   "requires_companion_resources": true,
   "tessl_export": {
-    "supported": false,
+    "supported": true,
     "reason": "Requires XML bundle context and source fixtures; Tessl currently consumes only SKILL.md."
   }
 }

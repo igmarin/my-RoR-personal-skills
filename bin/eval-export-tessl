@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'json'
+require 'pathname'
+require 'fileutils'
+
+# bin/eval-export-tessl [optional-scenario-path]
+# If no path provided, exports all scenarios with 'export_tessl: true' in metadata.
+
+project_root = Pathname.new(__dir__).join('..').realpath
+staging_root = project_root.join('evals')
+scenarios_root = project_root.join('personal-evals')
+
+# 1. Clean staging area (except .gitignore)
+if staging_root.exist?
+  staging_root.children.each do |child|
+    next if child.basename.to_s == '.gitignore'
+    FileUtils.rm_rf(child)
+  end
+else
+  staging_root.mkpath
+end
+
+target_path = ARGV[0]
+scenarios = if target_path
+              [Pathname.new(target_path)]
+            else
+              Pathname.glob(scenarios_root.join('*', 'metadata.json')).map(&:dirname)
+            end
+
+exported_count = 0
+
+scenarios.each do |scenario_dir|
+  metadata_file = scenario_dir.join('metadata.json')
+  next unless metadata_file.exist?
+
+  metadata = JSON.parse(metadata_file.read)
+  
+  # Only export if explicitly allowed or if we are targeting a specific path
+  supported = metadata.dig('tessl_export', 'supported')
+  next unless supported == true || target_path
+
+  scenario_name = scenario_dir.basename.to_s
+  dest_dir = staging_root.join(scenario_name)
+  dest_dir.mkpath
+
+  # Copy canonical eval files
+  ['task.md', 'criteria.json'].each do |f|
+    src = scenario_dir.join(f)
+    FileUtils.cp(src, dest_dir.join(f)) if src.exist?
+  end
+
+  # Tessl expects the skill content in the root of the eval or via path.
+  # For now, we stay compatible by keeping the staging area simple.
+  
+  puts "✓ Exported #{scenario_name} to evals/"
+  exported_count += 1
+end
+
+puts "\nTotal scenarios exported: #{exported_count}"

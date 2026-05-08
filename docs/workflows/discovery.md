@@ -10,14 +10,14 @@
 graph TB
     subgraph Context [🔍 Phase 1: Understand]
         direction TB
-        A[New to project] --> B[rails-context-engineering]
+        A[New to project] --> B[load-context]
         B --> C{Understood?}
         C -- No --> B
     end
 
     subgraph Setup [⚙️ Phase 2: Setup]
         direction TB
-        C -- Yes --> D[rails-project-onboarding]
+        C -- Yes --> D[setup-environment]
         D --> E{Ready?}
         E -- No --> D
     end
@@ -34,7 +34,7 @@ graph TB
 
 ---
 
-## Step 1: rails-context-engineering
+## Step 1: load-context
 
 **Goal:** Load the minimum context needed before writing code, tests, or PRDs.
 
@@ -54,7 +54,7 @@ graph TB
 
 ---
 
-## Step 2: rails-project-onboarding (NEW)
+## Step 2: setup-environment (NEW)
 
 **Goal:** Complete development environment setup.
 
@@ -131,16 +131,16 @@ docker-compose run web bin/rails db:create db:migrate db:seed
 | If you need... | Next skill |
 |----------------|------------|
 | To plan a feature | `create-prd` → [planning](planning.md) |
-| To start coding | `rails-tdd-slices` → [development](development.md) |
-| To fix a bug | `rails-bug-triage` → [development#bug-fix](development.md) |
-| To configure CI/CD | *(roadmap — `rails-ci-cd-setup`, see [setup](setup.md))* |
+| To start coding | `plan-tests` → [development](development.md) |
+| To fix a bug | `triage-bug` → [development#bug-fix](development.md) |
+| To configure CI/CD | *(roadmap — `setup-ci-cd`, see [setup](setup.md))* |
 
 ---
 
 ## Hard Gate: No Code Without Context
 
 ```text
-DO NOT write implementation code before running rails-context-engineering.
+DO NOT write implementation code before running load-context.
 ALWAYS post the Context Summary and resolve any ambiguities first.
 ```
 
@@ -150,5 +150,5 @@ ALWAYS post the Context Summary and resolve any ambiguities first.
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|
-| **rails-context-engineering** | Load context before coding | "load context", "before I code", "match existing style" |
-| **rails-project-onboarding** | Dev environment setup | "onboarding", "new dev", "setup project", "Docker" |
+| **load-context** | Load context before coding | "load context", "before I code", "match existing style" |
+| **setup-environment** | Dev environment setup | "onboarding", "new dev", "setup project", "Docker" |

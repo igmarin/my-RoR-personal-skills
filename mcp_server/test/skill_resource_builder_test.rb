@@ -6,7 +6,7 @@ require_relative '../lib/mcp_skills/skill_resource_builder'
 class SkillResourceBuilderTest < Minitest::Test
   def setup
     @tmpdir = Dir.mktmpdir('skill_builder_test')
-    @skill_dir = Pathname.new(@tmpdir).join('rails-code-review')
+    @skill_dir = Pathname.new(@tmpdir).join('code-review')
     @skill_dir.mkpath
     @skill_dir.join('SKILL.md').write('# Rails Code Review')
     @skill_dir.join('EXAMPLES.md').write('# Examples')
@@ -18,32 +18,32 @@ class SkillResourceBuilderTest < Minitest::Test
 
   def test_builds_skill_md_resource
     resources = McpSkills::SkillResourceBuilder.call(@skill_dir)
-    skill_resource = resources.find { |r| r.name == 'skill/rails-code-review' }
+    skill_resource = resources.find { |r| r.name == 'skill/code-review' }
     refute_nil skill_resource
   end
 
   def test_skill_resource_has_correct_uri
     resources = McpSkills::SkillResourceBuilder.call(@skill_dir)
-    skill_resource = resources.find { |r| r.name == 'skill/rails-code-review' }
+    skill_resource = resources.find { |r| r.name == 'skill/code-review' }
     assert skill_resource.uri.start_with?('file://')
     assert skill_resource.uri.end_with?('SKILL.md')
   end
 
   def test_skill_resource_has_markdown_mime_type
     resources = McpSkills::SkillResourceBuilder.call(@skill_dir)
-    skill_resource = resources.find { |r| r.name == 'skill/rails-code-review' }
+    skill_resource = resources.find { |r| r.name == 'skill/code-review' }
     assert_equal 'text/markdown', skill_resource.mime_type
   end
 
   def test_builds_support_file_resources
     resources = McpSkills::SkillResourceBuilder.call(@skill_dir)
-    support_resource = resources.find { |r| r.name == 'skill/rails-code-review/examples' }
+    support_resource = resources.find { |r| r.name == 'skill/code-review/examples' }
     refute_nil support_resource, 'Should build resource for EXAMPLES.md'
   end
 
   def test_support_resource_has_correct_uri
     resources = McpSkills::SkillResourceBuilder.call(@skill_dir)
-    support_resource = resources.find { |r| r.name == 'skill/rails-code-review/examples' }
+    support_resource = resources.find { |r| r.name == 'skill/code-review/examples' }
     assert support_resource.uri.end_with?('EXAMPLES.md')
   end
 
@@ -57,7 +57,7 @@ class SkillResourceBuilderTest < Minitest::Test
 
   def test_builds_workflow_resources_with_custom_prefix
     resources = McpSkills::SkillResourceBuilder.call(@skill_dir, prefix: 'workflow')
-    workflow_resource = resources.find { |r| r.name == 'workflow/rails-code-review' }
+    workflow_resource = resources.find { |r| r.name == 'workflow/code-review' }
     refute_nil workflow_resource
   end
 end

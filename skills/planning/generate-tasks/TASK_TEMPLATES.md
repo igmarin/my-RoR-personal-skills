@@ -44,8 +44,8 @@ Check off each task when done: change `- [ ]` to `- [x]`. Update the file after 
   - [ ] 4.1 Update README or module README if behavior or setup changed (`README.md` or `docs/...`)
   - [ ] 4.2 Update diagrams or architecture docs if flows or boundaries changed (`docs/...`, ADRs)
 - [ ] 5.0 Code review before merge
-  - [ ] 5.1 Self-review full diff (rails-code-review checklist); fix Critical/Suggestion items
-  - [ ] 5.2 Security/architecture pass if scope warrants (rails-security-review, rails-architecture-review)
+  - [ ] 5.1 Self-review full diff (code-review checklist); fix Critical/Suggestion items
+  - [ ] 5.2 Security/architecture pass if scope warrants (security-check, review-architecture)
   - [ ] 5.3 Open PR or request review — attach summary of doc/YARD updates
 ```
 

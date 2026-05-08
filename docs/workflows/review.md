@@ -10,15 +10,15 @@
 graph TB
     subgraph Review [👁️ Phase 1: Review]
         direction TB
-        A[PR ready] --> B[rails-code-review]
+        A[PR ready] --> B[code-review]
         B --> C{Security concerns?}
-        C -- Yes --> D[rails-security-review]
+        C -- Yes --> D[security-check]
     end
 
     subgraph DeepDive [🔍 Phase 2: Deep Dive - Optional]
         direction TB
         C -- No --> E{Architecture issues?}
-        E -- Yes --> F[rails-architecture-review]
+        E -- Yes --> F[review-architecture]
         D --> F
     end
 
@@ -26,7 +26,7 @@ graph TB
         direction TB
         E -- No --> G{Findings?}
         F --> G
-        G -- Critical --> H[rails-review-response]
+        G -- Critical --> H[respond-to-review]
         H --> I[Implement fixes]
         I --> J{Critical fixed?}
         J -- No --> K[Re-review]
@@ -49,7 +49,7 @@ graph TB
 
 ---
 
-## rails-code-review
+## code-review
 
 **Goal:** Systematic Rails PR review.
 
@@ -76,7 +76,7 @@ graph TB
 
 ---
 
-## rails-security-review
+## security-check
 
 **Goal:** Deep security dive.
 
@@ -92,7 +92,7 @@ graph TB
 
 ---
 
-## rails-architecture-review
+## review-architecture
 
 **Goal:** Structural review of boundaries and abstractions.
 
@@ -111,7 +111,7 @@ graph TB
 
 ---
 
-## rails-review-response
+## respond-to-review
 
 **Goal:** Respond to received feedback.
 
@@ -130,8 +130,8 @@ graph TB
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|
-| **rails-code-review** | Systematic PR review | "review PR", "code review", "check this code" |
-| **rails-security-review** | Security audit | "security", "audit", "vulnerability", "XSS", "SQL injection" |
-| **rails-architecture-review** | Structural review | "architecture", "structure", "boundaries", "extract" |
-| **rails-review-response** | Respond to feedback | "feedback", "review comments", "address feedback" |
-| **api-rest-collection** | API testing docs | "Postman", "API collection", "REST endpoints" |
+| **code-review** | Systematic PR review | "review PR", "code review", "check this code" |
+| **security-check** | Security audit | "security", "audit", "vulnerability", "XSS", "SQL injection" |
+| **review-architecture** | Structural review | "architecture", "structure", "boundaries", "extract" |
+| **respond-to-review** | Respond to feedback | "feedback", "review comments", "address feedback" |
+| **generate-api-collection** | API testing docs | "Postman", "API collection", "REST endpoints" |

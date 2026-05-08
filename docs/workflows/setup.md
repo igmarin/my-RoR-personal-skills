@@ -1,6 +1,6 @@
 # Workflow: Setup & Configuration (20)
 
-> **Roadmap notice:** the `rails-ci-cd-setup` skill referenced below is **not yet implemented** (see [skill-catalog Roadmap](../reference/skill-catalog.md#proposed-new-skills-roadmap)). The templates on this page are kept as reference material so a maintainer can lift them when the skill ships. Until then, treat this workflow as informational, not as an active skill chain.
+> **Roadmap notice:** the `setup-ci-cd` skill referenced below is **not yet implemented** (see [skill-catalog Roadmap](../reference/skill-catalog.md#proposed-new-skills-roadmap)). The templates on this page are kept as reference material so a maintainer can lift them when the skill ships. Until then, treat this workflow as informational, not as an active skill chain.
 
 **When to use:** Configure CI/CD, deploy environment, or development infrastructure.
 
@@ -12,7 +12,7 @@
 graph TB
     subgraph Configure [⚙️ Phase 1: Configure]
         direction TB
-        A[Need CI/CD] --> B[rails-ci-cd-setup]
+        A[Need CI/CD] --> B[setup-ci-cd]
         B --> C{GitHub or GitLab?}
         C --> D[Configure workflow]
     end
@@ -43,7 +43,7 @@ graph TB
 
 ---
 
-## rails-ci-cd-setup (ROADMAP — not yet implemented)
+## setup-ci-cd (ROADMAP — not yet implemented)
 
 **Goal:** Configure continuous integration pipeline for Rails.
 
@@ -148,7 +148,7 @@ security:
 
 | If setup is done... | Next step |
 |---------------------|-----------|
-| CI/CD ready | `rails-tdd-slices` → [development](development.md) |
+| CI/CD ready | `plan-tests` → [development](development.md) |
 | Need new feature | `create-prd` → [planning](planning.md) |
 
 ---
@@ -157,5 +157,5 @@ security:
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|
-| **rails-ci-cd-setup** *(roadmap)* | Configure CI/CD pipeline | "CI/CD", "GitHub Actions", "GitLab CI", "deploy" |
-| **rails-project-onboarding** | Dev environment setup | "onboarding", "setup project", "Docker" |
+| **setup-ci-cd** *(roadmap)* | Configure CI/CD pipeline | "CI/CD", "GitHub Actions", "GitLab CI", "deploy" |
+| **setup-environment** | Dev environment setup | "onboarding", "setup project", "Docker" |

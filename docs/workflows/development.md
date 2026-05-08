@@ -10,9 +10,9 @@
 graph TB
     subgraph Test [🧪 Phase 1: Test First]
         direction TB
-        A[Feature / Task] --> B[rails-context-engineering]
-        B --> C[rails-tdd-slices]
-        C --> D[rspec-best-practices]
+        A[Feature / Task] --> B[load-context]
+        B --> C[plan-tests]
+        C --> D[write-tests]
         D --> E{Test feedback OK?}
         E -- No --> D
     end
@@ -35,8 +35,8 @@ graph TB
     subgraph Finish [✅ Phase 4: Finish]
         direction TB
         I -- No --> J[Linters + Suite]
-        J --> K[yard-documentation]
-        K --> L[rails-code-review]
+        J --> K[write-yard-docs]
+        K --> L[code-review]
         L --> M((PR))
     end
 
@@ -54,7 +54,7 @@ graph TB
 
 ---
 
-## Step 1: rails-tdd-slices
+## Step 1: plan-tests
 
 **Goal:** Choose the correct first failing spec.
 
@@ -66,12 +66,12 @@ graph TB
 | HTTP endpoint behavior | Request spec |
 | Background processing | Job spec |
 | Cross-layer journey | System spec (sparingly) |
-| Bug fix | rails-bug-triage first |
+| Bug fix | triage-bug first |
 | Engine feature | Engine spec with dummy app |
 
 ---
 
-## Step 2: rspec-best-practices
+## Step 2: write-tests
 
 **Goal:** Write the test and verify it fails.
 
@@ -93,7 +93,7 @@ graph TB
 ### Service Objects
 
 ```
-rails-tdd-slices → rspec-service-testing → ruby-service-objects
+plan-tests → test-service → create-service-object
 ```
 
 - **Pattern:** `.call` with response contract `{ success: true/false, response: {} }`
@@ -102,7 +102,7 @@ rails-tdd-slices → rspec-service-testing → ruby-service-objects
 ### API Integration
 
 ```
-rails-tdd-slices → ruby-api-client-integration → rspec-best-practices
+plan-tests → integrate-api-client → write-tests
 ```
 
 - **Layers:** Auth → Client → Fetcher → Builder → Domain Entity
@@ -111,7 +111,7 @@ rails-tdd-slices → ruby-api-client-integration → rspec-best-practices
 ### GraphQL
 
 ```
-ddd-ubiquitous-language → rails-graphql-best-practices → rails-tdd-slices
+define-domain-language → implement-graphql → plan-tests
 ```
 
 - **Schema design:** Types, mutations, resolvers
@@ -121,7 +121,7 @@ ddd-ubiquitous-language → rails-graphql-best-practices → rails-tdd-slices
 ### Background Jobs
 
 ```
-rails-background-jobs → rails-tdd-slices
+implement-background-job → plan-tests
 ```
 
 - **Idempotency:** Jobs must be safe to re-run
@@ -131,7 +131,7 @@ rails-background-jobs → rails-tdd-slices
 ### Migrations
 
 ```
-rails-migration-safety → rails-tdd-slices → implement → verify up/down
+review-migration → plan-tests → implement → verify up/down
 ```
 
 - **Never combine:** Schema changes + data backfills
@@ -141,7 +141,7 @@ rails-migration-safety → rails-tdd-slices → implement → verify up/down
 ### Authorization
 
 ```
-rails-authorization-policies → rails-tdd-slices
+implement-authorization → plan-tests
 ```
 
 - **Patterns:** Pundit vs CanCanCan
@@ -150,7 +150,7 @@ rails-authorization-policies → rails-tdd-slices
 ### Performance
 
 ```
-rails-performance-optimization → rspec-best-practices → optimize
+optimize-performance → write-tests → optimize
 ```
 
 - **Regression spec:** Query count before optimizing
@@ -164,14 +164,14 @@ rails-performance-optimization → rspec-best-practices → optimize
 graph TB
     subgraph Triage [🐛 Phase 1: Triage]
         direction TB
-        A[Bug report] --> B[rails-bug-triage]
+        A[Bug report] --> B[triage-bug]
         B --> C{Reproducible?}
         C -- No --> B
     end
 
     subgraph Fix [🔧 Phase 2: Fix]
         direction TB
-        C -- Yes --> D[rails-tdd-slices]
+        C -- Yes --> D[plan-tests]
         D --> E[Write failing spec]
         E --> F{Spec fails for bug?}
         F -- No --> E
@@ -179,7 +179,7 @@ graph TB
         G --> H[Verify passes]
     end
 
-    H --> I[rails-code-review]
+    H --> I[code-review]
 
     %% Styling
     style Triage fill:#ffebee,stroke:#c62828
@@ -204,14 +204,14 @@ graph TB
 
     subgraph Build [💻 Phase 2: Build]
         direction TB
-        C --> D[rails-tdd-slices]
-        D --> E[ruby-api-client-integration]
+        C --> D[plan-tests]
+        D --> E[integrate-api-client]
     end
 
     subgraph Document [📚 Phase 3: Document]
         direction TB
-        E --> F[yard-documentation]
-        F --> G[rails-code-review]
+        E --> F[write-yard-docs]
+        F --> G[code-review]
     end
 
     %% Styling
@@ -236,18 +236,18 @@ graph TB
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|
-| **rails-tdd-slices** | Choose first failing spec | "where to start testing", "what test first", "TDD" |
-| **rspec-best-practices** | TDD discipline, spec types | "write test", "RSpec", "test-driven" |
-| **rspec-service-testing** | Service object tests | "test service", "spec/services" |
-| **ruby-service-objects** | .call pattern, service design | "create service", "extract service", ".call" |
-| **ruby-api-client-integration** | External API layers | "API integration", "HTTP client", "external API" |
-| **rails-background-jobs** | Active Job, Solid Queue, Sidekiq | "background job", "Active Job", "async" |
-| **rails-migration-safety** | Safe DB migrations | "migration", "add column", "index" |
-| **rails-graphql-best-practices** | GraphQL schema design | "GraphQL", "resolver", "mutation" |
-| **rails-bug-triage** | Bug reproduction | "bug", "debug", "fix", "broken" |
-| **rails-authorization-policies** | Roles, permissions | "authorization", "Pundit", "CanCanCan", "roles" |
-| **rails-performance-optimization** | Query optimization | "N+1", "slow", "performance", "optimize" |
-| **strategy-factory-null-calculator** | Variant calculators | "calculator", "strategy pattern", "dispatch" |
+| **plan-tests** | Choose first failing spec | "where to start testing", "what test first", "TDD" |
+| **write-tests** | TDD discipline, spec types | "write test", "RSpec", "test-driven" |
+| **test-service** | Service object tests | "test service", "spec/services" |
+| **create-service-object** | .call pattern, service design | "create service", "extract service", ".call" |
+| **integrate-api-client** | External API layers | "API integration", "HTTP client", "external API" |
+| **implement-background-job** | Active Job, Solid Queue, Sidekiq | "background job", "Active Job", "async" |
+| **review-migration** | Safe DB migrations | "migration", "add column", "index" |
+| **implement-graphql** | GraphQL schema design | "GraphQL", "resolver", "mutation" |
+| **triage-bug** | Bug reproduction | "bug", "debug", "fix", "broken" |
+| **implement-authorization** | Roles, permissions | "authorization", "Pundit", "CanCanCan", "roles" |
+| **optimize-performance** | Query optimization | "N+1", "slow", "performance", "optimize" |
+| **implement-calculator-pattern** | Variant calculators | "calculator", "strategy pattern", "dispatch" |
 
 ---
 

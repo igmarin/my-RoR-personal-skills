@@ -24,22 +24,22 @@ Read `SKILL.md` first. Load supporting files only when the skill links to them a
 
 ## Skill Selection
 
-Load the skill that best matches the current task. The bootstrap skill `rails-skills-orchestrator` routes to specialized skills. All skills are organized by category in `skills/<category>/`:
+Load the skill that best matches the current task. The bootstrap skill `skill-router` routes to specialized skills. All skills are organized by category in `skills/<category>/`:
 
 | Category | Path | Skills |
 |----------|------|--------|
-| **Planning** | `skills/planning/` | `create-prd`, `generate-tasks`, `ticket-planning` |
-| **Testing** | `skills/testing/` | `rspec-best-practices`, `rspec-service-testing`, `rails-tdd-slices`, `rails-bug-triage` |
-| **Code Quality** | `skills/code-quality/` | `rails-code-review`, `rails-review-response`, `rails-architecture-review`, `rails-security-review`, `rails-stack-conventions`, `rails-code-conventions`, `rails-authorization-policies`, `refactor-safely` |
-| **DDD** | `skills/ddd/` | `ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling` |
-| **Engines** | `skills/engines/` | `rails-engine-author`, `rails-engine-testing`, `rails-engine-reviewer`, `rails-engine-release`, `rails-engine-docs`, `rails-engine-installers`, `rails-engine-extraction`, `rails-engine-compatibility` |
-| **Infrastructure** | `skills/infrastructure/` | `rails-migration-safety`, `rails-background-jobs`, `rails-database-seeding`, `rails-performance-optimization`, `rails-api-versioning`, `rails-frontend-hotwire` |
-| **API** | `skills/api/` | `api-rest-collection`, `rails-graphql-best-practices`, `ruby-api-client-integration` |
-| **Patterns** | `skills/patterns/` | `ruby-service-objects`, `strategy-factory-null-calculator`, `yard-documentation` |
-| **Context** | `skills/context/` | `rails-context-engineering`, `rails-project-onboarding` |
+| **Planning** | `skills/planning/` | `create-prd`, `generate-tasks`, `plan-tickets` |
+| **Testing** | `skills/testing/` | `write-tests`, `test-service`, `plan-tests`, `triage-bug` |
+| **Code Quality** | `skills/code-quality/` | `code-review`, `respond-to-review`, `review-architecture`, `security-check`, `apply-stack-conventions`, `apply-code-conventions`, `implement-authorization`, `refactor-code` |
+| **DDD** | `skills/ddd/` | `define-domain-language`, `review-domain-boundaries`, `model-domain` |
+| **Engines** | `skills/engines/` | `create-engine`, `test-engine`, `review-engine`, `release-engine`, `document-engine`, `create-engine-installer`, `extract-engine`, `upgrade-engine` |
+| **Infrastructure** | `skills/infrastructure/` | `review-migration`, `implement-background-job`, `seed-database`, `optimize-performance`, `version-api`, `implement-hotwire` |
+| **API** | `skills/api/` | `generate-api-collection`, `implement-graphql`, `integrate-api-client` |
+| **Patterns** | `skills/patterns/` | `create-service-object`, `implement-calculator-pattern`, `write-yard-docs` |
+| **Context** | `skills/context/` | `load-context`, `setup-environment` |
 | **Build** | `build/` | `build` |
-| **Orchestration** | `skills/orchestration/` | `rails-skills-orchestrator` |
-| **Workflows** | `workflows/` | `rails-tdd-loop`, `rails-review-flow`, `rails-setup-flow`, `rails-quality-flow`, `rails-engines-flow` |
+| **Orchestration** | `skills/orchestration/` | `skill-router` |
+| **Workflows** | `workflows/` | `tdd-workflow`, `review-workflow`, `setup-workflow`, `quality-workflow`, `engine-workflow` |
 
 ## Non-Negotiable Workflow Rule
 
@@ -57,31 +57,31 @@ Do not write implementation code before the test exists and fails. Every skill t
 
 | Goal | Workflow Skill | Atomic Skills |
 |------|---------------|---------------|
-| Implement feature with TDD | `workflows/rails-tdd-loop` | Full orchestrated cycle |
-| Review PR systematically | `workflows/rails-review-flow` | Review → deep dive → response |
-| Set up project / CI/CD | `workflows/rails-setup-flow` | Context → onboarding → CI/CD |
-| Quality check before PR | `workflows/rails-quality-flow` | Conventions → refactor → docs |
-| Build Rails engine | `workflows/rails-engines-flow` | Author → test → review → release |
+| Implement feature with TDD | `workflows/tdd-workflow` | Full orchestrated cycle |
+| Review PR systematically | `workflows/review-workflow` | Review → deep dive → response |
+| Set up project / CI/CD | `workflows/setup-workflow` | Context → onboarding → CI/CD |
+| Quality check before PR | `workflows/quality-workflow` | Conventions → refactor → docs |
+| Build Rails engine | `workflows/engine-workflow` | Author → test → review → release |
 | Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` | Planning only |
 
 ### TDD Feature Loop (Recommended)
 
-The default daily workflow — orchestrated by `rails-tdd-loop`:
+The default daily workflow — orchestrated by `tdd-workflow`:
 
 ```
-skills/context/rails-context-engineering
-  → workflows/rails-tdd-loop (orchestrates below)
-    → skills/testing/rails-tdd-slices
-    → skills/testing/rspec-best-practices
+skills/context/load-context
+  → workflows/tdd-workflow (orchestrates below)
+    → skills/testing/plan-tests
+    → skills/testing/write-tests
     → [GATE: test feedback OK]
     → implement
     → [GATE: linters + suite]
-    → skills/patterns/yard-documentation
-    → skills/code-quality/rails-code-review
+    → skills/patterns/write-yard-docs
+    → skills/code-quality/code-review
     → PR
 ```
 
-For a full feature from scratch: `skills/context/rails-context-engineering` → `skills/planning/create-prd` → `skills/planning/generate-tasks` → `workflows/rails-tdd-loop`.
+For a full feature from scratch: `skills/context/load-context` → `skills/planning/create-prd` → `skills/planning/generate-tasks` → `workflows/tdd-workflow`.
 
 See `docs/workflow-guide.md` for all workflow variants (bug fix, GraphQL, engine, migration, refactor, etc.).
 
@@ -100,7 +100,7 @@ Skills are scored on two axes: **skill-specific criteria** AND **model performan
 ## Key Constraints
 
 - **The `evals/` directory is READ-ONLY.** These files contain intentional bugs, missing documentation, or non-standard patterns used to evaluate agent performance. Never "fix" or "improve" files in `evals/` unless explicitly instructed to update a test case scenario.
-- Do not generate tickets unless the user asks explicitly — `ticket-planning` is optional.
+- Do not generate tickets unless the user asks explicitly — `plan-tickets` is optional.
 - Do not skip the verify-failure step in the TDD gate.
-- Do not add repositories, aggregates, or domain events just because a task looks "DDD" — see `ddd-rails-modeling`.
-- Do not use `rails-graphql-best-practices` for REST endpoints or `api-rest-collection` for GraphQL endpoints.
+- Do not add repositories, aggregates, or domain events just because a task looks "DDD" — see `model-domain`.
+- Do not use `implement-graphql` for REST endpoints or `generate-api-collection` for GraphQL endpoints.

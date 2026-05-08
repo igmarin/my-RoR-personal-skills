@@ -1,208 +1,60 @@
-
 # Rails Agent Skills — Documentation
 
-> This is not just documentation — it is the operating system behind AI-driven Rails development.
->
-> Rails Agent Skills defines how AI agents should **think, plan, and execute** across the entire software lifecycle — from discovery to PR — with strict workflows and TDD as a non-negotiable quality gate.
+> **AI-Driven Rails Engineering:** We turn coding assistants into reliable engineers through structured workflows, action-oriented skills, and a non-negotiable TDD quality gate.
 
-Master index for all project documentation.
+This documentation defines the "operating system" for your development.
 
 ---
 
-## What this gives you
+## 🚀 Quick Start decision map
 
-- A complete, structured workflow system (Discovery → PR)
-- 39 production-grade skills with clear triggers and responsibilities
-- Enforced TDD workflows (tests as a hard gate, not a suggestion)
-- Context-aware orchestration across tasks and agents
-- A repeatable way to turn AI into a reliable engineering system
+Pick your current stage and follow the expert workflow.
 
-This documentation is your entry point to understanding and applying that system.
-
-## 🚀 Start Here
-
-Think of this as a decision map — not just docs. Pick your current stage and follow the workflow.
-
-| If you are... | Go to... |
+| If you are... | Use this... |
 |---------------|----------|
-| **New to the project** | [Quick Start](#quick-start) → [Workflows Discovery](workflows/discovery.md) |
-| **Developer looking for workflow** | [Workflows Index](workflows/) — All flows by stage |
-| **Skill contributor** | [Skill Design Principles](skill-design-principles.md) |
-| **Debugging integration** | [Implementation Guide](implementation-guide.md) |
+| **New to the project** | `load-context` → [Discovery Guide](workflows/discovery.md) |
+| **Ready to build a feature** | [TDD Workflow](workflows/development.md) |
+| **Reviewing code** | [Review Workflow](workflows/review.md) |
+| **Not sure where to start** | `skill-router` (The entry point) |
 
 ---
 
-## Evaluation Strategy: Baseline vs Context
+## Architecture: Skills vs. Workflows
 
-We don't just write skills; we validate their impact. Every skill in this library is measured against two scenarios:
+To save your token budget and keep the agent focused, we use a hybrid architecture:
 
-1.  **Baseline (Raw LLM):** How well does a base model (e.g., Sonnet 3.5) follow our conventions using only its general training data?
-2.  **With Context (Skill Loaded):** How well does the model perform when provided with the specific instructions and constraints in our `SKILL.md` files?
-
-The goal of every skill is to provide a significant **Lift** over the baseline. This ensures our library isn't just bloat, but a load-bearing beam for your engineering quality.
-
-*See [docs/skill-optimization-guide.md](skill-optimization-guide.md) for details on the scoring methodology.*
+1.  **Workflows (Resources):** These are high-level guides (like the ones in `workflows/`) that the agent sees as "Resources". They tell the agent *how* to chain steps together.
+2.  **Skills (Tools):** These are atomic, expert instructions (like `code-review` or `refactor-code`). The agent loads them on-demand using the `use_skill(name:)` tool.
 
 ---
 
-## Quick Start
+## Master Workflow Index
 
-If you're using AI agents in Rails, start here. This gives you the fastest path to the right workflow without guessing.
-
-### 30 Seconds: Which Skill to Use
-
-```text
-New to project?          → rails-context-engineering
-Plan a feature?          → create-prd → generate-tasks
-Start coding?            → rails-tdd-slices → rspec-best-practices
-Fix a bug?               → rails-bug-triage
-Refactor?                → refactor-safely
-Code review?             → rails-code-review
-Not sure?                → rails-skills-orchestrator
-```
-
-### Master Flow Diagram
-
-```mermaid
-flowchart TD
-    START([What do you need?]) --> DECISION{What stage?}
-
-    DECISION -->|Discovery| D00[discovery]
-    DECISION -->|Planning| D10[planning]
-    DECISION -->|Setup| D20[setup]
-    DECISION -->|Develop| D30[development]
-    DECISION -->|Quality| D40[quality]
-    DECISION -->|Review| D50[review]
-    DECISION -->|Engines| D60[engines]
-
-    D00 --> NEXT
-    D10 --> NEXT
-    D20 --> D30
-    D30 --> D40
-    D40 --> D50
-    D60 --> D50
-
-    NEXT{What next?} -->|Implement| D30
-    NEXT -->|Done| END([PR / Merge])
-
-    D50 -->|Feedback| RESPOND[rails-review-response]
-    RESPOND --> D30
-    D50 -->|OK| END
-```
+| Stage | Guide | Description | Primary Skills |
+|-------|----------|-------------|----------------|
+| **Discovery** | [Discovery & Context](workflows/discovery.md) | Understand codebase & onboarding | `load-context`, `setup-environment` |
+| **Planning** | [Planning & Design](workflows/planning.md) | PRDs, tasks, and DDD | `create-prd`, `generate-tasks`, `define-domain-language` |
+| **Setup** | [Setup & Configuration](workflows/setup.md) | CI/CD & infrastructure | `setup-environment`, `setup-ci-cd` |
+| **Development** | [Development](workflows/development.md) | TDD & Implementation | `plan-tests`, `write-tests`, `triage-bug` |
+| **Quality** | [Code Quality](workflows/quality.md) | Conventions & refactoring | `apply-code-conventions`, `refactor-code`, `write-yard-docs` |
+| **Review** | [Review & Validation](workflows/review.md) | Review, security, & architecture | `code-review`, `security-check`, `review-architecture` |
+| **Engines** | [Engine Development](workflows/engines.md) | Building Rails engines | `create-engine`, `release-engine` |
 
 ---
 
-## Workflows by Stage
+## Core Principles
 
-Each workflow is designed to be executed by an AI agent (or human + AI) with clear steps, inputs, and expected outputs.
+### 🧪 Tests Gate Implementation
+We never write implementation code until a test exists, runs, and fails. **No exceptions.**
 
-Step-by-step workflows for each development phase:
-
-| Stage | Document | Description |
-|-------|----------|-------------|
-| **Discovery** | [Discovery & Context](workflows/discovery.md) | Understand codebase, onboarding |
-| **Planning** | [Planning & Design](workflows/planning.md) | PRD, tasks, DDD |
-| **Setup** | [Setup & Configuration](workflows/setup.md) | CI/CD, dev environment |
-| **Development** | [Development](workflows/development.md) | TDD, implementation, bug fixes |
-| **Quality** | [Code Quality](workflows/quality.md) | Conventions, refactoring, docs |
-| **Review** | [Review & Validation](workflows/review.md) | Code review, security, architecture |
-| **Engines** | [Engines](workflows/engines.md) | Rails engines development |
-
-**Complete index:** [workflows/README.md](workflows/README.md)
+### 🔗 Workflow Chaining
+Skills are building blocks; workflows are the story. Follow the `skill-router` to find the right chain.
 
 ---
 
-## Reference
+## Reference & Authoring
 
-### Skill Catalog
-
-Complete catalog of 39 skills organized by category:
-
-- **[skill-catalog.md](reference/skill-catalog.md)** — List with descriptions and triggers
-- **[integration-matrix.md](reference/integration-matrix.md)** — Which skill connects to which
-
-### Principles & Architecture
-
-| Document                                                   | Content                                                                                                 |
-| ------------------------------------------------------------| ---------------------------------------------------------------------------------------------------------|
-| [skill-design-principles.md](skill-design-principles.md)   | 6 skill design principles                                                                               |
-| [skill-optimization-guide.md](skill-optimization-guide.md) | Eval-driven loop: baseline-vs-context targets, per-skill scoring, what to change when a skill regresses |
-| [architecture.md](architecture.md)                         | SKILL.md structure, frontmatter, checkpoints                                                            |
-| [skill-template.md](skill-template.md)                     | Template for new skills                                                                                 |
-
----
-
-## Guides
-
-In-depth guides by specific topic:
-
-| Guide | Topic |
-|-------|-------|
-| **implementation-guide.md** | Installation on Claude, Cursor, Gemini |
-| **workflow-guide.md** | Narrative companion to `workflows/` — full TDD Feature Loop, planning, bug fix, GraphQL, engine, migration, refactor, performance, perf optimization, and external API chains in one file |
-| **plugin-validation.md** | Plugin validation for different IDEs |
-| **vs-code-setup.md** | VS Code specific configuration |
-
----
-
-## Tests Gate Implementation
-
-Non-negotiable principle across all workflows:
-
-```text
-Write test → Run test → Verify it FAILS → Implement → Verify it PASSES
-```
-
-See details in each specific workflow.
-
----
-
-## External Links
-
-- **Repository:** [github.com/igmarin/rails-agent-skills](https://github.com/igmarin/rails-agent-skills)
-- **Tessl Registry:** [tessl.io](https://tessl.io)
-
----
-
-## File Structure
-
-```text
-docs/
-├── README.md                    # This file — master index
-├── skill-design-principles.md   # Design principles
-├── skill-template.md            # Template for skills
-├── architecture.md            # SKILL.md conventions
-├── implementation-guide.md    # IDE installation
-├── plugin-validation.md       # Plugin validation
-├── vs-code-setup.md          # VS Code specific
-│
-├── workflows/                 # Workflows by stage
-│   ├── README.md
-│   ├── discovery.md
-│   ├── planning.md
-│   ├── setup.md
-│   ├── development.md
-│   ├── quality.md
-│   ├── review.md
-│   └── engines.md
-│
-├── reference/                 # Quick reference (new)
-│   ├── skill-catalog.md
-│   └── integration-matrix.md
-│
-└── guides/                    # Deep guides (future)
-```
-
----
-
-## Documentation Roadmap
-
-- [x] Reorganize workflows into separate files
-- [x] Create skill-catalog.md
-- [x] Create integration-matrix.md
-- [ ] Migrate legacy content from workflow-guide.md
-- [ ] Create specific guides (authorization, performance, etc.)
-
----
-
-**Note:** This documentation is constantly evolving. If you find something confusing or missing, please open an issue in the repository.
+- **[Skill Catalog](reference/skill-catalog.md)** — Complete list of 39 skills with triggers.
+- **[Integration Matrix](reference/integration-matrix.md)** — How skills connect.
+- **[Skill Template](skill-template.md)** — For creating new skills.
+- **[Implementation Guide](implementation-guide.md)** — IDE Setup (MCP Server).

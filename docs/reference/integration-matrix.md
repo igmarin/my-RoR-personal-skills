@@ -17,11 +17,11 @@ Integration matrix: which skill connects to which and in what order.
 ### TDD Feature Loop (Main)
 
 ```text
-skills/context/rails-context-engineering
+skills/context/load-context
     ↓
-skills/testing/rails-tdd-slices
+skills/testing/plan-tests
     ↓
-skills/testing/rspec-best-practices → [checkpoint: Test Feedback]
+skills/testing/write-tests → [checkpoint: Test Feedback]
     ↓
 [checkpoint: Implementation Proposal]
     ↓
@@ -29,15 +29,15 @@ Implement
     ↓
 [gate: Linters + Full Suite]
     ↓
-skills/patterns/yard-documentation
+skills/patterns/write-yard-docs
     ↓
-rails-code-review → skills/code-quality/rails-review-response (if feedback) → PR
+code-review → skills/code-quality/respond-to-review (if feedback) → PR
 ```
 
 ### Feature from Scratch
 
 ```text
-skills/context/rails-context-engineering
+skills/context/load-context
     ↓
 create-prd → [gate: PRD approved]
     ↓
@@ -49,11 +49,11 @@ generate-tasks
 ### Feature DDD-First
 
 ```text
-skills/context/rails-context-engineering
+skills/context/load-context
     ↓
 create-prd
     ↓
-skills/ddd/ddd-ubiquitous-language → skills/ddd/ddd-boundaries-review → skills/ddd/ddd-rails-modeling
+skills/ddd/define-domain-language → skills/ddd/review-domain-boundaries → skills/ddd/model-domain
     ↓
 generate-tasks
     ↓
@@ -63,9 +63,9 @@ generate-tasks
 ### Bug Fix
 
 ```text
-rails-bug-triage
+triage-bug
     ↓
-rails-tdd-slices
+plan-tests
     ↓
 [gate: Write failing reproduction spec]
     ↓
@@ -73,13 +73,13 @@ Minimal fix
     ↓
 Verify passes + no regressions
     ↓
-rails-code-review
+code-review
 ```
 
 ### Refactoring
 
 ```text
-refactor-safely
+refactor-code
     ↓
 [gate: Characterization tests pass]
     ↓
@@ -87,57 +87,57 @@ Extract in small steps
     ↓
 Verify after each step
     ↓
-rails-code-review
+code-review
 ```
 
 ### New Engine
 
 ```text
-rails-engine-author
+create-engine
     ↓
 [gate: Engine specs fail]
     ↓
-rails-engine-testing
+test-engine
     ↓
-rails-engine-docs
+document-engine
     ↓
-rails-engine-installers
+create-engine-installer
     ↓
-rails-engine-reviewer
+review-engine
     ↓
-rails-engine-release
+release-engine
     ↓
-rails-engine-compatibility
+upgrade-engine
 ```
 
 ### Engine Extraction
 
 ```text
-rails-engine-extraction
+extract-engine
     ↓
-refactor-safely
+refactor-code
     ↓
 [gate: Characterization tests]
     ↓
-rails-engine-author
+create-engine
     ↓
-rails-engine-testing
+test-engine
 ```
 
 ### GraphQL Feature
 
 ```text
-ddd-ubiquitous-language
+define-domain-language
     ↓
-rails-graphql-best-practices
+implement-graphql
     ↓
-rails-tdd-slices
+plan-tests
     ↓
 [TDD Feature Loop]
     ↓
-rails-migration-safety (if DB changes)
+review-migration (if DB changes)
     ↓
-rails-security-review
+security-check
 ```
 
 ### External API Integration
@@ -147,13 +147,13 @@ create-prd
     ↓
 generate-tasks
     ↓
-rails-tdd-slices
+plan-tests
     ↓
-ruby-api-client-integration
+integrate-api-client
     ↓
-yard-documentation
+write-yard-docs
     ↓
-rails-code-review
+code-review
 ```
 
 ---
@@ -164,40 +164,40 @@ rails-code-review
 | Next | When |
 |------|------|
 | generate-tasks | Always after PRD approved |
-| ticket-planning | Optional — if tickets needed in tracker |
+| plan-tickets | Optional — if tickets needed in tracker |
 
 ### generate-tasks
 | Next | When |
 |------|------|
-| rails-tdd-slices | To start development |
-| ticket-planning | If tickets needed on board |
+| plan-tests | To start development |
+| plan-tickets | If tickets needed on board |
 
-### rails-tdd-slices
+### plan-tests
 | Next | When |
 |------|------|
-| rspec-best-practices | To write the spec |
+| write-tests | To write the spec |
 
-### rspec-best-practices
+### write-tests
 | Next | When |
 |------|------|
-| ruby-service-objects | If feature requires service |
-| ruby-api-client-integration | If integrating external API |
-| rails-background-jobs | If there are jobs |
-| rails-migration-safety | If there is a migration |
-| rails-graphql-best-practices | If it's GraphQL |
+| create-service-object | If feature requires service |
+| integrate-api-client | If integrating external API |
+| implement-background-job | If there are jobs |
+| review-migration | If there is a migration |
+| implement-graphql | If it's GraphQL |
 
-### ruby-service-objects
+### create-service-object
 | Next | When |
 |------|------|
-| rspec-service-testing | To test the service |
-| yard-documentation | Document the public service |
+| test-service | To test the service |
+| write-yard-docs | Document the public service |
 
-### rails-code-review
+### code-review
 | Next | When |
 |------|------|
-| rails-security-review | If there are security concerns |
-| rails-architecture-review | If there are architecture issues |
-| rails-review-response | If feedback received |
+| security-check | If there are security concerns |
+| review-architecture | If there are architecture issues |
+| respond-to-review | If feedback received |
 
 ---
 
@@ -205,7 +205,7 @@ rails-code-review
 
 ```text
 New to project?
-  ├─ Yes → rails-context-engineering → rails-project-onboarding
+  ├─ Yes → load-context → setup-environment
   └─ No → What do you need?
 
        Plan?
@@ -213,23 +213,23 @@ New to project?
        └─ No → Implement?
 
             Bug?
-            ├─ Yes → rails-bug-triage
+            ├─ Yes → triage-bug
             └─ No → Refactor?
-                 ├─ Yes → refactor-safely
-                 └─ No → rails-tdd-slices → rspec-best-practices
+                 ├─ Yes → refactor-code
+                 └─ No → plan-tests → write-tests
 
                       Type?
-                      ├─ Service → ruby-service-objects → rspec-service-testing
-                      ├─ API integration → ruby-api-client-integration
-                      ├─ Background job → rails-background-jobs
-                      ├─ Migration → rails-migration-safety
-                      ├─ GraphQL → rails-graphql-best-practices
-                      ├─ Authorization → rails-authorization-policies
-                      ├─ Performance → rails-performance-optimization
-                      └─ Engine → rails-engine-author
+                      ├─ Service → create-service-object → test-service
+                      ├─ API integration → integrate-api-client
+                      ├─ Background job → implement-background-job
+                      ├─ Migration → review-migration
+                      ├─ GraphQL → implement-graphql
+                      ├─ Authorization → implement-authorization
+                      ├─ Performance → optimize-performance
+                      └─ Engine → create-engine
 
 Review?
-  └─ rails-code-review → (rails-security-review | rails-architecture-review) → rails-review-response
+  └─ code-review → (security-check | review-architecture) → respond-to-review
 ```
 
 ---
@@ -238,12 +238,12 @@ Review?
 
 | Name | Type | Defined in | Purpose |
 |------|------|------------|---------|
-| Test Feedback | checkpoint | rails-tdd-slices | Confirm correct test before implementing |
-| Implementation Proposal | checkpoint | rspec-best-practices | Approve approach before code |
+| Test Feedback | checkpoint | plan-tests | Confirm correct test before implementing |
+| Implementation Proposal | checkpoint | write-tests | Approve approach before code |
 | Linters + Suite | gate | workflow-guide.md | All linters and tests pass |
 | PRD Approved | gate | create-prd | Don't implement without approved PRD |
-| Characterization Tests | gate | refactor-safely | Tests pass on current code before refactor |
-| Engine Specs | gate | rails-engine-author | Specs fail before implementing engine |
+| Characterization Tests | gate | refactor-code | Tests pass on current code before refactor |
+| Engine Specs | gate | create-engine | Specs fail before implementing engine |
 
 ---
 

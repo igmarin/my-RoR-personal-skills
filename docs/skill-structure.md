@@ -73,7 +73,7 @@ The numbered procedure. Includes:
 
 - Explicit **checkpoints** where the skill pauses for user feedback (Test Feedback, Implementation Proposal, Severity Triage — depending on skill).
 - Loop bodies (red → green → refactor).
-- Branch points ("If the change touches `db/schema.rb`, also load `rails-migration-safety`").
+- Branch points ("If the change touches `db/schema.rb`, also load `review-migration`").
 
 Keep steps imperative ("Write the spec", "Run `bundle exec rspec path/to/spec`") rather than declarative — the skill is an instruction sheet, not documentation of behavior.
 

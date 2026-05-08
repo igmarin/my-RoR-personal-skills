@@ -10,7 +10,7 @@
 graph TB
     subgraph Scaffold [🔧 Phase 1: Scaffold]
         direction TB
-        A[rails-engine-author] --> B[rails-engine-testing]
+        A[create-engine] --> B[test-engine]
         B --> C{Tests pass?}
         C -- No --> D[Fix setup]
         D --> B
@@ -18,13 +18,13 @@ graph TB
 
     subgraph Document [📝 Phase 2: Document]
         direction TB
-        C -- Yes --> E[rails-engine-docs]
-        E --> F[rails-engine-installers]
+        C -- Yes --> E[document-engine]
+        E --> F[create-engine-installer]
     end
 
     subgraph Review [🔍 Phase 3: Review]
         direction TB
-        F --> G[rails-engine-reviewer]
+        F --> G[review-engine]
         G --> H{Findings?}
         H -- Yes --> I[Fix issues]
         I --> G
@@ -32,8 +32,8 @@ graph TB
 
     subgraph Release [🚀 Phase 4: Release]
         direction TB
-        H -- No --> J[rails-engine-release]
-        J --> K[rails-engine-compatibility]
+        H -- No --> J[release-engine]
+        J --> K[upgrade-engine]
         K --> L((Release gem))
     end
 
@@ -50,7 +50,7 @@ graph TB
 
 ## Engine Skills Sequence
 
-### 1. rails-engine-author
+### 1. create-engine
 
 **Goal:** Initial scaffolding.
 
@@ -59,7 +59,7 @@ graph TB
 - Host-app contract
 - File structure
 
-### 2. rails-engine-testing
+### 2. test-engine
 
 **Goal:** Testing framework.
 
@@ -68,7 +68,7 @@ graph TB
 - Routing specs
 - Generator specs
 
-### 3. rails-engine-docs
+### 3. document-engine
 
 **Goal:** Complete documentation.
 
@@ -76,7 +76,7 @@ graph TB
 - Usage examples
 - Extension points
 
-### 4. rails-engine-installers
+### 4. create-engine-installer
 
 **Goal:** Installation generators.
 
@@ -85,7 +85,7 @@ graph TB
 - Initializer generator
 - Route mount setup
 
-### 5. rails-engine-reviewer
+### 5. review-engine
 
 **Goal:** Complete review.
 
@@ -94,7 +94,7 @@ graph TB
 - Safe initialization
 - Test coverage
 
-### 6. rails-engine-release
+### 6. release-engine
 
 **Goal:** Versioned release.
 
@@ -103,7 +103,7 @@ graph TB
 - Version bump
 - Gem build & publish
 
-### 7. rails-engine-compatibility
+### 7. upgrade-engine
 
 **Goal:** Cross-version stability.
 
@@ -117,11 +117,11 @@ graph TB
 
 ```mermaid
 flowchart LR
-    A[Host app code] --> B[rails-engine-extraction]
-    B --> C[refactor-safely]
+    A[Host app code] --> B[extract-engine]
+    B --> C[refactor-code]
     C --> D[Characterization tests]
-    D --> E[rails-engine-author]
-    E --> F[rails-engine-testing]
+    D --> E[create-engine]
+    E --> F[test-engine]
 ```
 
 **Key rule:** Don't extract and change behavior in the same step.
@@ -133,7 +133,7 @@ flowchart LR
 If the engine exposes HTTP endpoints:
 
 ```
-rails-engine-* → api-rest-collection
+engine skills → generate-api-collection
 ```
 
 Generate or update Postman Collection for testing.
@@ -144,12 +144,12 @@ Generate or update Postman Collection for testing.
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|
-| **rails-engine-author** | Scaffold engine | "create engine", "new engine", "extract to engine" |
-| **rails-engine-testing** | Engine test setup | "test engine", "dummy app", "engine specs" |
-| **rails-engine-docs** | Engine documentation | "engine README", "install guide", "engine docs" |
-| **rails-engine-installers** | Install generators | "install generator", "engine setup", "copy migrations" |
-| **rails-engine-reviewer** | Engine review | "review engine", "engine quality" |
-| **rails-engine-release** | Engine release | "release engine", "version bump", "publish gem" |
-| **rails-engine-compatibility** | Cross-version support | "Zeitwerk", "compatibility", "Rails upgrade" |
-| **rails-engine-extraction** | Extract to engine | "extract feature", "move to engine", "host coupling" |
-| **api-rest-collection** | API docs | "Postman", "API collection", "test endpoints" |
+| **create-engine** | Scaffold engine | "create engine", "new engine", "extract to engine" |
+| **test-engine** | Engine test setup | "test engine", "dummy app", "engine specs" |
+| **document-engine** | Engine documentation | "engine README", "install guide", "engine docs" |
+| **create-engine-installer** | Install generators | "install generator", "engine setup", "copy migrations" |
+| **review-engine** | Engine review | "review engine", "engine quality" |
+| **release-engine** | Engine release | "release engine", "version bump", "publish gem" |
+| **upgrade-engine** | Cross-version support | "Zeitwerk", "compatibility", "Rails upgrade" |
+| **extract-engine** | Extract to engine | "extract feature", "move to engine", "host coupling" |
+| **generate-api-collection** | API docs | "Postman", "API collection", "test endpoints" |

@@ -25,11 +25,11 @@ flowchart TD
     NEXT -->|Implement| DEV
     NEXT -->|Done| END([PR / Merge])
 
-    DEV -->|Tests pass| YARD[yard-documentation]
+    DEV -->|Tests pass| YARD[write-yard-docs]
     DEV -->|Need review| REVIEW
 
     YARD --> REVIEW
-    REVIEW -->|Feedback received| RESPOND[rails-review-response]
+    REVIEW -->|Feedback received| RESPOND[respond-to-review]
     RESPOND -->|Re-implement| DEV
     RESPOND -->|OK| END
 
@@ -43,13 +43,13 @@ flowchart TD
 
 | Stage | Workflow | Description | Primary Skills |
 |-------|----------|-------------|----------------|
-| **Discovery** | [Discovery & Context](discovery.md) | Understand codebase, project onboarding | `rails-context-engineering`, `rails-project-onboarding` |
-| **Planning** | [Planning & Design](planning.md) | Plan features, PRD, tasks, DDD | `create-prd`, `generate-tasks`, `ddd-*` |
-| **Setup** | [Setup & Configuration](setup.md) | Configure CI/CD, environment, deploy | `rails-project-onboarding` *(plus roadmap `rails-ci-cd-setup`)* |
-| **Development** | [Development](development.md) | TDD development, implementation | `rails-tdd-slices`, `rspec-*`, implementation |
-| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `rails-code-conventions`, `refactor-safely`, `yard-documentation` |
-| **Review** | [Review & Validation](review.md) | Code review, security, architecture | `rails-code-review`, `rails-security-review`, `rails-architecture-review` |
-| **Engines** | [Engine Development](engines.md) | Create and maintain Rails engines | `rails-engine-*` |
+| **Discovery** | [Discovery & Context](discovery.md) | Understand codebase, project onboarding | `load-context`, `setup-environment` |
+| **Planning** | [Planning & Design](planning.md) | Plan features, PRD, tasks, DDD | `create-prd`, `generate-tasks`, `ddd skills` |
+| **Setup** | [Setup & Configuration](setup.md) | Configure CI/CD, environment, deploy | `setup-environment` *(plus roadmap `setup-ci-cd`)* |
+| **Development** | [Development](development.md) | TDD development, implementation | `plan-tests`, `testing skills`, implementation |
+| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `apply-code-conventions`, `refactor-code`, `write-yard-docs` |
+| **Review** | [Review & Validation](review.md) | Code review, security, architecture | `code-review`, `security-check`, `review-architecture` |
+| **Engines** | [Engine Development](engines.md) | Create and maintain Rails engines | `engine skills` |
 
 ---
 
@@ -59,11 +59,11 @@ This directory contains **reference guides** describing each stage. For **execut
 
 | Stage Doc | Callable Skill | Status |
 |-----------|----------------|--------|
-| [development.md](development.md) | [`rails-tdd-loop`](../../workflows/rails-tdd-loop/SKILL.md) | Active |
-| [review.md](review.md) | [`rails-review-flow`](../../workflows/rails-review-flow/SKILL.md) | Active |
-| [setup.md](setup.md) | [`rails-setup-flow`](../../workflows/rails-setup-flow/SKILL.md) | Active |
-| [quality.md](quality.md) | [`rails-quality-flow`](../../workflows/rails-quality-flow/SKILL.md) | Active |
-| [engines.md](engines.md) | [`rails-engines-flow`](../../workflows/rails-engines-flow/SKILL.md) | Active |
+| [development.md](development.md) | [`tdd-workflow`](../../workflows/tdd-workflow/SKILL.md) | Active |
+| [review.md](review.md) | [`review-workflow`](../../workflows/review-workflow/SKILL.md) | Active |
+| [setup.md](setup.md) | [`setup-workflow`](../../workflows/setup-workflow/SKILL.md) | Active |
+| [quality.md](quality.md) | [`quality-workflow`](../../workflows/quality-workflow/SKILL.md) | Active |
+| [engines.md](engines.md) | [`engine-workflow`](../../workflows/engine-workflow/SKILL.md) | Active |
 | [discovery.md](discovery.md) | *(none — linear, no orchestration needed)* | Doc only |
 | [planning.md](planning.md) | *(none — linear, no orchestration needed)* | Doc only |
 
@@ -75,12 +75,12 @@ This directory contains **reference guides** describing each stage. For **execut
 
 | Situation | Workflow | Quick Entry |
 |-----------|----------|-------------|
-| **Bug fix** | [Bug Fix Loop](development.md#bug-fix-loop) | `rails-bug-triage` → Fix → Test |
-| **Refactoring** | [Refactor Safely](quality.md#refactor-safely) | `refactor-safely` → characterization tests → extract |
-| **Performance** | [Performance Optimization](development.md#performance) | `rails-performance-optimization` |
-| **GraphQL** | [GraphQL Feature](development.md#graphql) | `rails-graphql-best-practices` |
-| **Authorization** | [Authorization Setup](development.md#authorization) | `rails-authorization-policies` |
-| **External API** | [API Integration](development.md#external-api-integration) | `ruby-api-client-integration` |
+| **Bug fix** | [Bug Fix Loop](development.md#bug-fix-loop) | `triage-bug` → Fix → Test |
+| **Refactoring** | [Refactor Safely](quality.md#refactor-code) | `refactor-code` → characterization tests → extract |
+| **Performance** | [Performance Optimization](development.md#performance) | `optimize-performance` |
+| **GraphQL** | [GraphQL Feature](development.md#graphql) | `implement-graphql` |
+| **Authorization** | [Authorization Setup](development.md#authorization) | `implement-authorization` |
+| **External API** | [API Integration](development.md#external-api-integration) | `integrate-api-client` |
 
 ---
 
@@ -88,31 +88,31 @@ This directory contains **reference guides** describing each stage. For **execut
 
 ```
 New to the project?
-  ├─ Yes → rails-context-engineering → rails-project-onboarding
+  ├─ Yes → load-context → setup-environment
   └─ No → What do you need to do?
 
        Plan a feature?
-       ├─ Yes → create-prd → generate-tasks → (ticket-planning optional)
+       ├─ Yes → create-prd → generate-tasks → (plan-tickets optional)
        └─ No → Implement?
 
             Bug or refactor?
-            ├─ Bug → rails-bug-triage
-            ├─ Refactor → refactor-safely
-            └─ New feature → rails-tdd-slices → rspec-best-practices
+            ├─ Bug → triage-bug
+            ├─ Refactor → refactor-code
+            └─ New feature → plan-tests → write-tests
 
                  Code type?
-                 ├─ Service → ruby-service-objects
-                 ├─ REST API → ruby-api-client-integration
-                 ├─ GraphQL → rails-graphql-best-practices
-                 ├─ Migration → rails-migration-safety
-                 ├─ Background job → rails-background-jobs
-                 └─ Engine → rails-engine-author
+                 ├─ Service → create-service-object
+                 ├─ REST API → integrate-api-client
+                 ├─ GraphQL → implement-graphql
+                 ├─ Migration → review-migration
+                 ├─ Background job → implement-background-job
+                 └─ Engine → create-engine
 
                       Authorization/roles?
-                      └─ rails-authorization-policies
+                      └─ implement-authorization
 
                            Performance?
-                           └─ rails-performance-optimization
+                           └─ optimize-performance
 ```
 
 ---

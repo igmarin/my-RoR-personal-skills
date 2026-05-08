@@ -18,12 +18,13 @@ Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/rub
 
 ## What it exposes
 
-| Type | Prefix | Source |
-|------|--------|--------|
-| **Resources** | `skill/<name>` | Every published `SKILL.md` + support files in `build/`, `skills/<category>/<skill>/`, and supported Tessl tile mirrors |
+| Type | Prefix / Name | Source |
+|------|---------------|--------|
 | **Resources** | `doc/<name>` | All `*.md` files under `docs/`, including nested docs such as `docs/workflows/*.md` |
 | **Resources** | `workflow/<name>` | Every workflow directory under `workflows/<workflow>/`, exposed from its `SKILL.md` plus supported companion files |
 | **Tool** | `use_skill` | Invocable tool: given a `skill_name`, returns the full `SKILL.md` content |
+
+Individual **Skills** are no longer exposed as resources to prevent context bloat. They are accessed exclusively via the `use_skill` tool.
 
 Adding a new skill directory to the repo automatically makes it available — no server changes needed.
 
@@ -234,8 +235,8 @@ The container uses stdio transport — wire it up the same way as the Ruby comma
 1. You open any Rails project in Windsurf (or Claude Code, Cursor, etc.).
 2. The IDE loads this MCP server from its config.
 3. You ask: *"I need to add a GraphQL mutation — which skill should I use?"*
-4. The agent calls `tools/call use_skill` with `skill_name: "rails-graphql-best-practices"`.
-5. The server reads `rails-graphql-best-practices/SKILL.md` and returns the full instructions.
+4. The agent calls `tools/call use_skill` with `skill_name: "implement-graphql"`.
+5. The server reads `implement-graphql/SKILL.md` and returns the full instructions.
 6. The agent follows the skill workflow without loading the entire repo into context.
 
 ---

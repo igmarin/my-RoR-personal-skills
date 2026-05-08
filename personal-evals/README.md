@@ -12,7 +12,7 @@ The goal is to prove that our skills provide a significant improvement over the 
 
 ## Scenario Structure
 
-Each evaluation lives in its own directory (e.g., `skill-ruby-service-objects/`) and must contain:
+Each evaluation lives in its own directory (e.g., `skill-create-service-object/`) and must contain:
 
 ### 1. `task.md` (The Prompt)
 A complex, representative scenario that forces the agent to use the skill's specific instructions.

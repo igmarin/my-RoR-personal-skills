@@ -36,6 +36,7 @@ while IFS= read -r scenario_dir; do
 
   [[ -f "$scenario_dir/task.md" ]] || fail "$relative_dir is missing task.md"
   [[ -f "$scenario_dir/criteria.json" ]] || fail "$relative_dir is missing criteria.json"
+  [[ -f "$scenario_dir/metadata.json" ]] || fail "$relative_dir is missing metadata.json"
 
   if [[ -f "$scenario_dir/criteria.json" ]]; then
     ruby -rjson -e 'data = JSON.parse(File.read(ARGV.fetch(0))); abort "missing weighted_checklist type" unless data["type"] == "weighted_checklist"; checklist = data.fetch("checklist"); total = checklist.sum { |item| item.fetch("max_score") }; abort "criteria total must be 100, got #{total}" unless total == 100' "$scenario_dir/criteria.json" \
@@ -49,13 +50,14 @@ while IFS= read -r scenario_dir; do
       scenario_dir = ARGV.fetch(1)
       data = JSON.parse(File.read(File.join(scenario_dir, "metadata.json")))
 
-      required = %w[id target_type target_name context_mode tessl_export]
+      required = %w[id target_type target_name context_mode requires_companion_resources tessl_export]
       missing = required.reject { |key| data.key?(key) }
       abort "missing required keys: #{missing.join(", ")}" unless missing.empty?
 
       abort "id must match directory name" unless data.fetch("id") == File.basename(scenario_dir)
       abort "target_type must be skill or workflow" unless %w[skill workflow].include?(data.fetch("target_type"))
       abort "context_mode must be skill_bundle_xml" unless data.fetch("context_mode") == "skill_bundle_xml"
+      abort "requires_companion_resources must be boolean" unless [true, false].include?(data.fetch("requires_companion_resources"))
 
       tessl_export = data.fetch("tessl_export")
       abort "tessl_export.supported must be boolean" unless [true, false].include?(tessl_export["supported"])

@@ -29,9 +29,9 @@ A weighted checklist that evaluates adherence to our **strict conventions** and 
 - **Convention over generic:** Reward specific naming, structure, and documentation requirements defined in the skill.
 - **Weighted Scores:** Assign higher points to non-negotiable hard-gates.
 
-### 3. Optional metadata
+### 3. `metadata.json` (The Target Contract)
 
-New scenarios may add metadata that follows `personal-evals/schema.json`. Use it to declare the target skill or workflow and whether the scenario can be exported to Tessl later.
+Every scenario must include metadata that follows `personal-evals/schema.json`. Use it to declare the target skill or workflow, the XML context mode, and whether the scenario can be exported to Tessl later.
 
 ```json
 {

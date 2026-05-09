@@ -1,31 +1,12 @@
 {
   "context": "Evaluates the creation and configuration of a mountable Rails engine: namespace isolation, dummy app setup, and proper engine routing.",
-  "type": "weighted_checklist",
-  "checklist": [
-    {
-      "name": "Namespace Isolation",
-      "description": "The engine correctly uses `isolate_namespace AuthCore` in its engine.rb file.",
-      "max_score": 25
-    },
-    {
-      "name": "Proper Namespacing",
-      "description": "Models and controllers are correctly nested within the `AuthCore` module/directory structure.",
-      "max_score": 20
-    },
-    {
-      "name": "Engine Routing",
-      "description": "Routes are defined within the engine's `config/routes.rb` and use the engine's namespace.",
-      "max_score": 15
-    },
-    {
-      "name": "Dummy App Configuration",
-      "description": "A working dummy app structure is provided or described for integration testing.",
-      "max_score": 20
-    },
-    {
-      "name": "Mountable Pattern",
-      "description": "The engine is explicitly configured as a mountable engine, not a plain Railtie or full engine without isolation.",
-      "max_score": 20
-    }
-  ]
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 70,
+  "minimum_delta": 10
 }

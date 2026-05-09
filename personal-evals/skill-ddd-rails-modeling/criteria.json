@@ -1,36 +1,12 @@
 {
   "context": "Evaluates DDD modeling in Rails: use of Value Objects (POROs), Entity/Aggregate distinction, and proper service extraction without over-engineering.",
-  "type": "weighted_checklist",
-  "checklist": [
-    {
-      "name": "Value Object Pattern",
-      "description": "Address is implemented as a stateless PORO (Value Object), not a separate ActiveRecord table.",
-      "max_score": 20
-    },
-    {
-      "name": "Domain Service Extraction",
-      "description": "Carrier selection logic is moved to a specialized Domain Service, keeping models focused on data/state.",
-      "max_score": 20
-    },
-    {
-      "name": "Immutable Value Objects",
-      "description": "The Address object is immutable (attributes set at init, no setters).",
-      "max_score": 15
-    },
-    {
-      "name": "Entity Identification",
-      "description": "Shipment is correctly identified as an Entity with its own lifecycle and identity.",
-      "max_score": 15
-    },
-    {
-      "name": "Idiomatic Rails Integration",
-      "description": "Uses Rails conventions (like composed_of or similar) to integrate Value Objects into ActiveRecord.",
-      "max_score": 10
-    },
-    {
-      "name": "Boundary Enforcement",
-      "description": "The logic demonstrates clear boundaries; shipping rules do not leak back into the Order model.",
-      "max_score": 20
-    }
-  ]
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 70,
+  "minimum_delta": 10
 }

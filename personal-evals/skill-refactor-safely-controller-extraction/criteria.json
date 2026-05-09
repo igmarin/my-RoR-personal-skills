@@ -1,36 +1,12 @@
 {
   "context": "Evaluating the ability to safely refactor a fat Rails controller by extracting logic into a service object while following a strict TDD protocol.",
-  "type": "weighted_checklist",
-  "checklist": [
-    {
-      "name": "Characterization Tests First",
-      "description": "The agent must write RSpec tests for the existing controller behavior BEFORE altering the controller's logic.",
-      "max_score": 25
-    },
-    {
-      "name": "Test Coverage",
-      "description": "The tests must cover both the happy path (successful order creation) and the failure path (e.g., inventory failure).",
-      "max_score": 15
-    },
-    {
-      "name": "Extraction and Delegation",
-      "description": "The core business logic must be moved from the controller into a distinct Service Object, leaving a skinny controller that primarily handles HTTP concerns and delegates to the service.",
-      "max_score": 25
-    },
-    {
-      "name": "Behavior Preservation",
-      "description": "The underlying business logic, responses, and HTTP status codes must remain identical to the original implementation.",
-      "max_score": 15
-    },
-    {
-      "name": "Single Responsibility Principle (SRP)",
-      "description": "The newly extracted Service Object must adhere to the Single Responsibility Principle.",
-      "max_score": 10
-    },
-    {
-      "name": "YARD Documentation",
-      "description": "The extracted public methods in the new Service Object must be documented using correct YARD tags.",
-      "max_score": 10
-    }
-  ]
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 70,
+  "minimum_delta": 10
 }

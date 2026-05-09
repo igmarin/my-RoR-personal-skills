@@ -1,56 +1,12 @@
 {
   "context": "Tests whether the agent follows RSpec structural conventions when writing a service object spec: file pragma, describe format, service spec anchor pattern, external mocking style, and example naming discipline.",
-  "type": "weighted_checklist",
-  "checklist": [
-    {
-      "name": "Frozen string pragma",
-      "description": "The spec file begins with `# frozen_string_literal: true` as its very first line",
-      "max_score": 10
-    },
-    {
-      "name": "Full constant path",
-      "description": "RSpec.describe references the full constant path `Memberships::UpgradeService` (not a string like 'Memberships::UpgradeService')",
-      "max_score": 10
-    },
-    {
-      "name": "describe '.call' block",
-      "description": "Contains a `describe '.call'` block wrapping the primary test cases",
-      "max_score": 10
-    },
-    {
-      "name": "subject(:result) definition",
-      "description": "Defines `subject(:result) { described_class.call(...) }` inside the describe '.call' block",
-      "max_score": 10
-    },
-    {
-      "name": "No 'and' in examples",
-      "description": "No it/specify description string contains the word 'and' (case-insensitive, as a full word)",
-      "max_score": 10
-    },
-    {
-      "name": "No 'should' in examples",
-      "description": "No it/specify description string begins with or contains 'should'",
-      "max_score": 10
-    },
-    {
-      "name": "External service mocking style",
-      "description": "MailgunClient is mocked using `allow(MailgunClient).to receive(...)`, NOT via instance_double",
-      "max_score": 15
-    },
-    {
-      "name": "context 'when' naming",
-      "description": "Scenario variations use `context 'when ...'` or `context 'with ...'` blocks (not bare describe blocks for scenarios)",
-      "max_score": 10
-    },
-    {
-      "name": "Spec file path",
-      "description": "The spec is placed at `spec/services/memberships/upgrade_service_spec.rb` (mirrors source path)",
-      "max_score": 10
-    },
-    {
-      "name": "No ActiveRecord mocking",
-      "description": "Does NOT mock or stub ActiveRecord finders (User.find is not stubbed/mocked)",
-      "max_score": 5
-    }
-  ]
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 70,
+  "minimum_delta": 10
 }

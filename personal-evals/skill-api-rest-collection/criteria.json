@@ -1,36 +1,12 @@
 {
   "context": "Evaluating the ability to generate a complete and valid Postman Collection v2.1 for a set of Rails REST API endpoints.",
-  "type": "weighted_checklist",
-  "checklist": [
-    {
-      "name": "Collection Structure",
-      "description": "The generated Postman Collection must be valid v2.1 format with proper info, item structure, and variable definitions.",
-      "max_score": 20
-    },
-    {
-      "name": "Endpoint Coverage",
-      "description": "All 5 endpoints (index, show, create, update, destroy) must be present in the collection with correct HTTP methods.",
-      "max_score": 25
-    },
-    {
-      "name": "Request Configuration",
-      "description": "Each request must have proper URL, method, headers (Content-Type: application/json), and body where applicable (POST/PUT).",
-      "max_score": 20
-    },
-    {
-      "name": "Example Data",
-      "description": "Requests should include example data in the request body (for POST/PUT) and path parameters (for show/update/destroy) with meaningful test values.",
-      "max_score": 15
-    },
-    {
-      "name": "Descriptions and Documentation",
-      "description": "Each request should have a meaningful description, and the collection should have overall documentation describing its purpose.",
-      "max_score": 10
-    },
-    {
-      "name": "Test Scripts",
-      "description": "At least some requests should include test scripts (e.g., pm.test()) to validate responses.",
-      "max_score": 10
-    }
-  ]
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 70,
+  "minimum_delta": 10
 }

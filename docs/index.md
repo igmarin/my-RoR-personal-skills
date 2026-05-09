@@ -15,6 +15,7 @@ Master index for the Rails Agent Skills library. Start here to navigate the syst
 Detailed step-by-step guides for every development phase.
 
 - [Discovery & Context](workflows/discovery.md)
+- [Workflows Index](workflows/README.md)
 - [Planning & Design](workflows/planning.md)
 - [Development (TDD)](workflows/development.md)
 - [Code Quality & Refactoring](workflows/quality.md)

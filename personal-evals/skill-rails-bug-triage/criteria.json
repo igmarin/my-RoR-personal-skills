@@ -1,31 +1,12 @@
 {
   "context": "Evaluates bug triage skills: creating a reproduction spec first, isolating root causes (like thread-safety issues), and applying a verified fix.",
-  "type": "weighted_checklist",
-  "checklist": [
-    {
-      "name": "Failing Reproduction Spec First",
-      "description": "The agent writes a failing RSpec test BEFORE proposing or implementing the fix.",
-      "max_score": 30
-    },
-    {
-      "name": "Root Cause Identification",
-      "description": "Correctly identifies that class variables (@@) are not thread-safe in a multi-threaded Rails environment.",
-      "max_score": 25
-    },
-    {
-      "name": "Thread-Safe Fix",
-      "description": "The proposed fix removes the class variable or uses a thread-safe caching mechanism (like RequestStore or simple instance logic).",
-      "max_score": 20
-    },
-    {
-      "name": "Scope Isolation",
-      "description": "Ensures the fix validates that account_id belongs to the current_user before fetching.",
-      "max_score": 15
-    },
-    {
-      "name": "Verification Step",
-      "description": "Explicitly runs the reproduction spec after the fix to confirm it passes.",
-      "max_score": 10
-    }
-  ]
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 70,
+  "minimum_delta": 10
 }

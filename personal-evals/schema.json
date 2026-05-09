@@ -25,6 +25,12 @@
       "type": "boolean",
       "default": true
     },
+    "criteria_version": {
+      "type": "string",
+      "enum": ["1.0", "2.0"],
+      "default": "2.0",
+      "description": "Version of the criteria.json format. 2.0 uses canonical dimensions with per-dimension scoring."
+    },
     "tessl_export": {
       "type": "object",
       "additionalProperties": false,

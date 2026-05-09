@@ -1,61 +1,12 @@
 {
   "context": "Evaluates the creation of a Rails Service Object according to strict conventions: .call pattern, standardized response hash, YARD documentation, error constants, and TDD discipline.",
-  "type": "weighted_checklist",
-  "checklist": [
-    {
-      "name": "Mandatory Response Contract (Success)",
-      "description": "The service returns `{ success: true, response: { order: ... } }` on success.",
-      "max_score": 15
-    },
-    {
-      "name": "Mandatory Response Contract (Failure)",
-      "description": "The service returns `{ success: false, response: { error: { message: '...' } } }` on failure.",
-      "max_score": 15
-    },
-    {
-      "name": "Entry Point Pattern",
-      "description": "Implements `def self.call(...)` delegating to `new(...).call` (Pattern 1).",
-      "max_score": 10
-    },
-    {
-      "name": "Error Constants",
-      "description": "User-facing error messages are defined as constants at the top of the class.",
-      "max_score": 10
-    },
-    {
-      "name": "YARD Documentation (self.call)",
-      "description": "Includes `@param`, `@return [Hash]`, and `@raise` tags for the `self.call` method.",
-      "max_score": 10
-    },
-    {
-      "name": "YARD Documentation (public methods)",
-      "description": "Includes `@param`, `@return`, and `@raise` tags for all other public methods.",
-      "max_score": 5
-    },
-    {
-      "name": "Module README",
-      "description": "An `app/services/orders/README.md` file exists following the required template.",
-      "max_score": 10
-    },
-    {
-      "name": "Frozen String Pragma",
-      "description": "The service file starts with `# frozen_string_literal: true`.",
-      "max_score": 5
-    },
-    {
-      "name": "Proper Namespacing",
-      "description": "The class is wrapped in `module Orders` and placed at `app/services/orders/placement_service.rb`.",
-      "max_score": 5
-    },
-    {
-      "name": "Error Logging",
-      "description": "Rescued errors log both the message AND at least the first 5 lines of the backtrace.",
-      "max_score": 5
-    },
-    {
-      "name": "TDD Discipline (Simulated)",
-      "description": "The output includes a failing spec created before the implementation (verified via the task sequence).",
-      "max_score": 10
-    }
-  ]
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 70,
+  "minimum_delta": 10
 }

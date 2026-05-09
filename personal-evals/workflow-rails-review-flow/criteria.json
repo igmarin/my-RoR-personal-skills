@@ -1,36 +1,12 @@
 {
   "context": "Evaluates the execution of a systematic PR review: multi-pass analysis, severity classification, and identifying critical security/performance issues.",
-  "type": "weighted_checklist",
-  "checklist": [
-    {
-      "name": "Multi-Pass Analysis",
-      "description": "The agent explicitly performs multiple passes (e.g., Security, then Performance, then Style).",
-      "max_score": 15
-    },
-    {
-      "name": "Identifies SQL Injection",
-      "description": "Detects the critical security vulnerability in the SearchService (raw SQL with interpolation).",
-      "max_score": 25
-    },
-    {
-      "name": "Identifies N+1 Performance Issue",
-      "description": "Detects the performance issue in the controller (potential N+1 if products have associations).",
-      "max_score": 15
-    },
-    {
-      "name": "Identifies Migration Risk",
-      "description": "Detects that adding an index to a potentially large table should be done concurrently.",
-      "max_score": 15
-    },
-    {
-      "name": "Severity Classification",
-      "description": "Correctly classifies SQL injection as 'Critical' and style issues as 'Suggestions'.",
-      "max_score": 15
-    },
-    {
-      "name": "Actionable Code Fixes",
-      "description": "Provides the corrected code for the identified vulnerabilities and performance bottlenecks.",
-      "max_score": 15
-    }
-  ]
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 65,
+  "minimum_delta": 15
 }

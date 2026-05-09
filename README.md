@@ -24,7 +24,19 @@ The goal is simple: **make AI outputs predictable, testable, and production-read
 
 ## The Proof: Baseline vs Context
 
-We measure the effectiveness of our skills by comparing a "Baseline" agent (raw LLM) against an agent using our **Skill Context**. The difference in scores (the **Lift**) is the mathematical proof of the value this library provides.
+We measure the effectiveness of our skills by comparing a **Baseline** agent (raw LLM, no skill context) against a **Context** agent (with our skill instructions). The engine scores both outputs independently across five canonical dimensions, then computes the delta — the **Lift** — which is the mathematical proof of the value this library provides.
+
+### Canonical Dimensions
+
+| Dimension | Weight | Measures |
+|-----------|--------|----------|
+| Correctness | 30 | Does the output fulfill the task requirements? |
+| Skill Adherence | 25 | Did the agent follow patterns defined in the skill? |
+| Code Quality | 20 | Is the code clean, well-structured, and free of smells? |
+| Test Coverage | 15 | Are there meaningful tests following best practices? |
+| Documentation | 10 | Is there adequate YARD documentation and clear intent? |
+
+### Example Lift (Legacy v1 Format)
 
 | Skill | Baseline | With Context | **Lift** |
 |-------|----------|--------------|----------|
@@ -34,7 +46,34 @@ We measure the effectiveness of our skills by comparing a "Baseline" agent (raw 
 | `refactor-code` | 60% | 100% | **+40** |
 | `create-service-object` | 71% | 100% | **+29** |
 
-*Scores based on evaluation runs using Claude 3.5 Sonnet. A skill that only beats baseline marginally is considered under-specified; our goal is a significant lift on every non-generic convention.*
+*Legacy scores based on evaluation runs using Claude 3.5 Sonnet. The current engine (v2) uses integer dimension scores out of 100 with a `pass_threshold` and `minimum_delta` gate.*
+
+### Eval Format (v2)
+
+Evals in `personal-evals/` use the new `criteria.json` format:
+
+```json
+{
+  "context": "Describe what this eval measures.",
+  "dimensions": [
+    { "name": "correctness", "max_score": 30 },
+    { "name": "skill_adherence", "max_score": 25 },
+    { "name": "code_quality", "max_score": 20 },
+    { "name": "test_coverage", "max_score": 15 },
+    { "name": "documentation", "max_score": 10 }
+  ],
+  "pass_threshold": 70,
+  "minimum_delta": 10
+}
+```
+
+**Rules:**
+- `dimensions` `max_score` values must sum to exactly 100.
+- `pass_threshold` is the minimum total context score to pass (skills default 70, workflows 65).
+- `minimum_delta` is the minimum improvement over baseline required (skills default 10, workflows 15).
+- Optional per-dimension `description` overrides the built-in default.
+
+A skill that only beats baseline marginally is considered under-specified; our goal is a significant lift on every non-generic convention.
 
 ---
 

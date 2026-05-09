@@ -19,6 +19,15 @@ tmp/
 .gemini-plugin/
 .cursor/
 .windsurf/
+# Personal and internal files (Hidden from Tessl)
+personal-evals/
+plans/
+skills/**/README.md
+workflows/README.md
+CHANGELOG.md
+docs/eval-provenance.md
+docs/evaluator-and-agents-roadmap.md
+
 .tessl/
 .ruby-lsp/
 .vscode/

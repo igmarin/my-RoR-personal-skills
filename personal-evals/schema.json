@@ -3,7 +3,7 @@
   "title": "Personal Eval Metadata",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "target_type", "target_name", "context_mode", "tessl_export"],
+  "required": ["id", "target_type", "target_name", "context_mode", "requires_companion_resources", "tessl_export"],
   "properties": {
     "id": {
       "type": "string",

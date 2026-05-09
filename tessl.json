@@ -1,0 +1,12 @@
+{
+  "name": "rails-agent-skills",
+  "mode": "vendored",
+  "dependencies": {
+    "tessl-labs/tessl-skill-eval-scenarios": {
+      "version": "0.1.0"
+    },
+    "tessl-labs/review-model-performance": {
+      "version": "0.1.2"
+    }
+  }
+}

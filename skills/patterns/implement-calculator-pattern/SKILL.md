@@ -174,3 +174,9 @@ Each spec suite must cover: inactive plan, nil plan, each named variant, and unk
 ## Assets
 
 - [assets/examples.md](assets/examples.md)
+
+
+## Extended Resources
+
+- [IMPLEMENTATION.md](IMPLEMENTATION.md)
+- [TESTING.md](TESTING.md)

@@ -102,3 +102,8 @@ The following supplementary files may be present in the repository. Consult them
 
 - [assets/compatibility_matrix.md](assets/compatibility_matrix.md) — version support matrix template
 - [assets/zeitwerk_notes.md](assets/zeitwerk_notes.md) — extended Zeitwerk naming and configuration notes
+
+
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md)

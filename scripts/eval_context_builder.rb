@@ -5,140 +5,147 @@ require 'optparse'
 require 'pathname'
 require 'yaml'
 
-class EvalContextBuilder
-  TEXT_EXTENSIONS = %w[.erb .js .json .md .rb .txt .yaml .yml].freeze
-  MEDIA_TYPES = {
-    '.erb' => 'text/plain',
-    '.js' => 'application/javascript',
-    '.json' => 'application/json',
-    '.md' => 'text/markdown',
-    '.rb' => 'text/x-ruby',
-    '.txt' => 'text/plain',
-    '.yaml' => 'application/yaml',
-    '.yml' => 'application/yaml'
-  }.freeze
+module McpSkills
+  class EvalContextBuilder
+    TEXT_EXTENSIONS = %w[.erb .js .json .md .rb .txt .yaml .yml].freeze
+    MEDIA_TYPES = {
+      '.erb' => 'text/plain',
+      '.js' => 'application/javascript',
+      '.json' => 'application/json',
+      '.md' => 'text/markdown',
+      '.rb' => 'text/x-ruby',
+      '.txt' => 'text/plain',
+      '.yaml' => 'application/yaml',
+      '.yml' => 'application/yaml'
+    }.freeze
 
-  class Error < StandardError; end
+    class Error < StandardError; end
 
-  def initialize(repo_root:)
-    @repo_root = Pathname.new(repo_root).realpath
-  end
+    def self.call(target_path, repo_root: nil)
+      root = repo_root || Pathname.new(__dir__).join('..').realpath
+      new(repo_root: root).call(target_path: target_path)
+    end
 
-  def call(target_path:, target_type: nil, target_name: nil)
-    primary_path = resolve_primary_path(target_path)
-    target_dir = primary_path.dirname
-    metadata = frontmatter(primary_path)
+    def initialize(repo_root:)
+      @repo_root = Pathname.new(repo_root).realpath
+    end
 
-    render_context(
-      primary_path: primary_path,
-      target_type: target_type || infer_target_type(primary_path),
-      target_name: target_name || metadata.fetch('name', target_dir.basename.to_s),
-      resources: companion_resources(target_dir, primary_path)
-    )
-  end
+    def call(target_path:, target_type: nil, target_name: nil)
+      primary_path = resolve_primary_path(target_path)
+      target_dir = primary_path.dirname
+      metadata = frontmatter(primary_path)
 
-  private
+      render_context(
+        primary_path: primary_path,
+        target_type: target_type || infer_target_type(primary_path),
+        target_name: target_name || metadata.fetch('name', target_dir.basename.to_s),
+        resources: companion_resources(target_dir, primary_path)
+      )
+    end
 
-  def resolve_primary_path(target_path)
-    path = Pathname.new(target_path)
-    path = @repo_root.join(path) unless path.absolute?
-    path = path.join('SKILL.md') if path.directory?
+    private
 
-    raise Error, "SKILL.md not found: #{path}" unless path.file?
-    raise Error, "target path must point to SKILL.md: #{path}" unless path.basename.to_s == 'SKILL.md'
+    def resolve_primary_path(target_path)
+      path = Pathname.new(target_path)
+      path = @repo_root.join(path) unless path.absolute?
+      path = path.join('SKILL.md') if path.directory?
 
-    path.realpath
-  end
+      raise Error, "SKILL.md not found: #{path}" unless path.file?
+      raise Error, "target path must point to SKILL.md: #{path}" unless path.basename.to_s == 'SKILL.md'
 
-  def companion_resources(target_dir, primary_path)
-    direct_files = target_dir.children.select(&:file?)
-                             .reject { |path| path == primary_path }
-                             .select { |path| text_file?(path) }
+      path.realpath
+    end
 
-    asset_files = target_dir.join('assets').exist? ? target_dir.join('assets').glob('**/*').select(&:file?) : []
+    def companion_resources(target_dir, primary_path)
+      direct_files = target_dir.children.select(&:file?)
+                               .reject { |path| path == primary_path }
+                               .select { |path| text_file?(path) }
 
-    (direct_files + asset_files.select { |path| text_file?(path) })
-      .uniq
-      .sort_by { |path| relative_path(path) }
-  end
+      asset_files = target_dir.join('assets').exist? ? target_dir.join('assets').glob('**/*').select(&:file?) : []
 
-  def render_context(primary_path:, target_type:, target_name:, resources:)
-    lines = []
-    lines << %(<skill_context target_type="#{escape_attr(target_type)}" target_name="#{escape_attr(target_name)}">)
-    lines << render_file('primary', primary_path)
-    lines << '  <resources>'
-    resources.each { |path| lines << render_file('resource', path, role: role_for(path)) }
-    lines << '  </resources>'
-    lines << '</skill_context>'
-    lines.join("\n")
-  end
+      (direct_files + asset_files.select { |path| text_file?(path) })
+        .uniq
+        .sort_by { |path| relative_path(path) }
+    end
 
-  def render_file(tag_name, path, role: nil)
-    attrs = {
-      path: relative_path(path),
-      media_type: media_type(path)
-    }
-    attrs[:role] = role if role
+    def render_context(primary_path:, target_type:, target_name:, resources:)
+      lines = []
+      lines << %(<skill_context target_type="#{escape_attr(target_type)}" target_name="#{escape_attr(target_name)}">)
+      lines << render_file('primary', primary_path)
+      lines << '  <resources>'
+      resources.each { |path| lines << render_file('resource', path, role: role_for(path)) }
+      lines << '  </resources>'
+      lines << '</skill_context>'
+      lines.join("\n")
+    end
 
-    opening = attrs.map { |key, value| %(#{key}="#{escape_attr(value)}") }.join(' ')
-    indent = tag_name == 'primary' ? '  ' : '    '
+    def render_file(tag_name, path, role: nil)
+      attrs = {
+        path: relative_path(path),
+        media_type: media_type(path)
+      }
+      attrs[:role] = role if role
 
-    [
-      "#{indent}<#{tag_name} #{opening}>",
-      escape_text(path.read),
-      "#{indent}</#{tag_name}>"
-    ].join("\n")
-  end
+      opening = attrs.map { |key, value| %(#{key}="#{escape_attr(value)}") }.join(' ')
+      indent = tag_name == 'primary' ? '  ' : '    '
 
-  def frontmatter(path)
-    content = path.read
-    return {} unless content.start_with?("---\n")
+      [
+        "#{indent}<#{tag_name} #{opening}>",
+        escape_text(path.read),
+        "#{indent}</#{tag_name}>"
+      ].join("\n")
+    end
 
-    yaml = content.split(/^---\s*$/, 3)[1]
-    YAML.safe_load(yaml, permitted_classes: [], aliases: false) || {}
-  rescue Psych::SyntaxError
-    {}
-  end
+    def frontmatter(path)
+      content = path.read
+      return {} unless content.start_with?("---\n")
 
-  def infer_target_type(path)
-    relative = relative_path(path)
-    return 'workflow' if relative.start_with?('workflows/')
+      yaml = content.split(/^---\s*$/, 3)[1]
+      YAML.safe_load(yaml, permitted_classes: [], aliases: false) || {}
+    rescue Psych::SyntaxError
+      {}
+    end
 
-    'skill'
-  end
+    def infer_target_type(path)
+      relative = relative_path(path)
+      return 'workflow' if relative.start_with?('workflows/')
 
-  def role_for(path)
-    relative = relative_path(path)
-    basename = path.basename.to_s
+      'skill'
+    end
 
-    return 'asset' if relative.include?('/assets/')
-    return 'examples' if basename == 'EXAMPLES.md'
-    return 'testing' if basename == 'TESTING.md'
-    return 'patterns' if basename == 'PATTERNS.md'
-    return 'heuristics' if basename == 'HEURISTICS.md'
-    return 'task_templates' if basename == 'TASK_TEMPLATES.md'
+    def role_for(path)
+      relative = relative_path(path)
+      basename = path.basename.to_s
 
-    'companion'
-  end
+      return 'asset' if relative.include?('/assets/')
+      return 'examples' if basename == 'EXAMPLES.md'
+      return 'testing' if basename == 'TESTING.md'
+      return 'patterns' if basename == 'PATTERNS.md'
+      return 'heuristics' if basename == 'HEURISTICS.md'
+      return 'task_templates' if basename == 'TASK_TEMPLATES.md'
 
-  def text_file?(path)
-    TEXT_EXTENSIONS.include?(path.extname)
-  end
+      'companion'
+    end
 
-  def media_type(path)
-    MEDIA_TYPES.fetch(path.extname, 'text/plain')
-  end
+    def text_file?(path)
+      TEXT_EXTENSIONS.include?(path.extname)
+    end
 
-  def relative_path(path)
-    Pathname.new(path).relative_path_from(@repo_root).to_s
-  end
+    def media_type(path)
+      MEDIA_TYPES.fetch(path.extname, 'text/plain')
+    end
 
-  def escape_attr(value)
-    CGI.escapeHTML(value.to_s)
-  end
+    def relative_path(path)
+      Pathname.new(path).relative_path_from(@repo_root).to_s
+    end
 
-  def escape_text(value)
-    CGI.escapeHTML(value.to_s)
+    def escape_attr(value)
+      CGI.escapeHTML(value.to_s)
+    end
+
+    def escape_text(value)
+      CGI.escapeHTML(value.to_s)
+    end
   end
 end
 
@@ -165,12 +172,12 @@ if $PROGRAM_NAME == __FILE__
       exit 1
     end
 
-    puts EvalContextBuilder.new(repo_root: options[:repo_root]).call(
+    puts McpSkills::EvalContextBuilder.new(repo_root: options[:repo_root]).call(
       target_path: target_path,
       target_type: options[:target_type],
       target_name: options[:target_name]
     )
-  rescue EvalContextBuilder::Error => e
+  rescue McpSkills::EvalContextBuilder::Error => e
     warn e.message
     exit 1
   end

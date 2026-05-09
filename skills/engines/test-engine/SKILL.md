@@ -116,3 +116,8 @@ For generator and reload-safety spec examples, see [assets/examples.md](assets/e
 
 - [assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)
 - [assets/examples.md](assets/examples.md)
+
+
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md)

@@ -11,6 +11,14 @@
       "env": {
         "BUNDLE_GEMFILE": "mcp_server/Gemfile"
       }
+    },
+    "tessl": {
+      "type": "stdio",
+      "command": "tessl",
+      "args": [
+        "mcp",
+        "start"
+      ]
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "4.2.2",
+  "version": "5.0.3",
   "summary": "Curated library of 42 public AI agent skills for Ruby on Rails development, plus 5 callable workflow skills. Organized by category: planning, testing, code-quality, ddd, engines, infrastructure, api, patterns, context, orchestration, and workflows. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and TDD automation.",
   "docs": "docs/index.md",
   "skills": {
@@ -48,21 +48,6 @@
     },
     "code-review": {
       "path": "skills/code-quality/code-review/SKILL.md"
-    },
-    "tdd-workflow": {
-      "path": "workflows/tdd-workflow/SKILL.md"
-    },
-    "review-workflow": {
-      "path": "workflows/review-workflow/SKILL.md"
-    },
-    "setup-workflow": {
-      "path": "workflows/setup-workflow/SKILL.md"
-    },
-    "quality-workflow": {
-      "path": "workflows/quality-workflow/SKILL.md"
-    },
-    "engine-workflow": {
-      "path": "workflows/engine-workflow/SKILL.md"
     },
     "load-context": {
       "path": "skills/context/load-context/SKILL.md"
@@ -144,6 +129,28 @@
     },
     "write-yard-docs": {
       "path": "skills/patterns/write-yard-docs/SKILL.md"
+    }
+  },
+  "workflows": {
+    "tdd-workflow": {
+      "path": "workflows/tdd-workflow/SKILL.md",
+      "tessl_ignore": true
+    },
+    "review-workflow": {
+      "path": "workflows/review-workflow/SKILL.md",
+      "tessl_ignore": true
+    },
+    "setup-workflow": {
+      "path": "workflows/setup-workflow/SKILL.md",
+      "tessl_ignore": true
+    },
+    "quality-workflow": {
+      "path": "workflows/quality-workflow/SKILL.md",
+      "tessl_ignore": true
+    },
+    "engine-workflow": {
+      "path": "workflows/engine-workflow/SKILL.md",
+      "tessl_ignore": true
     }
   }
 }

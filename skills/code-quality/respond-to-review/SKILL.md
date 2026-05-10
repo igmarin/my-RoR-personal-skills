@@ -44,6 +44,7 @@ These responses skip verification and add zero signal:
 | "Great point!" / "Excellent feedback!" | Signals compliance, not understanding |
 | "Let me implement that now" | Skips verification — reviewer may lack codebase context |
 | "I'll fix all of these" | Batch commitment before evaluating each item individually |
+| "Fixed!" with no technical explanation | Always state what was checked and why the fix is correct |
 
 **Instead:** Restate the technical requirement, ask clarifying questions, push back with reasoning if wrong, or just start implementing one item after reading all feedback.
 
@@ -99,10 +100,8 @@ After implementing feedback, decide whether to request a re-review:
 
 | Mistake / Red Flag | Reality |
 |--------------------|----------|
-| Implementing feedback before reading all of it | Read everything before reacting — HARD-GATE step 1 |
 | Treating all feedback as equally urgent | Classify by severity — Critical before cosmetic |
 | Closing review comments without verifying | Comment what you checked and why you agree or disagree |
-| "Fixed!" comment with no technical explanation | Always state what was checked and why the fix is correct |
 | All review comments closed without any pushback | May indicate blind compliance — verify each item independently |
 | Skipping re-review after Critical fixes | A fix can introduce new issues — re-review is mandatory |
 | Asking for re-review after cosmetic changes | Wastes reviewer time — only request when logic changed |
@@ -115,7 +114,3 @@ After implementing feedback, decide whether to request a re-review:
 | **write-tests** | Run the TDD loop after implementing feedback that changes logic |
 | **refactor-code** | When feedback suggests a larger structural change |
 | **security-check** | When Critical feedback involves security — get a dedicated review |
-
-## Assets
-
-- [assets/response_templates.md](assets/response_templates.md)

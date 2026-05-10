@@ -14,7 +14,7 @@ The dummy app is essential—it verifies routing, initialization, configuration,
 
 The dummy app is created automatically with `rails plugin new`. Ensure it has:
 
-```
+```text
 spec/dummy/
   app/
     controllers/
@@ -167,10 +167,10 @@ RSpec.describe "Host Integration" do
 
   it 'uses configured user class' do
     user = CustomUser.create!(email: 'test@example.com')
-    
+
     # Engine code that references the configurable class
     result = YourEngine::UserFinder.find(user.id)
-    
+
     expect(result).to eq(user)
   end
 end
@@ -209,8 +209,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: ruby/setup-ruby@c4e5b1316158f92e3d49443a9d58b31d25ac0f8f
         with:
           ruby-version: '3.2'
           bundler-cache: true

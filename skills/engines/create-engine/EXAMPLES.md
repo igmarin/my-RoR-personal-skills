@@ -120,7 +120,7 @@ Key difference: No routes, no isolate_namespace, but needs Rails initialization 
 module JobEngine
   class Engine < ::Rails::Engine
     # No isolate_namespace - jobs live in host app namespace
-    
+
     initializer "job_engine.configure_queue_adapter" do |app|
       app.config.active_job.queue_adapter = :solid_queue if defined?(SolidQueue)
     end

@@ -144,7 +144,7 @@ jobs:
         ports:
           - 5432:5432
 
-        steps:
+    steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: Setup Ruby

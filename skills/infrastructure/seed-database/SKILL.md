@@ -51,8 +51,10 @@ See [references/workflow.md](references/workflow.md) for the complete seeding wo
 
 ```ruby
 # db/seeds/development.rb
-10.times do
-  User.find_or_create_by!(email: Faker::Internet.unique.email) do |u|
+10.times do |i|
+  email = "dev_user_#{i + 1}@example.com"
+
+  User.find_or_create_by!(email: email) do |u|
     u.password = ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16))
   end
 end
@@ -69,8 +71,10 @@ elsif Rails.env.test?
 end
 
 # db/seeds/development.rb
-10.times do
-  User.find_or_create_by!(email: Faker::Internet.unique.email) do |u|
+10.times do |i|
+  email = "dev_user_#{i + 1}@example.com"
+
+  User.find_or_create_by!(email: email) do |u|
     u.password = ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16))
   end
 end

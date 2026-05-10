@@ -106,13 +106,10 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 
 | Issue | Correct approach |
 |-------|------------------|
-| Business logic in views | Use helpers, presenters, or Stimulus controllers |
-| N+1 queries in loops | Eager load with `includes` before the loop |
-| Skipping FactoryBot for "quick" tests | Fixtures are brittle — always use factories |
-| Controller action with 15+ lines of business logic | Extract to a service object |
-| Model with no validations on required fields | Add presence/format validations |
-| View with 10+ lines of embedded Ruby conditionals | Move logic to a presenter or partial |
-| Hardcoded strings that belong in I18n | Use `t()` helpers |
+| Client-side interactivity reached for before Turbo | Use Turbo Frames/Streams first; add a Stimulus controller only when Turbo cannot handle it |
+| N+1 queries in loops over associations | Eager load with `includes` before the loop |
+| Controller action with 15+ lines of business logic | Extract to a service object using the `.call` pattern |
+| Accessing a protected resource without an authorisation check | Apply a Pundit policy on every action that touches access-controlled data |
 
 ## Integration
 

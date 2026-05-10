@@ -47,20 +47,9 @@ NEVER hardcode credentials (passwords, API keys, secrets) in seeds, factories, o
 
 See [references/workflow.md](references/workflow.md) for the complete seeding workflow.
 
-## Idempotent Seeds
-
-```ruby
-# db/seeds/development.rb
-10.times do |i|
-  email = "dev_user_#{i + 1}@example.com"
-
-  User.find_or_create_by!(email: email) do |u|
-    u.password = ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16))
-  end
-end
-```
-
 ## Environment-Specific Seeds
+
+Use `find_or_create_by!` to keep seeds idempotent — safe to run multiple times.
 
 ```ruby
 # db/seeds.rb

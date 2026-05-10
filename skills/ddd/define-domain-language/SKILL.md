@@ -9,7 +9,7 @@ description: >
   bounded context naming, what should we call this, terminology alignment, DDD glossary,
   naming inconsistency.
 metadata:
-  version: 1.0.0
+  version: 1.1.0
   user-invocable: "true"
 ---
 # Define Domain Language
@@ -55,6 +55,40 @@ ALWAYS flag overloaded or conflicting terms before recommending modeling changes
 5. **Flag ambiguity:** List terms that need user confirmation or that likely indicate multiple bounded contexts.
 6. **Hand off:** Continue with `review-domain-boundaries`, `model-domain`, or `create-prd` / `generate-tasks` depending on the workflow stage.
 
+### Worked Example: Customer/Client/Account Resolution
+
+**Scenario:** The codebase uses `Customer` in the storefront, `Client` in the billing reports, and `Account` in the admin dashboard—all referring to the same entity.
+
+**Step 1: Collect terms**
+- `Customer` (StorefrontController, CustomerMailer)
+- `Client` (BillingReport, ClientInvoice)
+- `Account` (Admin::AccountsController, AccountSettings)
+
+**Step 2: Group synonyms**
+All three appear to represent the same business concept: a person or organization that buys from us.
+
+**Step 3: Choose canonical term**
+Business stakeholders say "Customer" in meetings and requirements docs. The billing team uses "Client" only because their legacy system did. Admin uses "Account" as a legacy shortcut.
+
+**Decision:** Canonical term = **Customer**
+Aliases to capture: Client, Account
+
+**Step 4: Define with invariants**
+
+| Canonical term | Aliases | Definition | Invariant | Context |
+|----------------|---------|------------|-----------|---------|
+| Customer | Client, Account | A person or organization that purchases goods/services from our platform | Must have a unique email; can have zero or more Orders | Sales & Billing |
+
+**Step 5: Flag ambiguity**
+- **Open question:** Does "Account" ever refer to the login credentials entity (separate from the customer profile)? If yes, split into two entries.
+- **Open question:** Does "Client" mean something different in the legal/contracts module?
+
+**Step 6: Migration path**
+- Update code comments and docs to use "Customer"
+- Rename `ClientInvoice` → `CustomerInvoice` (single PR)
+- Add aliases in search/indexing for backward compatibility
+- Do NOT rename database tables yet—wait for glossary stabilization
+
 ## Output Style
 
 When using this skill, return:
@@ -85,11 +119,9 @@ See [assets/examples.md](assets/examples.md) for a full worked glossary example 
 | **model-domain** | When the terms are clear enough to decide entities, value objects, and services |
 | **review-architecture** | When naming confusion already appears in the code structure |
 
-## Assets
+## Assets & Examples
 
-- [assets/examples.md](assets/examples.md)
+Two complementary example resources are provided:
 
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md)
+- **[EXAMPLES.md](EXAMPLES.md)** — Full worked scenarios showing input tickets/PRDs, the resolution process, and common mistakes (best for understanding the workflow)
+- **[assets/examples.md](assets/examples.md)** — JSON schema examples for glossary entries and validation patterns (best for technical implementation)

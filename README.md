@@ -331,7 +331,7 @@ The guide covers the **MCP server** (recommended — on-demand, saves tokens), t
 | [review-architecture](skills/code-quality/review-architecture/)       | Review application structure, boundaries, and responsibilities                                           |
 | [security-check](skills/code-quality/security-check/)               | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities                                               |
 | [apply-stack-conventions](skills/code-quality/apply-stack-conventions/)           | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions                                                |
-| [apply-code-conventions](skills/code-quality/apply-code-conventions/)             | Daily coding checklist: DRY/YAGNI/POJO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
+| [apply-code-conventions](skills/code-quality/apply-code-conventions/)             | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
 | [implement-authorization](skills/code-quality/implement-authorization/) | Pundit/CanCanCan, roles, permissions, policy objects                                                  |
 | [refactor-code](skills/code-quality/refactor-code/) | Restructure code with characterization tests and safe extraction |
 
@@ -398,7 +398,6 @@ The guide covers the **MCP server** (recommended — on-demand, saves tokens), t
 | [create-engine-installer](skills/engines/create-engine-installer/)       | Create idempotent install generators                              |
 | [extract-engine](skills/engines/extract-engine/)       | Extract host app code into engines incrementally                  |
 | [upgrade-engine](skills/engines/upgrade-engine/) | Maintain cross-version compatibility                              |
-
 
 ### Orchestration
 

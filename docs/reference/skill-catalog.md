@@ -1,6 +1,6 @@
 # Skill Catalog — Rails Agent Skills
 
-Complete catalog of 39 skills organized by development lifecycle stage and by category.
+Complete catalog of 41 skills organized by development lifecycle stage and by category.
 
 ---
 

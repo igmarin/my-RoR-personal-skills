@@ -7,6 +7,7 @@
 evals/
 private-evals/
 tmp/
+lean-ctx/
 .Gemfile.lock
 .Gemfile
 .agents/skills/

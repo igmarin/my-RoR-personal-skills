@@ -7,15 +7,13 @@ description: >
   contract definition, and recommended file structure.
 metadata:
   user-invocable: "true"
-  version: 1.0.0
+  version: 1.1.0
 ---
 # Create Engine
 
 Use this skill when the task is to create, scaffold, or refactor a Rails engine.
 
-Favor maintainability over cleverness. A good engine has a narrow purpose, a clear host-app integration story, and a small public API.
-
-Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.
+A good engine has a narrow purpose, a clear host-app integration story, and a small public API. Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.
 
 ## Quick Reference
 
@@ -31,19 +29,23 @@ Keep this skill focused on structure and design. Use adjacent skills for install
 ```text
 Before engine work is complete, confirm all of the following:
 
-1. The root file is minimal: requires version, configuration, and engine only.
-2. Public-facing engines use isolate_namespace.
-3. The root module exposes .configure yielding a Configuration object.
-4. Host model references stay configurable strings (e.g. "User"), never ::User.
-5. Engine code never auto-applies migrations at boot (no config.paths['db/migrate'] or ActiveRecord::Migrator).
-6. The host contract is documented per the Host App Contract section.
-7. Initializers are idempotent and safe in development reloads.
-8. Assets and generators are namespaced and idempotent.
-9. Dummy app exists and integration tests pass.
-10. Mount the engine in the dummy app and verify routes load correctly.
-11. Search engine files for hard-coded host constants (::User, ::Employee).
-12. Search engine boot code for migration auto-apply patterns (db:migrate, ActiveRecord::Migrator, config.paths['db/migrate']).
-13. Expose integration seams through services, adapters, or hooks — not direct host constants.
+STRUCTURE & CONTRACT:
+1. Root file requires only version, configuration, and engine.
+2. Public engines use isolate_namespace; configuration exposes .configure block.
+3. Host model references are configurable strings (e.g., "User"), never hard-coded ::User.
+4. Host-app contract is documented (see Host App Contract section).
+
+SAFETY CHECKS:
+5. Engine code never auto-applies migrations at boot (no db:migrate, ActiveRecord::Migrator, or config.paths['db/migrate'] in initializers).
+6. Initializers are idempotent and safe in development reloads.
+7. Assets and generators are namespaced and idempotent.
+
+VERIFICATION COMMANDS:
+8. Dummy app exists: `ls spec/dummy` or `ls test/dummy` should return the app directory.
+9. Integration tests pass: `bundle exec rspec` or `bundle exec rake test` exits 0.
+10. Routes load correctly: `bundle exec rails routes` inside dummy app shows engine routes.
+11. No hard-coded host constants: `grep -r "::User\|::Employee" lib/ app/` returns nothing.
+12. No migration auto-apply patterns: `grep -r "db:migrate\|ActiveRecord::Migrator\|config.paths\['db/migrate'\]" lib/` returns nothing.
 ```
 
 ## Workflow
@@ -183,7 +185,9 @@ For a reusable starter layout and file stubs, read [reference.md](reference.md).
 | create-engine-installer | Generator-heavy setup, install scripts, copy migrations |
 | generate-api-collection | When the engine exposes HTTP endpoints (generate/update Postman collection) |
 
-## Assets
+## Assets & Resources
 
-- [assets/examples.md](assets/examples.md)
-- [assets/release-checklist.md](assets/release-checklist.md)
+- **[EXAMPLES.md](EXAMPLES.md)** — Full worked examples including mountable auth engine, background job engine, and common mistakes
+- **[TESTING.md](TESTING.md)** — Comprehensive testing guide with dummy app setup, configuration tests, and CI examples
+- **[assets/examples.md](assets/examples.md)** — Code snippets and patterns for engine structure
+- **[assets/release-checklist.md](assets/release-checklist.md)** — Release preparation checklist

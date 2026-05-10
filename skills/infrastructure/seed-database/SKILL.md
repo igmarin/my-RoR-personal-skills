@@ -24,6 +24,9 @@ Manage development and test data effectively.
 NEVER commit production data to seeds
 ALWAYS use factories for test-specific scenarios
 ALWAYS make seeds idempotent (can run multiple times safely)
+NEVER hardcode credentials (passwords, API keys, secrets) in seeds, factories, or examples
+  - Use ENV variables (e.g., ENV.fetch('DEFAULT_SEED_PASSWORD')) or SecureRandom.hex(16) for non-production data
+  - Use `rails credentials:edit` to manage production secrets, never commit them in code
 ```
 
 ## Quick Reference
@@ -44,17 +47,9 @@ ALWAYS make seeds idempotent (can run multiple times safely)
 
 See [references/workflow.md](references/workflow.md) for the complete seeding workflow.
 
-## Idempotent Seeds
-
-```ruby
-# db/seeds.rb
-admin = User.find_or_create_by!(email: 'admin@example.com') do |u|
-  u.password = 'password'
-  u.admin = true
-end
-```
-
 ## Environment-Specific Seeds
+
+Use `find_or_create_by!` to keep seeds idempotent — safe to run multiple times.
 
 ```ruby
 # db/seeds.rb
@@ -65,9 +60,11 @@ elsif Rails.env.test?
 end
 
 # db/seeds/development.rb
-10.times do
-  User.find_or_create_by!(email: Faker::Internet.unique.email) do |u|
-    u.password = 'password'
+10.times do |i|
+  email = "dev_user_#{i + 1}@example.com"
+
+  User.find_or_create_by!(email: email) do |u|
+    u.password = ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16))
   end
 end
 ```
@@ -79,16 +76,13 @@ end
 FactoryBot.define do
   factory :user do
     email { Faker::Internet.unique.email }
-    password { 'password' }
+    password { ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16)) }
 
     trait :admin do
       admin { true }
     end
   end
 end
-
-# Usage in specs
-create(:user, :admin)
 ```
 
 ## Examples

@@ -85,7 +85,7 @@ A skill that only beats baseline marginally is considered under-specified; our g
 - **Bootstrap discovery skill:** `[skill-router](skills/orchestration/skill-router/)` (session hook loads orchestrator)
 - **Documentation:** [docs/README.md](docs/README.md) — Complete guides and workflows
 - **Workflows:** [docs/workflows/](docs/workflows/) — Reference docs + callable workflow skills
-- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 38+ skills organized by category
+- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 41 skills organized by category
 - **Integration Matrix:** [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) — Skill chaining and workflows
 - **Skill structure:** [docs/architecture.md](docs/architecture.md)
 - **Eval optimization:** [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) — baseline-vs-context targets and the per-skill loop used to lift scores
@@ -322,7 +322,7 @@ The guide covers the **MCP server** (recommended — on-demand, saves tokens), t
 | [generate-tasks](skills/planning/generate-tasks/)   | Break down PRDs into step-by-step implementation task lists                  |
 | [plan-tickets](skills/planning/plan-tickets/) | Draft or create tickets from plans; sprint placement and classification |
 
-### Rails Code Quality
+### Code Quality
 
 | Skill                                                         | Description                                                                                              |
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -330,17 +330,21 @@ The guide covers the **MCP server** (recommended — on-demand, saves tokens), t
 | [respond-to-review](skills/code-quality/respond-to-review/)               | Respond to review feedback — evaluate, push back, implement safely, trigger re-review                    |
 | [review-architecture](skills/code-quality/review-architecture/)       | Review application structure, boundaries, and responsibilities                                           |
 | [security-check](skills/code-quality/security-check/)               | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities                                               |
-| [review-migration](skills/infrastructure/review-migration/)             | Plan production-safe database migrations                                                                 |
 | [apply-stack-conventions](skills/code-quality/apply-stack-conventions/)           | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions                                                |
 | [apply-code-conventions](skills/code-quality/apply-code-conventions/)             | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
-| [implement-background-job](skills/infrastructure/implement-background-job/)               | Design idempotent background jobs with Active Job / Solid Queue                                          |
-| [implement-graphql](skills/api/implement-graphql/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby      |
 | [implement-authorization](skills/code-quality/implement-authorization/) | Pundit/CanCanCan, roles, permissions, policy objects                                                  |
+| [refactor-code](skills/code-quality/refactor-code/) | Restructure code with characterization tests and safe extraction |
+
+### Infrastructure
+
+| Skill                                                         | Description                                                                                              |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [review-migration](skills/infrastructure/review-migration/)             | Plan production-safe database migrations                                                                 |
+| [implement-background-job](skills/infrastructure/implement-background-job/)               | Design idempotent background jobs with Active Job / Solid Queue                                          |
+| [seed-database](skills/infrastructure/seed-database/) | Fixtures vs Seeds for dev/test data management                                                         |
 | [optimize-performance](skills/infrastructure/optimize-performance/) | N+1 prevention, profiling, caching, query optimization                                                |
 | [version-api](skills/infrastructure/version-api/) | REST API versioning strategies and deprecation policies                                              |
-| [seed-database](skills/infrastructure/seed-database/) | Fixtures vs Seeds for dev/test data management                                                         |
 | [implement-hotwire](skills/infrastructure/implement-hotwire/) | Turbo/Stimulus integration patterns                                                                    |
-| [generate-api-collection](skills/api/generate-api-collection/)                   | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL           |
 
 ### DDD & Domain Modeling
 
@@ -355,9 +359,16 @@ The guide covers the **MCP server** (recommended — on-demand, saves tokens), t
 | Skill                                                                 | Description                                                                  |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | [create-service-object](skills/patterns/create-service-object/)                         | Build service objects with .call, standardized responses, transactions       |
-| [integrate-api-client](skills/api/integrate-api-client/)           | Integrate external APIs with the layered Auth/Client/Fetcher/Builder pattern |
 | [implement-calculator-pattern](skills/patterns/implement-calculator-pattern/) | Implement variant-based calculators with Strategy + Factory + Null Object    |
 | [write-yard-docs](skills/patterns/write-yard-docs/)                             | Write YARD docs for Ruby classes and public methods (all output in English)  |
+
+### API
+
+| Skill                                               | Description                                                                                        |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| [generate-api-collection](skills/api/generate-api-collection/)                   | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL           |
+| [implement-graphql](skills/api/implement-graphql/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby      |
+| [integrate-api-client](skills/api/integrate-api-client/)           | Integrate external APIs with the layered Auth/Client/Fetcher/Builder pattern |
 
 ### Context & Setup
 
@@ -388,17 +399,16 @@ The guide covers the **MCP server** (recommended — on-demand, saves tokens), t
 | [extract-engine](skills/engines/extract-engine/)       | Extract host app code into engines incrementally                  |
 | [upgrade-engine](skills/engines/upgrade-engine/) | Maintain cross-version compatibility                              |
 
-### Refactoring
-
-| Skill                               | Description                                                      |
-| ----------------------------------- | ---------------------------------------------------------------- |
-| [refactor-code](skills/code-quality/refactor-code/) | Restructure code with characterization tests and safe extraction |
-
-### Meta
+### Orchestration
 
 | Skill                                            | Description                                                    |
 | ------------------------------------------------ | -------------------------------------------------------------- |
 | [skill-router](skills/orchestration/skill-router/) | Discover and invoke the right skill for the current Rails task |
+
+### Documentation
+
+| Resource                                            | Description                                                    |
+| ------------------------------------------------ | -------------------------------------------------------------- |
 | [docs/skill-template.md](docs/skill-template.md) | Authoring template and checklist for expanding the library     |
 
 ## Skill Relationships

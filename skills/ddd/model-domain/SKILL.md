@@ -56,7 +56,9 @@ When using this skill, return for each domain concept:
 
 ## Examples
 
-### Value Object — Money (Quick Reference)
+Quick references for the three most common patterns. See [assets/examples.md](assets/examples.md) for full Domain Event and edge-case examples.
+
+### Value Object — Money
 
 ```ruby
 # app/models/money.rb
@@ -70,12 +72,56 @@ class Money
 end
 ```
 
-See [assets/examples.md](assets/examples.md) for detailed Application Service and Domain Event examples.
+### Aggregate Root — Order
+
+`Order` guards the invariant that line items cannot be added after the order is placed. All state transitions go through `Order`; `LineItem` is never modified directly.
+
+```ruby
+# app/models/order.rb
+class Order < ApplicationRecord
+  has_many :line_items, dependent: :destroy
+
+  def add_item(variant, quantity:)
+    raise Order::AlreadyPlacedError, "Cannot modify a placed order" if placed?
+    line_items.build(variant: variant, quantity: quantity, unit_price: variant.price)
+  end
+
+  def place!
+    raise Order::EmptyOrderError, "Cannot place an empty order" if line_items.none?
+    update!(status: "placed", placed_at: Time.current)
+  end
+end
+```
+
+### Application Service — PlaceOrder
+
+Orchestrates the use case: validates context, drives the aggregate, persists, and notifies. Contains no domain logic itself.
+
+```ruby
+# app/services/place_order.rb
+class PlaceOrder
+  def initialize(order:, mailer: OrderMailer)
+    @order = order
+    @mailer = mailer
+  end
+
+  def call
+    ActiveRecord::Base.transaction do
+      @order.place!
+      @order.save!
+    end
+    @mailer.confirmation(@order).deliver_later
+    Success.new(@order)
+  rescue Order::AlreadyPlacedError, Order::EmptyOrderError => e
+    Failure.new(e.message)
+  end
+end
+```
 
 ## Common Mistakes
 
 | Mistake | Reality |
-|---------|---------|
+|---------|----------|
 | Turning every concept into a service | Many behaviors belong naturally on entities or value objects |
 | Creating repositories for all reads and writes | ActiveRecord already provides a strong default persistence boundary |
 | Treating aggregates as folder names only | Aggregates exist to protect invariants, not to look architectural |

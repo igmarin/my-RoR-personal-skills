@@ -9,7 +9,7 @@ description: >
   bounded context naming, what should we call this, terminology alignment, DDD glossary,
   naming inconsistency.
 metadata:
-  version: 1.0.0
+  version: 1.1.0
   user-invocable: "true"
 ---
 # Define Domain Language
@@ -74,7 +74,7 @@ When using this skill, return:
 
 **Open questions:** Does "Parcel" ever mean an internal warehouse bin ID? If yes, split into two glossary entries.
 
-See [assets/examples.md](assets/examples.md) for a full worked glossary example and common mistakes.
+See [EXAMPLES.md](EXAMPLES.md) for a full worked glossary scenario (Customer/Client/Account resolution), the step-by-step resolution process, migration path guidance, and common mistakes.
 
 ## Integration
 
@@ -84,12 +84,3 @@ See [assets/examples.md](assets/examples.md) for a full worked glossary example 
 | **review-domain-boundaries** | When the glossary suggests multiple bounded contexts or language leakage |
 | **model-domain** | When the terms are clear enough to decide entities, value objects, and services |
 | **review-architecture** | When naming confusion already appears in the code structure |
-
-## Assets
-
-- [assets/examples.md](assets/examples.md)
-
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md)

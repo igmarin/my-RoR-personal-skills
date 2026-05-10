@@ -15,11 +15,12 @@ metadata:
 
 Orchestrates the full lifecycle of Rails engine development from scaffolding to release.
 
+> **Note:** Sub-skills referenced below (`skills/engines/create-engine`, `test-engine`, `review-engine`, etc.) are expected to exist separately in the skill bundle.
+
 ## Workflow Phases
 
 ### Phase 1: Engine Authoring
 
-**Scaffold and structure the engine:**
 1. **skills/engines/create-engine** — Design and scaffold namespace isolation, directory structure, and gemspec configuration
 
 **Kickoff command:**
@@ -27,17 +28,11 @@ Orchestrates the full lifecycle of Rails engine development from scaffolding to 
 rails plugin new my_engine --mountable --skip-test
 ```
 
-**Expected directory structure after scaffolding:**
-```
-my_engine/
-  app/
-  config/routes.rb
-  lib/my_engine/engine.rb
-  lib/my_engine/version.rb
-  lib/my_engine.rb
-  my_engine.gemspec
-  test/dummy/
-```
+**Key files to verify after scaffolding:**
+- `lib/my_engine/engine.rb` — namespace isolation declared
+- `lib/my_engine/version.rb` — version constant present
+- `my_engine.gemspec` — metadata complete and valid
+- `test/dummy/` — dummy app scaffolded
 
 **HARD GATE — Engine Structure Check:**
 ```bash
@@ -81,6 +76,12 @@ bundle exec rspec --format progress 2>&1 | tail -5
 # Must show: no load errors, exit 0 or partial pass
 ```
 
+**If load errors appear, fix in order:**
+- Verify `spec/spec_helper.rb` requires dummy app: `require File.expand_path('../dummy/config/environment', __FILE__)`
+- Verify dummy app mounts engine in `test/dummy/config/application.rb`
+- Run `bundle install` inside engine root
+- Confirm `Gemfile` points to a valid dummy app path
+
 ---
 
 ### Phase 3: Implementation & Review
@@ -104,8 +105,6 @@ bundle exec bundler-audit check --update
 ---
 
 ### Phase 4: Documentation & Release
-
-**Prepare for publication:**
 
 1. **skills/engines/document-engine** — Installation, configuration, usage examples, changelog
 
@@ -141,17 +140,6 @@ Not sure?          → skill-router
 2. Namespace properly isolated
 3. Migrations won't conflict
 4. Dependencies clearly declared
-
-## Output Style
-
-**Engine Release Checklist (abbreviated):**
-```markdown
-# Engine Release — v1.0.0
-- [x] Namespace isolation: MyEngine::
-- [x] Test suite: passing
-- [x] README and Changelog updated
-- [x] Git tag: v1.0.0
-```
 
 ## Integration
 

@@ -104,3 +104,10 @@ Skills are scored on two axes: **skill-specific criteria** AND **model performan
 - Do not skip the verify-failure step in the TDD gate.
 - Do not add repositories, aggregates, or domain events just because a task looks "DDD" — see `model-domain`.
 - Do not use `implement-graphql` for REST endpoints or `generate-api-collection` for GraphQL endpoints.
+
+<!-- lean-ctx -->
+## lean-ctx
+
+Prefer lean-ctx MCP tools over native equivalents for token savings.
+Full rules: @LEAN-CTX.md
+<!-- /lean-ctx -->

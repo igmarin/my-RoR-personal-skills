@@ -7,6 +7,8 @@
 evals/
 private-evals/
 tmp/
+.lean-ctx/
+lean-ctx/
 .Gemfile.lock
 .Gemfile
 .agents/skills/
@@ -46,3 +48,5 @@ node_modules/
 # Public root-level skill. Override common global build/ ignores.
 !build/
 !build/SKILL.md
+LEAN-CTX.md
+AGENTS.md.lean-ctx.bak

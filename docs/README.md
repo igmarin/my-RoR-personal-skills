@@ -54,7 +54,7 @@ Skills are building blocks; workflows are the story. Follow the `skill-router` t
 
 ## Reference & Authoring
 
-- **[Skill Catalog](reference/skill-catalog.md)** — Complete list of 39 skills with triggers.
+- **[Skill Catalog](reference/skill-catalog.md)** — Complete list of 41 skills with triggers.
 - **[Integration Matrix](reference/integration-matrix.md)** — How skills connect.
 - **[Skill Template](skill-template.md)** — For creating new skills.
 - **[Implementation Guide](implementation-guide.md)** — IDE Setup (MCP Server).

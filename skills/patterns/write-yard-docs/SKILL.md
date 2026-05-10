@@ -100,10 +100,9 @@ def self.call(plan_id:)
 
 | Pitfall | What to do |
 |---------|------------|
-| Documenting only the class, not public methods | Callers need param types and return shape for every public method |
-| Skipping `@option` for hash params | Without it, consumers don't know valid keys or types |
-| Only one `@raise` for multiple exceptions | List EVERY exception type — one `@raise` per class, even if rescued internally |
-| YARD text in a language other than English | Write in English unless the user explicitly requests otherwise |
+| Only one `@raise` for multiple exceptions | One `@raise` per exception class, even if rescued internally |
+| Skipping `@option` for hash params | List every valid key and type |
+| YARD text not in English | Write in English unless the user explicitly requests otherwise |
 
 ## Inline tagged notes
 
@@ -123,8 +122,7 @@ For advanced tags (`@abstract`, `@deprecated`, `@api private`, `@yield`, `@overl
 
 | Skill | When to chain |
 |-------|----------------|
-| **create-service-object** | Implementing or documenting service objects |
+| **create-service-object** | After implementing a service object |
 | **integrate-api-client** | Documenting API client layers (Auth, Client, Fetcher, Builder) |
-| **document-engine** | Documenting engine public API or extension points |
-| **code-review** | Reviewing that public interfaces are documented |
-| **generate-tasks** | Generated task lists include YARD tasks after implementation |
+| **code-review** | Verifying public interfaces are documented |
+| **generate-tasks** | Ensuring task lists include explicit YARD sub-tasks |

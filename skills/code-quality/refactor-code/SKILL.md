@@ -34,17 +34,16 @@ Use this skill when the task is to change structure without changing intended be
 
 ```
 NO REFACTORING WITHOUT CHARACTERIZATION TESTS FIRST.
-NEVER mix behavior changes with structural refactors in the same step.
+NEVER mix behavior changes with structural refactors in the same step —
+  if behavior changes are also needed, complete the structural refactor first,
+  then apply behavior changes in a separate step with its own test.
 ONE boundary per refactoring step — never extract two abstractions in the same step.
-VERIFY tests pass after EVERY step — not just at the end.
 If a public interface changes, document the compatibility shim and its removal condition.
 ```
 
 ## Core Rules
 
-- When behavior changes are also needed, complete the structural refactor first, then apply behavior changes in a separate step with its own test.
 - Keep public interfaces stable until callers are migrated.
-- Extract boundaries one at a time; split any step that would touch two abstractions.
 - Prefer adapters, facades, or wrappers for transitional states.
 - Stop and simplify if the refactor introduces more indirection than clarity.
 
@@ -72,10 +71,7 @@ AFTER each step:
 Report test run output at EACH step — not only at the end. At least two separate evidence entries at different sequence points are required.
 ```
 
-**Forbidden claims:**
-- "Should work now" (run the tests)
-- "Looks correct" (run the tests)
-- "I'm confident" (confidence is not evidence)
+**Forbidden claims:** "Should work now", "Looks correct", "I'm confident" — run the tests and report evidence instead.
 
 ## Characterization Test Template
 
@@ -123,14 +119,6 @@ def create
 end
 ```
 
-## Deeper Guidance
-
-Use support files for detailed guidance and examples:
-
-- [EXAMPLES.md](./EXAMPLES.md): End-to-end refactor sequences and anti-pattern examples
-- [HEURISTICS.md](./HEURISTICS.md): Common mistakes, red flags, and review heuristics
-- [INTEGRATION.md](./INTEGRATION.md): How to chain this skill with related skills
-
 ## Output Style
 
 When asked to refactor:
@@ -152,14 +140,10 @@ When asked to refactor:
 | **code-review** | For reviewing the refactored code ([details](./INTEGRATION.md#code-review)) |
 | **create-service-object** | When extracting logic into service objects ([details](./INTEGRATION.md#create-service-object)) |
 
-## Assets
+## References
 
-- [EXAMPLES.md](./EXAMPLES.md)
-- [HEURISTICS.md](./HEURISTICS.md)
-- [INTEGRATION.md](./INTEGRATION.md)
-
-
-## Extended Resources
-
+- [EXAMPLES.md](./EXAMPLES.md): End-to-end refactor sequences and anti-pattern examples
+- [HEURISTICS.md](./HEURISTICS.md): Common mistakes, red flags, and review heuristics
+- [INTEGRATION.md](./INTEGRATION.md): How to chain this skill with related skills
 - [assets/characterization_tests.md](assets/characterization_tests.md)
 - [assets/examples.md](assets/examples.md)

@@ -122,8 +122,6 @@ end
 
 | Pitfall | What to do |
 |---------|------------|
-| No dedicated Auth | `self.default`; credentials in one place |
-| Client missing nested `Error` | Wrap HTTP/parse as `Client::Error` |
 | Fetcher without retries/backoff | Add backoff/pagination where needed |
 | Builder leaks shape | `String(col['name'])`, `.slice(*@attributes)` always |
 | Weak tests | Hash factories; 4xx/5xx/bad JSON/timeout specs |

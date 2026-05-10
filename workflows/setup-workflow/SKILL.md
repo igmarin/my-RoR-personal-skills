@@ -52,6 +52,7 @@ cp .env.example .env 2>/dev/null || true
 - Bundler installed and working
 - Database connection successful
 - All env vars loaded (check `config/credentials.yml.enc` or `.env`)
+- All external CI actions pinned to immutable commit SHAs (never mutable tags like @v4, @v1)
 
 **If environment check FAILS:** Fix the failing item above before proceeding to Phase 2.
 
@@ -76,8 +77,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
         with:
           ruby-version: .ruby-version
           bundler-cache: true
@@ -101,8 +102,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
         with:
           ruby-version: .ruby-version
           bundler-cache: true
@@ -116,8 +117,8 @@ jobs:
     needs: deploy-staging
     environment: production   # Requires manual approval gate in GitHub
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
         with:
           ruby-version: .ruby-version
           bundler-cache: true

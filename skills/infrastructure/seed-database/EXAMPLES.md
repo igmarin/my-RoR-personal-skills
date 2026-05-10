@@ -8,7 +8,7 @@ Complete examples for managing development and test data.
 # db/seeds.rb
 # Admin user - idempotent with find_or_create_by!
 admin = User.find_or_create_by!(email: 'admin@example.com') do |u|
-  u.password = 'secure_password'
+  u.password = ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16))
   u.admin = true
   u.confirmed_at = Time.now
 end
@@ -22,7 +22,7 @@ end
 if User.count < 10
   10.times do |n|
     User.create_with(
-      password: 'password',
+      password: ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16)),
       confirmed_at: Time.now
     ).find_or_create_by!(email: "user#{n}@example.com")
   end
@@ -67,7 +67,7 @@ require 'faker'
   User.create!(
     email: Faker::Internet.unique.email,
     name: Faker::Name.name,
-    password: 'password',
+    password: ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16)),
     confirmed_at: Time.now
   )
 end
@@ -95,7 +95,7 @@ end
 FactoryBot.define do
   factory :user do
     sequence(:email) { |n| "user#{n}@example.com" }
-    password { 'password123' }
+    password { ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16)) }
     name { 'Test User' }
     confirmed_at { Time.now }
 

@@ -2,11 +2,19 @@
 
 ![Rails Agent Skills Logo](https://github.com/user-attachments/assets/55e84f62-52ab-44a5-8b0f-9fe1bdb12212)
 
-> **Rails Agent Skills** turns AI coding assistants into reliable Rails engineers — not just autocomplete tools.
->
-> It is a curated library of production-grade agent skills that encode conventions, workflows, and strict quality gates (TDD-first), so assistants generate code that actually holds up in real projects.
+**Rails Agent Skills turns AI coding assistants into disciplined Rails collaborators.**
 
-> Supported Technologies
+It is a curated library of **42 public Rails agent skills** and **5 callable workflows** that teach AI tools how to plan, test, implement, document, and review Rails work using production-minded conventions.
+
+The project is built around one non-negotiable rule:
+
+```text
+Write test -> run test -> verify it fails for the right reason -> implement -> verify it passes
+```
+
+That TDD gate is encoded directly into the skills and workflows, so agents do not just produce plausible Rails code. They follow a repeatable engineering process.
+
+> Supported agent environments
 >
 > [![ChatGPT](https://custom-icon-badges.demolab.com/badge/ChatGPT-74aa9c?logo=openai&logoColor=white)](#)
 > [![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#)
@@ -14,262 +22,167 @@
 > [![GitHub Copilot](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff)](#)
 > [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-886FBF?logo=googlegemini&logoColor=fff)](#)
 > [![Mistral AI](https://img.shields.io/badge/Mistral%20AI-FA520F?logo=mistral-ai&logoColor=fff)](#)
-> [![Opencode](https://img.shields.io/badge/OpenCode-4285F4?style=for-the-badge&logoColor=white)](#)
+> [![OpenCode](https://img.shields.io/badge/OpenCode-4285F4?style=for-the-badge&logoColor=white)](#)
 > [![Qwen](https://custom-icon-badges.demolab.com/badge/Qwen-605CEC?logo=qwen&logoColor=fff)](#)
 > [![Windsurf](https://img.shields.io/badge/Windsurf-0B100F?logo=windsurf&logoColor=fff)](#)
+
+> Official distribution
 >
+> [![Official MCP Registry](https://img.shields.io/badge/MCP%20Registry-Official-1f6feb)](https://registry.modelcontextprotocol.io/?q=io.github.igmarin%2Frails-agent-skills-mcp)
+> [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-igmarin%2Frails--agent--skills--mcp-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/igmarin/rails-agent-skills-mcp)
+> [![Cloudflare Worker](https://img.shields.io/badge/Cloudflare%20Worker-Streamable%20HTTP-F38020?logo=cloudflare&logoColor=white)](https://rails-agent-skills-mcp.ismael-marin.workers.dev/health)
+> [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills?label=release)](https://github.com/igmarin/rails-agent-skills/tags)
+> [![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills)
+> [![smithery badge](https://smithery.ai/badge/ismael-marin/rails-agent-skills)](https://smithery.ai/servers/ismael-marin/rails-agent-skills)
+> [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-> Tools
->
->[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills)
->[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
->![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/igmarin/rails-agent-skills?utm_source=oss&utm_medium=github&utm_campaign=igmarin%2Frails-agent-skills&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
->[![Snyk](https://img.shields.io/badge/Snyk-4C4A73?logo=snyk&logoColor=fff)](#)
->[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff)](https://hub.docker.com/r/igmarin/rails-agent-skills-mcp)
+## Who This Is For
 
----
+| Reader | What you get |
+|--------|--------------|
+| Rails developers | Agent instructions for common Rails work: tests, services, APIs, GraphQL, migrations, jobs, Hotwire, engines, security, and review. |
+| Team leads | A repeatable workflow that makes AI-assisted work easier to review because tests, docs, and self-review are part of the process. |
+| Junior developers | Step-by-step Rails workflow guidance that explains what to do next instead of dumping generic code. |
+| Senior developers | Opinionated guardrails for TDD, architecture, review, DDD, engines, performance, and production-safe changes. |
+| Recruiters and evaluators | A concrete example of AI tooling designed around engineering discipline, validation, and distribution. |
 
-## Why this exists
+## What Is In The Repository
 
-Most AI-generated code fails in real Rails apps because it lacks:
+| Area | Purpose |
+|------|---------|
+| `skills/` and `build/` | 42 public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
+| `workflows/` | 5 callable workflows that chain skills into full development loops. |
+| `docs/` | Public documentation, architecture, workflow guides, skill catalog, and evaluation policy. |
+| `mcp_server/` | Official Ruby MCP server exposing docs, workflows, and `use_skill`. |
+| `tessl-evals/` | Tessl-native eval scenarios for publishable skills in `tile.json`. |
+| `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. |
 
-- awareness of project conventions
-- disciplined workflows (especially TDD)
-- structured context across tasks
+The skills are not long-form tutorials. They are executable instructions for AI agents: when to gather context, when to stop for a checkpoint, how to write the first failing test, what Rails conventions to apply, and how to review the result.
 
-This library fixes that by giving agents **explicit skills and workflows** — from PRD → tasks → implementation → review — with tests acting as a hard gate before any code is written.
+## Start Here
 
-The goal is simple: **make AI outputs predictable, testable, and production-ready.**
+The recommended way to use this library is through the MCP server. MCP keeps the agent context small: docs and workflows are exposed as resources, and individual skills are loaded on demand. The `use_skill` tool returns a specific skill's `SKILL.md` only when the agent needs it.
 
----
+| Path | Best for | Start here |
+|------|----------|------------|
+| Official MCP Registry | Finding the verified MCP server metadata and latest published version | [MCP registry entry](https://registry.modelcontextprotocol.io/?q=io.github.igmarin%2Frails-agent-skills-mcp) |
+| Docker Hub image | Running without a local Ruby toolchain | [Docker image](https://hub.docker.com/r/igmarin/rails-agent-skills-mcp) |
+| Cloudflare Worker | Hosted Streamable HTTP MCP for registries and hosted clients | [health check](https://rails-agent-skills-mcp.ismael-marin.workers.dev/health) |
+| Smithery | Discovering and connecting through Smithery's MCP gateway | [Smithery listing](https://smithery.ai/servers/ismael-marin/rails-agent-skills) |
+| Local Ruby/Bundler | Local development, debugging, and repository checkout workflows | [mcp_server/README.md](mcp_server/README.md) |
+| GitHub CLI skills | Installing selected skills into a specific agent host | [GitHub CLI install](#install-selected-skills-with-github-cli) |
 
-## The Proof: Baseline vs Context
+### MCP Quick Start
 
-We measure the effectiveness of our skills by comparing a **Baseline** agent (raw LLM, no skill context) against a **Context** agent (with our skill instructions). The engine scores both outputs independently across five canonical dimensions, then computes the delta — the **Lift** — which is the mathematical proof of the value this library provides.
+For hosted MCP clients and registries that support Streamable HTTP, use the Cloudflare Worker endpoint:
 
-### Canonical Dimensions
+```text
+https://rails-agent-skills-mcp.ismael-marin.workers.dev/mcp
+```
 
-| Dimension | Weight | Measures |
-|-----------|--------|----------|
-| Correctness | 30 | Does the output fulfill the task requirements? |
-| Skill Adherence | 25 | Did the agent follow patterns defined in the skill? |
-| Code Quality | 20 | Is the code clean, well-structured, and free of smells? |
-| Test Coverage | 15 | Are there meaningful tests following best practices? |
-| Documentation | 10 | Is there adequate YARD documentation and clear intent? |
+Useful public checks:
 
-### Example Lift (Legacy v1 Format)
+```text
+Health: https://rails-agent-skills-mcp.ismael-marin.workers.dev/health
+Server card: https://rails-agent-skills-mcp.ismael-marin.workers.dev/.well-known/mcp/server-card.json
+```
 
-| Skill | Baseline | With Context | **Lift** |
-|-------|----------|--------------|----------|
-| `plan-tickets` | 30% | 100% | **+70** |
-| `integrate-api-client` | 40% | 100% | **+60** |
-| `generate-tasks` (TDD quadruplets) | 43% | 100% | **+57** |
-| `refactor-code` | 60% | 100% | **+40** |
-| `create-service-object` | 71% | 100% | **+29** |
-
-*Legacy scores based on evaluation runs using Claude 3.5 Sonnet. The current engine (v2) uses integer dimension scores out of 100 with a `pass_threshold` and `minimum_delta` gate.*
-
-### Eval Format (v2)
-
-Evals in `personal-evals/` use the new `criteria.json` format:
+For repeatable team installs, prefer the versioned Docker image published from a Git release tag:
 
 ```json
 {
-  "context": "Describe what this eval measures.",
-  "dimensions": [
-    { "name": "correctness", "max_score": 30 },
-    { "name": "skill_adherence", "max_score": 25 },
-    { "name": "code_quality", "max_score": 20 },
-    { "name": "test_coverage", "max_score": 15 },
-    { "name": "documentation", "max_score": 10 }
-  ],
-  "pass_threshold": 70,
-  "minimum_delta": 10
+  "mcpServers": {
+    "rails-agent-skills": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["run", "--rm", "-i", "igmarin/rails-agent-skills-mcp:5.1.5"]
+    }
+  }
 }
 ```
 
-**Rules:**
-- `dimensions` `max_score` values must sum to exactly 100.
-- `pass_threshold` is the minimum total context score to pass (skills default 70, workflows 65).
-- `minimum_delta` is the minimum improvement over baseline required (skills default 10, workflows 15).
-- Optional per-dimension `description` overrides the built-in default.
+For local development, clone the repo and run the Ruby server:
 
-A skill that only beats baseline marginally is considered under-specified; our goal is a significant lift on every non-generic convention.
-
----
-
-[![Ruby](https://img.shields.io/badge/ruby-%23CC342D.svg?style=flat&logo=ruby&logoColor=white)](https://www.ruby-lang.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills)](https://github.com/igmarin/rails-agent-skills/tags) ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/igmarin/rails-agent-skills?utm_source=oss&utm_medium=github&utm_campaign=igmarin%2Frails-agent-skills&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
-
----
-
-- **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
-- **Bootstrap discovery skill:** `[skill-router](skills/orchestration/skill-router/)` (session hook loads orchestrator)
-- **Documentation:** [docs/README.md](docs/README.md) — Complete guides and workflows
-- **Workflows:** [docs/workflows/](docs/workflows/) — Reference docs + callable workflow skills
-- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 41 skills organized by category
-- **Integration Matrix:** [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) — Skill chaining and workflows
-- **Skill structure:** [docs/architecture.md](docs/architecture.md)
-- **Eval optimization:** [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) — baseline-vs-context targets and the per-skill loop used to lift scores
-
-### Quick Start — Which Skill to Use?
-
-| Goal | Skill |
-|------|-------|
-| Implement feature with TDD | `workflows/tdd-workflow` |
-| Review PR | `workflows/review-workflow` |
-| Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` |
-| Not sure where to start | `skills/orchestration/skill-router` |
-
-## Methodology
-
-This skill library is built on core principles that shape how every skill operates. For detailed guidance on skill design, read the official [Skill Design Principles](docs/skill-design-principles.md).
-
-### 1. Tests Gate Implementation
-
-The core principle of this project. Tests are not a phase that happens "after" development — they are a **hard gate** that must be passed before any implementation code can be written.
-
-```text
-PRD → Tasks → [GATE] → Implementation → YARD → Docs → Code review → PR
-                 │
-                 ├── 1. Test EXISTS (written and saved)
-                 ├── 2. Test has been RUN
-                 └── 3. Test FAILS for the correct reason
-                        (feature missing, not a typo)
-
-        Only after all 3 conditions are met
-        can implementation code be written.
-
-After tests pass: document public Ruby API (YARD), update README/diagrams/
-related docs, then self-review (code-review) before opening the PR.
-Task lists from generate-tasks include these steps explicitly.
+```bash
+git clone https://github.com/igmarin/rails-agent-skills.git ~/rails-agent-skills
+cd ~/rails-agent-skills/mcp_server
+bundle install
+bundle exec ruby server.rb
 ```
 
-This applies to every skill that produces code: service objects, background jobs, API integrations, engine components, refactoring, and bug fixes. Every implementation skill in this library includes a **HARD-GATE: Tests Gate Implementation** section enforcing this discipline.
+See [mcp_server/README.md](mcp_server/README.md) for host-specific MCP configuration for Claude Code, Cursor, Windsurf, RubyMine, OpenCode, and other stdio MCP clients.
 
-Why this matters:
+When configuring MCP in external tools, use absolute paths for `cwd` and `BUNDLE_GEMFILE`. Relative paths and `~` are a common cause of gem-loading and timeout failures.
 
-- A test that passes immediately proves nothing — you don't know if it tests the right thing
-- A test you never saw fail could be testing existing behavior, not the new feature
-- Implementation code written before the test is biased by what you built, not what's required
+## Daily Workflow
 
-**Generated output:** All generated artifacts (documentation, YARD comments, Postman collections, examples) must be in **English** unless the user explicitly requests another language. This is reflected in the skill template and in `write-yard-docs` and `generate-api-collection`.
-
-### 2. Workflow Chaining
-
-Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The primary daily workflow is:
+Most Rails work should start with the TDD feature loop:
 
 ```text
-skills/testing/plan-tests → skills/testing/write-tests (write failing test)
-    ↓
-[CHECKPOINT: Test Design Review — confirm boundary, behavior, edge cases]
-    ↓
-[CHECKPOINT: Implementation Proposal — confirm approach before coding]
-    ↓
-Implement (minimal code to pass test) → Refactor
-    ↓
-[GATE: Linters + Full Test Suite]
-    ↓
-skills/patterns/write-yard-docs → Update docs
-    ↓
-skills/code-quality/code-review (self-review) → skills/code-quality/respond-to-review (on feedback)
-    ↓
-PR
+load-context
+  -> plan-tests
+  -> write-tests
+  -> verify failing test
+  -> implement
+  -> verify passing test
+  -> write-yard-docs
+  -> code-review
 ```
 
-See [docs/workflows/](docs/workflows/) for the full TDD Feature Loop and all workflow diagrams by lifecycle stage.
-
-**Note:** `plan-tickets` is an **optional** step. The assistant should **not** push for ticket generation unless the user asks explicitly (e.g. "turn this into tickets") or the context clearly indicates work should be mapped to a board/sprint.
-
-### 3. Rails-First Pattern Reuse
-
-This library intentionally reuses proven patterns from broader agent-skill libraries, but translates them into a **Rails-first** workflow instead of copying generic frontend-oriented skills one-to-one.
-
-| Reused pattern                         | Rails-first destination in this repo                                       |
-| ----------------------------------------| ----------------------------------------------------------------------------|
-| PRD interview + scope control          | `create-prd`                                                               |
-| Planning from requirements             | `generate-tasks`                                                           |
-| TDD loop and smallest safe slice       | `write-tests` + `plan-tests`                                |
-| Bug investigation to reproducible test | `triage-bug`                                                         |
-| Domain language and context design     | `define-domain-language` + `review-domain-boundaries` + `model-domain` |
-| Skill authoring conventions            | `docs/skill-template.md`                                                   |
-
-The rule of thumb is: **reuse patterns, not names**. If a broader skill maps cleanly to Rails/RSpec/YARD workflows, absorb the pattern into the existing chain. Create a new skill only when there is a real Rails-specific workflow gap.
-
-## How to Build a Feature (Your Daily Workflow)
-
-*For a practical guide on how to talk to the AI and effectively invoke these workflows, please see our **[Workflows Index](docs/workflows/)**.*
-
-Here is the recommended, step-by-step workflow for building a new feature from scratch using this skill library. This ensures every feature is well-planned, test-driven, and meets production-quality standards.
-
-**Goal:** Build a new feature, e.g., "Feature A"
-
-### Step 1: Planning & Task Breakdown
-
-- **Action:** Define the feature's requirements.
-  - **Use Skill:** [create-prd](skills/planning/create-prd/)
-- **Then:** Break the PRD into a detailed, TDD-ready checklist.
-  - **Use Skill:** [generate-tasks](skills/planning/generate-tasks/)
-
-### Step 2: Start the TDD Cycle
-
-- **Action:** Pick the first, highest-value "slice" of behavior from your task list.
-- **Action:** Get guidance on choosing the right *type* of test to write first (e.g., a request spec).
-  - **Use Skill:** [plan-tests](skills/testing/plan-tests/)
-- **Action:** Write the first failing test. **Crucially, run it and watch it fail.**
-  - **Use Skill:** [write-tests](skills/testing/write-tests/)
-
-### Step 3: Implementation
-
-- **Action:** Write the minimum amount of application code required to make your failing test pass.
-  - **Use Skills:** [create-service-object](skills/patterns/create-service-object/) for business logic, [apply-code-conventions](skills/code-quality/apply-code-conventions/) for general code quality.
-
-### Step 4: Verification
-
-- **Action:** Run the test again and watch it pass.
-- **Action:** Run linters and the full test suite to ensure no regressions. Refactor your new code if needed.
-
-### Step 5: Documentation & Self-Review
-
-- **Action:** Add inline documentation to any new public classes or methods.
-  - **Use Skill:** [write-yard-docs](skills/patterns/write-yard-docs/)
-- **Action:** Perform a self-review of your changes.
-  - **Use Skill:** [code-review](skills/code-quality/code-review/)
-
-### Step 6: Responding to Peer Review
-
-- **Action:** When you receive feedback from teammates, evaluate and implement their suggestions systematically.
-  - **Use Skill:** [respond-to-review](skills/code-quality/respond-to-review/)
-
-*For more detailed diagrams of these flows, see the **[Workflows Index](docs/workflows/)**.*
-
-## MCP Server
-
-The recommended way to use this library is via the embedded Ruby MCP server. The primary setup is local Ruby/Bundler; Docker is supported as a fallback for environments that do not want a local Ruby toolchain.
-
-The `use_skill` tool loads individual skills on demand, while docs and workflows remain available as MCP resources. That keeps the runtime contract small while still making the full skill library available.
+For a new feature from scratch:
 
 ```text
-tools/call use_skill { "skill_name": "implement-graphql" }
-→ returns full SKILL.md instructions
+create-prd -> generate-tasks -> TDD feature loop
 ```
 
-Published MCP surface:
+For a bug:
 
-| Prefix            | Source                                     |
-| -------------------| --------------------------------------------|
-| `doc/<name>`      | All files under `docs/`                    |
-| `workflow/<name>` | All workflow definitions                   |
-| `use_skill`       | Tool that returns the `SKILL.md` for a named skill |
+```text
+triage-bug -> plan-tests -> failing reproduction spec -> minimal fix -> code-review
+```
 
-Adding a new skill directory automatically makes it available through `use_skill` — no server changes needed.
+For a Rails engine:
 
-See **[mcp_server/README.md](mcp_server/README.md)** for the canonical MCP setup instructions and Docker fallback. Use **[docs/implementation-guide.md](docs/implementation-guide.md)** for the broader platform overview and non-MCP alternatives.
+```text
+create-engine -> test-engine -> document-engine -> review-engine -> release-engine
+```
 
-> **Important:** When configuring MCP in external tools (like Cursor, Windsurf, OpenCode, etc.), always use **absolute paths** for `cwd` and `BUNDLE_GEMFILE` to avoid environment and timeout errors.
+See [docs/workflow-guide.md](docs/workflow-guide.md) and [docs/workflows/](docs/workflows/) for the full workflow guide.
 
-## Install via GitHub CLI
+## Skill Catalog
 
-Requires [GitHub CLI](https://cli.github.com/) v2.90.0+.
+The library contains 42 public skills organized by Rails development concern.
+
+| Category | Examples |
+|----------|----------|
+| Planning | `create-prd`, `generate-tasks`, `plan-tickets` |
+| Testing | `plan-tests`, `write-tests`, `test-service`, `triage-bug` |
+| Code quality | `code-review`, `respond-to-review`, `security-check`, `refactor-code` |
+| Architecture and DDD | `define-domain-language`, `review-domain-boundaries`, `model-domain`, `review-architecture` |
+| Rails implementation | `create-service-object`, `implement-background-job`, `implement-authorization`, `implement-hotwire` |
+| APIs | `generate-api-collection`, `implement-graphql`, `integrate-api-client`, `version-api` |
+| Engines | `create-engine`, `test-engine`, `document-engine`, `release-engine`, `upgrade-engine` |
+| Infrastructure | `review-migration`, `optimize-performance`, `seed-database` |
+| Orchestration | `skill-router`, `build` |
+
+Use [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) for the complete catalog and [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) for skill chaining.
+
+## Quality And Evaluation
+
+This repo uses two complementary evaluation layers.
+
+| Layer | Status | What it validates |
+|-------|--------|-------------------|
+| Tessl | Public and active | Tessl-native scenarios in `tessl-evals/` validate the quality of publishable skills from `tile.json`. Tessl does not validate repository workflows today. |
+| `ruby-skill-bench` | Coming soon | The upcoming Ruby gem will run `personal-evals/` examples with full skill or workflow context, including `SKILL.md` plus companion resources bundled as XML. |
+
+Root `evals/` is generated Tessl staging output and must stay untracked. `tessl-evals/` is the tracked Tessl source. `personal-evals/` is the tracked source for open custom-evaluator examples.
+
+See [docs/eval-provenance.md](docs/eval-provenance.md) for the canonical eval ownership policy and [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) for the baseline-vs-context optimization loop.
+
+## Install Selected Skills With GitHub CLI
+
+Requires [GitHub CLI](https://cli.github.com/) v2.90.0+ with `gh skill`.
 
 ```bash
 # Install all skills interactively
@@ -278,17 +191,17 @@ gh skill install igmarin/rails-agent-skills
 # Install a specific skill for the current project
 gh skill install igmarin/rails-agent-skills code-review --scope project
 
-# Install a specific skill globally (available everywhere)
+# Install a specific skill globally
 gh skill install igmarin/rails-agent-skills code-review --scope user
 
 # Install pinned to a release tag
-gh skill install igmarin/rails-agent-skills code-review --pin v3.1.3 --scope user
+gh skill install igmarin/rails-agent-skills code-review --pin v5.1.5 --scope user
 
 # Search this repository's skills
 gh skill search rails --owner igmarin
 ```
 
-The default scope is `project`; use `--scope user` for a global install in your home directory. Skills are installed to the correct directory for your selected agent host automatically. To target a specific agent:
+To target a specific agent host:
 
 ```bash
 gh skill install igmarin/rails-agent-skills plan-tests --agent claude-code --scope user
@@ -301,248 +214,37 @@ gh skill install igmarin/rails-agent-skills plan-tests --agent windsurf --scope 
 Update installed skills:
 
 ```bash
-# Check for updates without changing files
 gh skill update --dry-run
-
-# Update all unpinned skills without prompting
 gh skill update --all
-
-# Re-download all skills, overwriting local edits
 gh skill update --force --all
-
-# Unpin pinned skills and update them to the latest release
 gh skill update --unpin
 ```
 
-> **Supply chain note:** Every release is tied to a git tag. Pinning to a tag or commit SHA (`--pin`) gives you reproducible, tamper-evident installs. Provenance metadata is written directly into each installed `SKILL.md` frontmatter so it travels with the skill.
+Pinning to a tag or commit SHA gives you reproducible installs. Provenance metadata is written into each installed `SKILL.md` frontmatter.
 
-## Platforms & Quick Start
+## Documentation Map
 
-To integrate these skills with your preferred AI development environment, refer to the **[Implementation Guide](docs/implementation-guide.md)**.
+| Need | Document |
+|------|----------|
+| Understand the docs system | [docs/README.md](docs/README.md) |
+| Install and configure MCP | [mcp_server/README.md](mcp_server/README.md) |
+| Browse all skills | [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) |
+| Understand skill chaining | [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) |
+| Follow workflow guides | [docs/workflow-guide.md](docs/workflow-guide.md) |
+| Understand repository structure | [docs/architecture.md](docs/architecture.md) |
+| Understand eval ownership | [docs/eval-provenance.md](docs/eval-provenance.md) |
+| Optimize skill eval quality | [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) |
 
-### Platform Integration Overview
+## Contributing
 
-| Platform | Recommended Integration | Key Step |
-|----------|-------------------------|----------|
-| **Gemini CLI** | Standard Plugin | Add repository path to `plugins` config |
-| **Cursor** | MCP Server / Rules | Add MCP URL or link `SKILL.md` in `.cursorrules` |
-| **Windsurf** | MCP Server | Register the Ruby MCP server in `mcp_config.json` |
-| **Claude Code** | MCP Server | Open the repo with the bundled `.mcp.json`, or copy the same local Ruby server config globally |
-| **Codex / OpenCode** | System Prompts | Point the agent to the `skills/` directory via workspace settings |
-| **RubyMine** | MCP Server | Configure via the Language Server Protocol settings |
+When contributing skills, workflows, docs, or MCP behavior:
 
-The guide covers the **MCP server** (recommended — on-demand, saves tokens), the Docker fallback, and the **symlink** approaches for each platform.
-
-## Skills Catalog
-
-### Planning & Tasks
-
-| Skill                               | Description                                                                  |
-| ----------------------------------- | ---------------------------------------------------------------------------- |
-| [create-prd](skills/planning/create-prd/)           | Generate Product Requirements Documents from feature descriptions            |
-| [generate-tasks](skills/planning/generate-tasks/)   | Break down PRDs into step-by-step implementation task lists                  |
-| [plan-tickets](skills/planning/plan-tickets/) | Draft or create tickets from plans; sprint placement and classification |
-
-### Code Quality
-
-| Skill                                                         | Description                                                                                              |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [code-review](skills/code-quality/code-review/)                       | Review Rails code following The Rails Way conventions — giving a review                                  |
-| [respond-to-review](skills/code-quality/respond-to-review/)               | Respond to review feedback — evaluate, push back, implement safely, trigger re-review                    |
-| [review-architecture](skills/code-quality/review-architecture/)       | Review application structure, boundaries, and responsibilities                                           |
-| [security-check](skills/code-quality/security-check/)               | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities                                               |
-| [apply-stack-conventions](skills/code-quality/apply-stack-conventions/)           | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions                                                |
-| [apply-code-conventions](skills/code-quality/apply-code-conventions/)             | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
-| [implement-authorization](skills/code-quality/implement-authorization/) | Pundit/CanCanCan, roles, permissions, policy objects                                                  |
-| [refactor-code](skills/code-quality/refactor-code/) | Restructure code with characterization tests and safe extraction |
-
-### Infrastructure
-
-| Skill                                                         | Description                                                                                              |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [review-migration](skills/infrastructure/review-migration/)             | Plan production-safe database migrations                                                                 |
-| [implement-background-job](skills/infrastructure/implement-background-job/)               | Design idempotent background jobs with Active Job / Solid Queue                                          |
-| [seed-database](skills/infrastructure/seed-database/) | Fixtures vs Seeds for dev/test data management                                                         |
-| [optimize-performance](skills/infrastructure/optimize-performance/) | N+1 prevention, profiling, caching, query optimization                                                |
-| [version-api](skills/infrastructure/version-api/) | REST API versioning strategies and deprecation policies                                              |
-| [implement-hotwire](skills/infrastructure/implement-hotwire/) | Turbo/Stimulus integration patterns                                                                    |
-
-### DDD & Domain Modeling
-
-| Skill                                               | Description                                                                                        |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [define-domain-language](skills/ddd/define-domain-language/) | Build a shared domain glossary, resolve synonyms, and clarify business terminology                 |
-| [review-domain-boundaries](skills/ddd/review-domain-boundaries/)     | Review bounded contexts, ownership, and language leakage in Rails codebases                        |
-| [model-domain](skills/ddd/model-domain/)           | Map DDD concepts to Rails models, services, value objects, and boundaries without over-engineering |
-
-### Ruby Patterns
-
-| Skill                                                                 | Description                                                                  |
-| --------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [create-service-object](skills/patterns/create-service-object/)                         | Build service objects with .call, standardized responses, transactions       |
-| [implement-calculator-pattern](skills/patterns/implement-calculator-pattern/) | Implement variant-based calculators with Strategy + Factory + Null Object    |
-| [write-yard-docs](skills/patterns/write-yard-docs/)                             | Write YARD docs for Ruby classes and public methods (all output in English)  |
-
-### API
-
-| Skill                                               | Description                                                                                        |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [generate-api-collection](skills/api/generate-api-collection/)                   | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL           |
-| [implement-graphql](skills/api/implement-graphql/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby      |
-| [integrate-api-client](skills/api/integrate-api-client/)           | Integrate external APIs with the layered Auth/Client/Fetcher/Builder pattern |
-
-### Context & Setup
-
-| Skill                                                       | Description                                                                                   |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| [load-context](skills/context/load-context/)     | Load schema, routes, nearest patterns before any code/spec/PRD — surface ambiguity explicitly |
-| [setup-environment](skills/context/setup-environment/) | Complete dev environment setup (Docker, env vars, database)                               |
-
-### Testing
-
-| Skill                                           | Description                                                                |
-| ----------------------------------------------- | -------------------------------------------------------------------------- |
-| [write-tests](skills/testing/write-tests/)   | Write maintainable, deterministic RSpec tests with TDD discipline          |
-| [plan-tests](skills/testing/plan-tests/)           | Pick the best first failing spec for a Rails change before implementation  |
-| [triage-bug](skills/testing/triage-bug/)           | Turn a Rails bug report into a reproducible failing spec and fix plan      |
-| [test-service](skills/testing/test-service/) | Test service objects with instance_double, hash factories, shared_examples |
-
-### Rails Engines
-
-| Skill                                                     | Description                                                       |
-| --------------------------------------------------------- | ----------------------------------------------------------------- |
-| [create-engine](skills/engines/create-engine/)               | Design and scaffold Rails engines with proper namespace isolation |
-| [test-engine](skills/engines/test-engine/)             | Set up dummy apps and engine-specific specs                       |
-| [review-engine](skills/engines/review-engine/)           | Review engine architecture, coupling, and maintainability         |
-| [release-engine](skills/engines/release-engine/)             | Prepare versioned releases with changelogs and upgrade notes      |
-| [document-engine](skills/engines/document-engine/)                   | Write comprehensive engine documentation                          |
-| [create-engine-installer](skills/engines/create-engine-installer/)       | Create idempotent install generators                              |
-| [extract-engine](skills/engines/extract-engine/)       | Extract host app code into engines incrementally                  |
-| [upgrade-engine](skills/engines/upgrade-engine/) | Maintain cross-version compatibility                              |
-
-### Orchestration
-
-| Skill                                            | Description                                                    |
-| ------------------------------------------------ | -------------------------------------------------------------- |
-| [skill-router](skills/orchestration/skill-router/) | Discover and invoke the right skill for the current Rails task |
-
-### Documentation
-
-| Resource                                            | Description                                                    |
-| ------------------------------------------------ | -------------------------------------------------------------- |
-| [docs/skill-template.md](docs/skill-template.md) | Authoring template and checklist for expanding the library     |
-
-## Skill Relationships
-
-```mermaid
-graph TB
-    subgraph Discovery [🔍 00: Discovery]
-        direction TB
-        A[load-context] --> B{New project?}
-        B -- Yes --> C[setup-environment]
-        B -- No --> D[Start]
-        C --> D
-    end
-
-    subgraph Planning [📝 10: Planning]
-        direction TB
-        D --> E[create-prd]
-        E --> F{PRD approved?}
-        F -- No --> E
-        F -- Yes --> G[generate-tasks]
-        G --> H{Need DDD?}
-        H -- Yes --> I[define-domain-language]
-        I --> J[review-domain-boundaries]
-        J --> K[model-domain]
-        K --> G
-    end
-
-    subgraph Development [💻 30: Development]
-        direction TB
-        H -- No --> L[plan-tests]
-        G --> L
-        L --> M[write-tests]
-        M --> N{Test OK?}
-        N -- No --> M
-        N -- Yes --> O{Proposal OK?}
-        O -- No --> O
-        O -- Yes --> P[Implement]
-        P --> Q{Passes?}
-        Q -- No --> P
-        Q -- Yes --> R{More?}
-        R -- Yes --> M
-        R -- No --> S[Linters + Suite]
-    end
-
-    subgraph Quality [✅ 40-50: Quality & Review]
-        direction TB
-        S --> T[write-yard-docs]
-        T --> U[code-review]
-        U --> V{Findings?}
-        V -- Critical --> W[respond-to-review]
-        W --> X[Fix]
-        X --> U
-        V -- None/Minor --> Y((Merge))
-    end
-
-    subgraph Engines [🔧 60: Engines]
-        direction TB
-        Z[create-engine] --> AA{Tests pass?}
-        AA -- No --> AB[Fix]
-        AB --> Z
-        AA -- Yes --> AC[release-engine]
-        AC --> AD((Release))
-    end
-
-    %% Cross-connections
-    U --> V1[security-check]
-    U --> V2[review-architecture]
-    V2 --> V3[refactor-code]
-    V3 --> V4[create-service-object]
-
-    BT[triage-bug] --> L
-```
-
-## How Skills Work
-
-Each skill is a `SKILL.md` file in its own directory. For detailed conventions and structure, refer to the [Skill Design Principles](docs/skill-design-principles.md).
-
-### Skills vs. Workflows
-
-This library differentiates between two types of agent capabilities:
-
--   **Skills (`skills/`):** Atomic, specialized modules (e.g., `code-review`, `write-yard-docs`). These are optimized for static analysis and "one-shot" tasks.
--   **Workflows (`workflows/`):** Higher-level orchestrators (e.g., `tdd-workflow`) that chain multiple skills together. 
-    -   **Important:** Workflows require an agent with **ReAct capabilities** (like the Gemini CLI, Claude Code, or Cursor with workspace context). They are designed to read multiple files, execute shell commands, and manage state across several turns. 
-    -   *Note on Scoring:* While platform static analysis might score workflows lower due to their dependency on external files, their actual performance is validated dynamically using our custom ReAct evaluation tool.
-
-## Typical Workflows
-
-Tests are a **gate** between planning and implementation. See [docs/workflows/](docs/workflows/) for full diagrams.
-
-| Workflow                                        | Skill Chain                                                                                                                                                                                                                                           |
-| -------------------------------------------------| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **TDD Feature Loop** *(primary daily workflow)* | load-context → plan-tests → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → write-yard-docs → code-review → respond-to-review (on feedback) → PR |
-| **New feature**                                 | load-context → create-prd → generate-tasks → (optional **plan-tickets**) → *TDD Feature Loop*                                                                                                                                         |
-| **DDD-first feature**                           | load-context → create-prd → define-domain-language → review-domain-boundaries → model-domain → generate-tasks → *TDD Feature Loop*                                                                                                   |
-| **Bug fix**                                     | triage-bug → plan-tests → **[write reproduction spec, verify failure]** → fix → verify passes → code-review                                                                                                                         |
-| **Code review + response**                      | code-review → respond-to-review (on feedback) → re-review if Critical items addressed                                                                                                                                                       |
-| **Security audit**                              | security-check → code-review (verify fixes) → PR                                                                                                                                                                                         |
-| **Performance optimization**                    | apply-code-conventions (ActiveRecord rules) → **[regression spec]** → optimize → code-review                                                                                                                                                    |
-| **Migration**                                   | review-migration → **[test up + down]** → implement → code-review                                                                                                                                                                         |
-| **GraphQL feature**                             | define-domain-language → implement-graphql → *TDD Feature Loop* → security-check                                                                                                                                                   |
-| **New engine**                                  | create-engine → **[write specs, verify failure]** → implement → document-engine                                                                                                                                                               |
-| **Refactoring**                                 | refactor-code → **[characterization tests]** → refactor → verify tests pass                                                                                                                                                                         |
-| **New service**                                 | plan-tests → **[write .call spec, verify failure]** → create-service-object → verify passes                                                                                                                                                      |
-| **API integration**                             | plan-tests → **[write layer specs, verify failure]** → integrate-api-client → verify passes                                                                                                                                              |
-
-## Creating New Skills
-
-For guidance on skill authoring, refer to the [Skill Design Principles](docs/skill-design-principles.md) and the [Skill Template](docs/skill-template.md).
+- Keep generated artifacts in English unless a user explicitly asks for another language.
+- Preserve the tests-gate-implementation rule for every code-producing skill.
+- Do not add tickets unless the user asks for ticket generation.
+- Do not commit generated root `evals/` output.
+- Keep public docs consistent with `tile.json`, `server.json`, and the latest release tag.
 
 ## Acknowledgments
 
-Huge thanks to **[Mumo Carlos (@mumoc)](https://github.com/mumoc)**. His mentorship has shaped my growth as a developer and influenced many of the habits and practices reflected in this library — not only the **plan-tickets** workflow he shared, but the broader discipline around quality, clarity, and thoughtful use of tools. This repo and the learning behind it would not be what they are without him.
-
-- plan-tickets: added assets/ticket-samples and ticket-schema.json to aid robust ticket generation across models
-- apply-stack-conventions: added compact assets/snippets for few-shot examples to improve cross-model robustness
+Huge thanks to [Mumo Carlos (@mumoc)](https://github.com/mumoc). His mentorship shaped many of the habits reflected here, especially the discipline around quality, clarity, and thoughtful use of tools.

@@ -6,7 +6,7 @@ Step-by-step install and verification for the **`rails-agent-skills`** repositor
 - **How to chain skills:** [workflow-guide.md](workflow-guide.md)
 - **Skill file conventions:** [architecture.md](architecture.md)
 
-The recommended way to use this library is via the **MCP Server Approach**. The primary path is the embedded Ruby/Bundler server in this repo. Docker remains available as a fallback for environments that do not want local Ruby setup.
+The recommended way to use this library is via the **MCP Server Approach**. The primary path for users is the official MCP distribution, with Docker available for repeatable installs and local Ruby/Bundler available for development or debugging.
 
 ---
 
@@ -14,9 +14,17 @@ The recommended way to use this library is via the **MCP Server Approach**. The 
 
 The MCP server exposes docs and workflows as resources and loads skills on demand through the `use_skill` tool.
 
-For complete MCP setup instructions, exact host-specific config snippets, and troubleshooting, see [mcp_server/README.md](../mcp_server/README.md). That file is the canonical source of truth for MCP setup.
+For complete MCP setup instructions, exact host-specific config snippets, Docker examples, official registry details, and troubleshooting, see [mcp_server/README.md](../mcp_server/README.md). That file is the canonical source of truth for MCP setup.
 
-### Local Ruby/Bundler (Primary)
+### Official MCP and Docker (Primary for users)
+
+For shared team installs, use the versioned Docker image documented in [mcp_server/README.md](../mcp_server/README.md). The current public examples use:
+
+```text
+igmarin/rails-agent-skills-mcp:5.1.5
+```
+
+### Local Ruby/Bundler (Primary for development)
 
 Clone the repo and install the MCP server dependencies:
 
@@ -30,7 +38,7 @@ Then configure your MCP host with the exact template from [mcp_server/README.md]
 
 ### Docker fallback
 
-If you do not want to manage a local Ruby toolchain, use the Docker fallback documented in [mcp_server/README.md](../mcp_server/README.md). Treat Docker as the fallback path; local Ruby/Bundler remains the primary setup for this repo.
+If you do not want to manage a local Ruby toolchain, use the Docker setup documented in [mcp_server/README.md](../mcp_server/README.md).
 
 ---
 

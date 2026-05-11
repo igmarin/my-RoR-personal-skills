@@ -1,14 +1,20 @@
 # Eval Provenance Policy
 
-This repository publishes reviewed Tessl-native eval scenarios from `tessl-evals/`.
+This repository uses two public eval source areas and one generated staging area.
+
+| Path | Purpose | Commit policy |
+|------|---------|---------------|
+| `tessl-evals/` | Tessl-native scenarios for publishable skills in `tile.json`. | Tracked. |
+| `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. | Tracked. |
+| `evals/` | Generated Tessl staging output produced from `tessl-evals/`. | Ignored; do not commit. |
+
+Tessl currently validates skills, not repository workflows. Tessl-native scenarios must target only publishable skills from `tile.json`.
+
+`ruby-skill-bench` is planned as a Ruby gem for validating skills and workflows with full context. Its `personal-evals/` examples load `SKILL.md` plus companion resources as XML. They do not need to be Tessl-compatible while Tessl only consumes `SKILL.md`.
 
 Generated scenarios from third-party services or private workflows must stay out of tracked paths. Store them locally in ignored directories such as `private-evals/` when needed for private validation.
 
-Root `evals/` is generated Tessl staging output only. Do not commit files under `evals/`; the release workflow stages `tessl-evals/` into `evals/` immediately before publishing.
-
-Tracked custom-evaluator examples belong in `personal-evals/`. They are open examples for the custom full-context evaluator, which loads `SKILL.md` plus companion resources as XML. They do not need to be Tessl-compatible while Tessl only consumes `SKILL.md`.
-
-Tracked Tessl-native scenarios belong in `tessl-evals/`. They must target only publishable skills from `tile.json`; repo-local `workflows/` are intentionally excluded because they are not part of the Tessl tile.
+Root `evals/` is generated Tessl staging output only. The release workflow stages `tessl-evals/` into `evals/` immediately before publishing.
 
 Public eval examples must meet one of these criteria:
 

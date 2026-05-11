@@ -1,6 +1,8 @@
 # Rails Agent Skills — MCP Server
 
-A Ruby MCP server that exposes the `rails-agent-skills` skill library to AI tools (Windsurf, Cursor, Claude Code, RubyMine, etc.) via the [Model Context Protocol](https://modelcontextprotocol.io) official spec (JSON-RPC 2.0, stdio transport).
+A Ruby MCP server that exposes the `rails-agent-skills` library to AI tools (Windsurf, Cursor, Claude Code, RubyMine, OpenCode, etc.) via the [Model Context Protocol](https://modelcontextprotocol.io) official spec (JSON-RPC 2.0, stdio transport).
+
+This is the canonical setup guide for the official MCP distribution. It publishes repository docs and workflows as resources, then loads individual Rails skills on demand through the `use_skill` tool so agents do not need the full skill library in context at once.
 
 Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/ruby-sdk) (`gem 'mcp'`).
 
@@ -22,11 +24,11 @@ Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/rub
 |------|---------------|--------|
 | **Resources** | `doc/<name>` | All `*.md` files under `docs/`, including nested docs such as `docs/workflows/*.md` |
 | **Resources** | `workflow/<name>` | Every workflow directory under `workflows/<workflow>/`, exposed from its `SKILL.md` plus supported companion files |
-| **Tool** | `use_skill` | Invocable tool: given a `skill_name`, returns the full `SKILL.md` content |
+| **Tool** | `use_skill` | Invocable tool: given a `skill_name`, returns the full `SKILL.md` content for a public skill |
 
 Individual **Skills** are no longer exposed as resources to prevent context bloat. They are accessed exclusively via the `use_skill` tool.
 
-Adding a new skill directory to the repo automatically makes it available through `use_skill` — no server changes needed.
+Adding a new public skill directory to the repo automatically makes it available through `use_skill` — no server changes needed.
 
 ---
 
@@ -229,6 +231,116 @@ The container uses stdio transport — wire it up the same way as the Ruby comma
 }
 ```
 
+Use a versioned image tag when you need repeatable installs:
+
+```json
+{
+  "mcpServers": {
+    "rails-agent-skills": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["run", "--rm", "-i", "igmarin/rails-agent-skills-mcp:5.1.5"]
+    }
+  }
+}
+```
+
+`latest` tracks the most recent successful push to `main`. Versioned tags, such as `5.1.5`, are created from Git release tags and should be preferred for shared team configuration.
+
+---
+
+## Official MCP Registry
+
+This server is published to the official MCP Registry as:
+
+```text
+io.github.igmarin/rails-agent-skills-mcp
+```
+
+The official registry does not host this server's code or container image. It stores metadata in root [`server.json`](../server.json), including the server name, repository, stdio transport, and the Docker Hub image reference.
+
+The package entry uses OCI:
+
+```json
+{
+  "registryType": "oci",
+  "identifier": "docker.io/igmarin/rails-agent-skills-mcp:VERSION",
+  "transport": {
+    "type": "stdio"
+  }
+}
+```
+
+For OCI packages, do not add a package-level `version` field. The MCP Registry expects the package version to be encoded in the image tag inside `identifier`.
+
+The Docker image must include this ownership label:
+
+```dockerfile
+LABEL io.modelcontextprotocol.server.name="io.github.igmarin/rails-agent-skills-mcp"
+```
+
+You can verify the local image metadata with:
+
+```bash
+docker build -t rails-agent-skills-mcp:test .
+docker image inspect rails-agent-skills-mcp:test --format '{{ index .Config.Labels "io.modelcontextprotocol.server.name" }}'
+```
+
+Expected output:
+
+```text
+io.github.igmarin/rails-agent-skills-mcp
+```
+
+---
+
+## Cloudflare Streamable HTTP MCP
+
+The repository also includes a hosted Streamable HTTP MCP server under [`../cloudflare_mcp`](../cloudflare_mcp). It is separate from this Ruby stdio server and exists for hosted registries and clients that need a public HTTPS MCP URL.
+
+Use this URL for Smithery or any MCP client that supports Streamable HTTP:
+
+```text
+https://rails-agent-skills-mcp.ismael-marin.workers.dev/mcp
+```
+
+Useful public checks:
+
+```text
+Health: https://rails-agent-skills-mcp.ismael-marin.workers.dev/health
+Server card: https://rails-agent-skills-mcp.ismael-marin.workers.dev/.well-known/mcp/server-card.json
+```
+
+The Cloudflare Worker is deployed by `.github/workflows/cloudflare-mcp-deploy.yml` after validation. It requires `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` repository secrets.
+
+---
+
+## Release and Publishing Flow
+
+Normal pushes to `main` publish the Docker `latest` image and deploy the Cloudflare Worker when `cloudflare_mcp/**` changes. They do **not** publish a new MCP Registry version.
+
+Release tags publish immutable versioned artifacts:
+
+```bash
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin vX.Y.Z
+```
+
+That tag triggers `.github/workflows/docker-publish.yml`:
+
+1. Build and push `docker.io/igmarin/rails-agent-skills-mcp:X.Y.Z`.
+2. Rewrite root `server.json` so `version` is `X.Y.Z` and the OCI `identifier` points at the same Docker image tag.
+3. Authenticate to the MCP Registry with GitHub OIDC.
+4. Publish `io.github.igmarin/rails-agent-skills-mcp` version `X.Y.Z`.
+
+MCP Registry versions are immutable, so a failed registry publish should be fixed in code and released with a new tag. Do not move or reuse already-pushed release tags unless you intentionally want to rewrite release history.
+
+After a successful release, verify registry discovery with:
+
+```bash
+curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.igmarin/rails-agent-skills-mcp"
+```
+
 ---
 
 ## End-to-end use case
@@ -262,9 +374,9 @@ Tests are written with Minitest: each file validates real behavior of a service 
 
 This server is listed on:
 
-- [smithery.ai](https://smithery.ai) — auto-indexed from GitHub
-- [glama.ai](https://glama.ai) — submit via their website
-- [modelcontextprotocol.io/registry](https://modelcontextprotocol.io) — community servers list
+- [smithery.ai](https://smithery.ai/servers/ismael-marin/rails-agent-skills) — uses the Cloudflare Streamable HTTP MCP endpoint
+- [cloudflare.com](https://rails-agent-skills-mcp.ismael-marin.workers.dev/mcp) — submit via their website
+- [modelcontextprotocol.io](https://registry.modelcontextprotocol.io/?q=io.github.igmarin%2Frails-agent-skills-mcp) — official MCP Registry metadata for the Docker image
 
 ---
 

@@ -4,7 +4,44 @@ All notable changes to this repository will be documented in this file.
 
 This project uses semantic versioning for published skill-library releases.
 
-## [5.0.0] - Unreleased
+## [5.1.5] - 2026-05-11
+
+### Added
+
+- Added a Cloudflare Workers Streamable HTTP MCP server for hosted integrations such as Smithery.
+- Added a GitHub Actions workflow to validate and deploy the Cloudflare MCP server from `cloudflare_mcp/`.
+- Documented the Cloudflare Worker MCP endpoint, health check, server card, and required deploy secrets.
+
+### Changed
+
+- Reworked public documentation around MCP-first usage, eval ownership, and the current release line.
+- Updated public install examples to the `5.1.5` release line.
+
+## [5.1.3] - 2026-05-11
+
+### Fixed
+
+- Fixed Docker deploy metadata for the MCP server release flow.
+- Removed the invalid package-level version field from MCP Registry package metadata.
+- Updated the MCP registry follow-up plan after the Docker deploy fix.
+
+## [5.1.2] - 2026-05-11
+
+### Added
+
+- Added official MCP Registry publishing support for `io.github.igmarin/rails-agent-skills-mcp`.
+- Added root `server.json` metadata for the official MCP Registry.
+- Added Docker image ownership metadata required by the MCP Registry.
+
+## [5.1.1] - 2026-05-11
+
+### Fixed
+
+- Fixed Tessl eval staging and asset links used by the publish/review workflows.
+- Updated Tessl review and publish workflow behavior for staged eval assets.
+- Clarified Tessl eval handling in `tessl-evals/README.md`.
+
+## [5.0.0] - 2026-05-08
 
 ### Added
 

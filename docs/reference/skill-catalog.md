@@ -1,6 +1,6 @@
 # Skill Catalog — Rails Agent Skills
 
-Complete catalog of 41 skills organized by development lifecycle stage and by category.
+Complete catalog of 42 public skills and 5 callable workflows organized by development lifecycle stage and by category.
 
 ---
 
@@ -28,6 +28,7 @@ Complete catalog of 41 skills organized by development lifecycle stage and by ca
 
 | Skill | Description | Trigger Words |
 |-------|-------------|---------------|
+| **build** | Tessl build skill for packaging and validating this skill library | "build skill", "package tile", "validate tile", "publish skill library" |
 | **load-context** | Load minimum context before coding (schema, routes, neighbors) | "load context", "before I code", "match existing style", "what does this codebase use" |
 | **setup-environment** *(NEW)* | Complete dev environment setup (Docker, env vars, db) | "onboarding", "new dev", "setup project", "Docker", "environment" |
 
@@ -220,6 +221,7 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 | Skill | Path | Description |
 |-------|------|-------------|
+| **build** | `build/` | Tessl build skill for packaging and validating this library |
 | **skill-router** | `skills/orchestration/skill-router/` | Routes to correct specialized skill |
 
 ### Patterns

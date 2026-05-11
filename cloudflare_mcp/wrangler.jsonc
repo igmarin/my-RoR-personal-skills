@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rails-agent-skills-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-05-11",
+  "compatibility_flags": ["nodejs_compat"],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "RailsAgentSkillsMCP",
+        "class_name": "RailsAgentSkillsMCP"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["RailsAgentSkillsMCP"]
+    }
+  ],
+  "vars": {
+    "RAW_BASE": "https://raw.githubusercontent.com/igmarin/rails-agent-skills/main"
+  }
+}

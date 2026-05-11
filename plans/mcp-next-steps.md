@@ -36,14 +36,13 @@ The implementation targets the next `v*` release tag. It does not try to retrofi
        "subfolder": "mcp_server"
      },
      "version": "0.0.0",
-     "packages": [
-       {
-         "registryType": "oci",
-         "identifier": "docker.io/igmarin/rails-agent-skills-mcp:0.0.0",
-         "version": "0.0.0",
-         "transport": {
-           "type": "stdio"
-         }
+    "packages": [
+      {
+        "registryType": "oci",
+        "identifier": "docker.io/igmarin/rails-agent-skills-mcp:0.0.0",
+        "transport": {
+          "type": "stdio"
+        }
        }
      ]
    }
@@ -56,7 +55,8 @@ The implementation targets the next `v*` release tag. It does not try to retrofi
    - Runs only for `v*` tags.
    - Waits for the Docker image build/push job to finish.
    - Downloads `mcp-publisher`.
-   - Sets `server.json.version`, `packages[0].identifier`, and `packages[0].version` from the tag.
+   - Sets `server.json.version` and `packages[0].identifier` from the tag.
+   - Leaves the OCI package without a package-level `version` field because the registry requires the OCI version in the image tag.
    - Confirms the versioned Docker image is visible on Docker Hub.
    - Authenticates with GitHub OIDC.
    - Publishes the server metadata to the MCP Registry.

@@ -13,7 +13,6 @@
     {
       "registryType": "oci",
       "identifier": "docker.io/igmarin/rails-agent-skills-mcp:0.0.0",
-      "version": "0.0.0",
       "transport": {
         "type": "stdio"
       }

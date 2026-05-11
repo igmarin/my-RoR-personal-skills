@@ -70,7 +70,7 @@ jobs:
 
             data["version"] = version
             package["identifier"] = "docker.io/igmarin/rails-agent-skills-mcp:#{version}"
-            package["version"] = version
+            package.delete("version")
 
             File.write(path, "#{JSON.pretty_generate(data)}\n")
           '

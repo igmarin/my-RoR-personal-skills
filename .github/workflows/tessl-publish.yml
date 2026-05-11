@@ -82,7 +82,7 @@ jobs:
 
             if latest.empty?
               puts local
-            elsif parts(local) > parts(latest)
+            elsif (parts(local) <=> parts(latest)) == 1
               puts local
             else
               major, minor, patch = parts(latest)

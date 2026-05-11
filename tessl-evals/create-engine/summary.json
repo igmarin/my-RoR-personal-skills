@@ -1,0 +1,14 @@
+{
+  "target_skill": "create-engine",
+  "total_scenarios": 1,
+  "instructions_coverage": {
+    "total_instructions": 8,
+    "instructions_tested": 8,
+    "coverage_percentage": 100
+  },
+  "reason_distribution": {
+    "new knowledge": 3,
+    "reminder": 2,
+    "preference": 3
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "target_skill": "document-engine",
+  "source_path": "skills/engines/document-engine/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "All generated documentation (README, guides, examples) must be in **English** unless the user explicitly requests another language.",
+      "original_snippets": "All generated documentation (README, guides, examples) must be in **English** unless the user explicitly requests another language.",
+      "relevant_when": "When a user asks for Rails work that should trigger document-engine.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Check each row in the Documentation Gaps checklist against the draft. A checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.",
+      "original_snippets": "Check each row in the Documentation Gaps checklist against the draft. A checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.",
+      "relevant_when": "When a user asks for Rails work that should trigger document-engine.",
+      "why_given": "preference"
+    }
+  ]
+}

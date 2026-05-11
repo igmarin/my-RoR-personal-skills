@@ -1,0 +1,13 @@
+{
+  "target_skill": "plan-tests",
+  "total_scenarios": 1,
+  "instructions_coverage": {
+    "total_instructions": 5,
+    "instructions_tested": 5,
+    "coverage_percentage": 100
+  },
+  "reason_distribution": {
+    "new knowledge": 4,
+    "preference": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "context": "Checks whether the final artifact follows the review-migration instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: Use this skill when schema changes must be safe in real environments.",
+      "max_score": 25
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: **Core principle:** Prefer phased rollouts over one-shot migrations on large or busy tables.",
+      "max_score": 25
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: Check lock behavior for indexes, constraints, defaults, and rewrites.",
+      "max_score": 25
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: Use multi-step rollouts for renames, type changes, and unique constraints.",
+      "max_score": 25
+    }
+  ]
+}

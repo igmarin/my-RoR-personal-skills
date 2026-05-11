@@ -1,0 +1,31 @@
+{
+  "context": "Checks whether the final artifact follows the apply-code-conventions instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: Detect → run → defer. Do not invent style rules.",
+      "max_score": 20
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: **Run linter** — detect config, run the appropriate tool, note absence if none found.",
+      "max_score": 20
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: **Check area-specific rules** — apply the \"Apply by area\" table below to each changed path.",
+      "max_score": 20
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: **Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.",
+      "max_score": 20
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: Only recommend `let_it_be` if `test-prof` is already in `Gemfile.lock`. Otherwise default to `let`; reach for `let!` only when lazy evaluation would break the example. Don't introduce `test-prof` unless asked.",
+      "max_score": 20
+    }
+  ]
+}

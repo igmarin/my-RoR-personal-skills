@@ -1,0 +1,54 @@
+{
+  "target_skill": "create-engine",
+  "source_path": "skills/engines/create-engine/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "Use this skill when the task is to create, scaffold, or refactor a Rails engine.",
+      "original_snippets": "Use this skill when the task is to create, scaffold, or refactor a Rails engine.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "A good engine has a narrow purpose, a clear host-app integration story, and a small public API. Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.",
+      "original_snippets": "A good engine has a narrow purpose, a clear host-app integration story, and a small public API. Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Dummy app exists: `ls spec/dummy` or `ls test/dummy` should return the app directory.",
+      "original_snippets": "Dummy app exists: `ls spec/dummy` or `ls test/dummy` should return the app directory.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "reminder"
+    },
+    {
+      "instruction": "Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.",
+      "original_snippets": "Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Use a structure close to this:",
+      "original_snippets": "Use a structure close to this:",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**What the host app must add:** mount route, initializer, migrations, credentials, background jobs, or assets.",
+      "original_snippets": "**What the host app must add:** mount route, initializer, migrations, credentials, background jobs, or assets.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Prefer one explicit configuration surface, for example:",
+      "original_snippets": "Prefer one explicit configuration surface, for example:",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "reminder"
+    },
+    {
+      "instruction": "Do not scatter configuration across unrelated constants and initializers.",
+      "original_snippets": "Do not scatter configuration across unrelated constants and initializers.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "preference"
+    }
+  ]
+}

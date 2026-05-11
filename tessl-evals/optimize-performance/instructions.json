@@ -1,0 +1,54 @@
+{
+  "target_skill": "optimize-performance",
+  "source_path": "skills/infrastructure/optimize-performance/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "REPORT ORDER MUST MATCH WORK ORDER:",
+      "original_snippets": "REPORT ORDER MUST MATCH WORK ORDER:",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "to lock it in.\" The spec MUST be written and shown failing BEFORE the fix",
+      "original_snippets": "to lock it in.\" The spec MUST be written and shown failing BEFORE the fix",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**Write regression spec** — assert query count",
+      "original_snippets": "**Write regression spec** — assert query count",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Verify** — confirm improvement with EXPLAIN ANALYZE",
+      "original_snippets": "**Verify** — confirm improvement with EXPLAIN ANALYZE",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Write this spec **before** applying any optimization to lock in the expected query count:",
+      "original_snippets": "Write this spec **before** applying any optimization to lock in the expected query count:",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Use the `db-query-matchers` gem or a custom `make_database_queries` matcher. The spec must pass after the fix and fail if a future change reintroduces the N+1.",
+      "original_snippets": "Use the `db-query-matchers` gem or a custom `make_database_queries` matcher. The spec must pass after the fix and fail if a future change reintroduces the N+1.",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:",
+      "original_snippets": "Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "`Seq Scan` on large tables → should become `Index Scan` after adding an index",
+      "original_snippets": "`Seq Scan` on large tables → should become `Index Scan` after adding an index",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "reminder"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "context": "Checks whether the final artifact follows the implement-graphql instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a Rails application with the `graphql-ruby` gem.",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: Before shipping a resolver/mutation slice, ALL of the following must be true (details in linked sections; do not duplicate checks in prose here):",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: TESTING.md: specs in `spec/graphql/` use `AppSchema.execute` — **ALL spec files** (resolver specs AND mutation specs). Never use HTTP controller dispatch for GraphQL specs.",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: SPEC:       Write failing spec (happy path + auth + validation error case) — see TESTING.md",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: FINAL CHECK: Verify every HARD-GATE item above against the code you wrote — all 8 must be true",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: Prefer **dedicated resolver classes** over inline field blocks for non-trivial logic.",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: **FORBIDDEN:** Never call `object.association` directly and never use `.includes` on the scope — every association load MUST go through the dataloader (graphql-ruby 1.12+). This applies both in type field definitions and in list resolvers:",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: List resolvers must also prime the dataloader for each association the returned records will expose:",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-9",
+      "description": "The submitted artifact follows this skill instruction: Write `description:` inline on **every** field in every type — no field left undescribed:",
+      "max_score": 11
+    }
+  ]
+}

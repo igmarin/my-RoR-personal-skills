@@ -1,0 +1,48 @@
+{
+  "target_skill": "create-engine-installer",
+  "source_path": "skills/engines/create-engine-installer/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "Use this skill when the task is to design or review how a host app installs and configures a Rails engine — generating initializers, copying migrations, mounting routes, or exposing a single install command.",
+      "original_snippets": "Use this skill when the task is to design or review how a host app installs and configures a Rails engine — generating initializers, copying migrations, mounting routes, or exposing a single install command.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Core principle:** Setup must be explicit, repeatable, and safe to rerun. Never modify the host app at boot time.",
+      "original_snippets": "**Core principle:** Setup must be explicit, repeatable, and safe to rerun. Never modify the host app at boot time.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "GENERATE:  Run the generator against a clean host app",
+      "original_snippets": "GENERATE:  Run the generator against a clean host app",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "VERIFY:    Check output files exist in the correct host paths",
+      "original_snippets": "VERIFY:    Check output files exist in the correct host paths",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "RERUN:     Run the generator a second time",
+      "original_snippets": "RERUN:     Run the generator a second time",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "DOCUMENT:  List what was generated vs. what the user must do manually",
+      "original_snippets": "DOCUMENT:  List what was generated vs. what the user must do manually",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**Minimal rerun spec (must always pass):**",
+      "original_snippets": "**Minimal rerun spec (must always pass):**",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "preference"
+    }
+  ]
+}

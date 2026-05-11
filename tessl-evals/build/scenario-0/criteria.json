@@ -1,0 +1,56 @@
+{
+  "context": "Checks whether the final artifact follows the build instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: Use for executing focused implementation tasks from an established plan. **Not for** broad architectural design, planning, or large-scale refactoring.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: **Read**: Review the pre-defined task, spec, and relevant code. Stop and clarify if the scope is vague or exceeds a single task.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: **TDD**: Write/update tests for new behavior or bug fixes.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: **Full Suite**: Run the strongest available project checks (e.g. `bundle exec rspec`) to prevent regressions.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: **Manual Check**: Perform task-specific verification (e.g., `curl` an endpoint or check logs).",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: **Run spec → Confirm failure**: `bundle exec rspec spec/models/user_spec.rb` (Fails with `NoMethodError: undefined method 'admin?'`)",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: **Run spec → Confirm pass**: `bundle exec rspec spec/models/user_spec.rb` (Passes)",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: ☐ **Verify Failure**: Run the spec and see it crash in `SearchService`.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-9",
+      "description": "The submitted artifact follows this skill instruction: ☐ **Verify Pass**: Re-run the spec.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-10",
+      "description": "The submitted artifact follows this skill instruction: ☐ **Regression check**: Run all search-related specs.",
+      "max_score": 10
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "context": "Checks whether the final artifact follows the implement-authorization instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: **Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected",
+      "max_score": 100
+    }
+  ]
+}

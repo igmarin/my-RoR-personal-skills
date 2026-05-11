@@ -1,0 +1,36 @@
+{
+  "target_skill": "code-review",
+  "source_path": "skills/code-quality/code-review/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "**Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.",
+      "original_snippets": "**Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.",
+      "relevant_when": "When a user asks for Rails work that should trigger code-review.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Self-review the full branch diff using the Review Order below.",
+      "original_snippets": "Self-review the full branch diff using the Review Order below.",
+      "relevant_when": "When a user asks for Rails work that should trigger code-review.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "generate-tasks must include a \"Code review before merge\" task.",
+      "original_snippets": "generate-tasks must include a \"Code review before merge\" task.",
+      "relevant_when": "When a user asks for Rails work that should trigger code-review.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Use **only** these labels:",
+      "original_snippets": "Use **only** these labels:",
+      "relevant_when": "When a user asks for Rails work that should trigger code-review.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**`Critical`** — security, data loss, crash, or **Always Critical** (see below). Block merge.",
+      "original_snippets": "**`Critical`** — security, data loss, crash, or **Always Critical** (see below). Block merge.",
+      "relevant_when": "When a user asks for Rails work that should trigger code-review.",
+      "why_given": "reminder"
+    }
+  ]
+}

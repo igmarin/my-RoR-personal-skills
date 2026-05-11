@@ -1,0 +1,54 @@
+{
+  "target_skill": "implement-background-job",
+  "source_path": "skills/infrastructure/implement-background-job/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "Use this skill when the task is to add, configure, or review background jobs in a Rails application.",
+      "original_snippets": "Use this skill when the task is to add, configure, or review background jobs in a Rails application.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Core principle:** Design jobs for idempotency and safe retries. Prefer Active Job's unified API; choose backend based on Rails version and scale.",
+      "original_snippets": "**Core principle:** Design jobs for idempotency and safe retries. Prefer Active Job's unified API; choose backend based on Rails version and scale.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "reminder"
+    },
+    {
+      "instruction": "EVERY job MUST have its test written and validated BEFORE implementation.",
+      "original_snippets": "EVERY job MUST have its test written and validated BEFORE implementation.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Write the job spec (idempotency, retry, error handling)",
+      "original_snippets": "Write the job spec (idempotency, retry, error handling)",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Run the spec — verify it fails because the job does not exist yet",
+      "original_snippets": "Run the spec — verify it fails because the job does not exist yet",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "EVERY job that performs a side effect (charge, email, API call) MUST have",
+      "original_snippets": "EVERY job that performs a side effect (charge, email, API call) MUST have",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "EVERY perform method should do only three things:",
+      "original_snippets": "EVERY perform method should do only three things:",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "reminder"
+    },
+    {
+      "instruction": "Load the record from the passed ID",
+      "original_snippets": "Load the record from the passed ID",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "new knowledge"
+    }
+  ]
+}

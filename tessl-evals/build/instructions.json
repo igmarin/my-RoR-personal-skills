@@ -1,0 +1,66 @@
+{
+  "target_skill": "build",
+  "source_path": "build/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "Use for executing focused implementation tasks from an established plan. **Not for** broad architectural design, planning, or large-scale refactoring.",
+      "original_snippets": "Use for executing focused implementation tasks from an established plan. **Not for** broad architectural design, planning, or large-scale refactoring.",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Read**: Review the pre-defined task, spec, and relevant code. Stop and clarify if the scope is vague or exceeds a single task.",
+      "original_snippets": "**Read**: Review the pre-defined task, spec, and relevant code. Stop and clarify if the scope is vague or exceeds a single task.",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**TDD**: Write/update tests for new behavior or bug fixes.",
+      "original_snippets": "**TDD**: Write/update tests for new behavior or bug fixes.",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Full Suite**: Run the strongest available project checks (e.g. `bundle exec rspec`) to prevent regressions.",
+      "original_snippets": "**Full Suite**: Run the strongest available project checks (e.g. `bundle exec rspec`) to prevent regressions.",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Manual Check**: Perform task-specific verification (e.g., `curl` an endpoint or check logs).",
+      "original_snippets": "**Manual Check**: Perform task-specific verification (e.g., `curl` an endpoint or check logs).",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Run spec → Confirm failure**: `bundle exec rspec spec/models/user_spec.rb` (Fails with `NoMethodError: undefined method 'admin?'`)",
+      "original_snippets": "**Run spec → Confirm failure**: `bundle exec rspec spec/models/user_spec.rb` (Fails with `NoMethodError: undefined method 'admin?'`)",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Run spec → Confirm pass**: `bundle exec rspec spec/models/user_spec.rb` (Passes)",
+      "original_snippets": "**Run spec → Confirm pass**: `bundle exec rspec spec/models/user_spec.rb` (Passes)",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "☐ **Verify Failure**: Run the spec and see it crash in `SearchService`.",
+      "original_snippets": "☐ **Verify Failure**: Run the spec and see it crash in `SearchService`.",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "☐ **Verify Pass**: Re-run the spec.",
+      "original_snippets": "☐ **Verify Pass**: Re-run the spec.",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "☐ **Regression check**: Run all search-related specs.",
+      "original_snippets": "☐ **Regression check**: Run all search-related specs.",
+      "relevant_when": "When a user asks for Rails work that should trigger build.",
+      "why_given": "new knowledge"
+    }
+  ]
+}

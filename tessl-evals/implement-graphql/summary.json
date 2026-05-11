@@ -1,0 +1,14 @@
+{
+  "target_skill": "implement-graphql",
+  "total_scenarios": 1,
+  "instructions_coverage": {
+    "total_instructions": 9,
+    "instructions_tested": 9,
+    "coverage_percentage": 100
+  },
+  "reason_distribution": {
+    "new knowledge": 3,
+    "preference": 5,
+    "reminder": 1
+  }
+}

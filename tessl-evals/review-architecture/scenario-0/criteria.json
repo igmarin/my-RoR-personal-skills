@@ -1,0 +1,31 @@
+{
+  "context": "Checks whether the final artifact follows the review-architecture instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to review or improve the structure of a Rails application or library.",
+      "max_score": 20
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: **Core principle:** Prioritize boundary problems over style. Prefer simple objects and explicit flow over hidden behavior.",
+      "max_score": 20
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: Check where domain logic lives.",
+      "max_score": 20
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: Check whether abstractions clarify the design or only move code around.",
+      "max_score": 20
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count. If verification reveals the finding is not a genuine structural problem, either downgrade it to Medium/Low with a revised rationale, or remove it entirely. Do not list findings that do not survive code-level confirmation.",
+      "max_score": 20
+    }
+  ]
+}

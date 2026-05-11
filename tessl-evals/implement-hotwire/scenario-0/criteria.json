@@ -1,0 +1,11 @@
+{
+  "context": "Checks whether the final artifact follows the implement-hotwire instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: **Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with a headless driver set to `no_js`) and confirm forms submit, links navigate, and data persists correctly without JS.",
+      "max_score": 100
+    }
+  ]
+}

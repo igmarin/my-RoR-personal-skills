@@ -1,0 +1,36 @@
+{
+  "target_skill": "apply-code-conventions",
+  "source_path": "skills/code-quality/apply-code-conventions/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "Detect → run → defer. Do not invent style rules.",
+      "original_snippets": "Detect → run → defer. Do not invent style rules.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**Run linter** — detect config, run the appropriate tool, note absence if none found.",
+      "original_snippets": "**Run linter** — detect config, run the appropriate tool, note absence if none found.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Check area-specific rules** — apply the \"Apply by area\" table below to each changed path.",
+      "original_snippets": "**Check area-specific rules** — apply the \"Apply by area\" table below to each changed path.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.",
+      "original_snippets": "**Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Only recommend `let_it_be` if `test-prof` is already in `Gemfile.lock`. Otherwise default to `let`; reach for `let!` only when lazy evaluation would break the example. Don't introduce `test-prof` unless asked.",
+      "original_snippets": "Only recommend `let_it_be` if `test-prof` is already in `Gemfile.lock`. Otherwise default to `let`; reach for `let!` only when lazy evaluation would break the example. Don't introduce `test-prof` unless asked.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
+      "why_given": "preference"
+    }
+  ]
+}

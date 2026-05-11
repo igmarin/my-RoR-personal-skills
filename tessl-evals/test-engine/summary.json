@@ -1,0 +1,13 @@
+{
+  "target_skill": "test-engine",
+  "total_scenarios": 1,
+  "instructions_coverage": {
+    "total_instructions": 4,
+    "instructions_tested": 4,
+    "coverage_percentage": 100
+  },
+  "reason_distribution": {
+    "new knowledge": 3,
+    "preference": 1
+  }
+}

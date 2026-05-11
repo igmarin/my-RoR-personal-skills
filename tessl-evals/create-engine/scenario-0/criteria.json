@@ -1,0 +1,46 @@
+{
+  "context": "Checks whether the final artifact follows the create-engine instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to create, scaffold, or refactor a Rails engine.",
+      "max_score": 13
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: A good engine has a narrow purpose, a clear host-app integration story, and a small public API. Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.",
+      "max_score": 13
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: Dummy app exists: `ls spec/dummy` or `ls test/dummy` should return the app directory.",
+      "max_score": 13
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.",
+      "max_score": 13
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: Use a structure close to this:",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: **What the host app must add:** mount route, initializer, migrations, credentials, background jobs, or assets.",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: Prefer one explicit configuration surface, for example:",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: Do not scatter configuration across unrelated constants and initializers.",
+      "max_score": 12
+    }
+  ]
+}

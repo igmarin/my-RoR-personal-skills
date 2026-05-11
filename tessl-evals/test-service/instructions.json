@@ -1,0 +1,36 @@
+{
+  "target_skill": "test-service",
+  "source_path": "skills/testing/test-service/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "Use this skill when writing tests for service classes under `spec/services/`.",
+      "original_snippets": "Use this skill when writing tests for service classes under `spec/services/`.",
+      "relevant_when": "When a user asks for Rails work that should trigger test-service.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use `instance_double` for isolation, `create` for integration.",
+      "original_snippets": "**Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use `instance_double` for isolation, `create` for integration.",
+      "relevant_when": "When a user asks for Rails work that should trigger test-service.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "WRITE:   Write the spec (happy path + error cases + edge cases)",
+      "original_snippets": "WRITE:   Write the spec (happy path + error cases + edge cases)",
+      "relevant_when": "When a user asks for Rails work that should trigger test-service.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Use `instance_double` for unit isolation:",
+      "original_snippets": "Use `instance_double` for unit isolation:",
+      "relevant_when": "When a user asks for Rails work that should trigger test-service.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Use `create` for integration tests:",
+      "original_snippets": "Use `create` for integration tests:",
+      "relevant_when": "When a user asks for Rails work that should trigger test-service.",
+      "why_given": "new knowledge"
+    }
+  ]
+}

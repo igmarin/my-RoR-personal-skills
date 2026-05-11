@@ -109,23 +109,30 @@ done < <(find build skills workflows -name "SKILL.md" -not -path "*/.tessl/*" | 
 
 info "Total SKILL.md files found: $skill_count"
 
-# Cross-check: every public skill/workflow dir with SKILL.md must be in tile.json.skills or tile.json.workflows
+# Cross-check: every public publishable skill dir with SKILL.md must be in tile.json.skills.
+# Root workflows are repo-local orchestrations and are intentionally excluded from the Tessl tile.
 section "tile.json ↔ Disk Sync"
 
 if [ -f "tile.json" ]; then
   TILE_SKILL_PATHS=$(jq -r '.skills | .[].path' tile.json 2>/dev/null | sort)
-  TILE_WORKFLOW_PATHS=$(jq -r '.workflows | .[].path' tile.json 2>/dev/null | sort)
-  COMBINED_PATHS=$(printf "%s\n%s" "$TILE_SKILL_PATHS" "$TILE_WORKFLOW_PATHS" | sort)
-  
-  DISK_SKILL_PATHS=$(find build skills workflows -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#^\./##' | sort)
+  DISK_SKILL_PATHS=$(find build skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#^\./##' | sort)
 
   while IFS= read -r path; do
-    if printf '%s\n' "$COMBINED_PATHS" | grep -qx "$path"; then
+    if printf '%s\n' "$TILE_SKILL_PATHS" | grep -qx "$path"; then
       check_pass "tile.json includes: $path"
     else
       check_fail "tile.json missing: $path"
     fi
   done <<< "$DISK_SKILL_PATHS"
+
+  WORKFLOW_PATHS=$(find workflows -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#^\./##' | sort)
+  while IFS= read -r path; do
+    if printf '%s\n' "$TILE_SKILL_PATHS" | grep -qx "$path"; then
+      check_fail "tile.json should not include workflow: $path"
+    else
+      check_pass "workflow excluded from Tessl tile: $path"
+    fi
+  done <<< "$WORKFLOW_PATHS"
 fi
 
 # Summary

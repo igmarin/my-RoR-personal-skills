@@ -1,0 +1,48 @@
+{
+  "target_skill": "security-check",
+  "source_path": "skills/code-quality/security-check/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "Use this skill when the task is to review or harden Rails code from a security perspective.",
+      "original_snippets": "Use this skill when the task is to review or harden Rails code from a security perspective.",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Check authentication and authorization boundaries.",
+      "original_snippets": "Check authentication and authorization boundaries.",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Check parameter handling and sensitive attribute assignment.",
+      "original_snippets": "Check parameter handling and sensitive attribute assignment.",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Check redirects, rendering, and output encoding.",
+      "original_snippets": "Check redirects, rendering, and output encoding.",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Check file handling, network calls, and background job inputs.",
+      "original_snippets": "Check file handling, network calls, and background job inputs.",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Check secrets, logging, and operational exposure.",
+      "original_snippets": "Check secrets, logging, and operational exposure.",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).",
+      "original_snippets": "**Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "new knowledge"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "context": "Checks whether the final artifact follows the apply-stack-conventions instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: ALL new code MUST have its test written and validated BEFORE implementation.",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: Write the spec: bundle exec rspec spec/[path]_spec.rb",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: Verify it FAILS — output must show the feature does not exist yet",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: Write the implementation code",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: Verify it PASSES — run the same spec and confirm green",
+      "max_score": 16
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: Each step should remain testable in isolation before wiring to the next layer.",
+      "max_score": 16
+    }
+  ]
+}

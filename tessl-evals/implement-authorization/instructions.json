@@ -1,0 +1,12 @@
+{
+  "target_skill": "implement-authorization",
+  "source_path": "skills/code-quality/implement-authorization/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "**Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected",
+      "original_snippets": "**Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "new knowledge"
+    }
+  ]
+}

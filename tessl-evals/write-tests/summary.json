@@ -1,0 +1,14 @@
+{
+  "target_skill": "write-tests",
+  "total_scenarios": 1,
+  "instructions_coverage": {
+    "total_instructions": 9,
+    "instructions_tested": 9,
+    "coverage_percentage": 100
+  },
+  "reason_distribution": {
+    "new knowledge": 5,
+    "reminder": 1,
+    "preference": 3
+  }
+}

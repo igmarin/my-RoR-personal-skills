@@ -1,0 +1,14 @@
+{
+  "target_skill": "implement-background-job",
+  "total_scenarios": 1,
+  "instructions_coverage": {
+    "total_instructions": 8,
+    "instructions_tested": 8,
+    "coverage_percentage": 100
+  },
+  "reason_distribution": {
+    "new knowledge": 4,
+    "reminder": 2,
+    "preference": 2
+  }
+}

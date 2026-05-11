@@ -1,0 +1,36 @@
+{
+  "context": "Checks whether the final artifact follows the seed-database instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: Use ENV variables (e.g., ENV.fetch('DEFAULT_SEED_PASSWORD')) or SecureRandom.hex(16) for non-production data",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: Use `rails credentials:edit` to manage production secrets, never commit them in code",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: **Write idempotent seeds** — use `find_or_create_by!` so re-runs are safe.",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: **Run seeds** — execute `rails db:seed` (or `rails db:setup` for a fresh database).",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: **Verify data** — open `rails console` and spot-check expected records exist with correct attributes.",
+      "max_score": 16
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: Use `find_or_create_by!` to keep seeds idempotent — safe to run multiple times.",
+      "max_score": 16
+    }
+  ]
+}

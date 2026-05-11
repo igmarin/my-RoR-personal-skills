@@ -1,0 +1,6 @@
+# Tracked source for Tessl-native scenarios. The publish workflow stages this into
+# root evals/ so Tessl sees only the canonical scenario location.
+tessl-evals/
+
+# Local scratch output from validation and packaging checks.
+tmp/

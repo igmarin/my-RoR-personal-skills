@@ -1,12 +1,14 @@
 # Eval Provenance Policy
 
-This repository does not publish generated eval scenarios.
+This repository publishes reviewed Tessl-native eval scenarios from `tessl-evals/`.
 
 Generated scenarios from third-party services or private workflows must stay out of tracked paths. Store them locally in ignored directories such as `private-evals/` when needed for private validation.
 
-Root `evals/` is generated Tessl staging output only. Do not commit files under `evals/`; doing so changes which scenarios Tessl runs for this repository.
+Root `evals/` is generated Tessl staging output only. Do not commit files under `evals/`; the release workflow stages `tessl-evals/` into `evals/` immediately before publishing.
 
-Tracked examples belong in `personal-evals/`. They are open examples for the custom full-context evaluator, which loads `SKILL.md` plus companion resources as XML. They do not need to be Tessl-compatible while Tessl only consumes `SKILL.md`.
+Tracked custom-evaluator examples belong in `personal-evals/`. They are open examples for the custom full-context evaluator, which loads `SKILL.md` plus companion resources as XML. They do not need to be Tessl-compatible while Tessl only consumes `SKILL.md`.
+
+Tracked Tessl-native scenarios belong in `tessl-evals/`. They must target only publishable skills from `tile.json`; repo-local `workflows/` are intentionally excluded because they are not part of the Tessl tile.
 
 Public eval examples must meet one of these criteria:
 

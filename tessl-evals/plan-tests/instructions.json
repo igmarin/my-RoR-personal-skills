@@ -1,0 +1,36 @@
+{
+  "target_skill": "plan-tests",
+  "source_path": "skills/testing/plan-tests/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "Use this skill when the hardest part of the task is deciding where TDD should start.",
+      "original_snippets": "Use this skill when the hardest part of the task is deciding where TDD should start.",
+      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Pick the smallest strong slice:** Choose the spec type that proves the behavior without dragging in unrelated layers. Do not choose the first spec based on convenience alone — do not start with a lower-level unit if the real risk is request, job, engine, or persistence wiring.",
+      "original_snippets": "**Pick the smallest strong slice:** Choose the spec type that proves the behavior without dragging in unrelated layers. Do not choose the first spec based on convenience alone — do not start with a lower-level unit if the real risk is request, job, engine, or persistence wiring.",
+      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**Write one failing example:** Keep it minimal; one example is enough to open the gate.",
+      "original_snippets": "**Write one failing example:** Keep it minimal; one example is enough to open the gate.",
+      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.",
+      "original_snippets": "**Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.",
+      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "CHECKPOINT: Test Design Review",
+      "original_snippets": "CHECKPOINT: Test Design Review",
+      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
+      "why_given": "new knowledge"
+    }
+  ]
+}

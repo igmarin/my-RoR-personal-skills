@@ -1,0 +1,12 @@
+{
+  "target_skill": "implement-hotwire",
+  "total_scenarios": 1,
+  "instructions_coverage": {
+    "total_instructions": 1,
+    "instructions_tested": 1,
+    "coverage_percentage": 100
+  },
+  "reason_distribution": {
+    "new knowledge": 1
+  }
+}

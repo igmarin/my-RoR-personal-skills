@@ -1,0 +1,12 @@
+{
+  "target_skill": "implement-hotwire",
+  "source_path": "skills/infrastructure/implement-hotwire/SKILL.md",
+  "instructions": [
+    {
+      "instruction": "**Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with a headless driver set to `no_js`) and confirm forms submit, links navigate, and data persists correctly without JS.",
+      "original_snippets": "**Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with a headless driver set to `no_js`) and confirm forms submit, links navigate, and data persists correctly without JS.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-hotwire.",
+      "why_given": "new knowledge"
+    }
+  ]
+}

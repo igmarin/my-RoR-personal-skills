@@ -2,44 +2,45 @@
 
 ## Goal
 
-Register the `rails-agent-skills` MCP server with the official MCP Registry at `registry.modelcontextprotocol.io`, using the existing public Docker image as the distributable package.
+Register the `rails-agent-skills` MCP server with the official MCP Registry at `registry.modelcontextprotocol.io`, using the public Docker Hub image `docker.io/igmarin/rails-agent-skills-mcp` as the distributable package.
 
-This should be done after the Tessl release/eval automation work is merged, so the versioning and tag flow are stable first.
+The implementation targets the next `v*` release tag. It does not try to retrofit the registry entry onto an older image tag.
 
 ## Current Repo State
 
-- The repo already contains a real stdio MCP server in `mcp_server/`.
+- The repo contains a real stdio MCP server in `mcp_server/`.
 - The server runs through Ruby/Bundler locally and through the root `Dockerfile` for containerized use.
-- Docker Hub image workflow already publishes `igmarin/rails-agent-skills-mcp`.
-- `mcp_server/registry.json` exists, but it is not the official MCP Registry `server.json` format.
-- The official MCP Registry is a metadata registry: it stores server metadata pointing at a public package or image. It does not host the server code.
+- Docker Hub publishing is handled by `.github/workflows/docker-publish.yml`.
+- Root `server.json` is the official MCP Registry metadata file.
+- `mcp_server/registry.json` remains in place for older registry/catalog integrations and should not be removed unless those integrations no longer need it.
 
-## Required Changes
+## Implemented Changes
 
-1. Add the official MCP Registry ownership label to the Docker image:
+1. Docker image ownership verification is declared in the root `Dockerfile`:
 
    ```dockerfile
    LABEL io.modelcontextprotocol.server.name="io.github.igmarin/rails-agent-skills-mcp"
    ```
 
-2. Add root `server.json` using the official schema:
+2. Root `server.json` uses the official schema and stable MCP server name:
 
    ```json
    {
      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
      "name": "io.github.igmarin/rails-agent-skills-mcp",
      "title": "Rails Agent Skills",
-     "description": "MCP server exposing Rails development skills, docs, and workflows through stdio.",
+     "description": "Rails development skills, docs, and workflows exposed through MCP stdio.",
      "repository": {
        "url": "https://github.com/igmarin/rails-agent-skills",
        "source": "github",
        "subfolder": "mcp_server"
      },
-     "version": "VERSION",
+     "version": "0.0.0",
      "packages": [
        {
          "registryType": "oci",
-         "identifier": "docker.io/igmarin/rails-agent-skills-mcp:VERSION",
+         "identifier": "docker.io/igmarin/rails-agent-skills-mcp:0.0.0",
+         "version": "0.0.0",
          "transport": {
            "type": "stdio"
          }
@@ -48,65 +49,70 @@ This should be done after the Tessl release/eval automation work is merged, so t
    }
    ```
 
-   Replace `VERSION` from the Git tag during release, for example `5.1.1`.
+   The workflow replaces `0.0.0` with the Git tag version before publishing.
 
-3. Update Docker publishing so semver tags are always available before MCP Registry publish.
+3. `.github/workflows/docker-publish.yml` now has a dependent `publish-mcp-registry` job:
 
-   The registry entry should point to a versioned image tag, not only `latest`.
+   - Runs only for `v*` tags.
+   - Waits for the Docker image build/push job to finish.
+   - Downloads `mcp-publisher`.
+   - Sets `server.json.version`, `packages[0].identifier`, and `packages[0].version` from the tag.
+   - Confirms the versioned Docker image is visible on Docker Hub.
+   - Authenticates with GitHub OIDC.
+   - Publishes the server metadata to the MCP Registry.
 
-4. Add `.github/workflows/publish-mcp-registry.yml` or extend the Docker publish workflow with a dependent publish job:
+## Release Flow
 
-   - Trigger on `v*` tags.
-   - Build/push the Docker image first.
-   - Install `mcp-publisher`.
-   - Authenticate with GitHub OIDC:
+The expected release flow is:
 
-     ```bash
-     ./mcp-publisher login github-oidc
-     ```
+```bash
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
 
-   - Set `server.json.version` and OCI image identifier from the tag.
-   - Publish:
+The tag triggers:
 
-     ```bash
-     ./mcp-publisher publish
-     ```
+1. Docker image publish to `docker.io/igmarin/rails-agent-skills-mcp:X.Y.Z`.
+2. MCP Registry metadata publish for `io.github.igmarin/rails-agent-skills-mcp` version `X.Y.Z`.
 
-   Required workflow permission:
+Do not use `latest` in `server.json`; the registry entry must point at a specific immutable image tag.
 
-   ```yaml
-   permissions:
-     id-token: write
-     contents: read
-   ```
+## Your Remaining Tasks
 
-5. Validate before publishing:
+- Keep Docker Hub repository `igmarin/rails-agent-skills-mcp` public.
+- Keep GitHub secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` available.
+- Merge the MCP Registry implementation.
+- Create and push the next `v*` release tag when ready.
+- Watch the first registry publish run. If GitHub namespace authorization fails, complete the authorization step requested by `mcp-publisher`.
 
-   - Validate `server.json` against its `$schema` with a real JSON schema validator.
-   - Build the Docker image locally or in CI.
-   - Confirm the image label exists on the built image.
-   - Confirm the stdio server starts inside Docker:
+## Agent / Repo Tasks
 
-     ```bash
-     docker run --rm -i igmarin/rails-agent-skills-mcp:VERSION
-     ```
+- Maintain `server.json` with the official schema.
+- Keep Docker image labels aligned with `server.json.name`.
+- Keep the Docker publish job ahead of MCP Registry publish.
+- Validate the MCP server and Docker image before release.
 
-6. Verify after publishing:
+## Validation Checklist
 
-   ```bash
-   curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.igmarin/rails-agent-skills-mcp"
-   ```
+Before release:
 
-## Acceptance Criteria
+```bash
+cd mcp_server && bundle exec rake test
+ruby -rjson -e 'JSON.parse(File.read("server.json")); puts "server.json JSON ok"'
+docker build -t rails-agent-skills-mcp:test .
+docker image inspect rails-agent-skills-mcp:test --format '{{ index .Config.Labels "io.modelcontextprotocol.server.name" }}'
+```
 
-- `server.json` exists at repo root and validates against the official schema.
-- Docker image includes `io.modelcontextprotocol.server.name=io.github.igmarin/rails-agent-skills-mcp`.
-- CI publishes the Docker image before attempting MCP Registry publish.
-- MCP Registry publish uses OIDC, not a long-lived GitHub token.
-- Registry search returns `io.github.igmarin/rails-agent-skills-mcp`.
+The label inspection should print:
 
-## Notes
+```text
+io.github.igmarin/rails-agent-skills-mcp
+```
 
-- Keep this as a separate PR/commit from the Tessl release automation.
-- Do not replace `mcp_server/registry.json` unless Smithery/Glama no longer need it.
-- If branch/tag versioning changes in the Tessl work, align `server.json.version` with the final release tag strategy before implementation.
+After release:
+
+```bash
+curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.igmarin/rails-agent-skills-mcp"
+```
+
+The response should include `io.github.igmarin/rails-agent-skills-mcp`.

@@ -41,3 +41,48 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  publish-mcp-registry:
+    needs: build-and-push
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Install mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+          chmod +x mcp-publisher
+
+      - name: Set server metadata version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          VERSION="$version" ruby -rjson -e '
+            path = "server.json"
+            data = JSON.parse(File.read(path))
+            version = ENV.fetch("VERSION")
+            package = data.fetch("packages").fetch(0)
+
+            data["version"] = version
+            package["identifier"] = "docker.io/igmarin/rails-agent-skills-mcp:#{version}"
+            package["version"] = version
+
+            File.write(path, "#{JSON.pretty_generate(data)}\n")
+          '
+          cat server.json
+
+      - name: Confirm Docker image is published
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          docker buildx imagetools inspect "docker.io/igmarin/rails-agent-skills-mcp:${version}"
+
+      - name: Authenticate to MCP Registry
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish to MCP Registry
+        run: ./mcp-publisher publish

@@ -1,5 +1,7 @@
 FROM ruby:4.0.2-alpine
 
+LABEL io.modelcontextprotocol.server.name="io.github.igmarin/rails-agent-skills-mcp"
+
 WORKDIR /app
 
 # Copy only Gemfiles first to leverage Docker cache

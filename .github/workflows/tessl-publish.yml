@@ -10,6 +10,7 @@ on:
       - 'tessl-evals/**'
       - 'tile.json'
       - 'tessl.json'
+      - 'scripts/generate-tessl-evals.rb'
       - 'scripts/stage-tessl-evals.rb'
       - 'scripts/validate-tessl-evals.rb'
       - 'scripts/validate-plugins.sh'
@@ -33,8 +34,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate manifests and Tessl eval source
+      - name: Generate and validate Tessl eval source
         run: |
+          ruby scripts/generate-tessl-evals.rb
           bash scripts/validate-plugins.sh
           ruby scripts/validate-tessl-evals.rb
 

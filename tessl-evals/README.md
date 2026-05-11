@@ -8,6 +8,8 @@ Root `evals/` is generated staging output and stays ignored. Before publishing, 
 ruby scripts/stage-tessl-evals.rb
 ```
 
+The staging script flattens each tracked `tessl-evals/<skill>/scenario-0/` directory into `evals/<skill>/` because Tessl expects every direct child of `evals/` to be a runnable scenario with `task.md`, `criteria.json`, and `capability.txt`.
+
 Validate coverage and scenario shape with:
 
 ```bash

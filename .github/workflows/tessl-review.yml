@@ -9,6 +9,7 @@ on:
       - 'tile.json'
       - 'tessl.json'
       - 'scripts/changed-tessl-skill-paths.rb'
+      - 'scripts/generate-tessl-evals.rb'
       - 'scripts/validate-tessl-evals.rb'
       - 'scripts/validate-plugins.sh'
       - '.github/workflows/tessl-review.yml'
@@ -31,8 +32,9 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Validate manifests and Tessl eval source
+      - name: Generate and validate Tessl eval source
         run: |
+          ruby scripts/generate-tessl-evals.rb
           bash scripts/validate-plugins.sh
           ruby scripts/validate-tessl-evals.rb
 

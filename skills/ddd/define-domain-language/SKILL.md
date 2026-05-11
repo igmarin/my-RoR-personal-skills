@@ -76,6 +76,8 @@ When using this skill, return:
 
 See [EXAMPLES.md](EXAMPLES.md) for a full worked glossary scenario (Customer/Client/Account resolution), the step-by-step resolution process, migration path guidance, and common mistakes.
 
+Additional asset examples are available in [assets/examples.md](assets/examples.md) for JSON glossary entries and schema validation notes.
+
 ## Integration
 
 | Skill | When to chain |

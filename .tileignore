@@ -1,5 +1,5 @@
-# Tracked source for Tessl-native scenarios. The publish workflow stages this into
-# root evals/ so Tessl sees only the canonical scenario location.
+# Tracked source for Tessl-native scenarios. The publish workflow flattens this
+# into root evals/ so every direct child is a runnable scenario.
 tessl-evals/
 
 # Local scratch output from validation and packaging checks.

@@ -106,6 +106,10 @@ After implementing feedback, decide whether to request a re-review:
 | Skipping re-review after Critical fixes | A fix can introduce new issues — re-review is mandatory |
 | Asking for re-review after cosmetic changes | Wastes reviewer time — only request when logic changed |
 
+## Supporting Files
+
+- [Review response templates](assets/response_templates.md) provide copy-ready response patterns for common review outcomes.
+
 ## Integration
 
 | Skill | When to chain |

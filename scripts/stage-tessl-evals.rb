@@ -18,7 +18,12 @@ Dir.children(SOURCE).sort.each do |entry|
   source_path = File.join(SOURCE, entry)
   next unless File.directory?(source_path)
 
-  FileUtils.cp_r(source_path, File.join(DESTINATION, entry))
+  Dir.children(source_path).grep(/\Ascenario-\d+\z/).sort.each do |scenario|
+    scenario_path = File.join(source_path, scenario)
+    staged_name = scenario == "scenario-0" ? entry : "#{entry}-#{scenario}"
+
+    FileUtils.cp_r(scenario_path, File.join(DESTINATION, staged_name))
+  end
 end
 
 puts "Staged Tessl eval scenarios into #{DESTINATION.sub("#{ROOT}/", "")}"

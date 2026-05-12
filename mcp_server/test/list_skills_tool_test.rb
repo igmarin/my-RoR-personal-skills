@@ -22,6 +22,7 @@ class ListSkillsToolTest < Minitest::Test
     refute_includes result.structured_content[:skills].map { |skill| skill[:name] }, 'converting-skill-to-tessl-tile'
 
     code_review = result.structured_content[:skills].find { |skill| skill[:name] == 'code-review' }
+    refute_nil code_review, "Expected 'code-review' skill in structured_content[:skills]"
     assert_equal 'skills/code-quality/code-review/SKILL.md', code_review[:path]
     assert_equal 'code-quality', code_review[:category]
     assert_includes result.content.first[:text], 'code-review'

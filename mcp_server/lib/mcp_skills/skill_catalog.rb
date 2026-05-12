@@ -7,6 +7,8 @@ require 'yaml'
 module McpSkills
   # Builds structured metadata for public Rails Agent Skills.
   class SkillCatalog
+    class ManifestError < StandardError; end
+
     Skill = Struct.new(:name, :path, :category, :description, :content, keyword_init: true) do
       def metadata
         {
@@ -18,6 +20,11 @@ module McpSkills
       end
     end
 
+    # Builds the public skill catalog from the root Tessl manifest.
+    #
+    # @param project_root [String, Pathname] Root of the repository containing tile.json.
+    # @return [Array<Skill>] Skills declared in tile.json, in manifest order.
+    # @raise [ManifestError] when tile.json is missing, malformed, or lacks a skills object.
     def self.call(project_root)
       new(project_root).call
     end
@@ -27,13 +34,20 @@ module McpSkills
     end
 
     def call
-      manifest.fetch('skills').map { |name, spec| build_skill(name, spec) }
+      skills = manifest['skills']
+      raise ManifestError, 'tile.json is missing required "skills" object' unless skills.is_a?(Hash)
+
+      skills.map { |name, spec| build_skill(name, spec) }
     end
 
     private
 
     def manifest
       JSON.parse(@project_root.join('tile.json').read)
+    rescue Errno::ENOENT => e
+      raise ManifestError, "Unable to read tile.json: #{e.message}"
+    rescue JSON::ParserError => e
+      raise ManifestError, "Unable to parse tile.json: #{e.message}"
     end
 
     def build_skill(name, spec)
@@ -48,6 +62,8 @@ module McpSkills
         description: description_from(content.to_s),
         content: content
       )
+    rescue KeyError => e
+      raise ManifestError, "Skill '#{name}' in tile.json is missing required path: #{e.message}"
     end
 
     def category_from_path(path)

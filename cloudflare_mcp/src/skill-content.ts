@@ -96,23 +96,30 @@ export async function listSkillNames(fetcher: Fetcher = fetch, rawBase = DEFAULT
 export async function listSkills(fetcher: Fetcher = fetch, rawBase = DEFAULT_RAW_BASE): Promise<SkillMetadata[]> {
   const manifest = await loadManifest(fetcher, rawBase);
 
-  return Promise.all(
+  const skills = await Promise.all(
     Object.entries(manifest.skills)
       .sort(([left], [right]) => left.localeCompare(right))
       .map(async ([name, spec]) => {
-        const response = await fetcher(buildRawUrl(rawBase, spec.path));
-        if (!response.ok) {
-          throw new Error(`Unable to load ${spec.path}: ${response.status}`);
-        }
+        try {
+          const response = await fetcher(buildRawUrl(rawBase, spec.path));
+          if (!response.ok) {
+            throw new Error(`Unable to load ${spec.path}: ${response.status}`);
+          }
 
-        return {
-          name,
-          path: spec.path,
-          category: categoryFromPath(spec.path),
-          description: extractSkillDescription(await response.text()),
-        };
+          return {
+            name,
+            path: spec.path,
+            category: categoryFromPath(spec.path),
+            description: extractSkillDescription(await response.text()),
+          };
+        } catch (error) {
+          console.warn(`Skipping unavailable skill '${name}':`, error);
+          return null;
+        }
       }),
   );
+
+  return skills.filter((skill): skill is SkillMetadata => skill !== null);
 }
 
 export async function loadSkillContent(

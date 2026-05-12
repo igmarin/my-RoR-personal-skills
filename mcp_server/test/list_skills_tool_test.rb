@@ -39,4 +39,14 @@ class ListSkillsToolTest < Minitest::Test
     assert_equal true, tool_hash[:annotations].fetch(:idempotentHint)
     assert_equal false, tool_hash[:annotations].fetch(:openWorldHint)
   end
+
+  def test_call_raises_clear_manifest_error_when_tile_json_is_missing
+    FileUtils.rm(@base.join('tile.json'))
+
+    error = assert_raises(McpSkills::SkillCatalog::ManifestError) do
+      McpSkills::ListSkillsTool.call(project_root: @base, server_context: {})
+    end
+
+    assert_match(/tile\.json/, error.message)
+  end
 end

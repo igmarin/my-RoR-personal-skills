@@ -1,7 +1,6 @@
 .DS_Store
 .agents/skills/*
 .github/skills/*
-.agents/*
 # Claude Code internal state (worktrees, plans, session data)
 .claude/
 # Root evals/ is generated Tessl staging output. Keep canonical examples in personal-evals/.
@@ -12,7 +11,6 @@ tmp/
 lean-ctx/
 .Gemfile.lock
 .Gemfile
-.agents/skills/
 
 # IDE / AI assistant configs (personal, not shared)
 .crush/

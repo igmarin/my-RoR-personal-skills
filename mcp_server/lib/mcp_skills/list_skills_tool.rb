@@ -56,6 +56,7 @@ module McpSkills
       # @param project_root [Pathname, String] Override for testing; defaults to repo root.
       # @param server_context [Hash] MCP server context (unused but required by protocol).
       # @return [MCP::Tool::Response]
+      # @raise [SkillCatalog::ManifestError] when tile.json cannot be read, parsed, or mapped to skills.
       def call(server_context:, project_root: nil)
         skills = SkillCatalog.call(resolve_root(project_root)).map(&:metadata)
         structured_content = { count: skills.length, skills: skills }

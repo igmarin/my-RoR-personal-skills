@@ -99,4 +99,17 @@ class SkillToolTest < Minitest::Test
     assert_equal true, tool_hash[:annotations].fetch(:idempotentHint)
     assert_equal false, tool_hash[:annotations].fetch(:openWorldHint)
   end
+
+  def test_call_returns_clear_error_when_manifest_is_malformed
+    @base.join('tile.json').write('{')
+
+    result = McpSkills::SkillTool.call(
+      skill_name: 'code-review',
+      project_root: @base,
+      server_context: {}
+    )
+
+    assert result.error?, 'Expected an error response for malformed tile.json'
+    assert_match(/Unable to parse tile\.json/, result.structured_content[:error])
+  end
 end

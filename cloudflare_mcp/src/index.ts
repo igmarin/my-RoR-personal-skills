@@ -71,76 +71,87 @@ function toolAnnotations(title: string) {
   };
 }
 
-function toolDefinitions() {
-  return [
-    {
-      name: "use_skill",
-      title: "Use Rails Skill",
-      description:
-        "Read one public Rails Agent Skill by name after selecting it from list_skills. Returns the full SKILL.md instructions plus structured metadata. This tool is read-only and has no repository side effects.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          skill_name: {
-            type: "string",
-            description: "The directory name of the skill, such as code-review, write-tests, or build.",
-          },
+const TOOL_REGISTRY = {
+  use_skill: {
+    title: "Use Rails Skill",
+    description:
+      "Read one public Rails Agent Skill by name after selecting it from list_skills. Returns the full SKILL.md instructions plus structured metadata. This tool is read-only and has no repository side effects.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        skill_name: {
+          type: "string",
+          description: "The directory name of the skill, such as code-review, write-tests, or build.",
         },
-        required: ["skill_name"],
-        additionalProperties: false,
       },
-      outputSchema: {
-        type: "object",
-        properties: {
-          found: { type: "boolean", description: "Whether the requested skill was found." },
-          name: { type: ["string", "null"], description: "Normalized skill name, or null when not found." },
-          path: { type: ["string", "null"], description: "Repository path to SKILL.md, or null when not found." },
-          category: { type: ["string", "null"], description: "Skill category, or null when not found." },
-          description: { type: ["string", "null"], description: "Short routing description, or null when not found." },
-          content: { type: ["string", "null"], description: "Full SKILL.md instructions, or null when not found." },
-          error: { type: ["string", "null"], description: "Error message when the skill cannot be loaded." },
-        },
-        required: ["found", "name", "path", "category", "description", "content", "error"],
-        additionalProperties: false,
-      },
-      annotations: toolAnnotations("Use Rails Skill"),
+      required: ["skill_name"],
+      additionalProperties: false,
     },
-    {
-      name: "list_skills",
-      title: "List Rails Skills",
-      description:
-        "Discover public Rails Agent Skills before loading one with use_skill. Returns names, categories, paths, and routing descriptions only; it does not return full skill bodies. This tool is read-only and has no repository side effects.",
-      inputSchema: {
-        type: "object",
-        properties: {},
-        additionalProperties: false,
+    runtimeInputSchema: {
+      skill_name: z.string().describe("Skill name, for example code-review, write-tests, or build."),
+    },
+    outputSchema: {
+      type: "object",
+      properties: {
+        found: { type: "boolean", description: "Whether the requested skill was found." },
+        name: { type: ["string", "null"], description: "Normalized skill name, or null when not found." },
+        path: { type: ["string", "null"], description: "Repository path to SKILL.md, or null when not found." },
+        category: { type: ["string", "null"], description: "Skill category, or null when not found." },
+        description: { type: ["string", "null"], description: "Short routing description, or null when not found." },
+        content: { type: ["string", "null"], description: "Full SKILL.md instructions, or null when not found." },
+        error: { type: ["string", "null"], description: "Error message when the skill cannot be loaded." },
       },
-      outputSchema: {
-        type: "object",
-        properties: {
-          count: { type: "integer", minimum: 0, description: "Number of public skills returned." },
-          skills: {
-            type: "array",
-            description: "Public Rails Agent Skills available through use_skill.",
-            items: {
-              type: "object",
-              properties: {
-                name: { type: "string", description: "Stable skill name." },
-                path: { type: "string", description: "Repository path to SKILL.md." },
-                category: { type: "string", description: "Top-level skill category." },
-                description: { type: "string", description: "Short routing description." },
-              },
-              required: ["name", "path", "category", "description"],
-              additionalProperties: false,
+      required: ["found", "name", "path", "category", "description", "content", "error"],
+      additionalProperties: false,
+    },
+    runtimeOutputSchema: useSkillOutputSchema,
+  },
+  list_skills: {
+    title: "List Rails Skills",
+    description:
+      "Discover public Rails Agent Skills before loading one with use_skill. Returns names, categories, paths, and routing descriptions only; it does not return full skill bodies. This tool is read-only and has no repository side effects.",
+    inputSchema: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+    },
+    runtimeInputSchema: {},
+    outputSchema: {
+      type: "object",
+      properties: {
+        count: { type: "integer", minimum: 0, description: "Number of public skills returned." },
+        skills: {
+          type: "array",
+          description: "Public Rails Agent Skills available through use_skill.",
+          items: {
+            type: "object",
+            properties: {
+              name: { type: "string", description: "Stable skill name." },
+              path: { type: "string", description: "Repository path to SKILL.md." },
+              category: { type: "string", description: "Top-level skill category." },
+              description: { type: "string", description: "Short routing description." },
             },
+            required: ["name", "path", "category", "description"],
+            additionalProperties: false,
           },
         },
-        required: ["count", "skills"],
-        additionalProperties: false,
       },
-      annotations: toolAnnotations("List Rails Skills"),
+      required: ["count", "skills"],
+      additionalProperties: false,
     },
-  ];
+    runtimeOutputSchema: listSkillsOutputSchema,
+  },
+} as const;
+
+function toolDefinitions() {
+  return Object.entries(TOOL_REGISTRY).map(([name, tool]) => ({
+    name,
+    title: tool.title,
+    description: tool.description,
+    inputSchema: tool.inputSchema,
+    outputSchema: tool.outputSchema,
+    annotations: toolAnnotations(tool.title),
+  }));
 }
 
 export class RailsAgentSkillsMCP extends McpAgent<Env> {
@@ -153,14 +164,11 @@ export class RailsAgentSkillsMCP extends McpAgent<Env> {
     this.server.registerTool(
       "use_skill",
       {
-        title: "Use Rails Skill",
-        description:
-          "Read one public Rails Agent Skill by name after selecting it from list_skills. Returns the full SKILL.md instructions plus structured metadata. This tool is read-only and has no repository side effects.",
-        inputSchema: {
-        skill_name: z.string().describe("Skill name, for example code-review, write-tests, or build."),
-      },
-        outputSchema: useSkillOutputSchema,
-        annotations: toolAnnotations("Use Rails Skill"),
+        title: TOOL_REGISTRY.use_skill.title,
+        description: TOOL_REGISTRY.use_skill.description,
+        inputSchema: TOOL_REGISTRY.use_skill.runtimeInputSchema,
+        outputSchema: TOOL_REGISTRY.use_skill.runtimeOutputSchema,
+        annotations: toolAnnotations(TOOL_REGISTRY.use_skill.title),
       },
       async ({ skill_name }) => {
         const skill = await loadSkill(skill_name, fetch, rawBase(this.env));
@@ -201,12 +209,11 @@ export class RailsAgentSkillsMCP extends McpAgent<Env> {
     );
 
     this.server.registerTool("list_skills", {
-      title: "List Rails Skills",
-      description:
-        "Discover public Rails Agent Skills before loading one with use_skill. Returns names, categories, paths, and routing descriptions only; it does not return full skill bodies. This tool is read-only and has no repository side effects.",
-      inputSchema: {},
-      outputSchema: listSkillsOutputSchema,
-      annotations: toolAnnotations("List Rails Skills"),
+      title: TOOL_REGISTRY.list_skills.title,
+      description: TOOL_REGISTRY.list_skills.description,
+      inputSchema: TOOL_REGISTRY.list_skills.runtimeInputSchema,
+      outputSchema: TOOL_REGISTRY.list_skills.runtimeOutputSchema,
+      annotations: toolAnnotations(TOOL_REGISTRY.list_skills.title),
     }, async () => {
       const skills = await listSkills(fetch, rawBase(this.env));
       const structuredContent = { count: skills.length, skills };

@@ -110,6 +110,8 @@ module McpSkills
           structured_content: structured_content
         )
       rescue StandardError => e
+        warn "[MCP] #{e.class}: #{e.message}"
+        warn e.backtrace.first(5).join("\n") if e.backtrace
         structured_content = not_found_content(name || skill_name, "Error reading skill '#{name || skill_name}': #{e.message}")
         MCP::Tool::Response.new(
           [{ type: 'text', text: structured_content[:error] }],

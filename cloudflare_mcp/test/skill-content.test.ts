@@ -107,6 +107,29 @@ describe("skill loading", () => {
     ]);
   });
 
+  it("skips unavailable skills while preserving successful skill order", async () => {
+    function partialFetcher(url: string) {
+      if (url.endsWith("/tile.json")) {
+        return Promise.resolve(new Response(JSON.stringify(manifest)));
+      }
+
+      if (url.endsWith("/build/SKILL.md")) {
+        return Promise.resolve(new Response("---\nname: build\ndescription: Build the tile.\n---\n# Build\n"));
+      }
+
+      return Promise.resolve(new Response("not found", { status: 404 }));
+    }
+
+    await expect(listSkills(partialFetcher as typeof fetch, "https://example.test")).resolves.toEqual([
+      {
+        name: "build",
+        path: "build/SKILL.md",
+        category: "build",
+        description: "Build the tile.",
+      },
+    ]);
+  });
+
   it("loads structured skill content", async () => {
     await expect(loadSkill("code-review", fetcher as typeof fetch, "https://example.test")).resolves.toMatchObject({
       name: "code-review",

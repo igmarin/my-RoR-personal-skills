@@ -30,9 +30,13 @@ module McpSkills
     end
 
     def initialize(project_root)
-      @project_root = Pathname.new(project_root)
+      @project_root = Pathname.new(project_root).expand_path
     end
 
+    # Builds skills declared by the loaded manifest.
+    #
+    # @return [Array<Skill>] Skills declared in tile.json, in manifest order.
+    # @raise [ManifestError] when the manifest is missing a valid "skills" Hash.
     def call
       skills = manifest['skills']
       raise ManifestError, 'tile.json is missing required "skills" object' unless skills.is_a?(Hash)
@@ -52,7 +56,7 @@ module McpSkills
 
     def build_skill(name, spec)
       relative_path = spec.fetch('path')
-      skill_md = @project_root.join(relative_path)
+      skill_md = safe_skill_path(name, relative_path)
       content = skill_md.exist? ? skill_md.read : nil
 
       Skill.new(
@@ -64,6 +68,16 @@ module McpSkills
       )
     rescue KeyError => e
       raise ManifestError, "Skill '#{name}' in tile.json is missing required path: #{e.message}"
+    end
+
+    def safe_skill_path(name, relative_path)
+      candidate = @project_root.join(relative_path).cleanpath
+      root_path = @project_root.to_path
+      candidate_path = candidate.to_path
+
+      return candidate if candidate_path == root_path || candidate_path.start_with?("#{root_path}#{File::SEPARATOR}")
+
+      raise ManifestError, "Skill '#{name}' in tile.json points outside project root: #{relative_path}"
     end
 
     def category_from_path(path)

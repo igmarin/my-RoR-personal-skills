@@ -49,4 +49,14 @@ class ListSkillsToolTest < Minitest::Test
 
     assert_match(/tile\.json/, error.message)
   end
+
+  def test_call_rejects_manifest_paths_outside_project_root
+    write_tile_manifest(@base, { 'escape' => '../outside/SKILL.md' })
+
+    error = assert_raises(McpSkills::SkillCatalog::ManifestError) do
+      McpSkills::ListSkillsTool.call(project_root: @base, server_context: {})
+    end
+
+    assert_match(/outside project root/, error.message)
+  end
 end

@@ -374,9 +374,9 @@ Tests are written with Minitest: each file validates real behavior of a service 
 
 This server is listed on:
 
-- [smithery.ai](https://smithery.ai/servers/ismael-marin/rails-agent-skills) — uses the Cloudflare Streamable HTTP MCP endpoint
 - [cloudflare.com](https://rails-agent-skills-mcp.ismael-marin.workers.dev/mcp) — submit via their website
 - [modelcontextprotocol.io](https://registry.modelcontextprotocol.io/?q=io.github.igmarin%2Frails-agent-skills-mcp) — official MCP Registry metadata for the Docker image
+- [Glama](https://glama.ai/mcp/connectors/dev.workers.ismael-marin.rails-agent-skills-mcp/ruby-on-rails-mcp-skills) - Connect via Glama
 
 ---
 

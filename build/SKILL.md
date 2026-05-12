@@ -34,7 +34,7 @@ Implementation code CANNOT be written until:
 
 ## When to use
 
-Use for executing focused implementation tasks from an established plan. **Not for** broad architectural design, planning, or large-scale refactoring.
+Use for a single planned implementation task; use planning/review skills for broad design, task creation, or large refactors.
 
 ## Core Process
 
@@ -47,52 +47,15 @@ Use for executing focused implementation tasks from an established plan. **Not f
     - **Manual Check**: Perform task-specific verification (e.g., `curl` an endpoint or check logs).
 4. **Final Gate**: Confirm behavior matches the task, no unrelated scope was added, and all tests pass.
 
-### Example: TDD Loop (Code-Level)
-
-Task: "Implement `User#admin?` based on the `role` attribute."
-
-1. **Write failing spec**:
-   ```ruby
-   # spec/models/user_spec.rb
-   it "returns true if the user is an admin" do
-     user = User.new(role: "admin")
-     expect(user.admin?).to be true
-   end
-   ```
-2. **Run spec → Confirm failure**: `bundle exec rspec spec/models/user_spec.rb` (Fails with `NoMethodError: undefined method 'admin?'`)
-3. **Implement (minimal)**:
-   ```ruby
-   # app/models/user.rb
-   def admin?
-     role == "admin"
-   end
-   ```
-4. **Run spec → Confirm pass**: `bundle exec rspec spec/models/user_spec.rb` (Passes)
-
-### Example: Bug fix with verification
-
-Task: "Fix 500 error on Search when query is nil"
-
-☐ **Reproduce**: Add a test case to `spec/requests/search_spec.rb` passing `q: nil`.
-☐ **Verify Failure**: Run the spec and see it crash in `SearchService`.
-☐ **Fix**: Add a null-object or guard in `SearchService`: `query.to_s.strip`.
-☐ **Verify Pass**: Re-run the spec.
-☐ **Regression check**: Run all search-related specs.
+See [EXAMPLES.md](./EXAMPLES.md) for compact TDD and bug-fix examples.
 
 ## Rules
 
-- **Explicit Failure**: Handle failure paths explicitly instead of leaving them implicit.
 - **Honest Verification**: If a critical check could not be run, state it clearly.
 
 ## Output Style
 
-When reporting a completed build task, your output MUST include:
-
-1. **Task completed** — Name the task or behavior implemented.
-2. **Tests-first evidence** — State which test was written or updated and that it failed before implementation.
-3. **Implementation summary** — List only the files or behavior changed for this task.
-4. **Verification** — Report exact commands run and whether they passed.
-5. **Residual risk** — Call out skipped checks, blocked verification, or assumptions.
+Report: task completed, tests-first evidence, implementation summary, verification commands/results, and residual risk.
 
 ## Integration
 

@@ -14,7 +14,7 @@ def admin?
 end
 ```
 
-4. Rerun the focused spec and then the relevant broader suite.
+1. Rerun the focused spec and then the relevant broader suite.
 
 ## Bug Fix Loop
 

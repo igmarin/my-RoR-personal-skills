@@ -1,5 +1,6 @@
 .DS_Store
-.agents/skills/
+.agents/skills/*
+.github/skills/*
 .agents/*
 # Claude Code internal state (worktrees, plans, session data)
 .claude/

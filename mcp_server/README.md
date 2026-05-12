@@ -2,7 +2,7 @@
 
 A Ruby MCP server that exposes the `rails-agent-skills` library to AI tools (Windsurf, Cursor, Claude Code, RubyMine, OpenCode, etc.) via the [Model Context Protocol](https://modelcontextprotocol.io) official spec (JSON-RPC 2.0, stdio transport).
 
-This is the canonical setup guide for the official MCP distribution. It publishes repository docs and workflows as resources, then loads individual Rails skills on demand through the `use_skill` tool so agents do not need the full skill library in context at once.
+This is the canonical setup guide for the official MCP distribution. It publishes repository docs and workflows as resources, lists available Rails skills through `list_skills`, then loads individual Rails skills on demand through the `use_skill` tool so agents do not need the full skill library in context at once.
 
 Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/ruby-sdk) (`gem 'mcp'`).
 
@@ -24,11 +24,12 @@ Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/rub
 |------|---------------|--------|
 | **Resources** | `doc/<name>` | All `*.md` files under `docs/`, including nested docs such as `docs/workflows/*.md` |
 | **Resources** | `workflow/<name>` | Every workflow directory under `workflows/<workflow>/`, exposed from its `SKILL.md` plus supported companion files |
-| **Tool** | `use_skill` | Invocable tool: given a `skill_name`, returns the full `SKILL.md` content for a public skill |
+| **Tool** | `list_skills` | Invocable read-only discovery tool: returns public skill names, categories, paths, and frontmatter descriptions |
+| **Tool** | `use_skill` | Invocable read-only loader tool: given a `skill_name`, returns structured metadata plus the full `SKILL.md` content for a public skill |
 
-Individual **Skills** are no longer exposed as resources to prevent context bloat. They are accessed exclusively via the `use_skill` tool.
+Individual **Skills** are no longer exposed as resources to prevent context bloat. Discover them with `list_skills`, then load one on demand with `use_skill`.
 
-Adding a new public skill directory to the repo automatically makes it available through `use_skill` — no server changes needed.
+Adding a new public skill directory to the repo automatically makes it available through `list_skills` and `use_skill` — no server changes needed.
 
 ---
 
@@ -44,11 +45,13 @@ mcp_server/
 ├── registry.json                      # Metadata for MCP registries (smithery.ai, glama.ai)
 ├── lib/
 │   └── mcp_skills/
+│       ├── skill_catalog.rb           # Service: builds structured skill metadata
 │       ├── resource_registry.rb       # Service: discovers published docs and workflows
 │       ├── resource_discovery.rb      # Service: resolves published skill/workflow topology
 │       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for workflow markdown
 │       ├── doc_resource_builder.rb    # Service: builds MCP::Resource objects for docs
-│       └── skill_tool.rb             # MCP::Tool: 'use_skill' invocable by the agent
+│       ├── list_skills_tool.rb        # MCP::Tool: 'list_skills' discovery
+│       └── skill_tool.rb              # MCP::Tool: 'use_skill' loader
 └── test/
     ├── test_helper.rb
     ├── resource_registry_test.rb
@@ -63,7 +66,9 @@ mcp_server/
 - **`McpSkills::ResourceDiscovery`** — resolves the published topology for root `build/`, nested `skills/`, root `workflows/`, and `docs/`.
 - **`McpSkills::SkillResourceBuilder`** — maps a workflow directory path to `MCP::Resource` objects with `file://` URIs and a configurable name prefix.
 - **`McpSkills::DocResourceBuilder`** — builds `doc/` resources for markdown files anywhere under `docs/`.
-- **`McpSkills::SkillTool`** — `MCP::Tool` subclass. `call(skill_name:)` reads and returns the `SKILL.md` content.
+- **`McpSkills::SkillCatalog`** — builds structured skill metadata from discovered `SKILL.md` files.
+- **`McpSkills::ListSkillsTool`** — `MCP::Tool` subclass. `call` returns names, paths, categories, and descriptions as structured content.
+- **`McpSkills::SkillTool`** — `MCP::Tool` subclass. `call(skill_name:)` returns structured metadata plus the full `SKILL.md` content.
 
 ---
 
@@ -348,9 +353,10 @@ curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.igm
 1. You open any Rails project in Windsurf (or Claude Code, Cursor, etc.).
 2. The IDE loads this MCP server from its config.
 3. You ask: *"I need to add a GraphQL mutation — which skill should I use?"*
-4. The agent calls `tools/call use_skill` with `skill_name: "implement-graphql"`.
-5. The server reads `implement-graphql/SKILL.md` and returns the full instructions.
-6. The agent follows the skill workflow without loading the entire repo into context.
+4. The agent calls `tools/call list_skills` if it needs to discover available skill names and routing descriptions.
+5. The agent calls `tools/call use_skill` with `skill_name: "implement-graphql"`.
+6. The server reads `implement-graphql/SKILL.md` and returns structured metadata plus the full instructions.
+7. The agent follows the skill workflow without loading the entire repo into context.
 
 ---
 
@@ -366,7 +372,7 @@ Tests are written with Minitest: each file validates real behavior of a service 
 
 ## Auto-discovery of new skills
 
-`ResourceRegistry` uses explicit topology discovery for `build/SKILL.md`, `skills/*/*/SKILL.md`, `workflows/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published workflow or doc file in those locations, it appears in `resources/list` on the next server start. Published skills become available through `use_skill` without any server code changes.
+`ResourceRegistry` uses explicit topology discovery for `build/SKILL.md`, `skills/*/*/SKILL.md`, `workflows/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published workflow or doc file in those locations, it appears in `resources/list` on the next server start. Published skills become available through `list_skills` and `use_skill` without any server code changes.
 
 ---
 

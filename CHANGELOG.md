@@ -11,11 +11,13 @@ This project uses semantic versioning for published skill-library releases.
 - Added a Cloudflare Workers Streamable HTTP MCP server for hosted integrations such as Smithery.
 - Added a GitHub Actions workflow to validate and deploy the Cloudflare MCP server from `cloudflare_mcp/`.
 - Documented the Cloudflare Worker MCP endpoint, health check, server card, and required deploy secrets.
+- Added structured MCP output schemas, tool annotations, and `list_skills` discovery metadata for better registry quality.
 
 ### Changed
 
 - Reworked public documentation around MCP-first usage, eval ownership, and the current release line.
 - Updated public install examples to the `5.1.5` release line.
+- Reinforced the first Tessl worst-score skill batch with clearer Output Style guidance.
 
 ## [5.1.3] - 2026-05-11
 

@@ -2,5 +2,9 @@
 # into root evals/ so every direct child is a runnable scenario.
 tessl-evals/
 
+# Hosted MCP Worker implementation. It is distributed through Cloudflare,
+# Smithery, and Glama, not through the Tessl tile.
+cloudflare_mcp/
+
 # Local scratch output from validation and packaging checks.
 tmp/

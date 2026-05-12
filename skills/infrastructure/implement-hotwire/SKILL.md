@@ -19,6 +19,15 @@ Build modern Rails frontends with Hotwire using progressive enhancement.
 
 **Files:** [SKILL.md](./SKILL.md) · [EXAMPLES.md](./EXAMPLES.md) · [references/workflow.md](./references/workflow.md)
 
+## Quick Reference
+
+| Need | Hotwire choice |
+|------|----------------|
+| Replace part of a page after a link/form | Turbo Frame |
+| Broadcast server-side changes | Turbo Stream |
+| Client-only behavior beyond Turbo | Stimulus controller |
+| Full page navigation | Normal Rails navigation, not a frame |
+
 ## HARD-GATE
 
 ```text
@@ -86,3 +95,21 @@ See [EXAMPLES.md](EXAMPLES.md) for complete examples including:
 - **Turbo Stream morphing** — DOM diffing (Turbo 8+). See [EXAMPLES.md](EXAMPLES.md#turbo-stream-morphing).
 - **Nested frames** — Scoped frame navigation. See [EXAMPLES.md](EXAMPLES.md#nested-frames).
 - **Stimulus values & classes API** — Configurable controllers. See [EXAMPLES.md](EXAMPLES.md#stimulus-values-classes-api).
+
+## Output Style
+
+When implementing Hotwire, your output MUST include:
+
+1. **Progressive baseline** — State how the feature works with normal HTML before Hotwire enhancement.
+2. **Chosen primitive** — Name Turbo Frame, Turbo Stream, Stimulus, or a combination, and why.
+3. **DOM contract** — List frame IDs, stream targets, Stimulus controller names, targets, values, and actions.
+4. **Server contract** — State controller response formats, broadcast triggers, partial names, and ActionCable channel/log checks when used.
+5. **Verification** — Include no-JavaScript degraded-mode check plus system/browser checks for frame, stream, or Stimulus behavior.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **write-tests** | For system specs and failing interaction coverage |
+| **apply-stack-conventions** | For Rails + Hotwire + Tailwind stack alignment |
+| **code-review** | After the UI behavior and degraded mode are verified |

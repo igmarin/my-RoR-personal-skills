@@ -13,6 +13,16 @@ metadata:
 
 Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a Rails application with the `graphql-ruby` gem.
 
+## Quick Reference
+
+| Concern | Required choice |
+|---------|-----------------|
+| Specs | Use `AppSchema.execute` in `spec/graphql/`; do not dispatch HTTP controller specs |
+| Resolver shape | Dedicated resolver/mutation classes, not inline complex field blocks |
+| Associations | Use GraphQL dataloader sources, never direct `object.association` loads |
+| Collections | Use `Types::*Type.connection_type` for paginated collections |
+| Security | Field-level authorization plus depth/complexity limits |
+
 ## HARD-GATE
 
 ```text
@@ -173,6 +183,17 @@ class Types::OrderType < Types::BaseObject
   field :total_cents, Integer, null: false, description: "Total order amount in cents."
 end
 ```
+
+## Output Style
+
+When implementing GraphQL, your output MUST include:
+
+1. **Schema contract** — Types, fields, arguments, nullability, descriptions, and connection shape.
+2. **Resolver/mutation structure** — Dedicated class names and service-object delegation points.
+3. **N+1 prevention** — Dataloader source and every association load it protects.
+4. **Authorization and limits** — Field-level guards, Pundit checks, introspection/depth/complexity decisions.
+5. **Error shape** — Mutation `{ result, errors }` or equivalent structured failure behavior.
+6. **Verification** — `spec/graphql/` commands covering happy path, auth, validation errors, N+1 counts, and schema limits.
 
 ## Integration
 

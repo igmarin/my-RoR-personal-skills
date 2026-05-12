@@ -14,9 +14,25 @@ metadata:
 
 Normalize inputs, classify each work item, apply title conventions, draft tickets in a standard structure, then either return markdown drafts or create issues in the issue tracker after explicit approval.
 
+## Quick Reference
+
+```text
+Plan input -> classify each item -> draft tickets -> confirm before tracker creation
+Default mode: draft-only, unless the user explicitly asks to create issues.
+Ticket shape: Title, Type, Area, Bucket, Summary, Background, Acceptance Criteria, Dependencies, Technical Notes.
+```
+
 See [EXAMPLES.md](./EXAMPLES.md) for a complete plan → ticket draft example.
 
-## Workflow
+## HARD-GATE
+
+```text
+Do not create tracker issues unless the user explicitly asks for creation.
+Do not assume tracker credentials, project fields, sprint IDs, status behavior, or required custom fields.
+If the user only asks for tickets, return markdown drafts.
+```
+
+## Core Process
 
 ### 1. Normalize the initiative
 
@@ -106,6 +122,18 @@ Keep the main sections business-facing.
 ```
 
 Omit fields the project does not require. Confirm actual field names from the tracker's create-metadata endpoint before issuing the call. Do not set status on create — use the project's default initial status.
+
+## Output Style
+
+When asked to draft tickets, your output MUST include:
+
+1. **Ticket title** — Use `BE |`, `FE |`, or `Mobile |` only when the ticket is owned by that area.
+2. **Classification line** — State `type`, `area`, `execution_order`, `dependency_level`, and `target_bucket` for every ticket.
+3. **Five required sections** — `Summary`, `Background`, `Acceptance Criteria`, `Dependencies`, and `Technical Notes`, in that order.
+4. **Observable acceptance criteria** — Write criteria a reviewer can verify without reading the agent's hidden process.
+5. **Sequencing note** — Call out which tickets must happen before dependent client or follow-up tickets.
+6. **Assumptions** — State assumptions about tracker, sprint, labels, components, or missing plan details.
+7. **Creation boundary** — If not creating issues, explicitly state that the output is draft-only. If creating issues, report created issue keys and any skipped fields.
 
 ## Sprint Placement Heuristics
 

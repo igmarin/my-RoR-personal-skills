@@ -7,7 +7,7 @@ class DistributionContractTest < Minitest::Test
   def test_registry_metadata_matches_runtime_contract
     registry = JSON.parse(REPO_ROOT.join('mcp_server', 'registry.json').read)
 
-    assert_equal ['use_skill'], registry.fetch('tools').map { |tool| tool.fetch('name') }
+    assert_equal %w[list_skills use_skill], registry.fetch('tools').map { |tool| tool.fetch('name') }
     assert_equal %w[doc/* workflow/*], registry.fetch('resources').map { |resource| resource.fetch('prefix') }
   end
 

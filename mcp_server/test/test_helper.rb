@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
+require 'json'
+require 'fileutils'
+require 'pathname'
 require 'tmpdir'
 
 REPO_ROOT = Pathname.new(__dir__).join('..', '..').realpath
@@ -43,4 +46,21 @@ def build_fixture_tree(base_dir)
   tessl_dir = base.join('.tessl', 'tiles', 'owner', 'repo', 'code-review')
   tessl_dir.mkpath
   tessl_dir.join('SKILL.md').write('# Duplicate tessl skill')
+
+  write_tile_manifest(
+    base,
+    {
+      'build' => 'build/SKILL.md',
+      'code-review' => 'skills/code-quality/code-review/SKILL.md',
+      'plan-tests' => 'skills/testing/plan-tests/SKILL.md',
+      'create-service-object' => 'skills/patterns/create-service-object/SKILL.md'
+    }
+  )
+end
+
+def write_tile_manifest(base_dir, skills)
+  base = Pathname.new(base_dir)
+  base.join('tile.json').write(
+    "#{JSON.pretty_generate({ 'name' => 'test/tile', 'version' => '0.0.0', 'skills' => skills.transform_values { |path| { 'path' => path } } })}\n"
+  )
 end

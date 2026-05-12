@@ -12,8 +12,12 @@
   "transport": "stdio",
   "tools": [
     {
+      "name": "list_skills",
+      "description": "Discover public Rails Agent Skills before loading one with use_skill"
+    },
+    {
       "name": "use_skill",
-      "description": "Load and return the full SKILL.md instructions for a named Rails development skill"
+      "description": "Load and return the full SKILL.md instructions plus structured metadata for a named Rails development skill"
     }
   ],
   "resources": [

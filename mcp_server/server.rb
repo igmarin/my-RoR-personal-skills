@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mcp'
+require_relative 'lib/mcp_skills/list_skills_tool'
 require_relative 'lib/mcp_skills/resource_registry'
 require_relative 'lib/mcp_skills/skill_tool'
 
@@ -17,7 +18,7 @@ begin
   server = MCP::Server.new(
     name: 'rails-agent-skills',
     version: '1.0.0',
-    tools: [McpSkills::SkillTool],
+    tools: [McpSkills::ListSkillsTool, McpSkills::SkillTool],
     resources: registry.all_resources
   )
   warn '[MCP] Server created'

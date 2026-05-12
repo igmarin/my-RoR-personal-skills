@@ -164,6 +164,17 @@ Each spec suite must cover: inactive plan, nil plan, each named variant, and unk
 | Direct service instantiation (`ServiceClass.new(entity)`) | Route through `Factory.for(entity)` — it is the sole public entry point; direct instantiation bypasses the NullService safety net |
 | Forgetting `super` in concrete `should_calculate?` | Always call `super` — skipping it removes the base nil/presence guard |
 
+## Output Style
+
+When implementing the calculator pattern, your output MUST include:
+
+1. **Single entry point** — Show `Calculator::Factory.for(entity).calculate` as the only public access path.
+2. **Component list** — Factory, BaseService, NullService, and every concrete strategy class.
+3. **Dispatch map** — `SERVICE_MAP` keys, concrete classes, and unknown/nil fallback to NullService.
+4. **Guard behavior** — Base guard, concrete `super` call, and NullService no-op behavior.
+5. **Tests-first proof** — Spec order and commands for Factory, BaseService, NullService, and concrete services.
+6. **Variant coverage** — Named variants, inactive/nil plan, and unknown variant contexts.
+
 ## Integration
 
 | Skill | When to chain |

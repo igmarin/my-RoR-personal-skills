@@ -6,6 +6,17 @@ export type TileManifest = {
   skills: Record<string, SkillSpec>;
 };
 
+export type SkillMetadata = {
+  name: string;
+  path: string;
+  category: string;
+  description: string;
+};
+
+export type SkillContent = SkillMetadata & {
+  content: string;
+};
+
 export const DEFAULT_RAW_BASE = "https://raw.githubusercontent.com/igmarin/rails-agent-skills/main";
 
 type Fetcher = typeof fetch;
@@ -33,6 +44,41 @@ export function buildRawUrl(rawBase: string, path: string): string {
   return `${rawBase.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
 }
 
+export function categoryFromPath(path: string): string {
+  if (path === "build/SKILL.md") return "build";
+
+  const parts = path.split("/");
+  if (parts[0] === "skills" && parts[1]) return parts[1];
+  if (parts[0] === "workflows") return "workflow";
+
+  return "unknown";
+}
+
+export function extractSkillDescription(markdown: string): string {
+  const match = markdown.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return "";
+
+  const lines = match[1].split("\n");
+  const descriptionIndex = lines.findIndex((line) => line.startsWith("description:"));
+  if (descriptionIndex === -1) return "";
+
+  const firstLine = lines[descriptionIndex].replace(/^description:\s*/, "").trim();
+  if (firstLine && firstLine !== ">") return firstLine;
+
+  const descriptionLines: string[] = [];
+  for (const line of lines.slice(descriptionIndex + 1)) {
+    if (/^\w[\w-]*:/.test(line)) break;
+    descriptionLines.push(line);
+  }
+
+  return descriptionLines
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export async function loadManifest(fetcher: Fetcher = fetch, rawBase = DEFAULT_RAW_BASE): Promise<TileManifest> {
   const response = await fetcher(buildRawUrl(rawBase, "tile.json"));
   if (!response.ok) {
@@ -45,6 +91,35 @@ export async function loadManifest(fetcher: Fetcher = fetch, rawBase = DEFAULT_R
 export async function listSkillNames(fetcher: Fetcher = fetch, rawBase = DEFAULT_RAW_BASE): Promise<string[]> {
   const manifest = await loadManifest(fetcher, rawBase);
   return Object.keys(manifest.skills).sort();
+}
+
+export async function listSkills(fetcher: Fetcher = fetch, rawBase = DEFAULT_RAW_BASE): Promise<SkillMetadata[]> {
+  const manifest = await loadManifest(fetcher, rawBase);
+
+  const skills = await Promise.all(
+    Object.entries(manifest.skills)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(async ([name, spec]) => {
+        try {
+          const response = await fetcher(buildRawUrl(rawBase, spec.path));
+          if (!response.ok) {
+            throw new Error(`Unable to load ${spec.path}: ${response.status}`);
+          }
+
+          return {
+            name,
+            path: spec.path,
+            category: categoryFromPath(spec.path),
+            description: extractSkillDescription(await response.text()),
+          };
+        } catch (error) {
+          console.warn(`Skipping unavailable skill '${name}':`, error);
+          return null;
+        }
+      }),
+  );
+
+  return skills.filter((skill): skill is SkillMetadata => skill !== null);
 }
 
 export async function loadSkillContent(
@@ -62,4 +137,29 @@ export async function loadSkillContent(
   }
 
   return response.text();
+}
+
+export async function loadSkill(
+  skillName: string,
+  fetcher: Fetcher = fetch,
+  rawBase = DEFAULT_RAW_BASE,
+): Promise<SkillContent | null> {
+  const manifest = await loadManifest(fetcher, rawBase);
+  const normalized = normalizeSkillName(skillName);
+  const path = resolveSkillPath(manifest, normalized);
+  if (!path) return null;
+
+  const response = await fetcher(buildRawUrl(rawBase, path));
+  if (!response.ok) {
+    throw new Error(`Unable to load ${path}: ${response.status}`);
+  }
+
+  const content = await response.text();
+  return {
+    name: normalized,
+    path,
+    category: categoryFromPath(path),
+    description: extractSkillDescription(content),
+    content,
+  };
 }

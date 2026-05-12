@@ -15,11 +15,28 @@ metadata:
 
 # Build
 
+## Quick Reference
+
+```text
+Use only after a task is already planned.
+Write/adjust the failing test first -> run it -> verify the right failure -> implement -> rerun -> report verification.
+Keep the change scoped to the named task; call out any blocked or skipped checks.
+```
+
+## HARD-GATE: Tests Gate Implementation
+
+```text
+Implementation code CANNOT be written until:
+  1. The relevant test exists or has been updated
+  2. The test has been run
+  3. The test fails for the expected task-related reason
+```
+
 ## When to use
 
 Use for executing focused implementation tasks from an established plan. **Not for** broad architectural design, planning, or large-scale refactoring.
 
-## Process
+## Core Process
 
 1. **Read**: Review the pre-defined task, spec, and relevant code. Stop and clarify if the scope is vague or exceeds a single task.
 2. **Implement**: Apply the smallest useful code change that satisfies the task requirements.
@@ -66,3 +83,21 @@ Task: "Fix 500 error on Search when query is nil"
 
 - **Explicit Failure**: Handle failure paths explicitly instead of leaving them implicit.
 - **Honest Verification**: If a critical check could not be run, state it clearly.
+
+## Output Style
+
+When reporting a completed build task, your output MUST include:
+
+1. **Task completed** — Name the task or behavior implemented.
+2. **Tests-first evidence** — State which test was written or updated and that it failed before implementation.
+3. **Implementation summary** — List only the files or behavior changed for this task.
+4. **Verification** — Report exact commands run and whether they passed.
+5. **Residual risk** — Call out skipped checks, blocked verification, or assumptions.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **plan-tests** | When the task lacks a clear first failing spec |
+| **write-tests** | When test structure or examples are needed |
+| **code-review** | After implementation and verification pass |

@@ -118,6 +118,17 @@ end
 - [ ] FactoryBot hash factories for API responses
 - [ ] Specs for all layers including error scenarios
 
+## Output Style
+
+When implementing an API client, your output MUST include:
+
+1. **Layer map** — Auth, Client, Fetcher, Builder, and Domain Entity files and responsibilities.
+2. **Tests-first proof** — Spec command and expected failure before each implemented layer.
+3. **Configuration contract** — Required env/config keys, defaults, timeout, retries, and missing-configuration error.
+4. **Error behavior** — HTTP failure, timeout, malformed JSON, auth failure, and sanitized error messages.
+5. **Data shaping** — Builder attribute whitelist, FactoryBot hash factories, and domain entity constants.
+6. **Verification** — Unit specs for each layer and any integration-contract checks run without live API dependence.
+
 ## Pitfalls
 
 | Pitfall | What to do |
@@ -128,6 +139,11 @@ end
 | No `timeout:` on Client | Always set `timeout:` |
 | Untrusted API text | Errors use only `response.code`/`e.class`; Builder always slices through `ATTRIBUTES` — see **security-check** |
 
-## Related skills
+## Integration
 
-**write-yard-docs**, **create-service-object**, **test-service**, **security-check** — use when documenting layers, aligning service conventions, speccing doubles/factories, or auditing secrets and validation.
+| Skill | When to chain |
+|-------|---------------|
+| **write-yard-docs** | When documenting public client/auth/fetcher APIs |
+| **create-service-object** | When aligning `.call` and service conventions |
+| **test-service** | When speccing doubles, factories, and layer behavior |
+| **security-check** | When auditing secrets, untrusted API data, and validation |

@@ -62,7 +62,7 @@ The skills are not long-form tutorials. They are executable instructions for AI 
 
 ## Start Here
 
-The recommended way to use this library is through the MCP server. MCP keeps the agent context small: docs and workflows are exposed as resources, and individual skills are loaded on demand. The `use_skill` tool returns a specific skill's `SKILL.md` only when the agent needs it.
+The recommended way to use this library is through the MCP server. MCP keeps the agent context small: docs and workflows are exposed as resources, available skills are discoverable through `list_skills`, and individual skills are loaded on demand. The `use_skill` tool returns a specific skill's `SKILL.md` only when the agent needs it.
 
 | Path | Best for | Start here |
 |------|----------|------------|

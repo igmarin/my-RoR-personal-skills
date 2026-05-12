@@ -18,6 +18,16 @@ When **writing or generating** code for this project, follow these conventions. 
 
 **Style:** If the project uses a linter, treat it as the source of truth for formatting. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **apply-code-conventions**.
 
+## Quick Reference
+
+| Stack area | Default convention |
+|------------|--------------------|
+| Rails MVC | Thin controllers; move non-trivial business logic into service objects |
+| PostgreSQL | Avoid N+1s with `includes`; use database constraints for integrity |
+| Hotwire | Prefer Turbo Frames/Streams before Stimulus |
+| Tailwind | Use utilities in views; extract repeated UI into partials/components |
+| Auth | Apply Devise authentication and Pundit authorization to protected resources |
+
 ## HARD-GATE: Tests Gate Implementation
 
 ```
@@ -110,6 +120,16 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 | N+1 queries in loops over associations | Eager load with `includes` before the loop |
 | Controller action with 15+ lines of business logic | Extract to a service object using the `.call` pattern |
 | Accessing a protected resource without an authorisation check | Apply a Pundit policy on every action that touches access-controlled data |
+
+## Output Style
+
+When applying stack conventions, your output MUST include:
+
+1. **Stack decisions** — State which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
+2. **Tests-first proof** — Name the spec written or updated before implementation and the command used to verify it.
+3. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
+4. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
+5. **Verification** — List Rails specs, system tests, linting, and any browser/manual checks run.
 
 ## Integration
 

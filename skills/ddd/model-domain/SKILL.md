@@ -12,26 +12,7 @@ metadata:
 ---
 # Model Domain
 
-**Core principle:** Model real domain pressure, not textbook DDD vocabulary.
-
-## HARD-GATE
-
-```text
-DO NOT introduce repositories, aggregates, or domain events just to sound "DDD".
-DO NOT fight Rails defaults when a normal model or service expresses the domain clearly.
-ALWAYS start from domain invariants, ownership, and lifecycle before choosing a pattern.
-```
-
-## Modeling Order
-
-1. **List domain concepts:** Entities, values, policies, workflows, and events from the ubiquitous language.
-2. **Identify invariants:** Decide which object or boundary must keep each rule true.
-3. **Choose the aggregate entry point:** Name the object that guards state transitions and consistency.
-4. **Place behavior:** Keep behavior on the entity/aggregate when cohesive; extract a domain service only when behavior spans multiple concepts cleanly.
-5. **Pick Rails homes:** Choose the simplest location that matches the boundary and repo conventions.
-6. **Verify with tests:** Hand off to `plan-tests` and `write-tests` before implementation.
-
-## Rails-First Mapping
+## Quick Reference
 
 | DDD concept | Rails-first default | Avoid by default | Typical home |
 |-------------|---------------------|------------------|--------------|
@@ -43,82 +24,28 @@ ALWAYS start from domain invariants, ownership, and lifecycle before choosing a 
 | Repository | Only when a real persistence boundary exists beyond ActiveRecord | Repositories for every query | `app/repositories/` (rare) |
 | Domain event | Explicit object when multiple downstream consumers justify it | Callback-driven hidden side effects | `app/events/` or project namespace |
 
-## Output Style
+## HARD-GATE
 
-When using this skill, return for each domain concept:
-
-1. **Domain concept** — name from the ubiquitous language
-2. **Recommended modeling choice** — entity, value object, service, etc.
-3. **Suggested Rails home** — file path
-4. **Invariant or ownership reason** — why this boundary
-5. **Patterns to avoid** — what not to reach for
-6. **Next skill to chain** — `generate-tasks`, `plan-tests`, etc.
-
-## Examples
-
-Quick references for the three most common patterns. See [assets/examples.md](assets/examples.md) for full Domain Event and edge-case examples.
-
-### Value Object — Money
-
-```ruby
-# app/models/money.rb
-class Money
-  attr_reader :amount_cents, :currency
-  def initialize(amount_cents, currency = "USD")
-    @amount_cents, @currency = Integer(amount_cents), currency.upcase.freeze
-    freeze
-  end
-  def ==(other) = other.is_a?(Money) && amount_cents == other.amount_cents && currency == other.currency
-end
+```text
+DO NOT introduce repositories, aggregates, or domain events just to sound "DDD".
+DO NOT fight Rails defaults when a normal model or service expresses the domain clearly.
+ALWAYS start from domain invariants, ownership, and lifecycle before choosing a pattern.
 ```
 
-### Aggregate Root — Order
+## Core Process
 
-`Order` guards the invariant that line items cannot be added after the order is placed. All state transitions go through `Order`; `LineItem` is never modified directly.
+**Core principle:** Model real domain pressure, not textbook DDD vocabulary.
 
-```ruby
-# app/models/order.rb
-class Order < ApplicationRecord
-  has_many :line_items, dependent: :destroy
+### Modeling Order
 
-  def add_item(variant, quantity:)
-    raise Order::AlreadyPlacedError, "Cannot modify a placed order" if placed?
-    line_items.build(variant: variant, quantity: quantity, unit_price: variant.price)
-  end
+1. **List domain concepts:** Entities, values, policies, workflows, and events from the ubiquitous language.
+2. **Identify invariants:** Decide which object or boundary must keep each rule true.
+3. **Choose the aggregate entry point:** Name the object that guards state transitions and consistency.
+4. **Place behavior:** Keep behavior on the entity/aggregate when cohesive; extract a domain service only when behavior spans multiple concepts cleanly.
+5. **Pick Rails homes:** Choose the simplest location that matches the boundary and repo conventions.
+6. **Verify with tests:** Hand off to `plan-tests` and `write-tests` before implementation.
 
-  def place!
-    raise Order::EmptyOrderError, "Cannot place an empty order" if line_items.none?
-    update!(status: "placed", placed_at: Time.current)
-  end
-end
-```
-
-### Application Service — PlaceOrder
-
-Orchestrates the use case: validates context, drives the aggregate, persists, and notifies. Contains no domain logic itself.
-
-```ruby
-# app/services/place_order.rb
-class PlaceOrder
-  def initialize(order:, mailer: OrderMailer)
-    @order = order
-    @mailer = mailer
-  end
-
-  def call
-    ActiveRecord::Base.transaction do
-      @order.place!
-      @order.save!
-    end
-    @mailer.confirmation(@order).deliver_later
-    Success.new(@order)
-  rescue Order::AlreadyPlacedError, Order::EmptyOrderError => e
-    Failure.new(e.message)
-  end
-end
-```
-
-## Common Mistakes
+### Common Mistakes
 
 | Mistake | Reality |
 |---------|----------|
@@ -130,6 +57,23 @@ end
 | Same invariant enforced from multiple unrelated entry points | Single aggregate root guards state transitions — one entry point per invariant |
 | New abstractions that increase indirection without clarifying ownership | If the boundary is unclear after modeling, the abstraction is premature |
 
+## Extended Resources
+
+- [assets/examples.md](assets/examples.md)
+- [assets/modeling_template.md](assets/modeling_template.md)
+
+## Output Style
+
+When using this skill, return for each domain concept:
+
+1. **Domain concept** — name from the ubiquitous language
+2. **Recommended modeling choice** — entity, value object, service, etc.
+3. **Suggested Rails home** — file path
+4. **Invariant or ownership reason** — why this boundary
+5. **Patterns to avoid** — what not to reach for
+6. **Next skill to chain** — `generate-tasks`, `plan-tests`, etc.
+7. **Language** — Must be in English unless explicitly requested otherwise.
+
 ## Integration
 
 | Skill | When to chain |
@@ -139,8 +83,3 @@ end
 | **generate-tasks** | After the tactical design is clear and ready for implementation planning |
 | **plan-tests** | When the next step is choosing the best first failing spec |
 | **apply-code-conventions** | When validating the modeling choice against Rails simplicity and repo conventions |
-
-## Assets
-
-- [assets/examples.md](assets/examples.md)
-- [assets/modeling_template.md](assets/modeling_template.md)

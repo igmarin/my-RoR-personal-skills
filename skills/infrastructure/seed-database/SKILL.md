@@ -12,11 +12,18 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Seed Database
 
 Manage development and test data effectively.
 
-**Files:** [SKILL.md](./SKILL.md) · [EXAMPLES.md](./EXAMPLES.md) · [references/workflow.md](./references/workflow.md)
+## Quick Reference
+
+| Use | Solution |
+|-----|----------|
+| Static reference data | `db/seeds.rb` with `find_or_create_by!` |
+| Test scenarios | FactoryBot in `spec/factories/` |
+| Complex relationships | Both combined |
 
 ## HARD-GATE
 
@@ -29,15 +36,7 @@ NEVER hardcode credentials (passwords, API keys, secrets) in seeds, factories, o
   - Use `rails credentials:edit` to manage production secrets, never commit them in code
 ```
 
-## Quick Reference
-
-| Use | Solution |
-|-----|----------|
-| Static reference data | `db/seeds.rb` with `find_or_create_by!` |
-| Test scenarios | FactoryBot in `spec/factories/` |
-| Complex relationships | Both combined |
-
-## Seeding Workflow
+## Core Process
 
 1. **Write idempotent seeds** — use `find_or_create_by!` so re-runs are safe.
 2. **Scope by environment** — guard non-production data with `Rails.env` checks.
@@ -45,12 +44,10 @@ NEVER hardcode credentials (passwords, API keys, secrets) in seeds, factories, o
 4. **Validate idempotency** — run `rails db:seed` a second time and confirm no duplicates or errors.
 5. **Verify data** — open `rails console` and spot-check expected records exist with correct attributes.
 
-See [references/workflow.md](references/workflow.md) for the complete seeding workflow.
+## Extended Resources
 
-## Environment-Specific Seeds
-
+**Environment-Specific Seeds**
 Use `find_or_create_by!` to keep seeds idempotent — safe to run multiple times.
-
 ```ruby
 # db/seeds.rb
 if Rails.env.development?
@@ -69,8 +66,7 @@ end
 end
 ```
 
-## FactoryBot Factory Example
-
+**FactoryBot Factory Example**
 ```ruby
 # spec/factories/users.rb
 FactoryBot.define do
@@ -85,16 +81,23 @@ FactoryBot.define do
 end
 ```
 
-## Examples
-
-See [EXAMPLES.md](EXAMPLES.md) for complete examples including:
-- Environment-specific seed structure
-- FactoryBot factories with traits
-- Idempotent seed patterns
-- Troubleshooting common issues
-
-## External References
-
+- [SKILL.md](./SKILL.md)
+- [EXAMPLES.md](./EXAMPLES.md)
+- [references/workflow.md](./references/workflow.md)
 - [FactoryBot documentation](https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md)
 - [Faker gem](https://github.com/faker-ruby/faker)
 - [Rails Seeding Guide](https://guides.rubyonrails.org/active_record_migrations.html#migrations-and-seed-data)
+
+## Output Style
+
+1. Use idiomatic Rails seeding patterns.
+2. Structure factories clearly.
+3. Ensure no credentials are leaked.
+4. Language — Must be in English unless explicitly requested otherwise.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **write-tests** | When setting up test scenarios |
+| **review-migration** | When ensuring DB schema is aligned |

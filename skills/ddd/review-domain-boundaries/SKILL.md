@@ -13,10 +13,6 @@ metadata:
 ---
 # Review Domain Boundaries
 
-Use this skill when the main problem is not syntax or style, but unclear domain boundaries.
-
-**Core principle:** Fix context leakage before adding more patterns.
-
 ## Quick Reference
 
 | Area | What to check |
@@ -35,14 +31,20 @@ DO NOT treat every large module as a bounded context automatically.
 ALWAYS identify the leaked language or ownership conflict before proposing structural changes.
 ```
 
-## When to Use
+## Core Process
+
+Use this skill when the main problem is not syntax or style, but unclear domain boundaries.
+
+**Core principle:** Fix context leakage before adding more patterns.
+
+### When to Use
 
 - The repo appears to mix multiple business concepts under one model or service namespace.
 - Teams are debating ownership, boundaries, or where a rule belongs.
 - A Rails architecture review reveals cross-domain coupling.
 - **Next step:** Chain to `model-domain` when a context is clear enough to model tactically, or to `refactor-code` when boundaries need incremental extraction.
 
-## Review Order
+### Review Order
 
 1. **Map entry points:** Start from controllers, jobs, services, APIs, and UI flows that expose business behavior.
 2. **Name the contexts:** Group flows and rules by business capability, not by current folder names alone.
@@ -50,21 +52,7 @@ ALWAYS identify the leaked language or ownership conflict before proposing struc
 4. **Check ownership:** Decide which context should own invariants, transitions, and external side effects.
 5. **Propose the smallest credible improvement:** Rename, extract, isolate, or wrap before attempting large reorganizations.
 
-## Output Style
-
-Write findings first.
-
-For each finding include:
-
-- **Severity**
-- **Contexts involved**
-- **Leaked term / ownership conflict**
-- **Why the current boundary is risky**
-- **Smallest credible improvement**
-
-Then list open questions and recommended next skills.
-
-## Detecting Leakage
+### Detecting Leakage
 
 Use ripgrep to find cross-context references before reading code manually:
 
@@ -80,6 +68,27 @@ rg 'Fleet::[A-Z]' app/services/billing/
 rg 'after_(create|update|save).*Job|after_(create|update|save).*Mailer' app/models/
 ```
 
+### Common Pitfalls
+
+- Treating a shared database table as proof of a shared context — storage and domain boundaries are independent concerns.
+- Splitting into new contexts before the business language is stable enough to name them clearly.
+- Mistaking a large Rails namespace for a bounded context without checking whether it has a single, coherent set of rules and an identifiable owner.
+
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md) includes a worked leakage example (Fleet/Billing context boundaries).
+
+## Output Style
+
+1. **Finding Format**: For each finding include:
+   - **Severity**
+   - **Contexts involved**
+   - **Leaked term / ownership conflict**
+   - **Why the current boundary is risky**
+   - **Smallest credible improvement**
+2. **Structure**: Write findings first, then list open questions and recommended next skills.
+3. **Language**: Must be in English unless explicitly requested otherwise.
+
 ## Integration
 
 | Skill | When to chain |
@@ -88,34 +97,3 @@ rg 'after_(create|update|save).*Job|after_(create|update|save).*Mailer' app/mode
 | **model-domain** | When a context is clear and needs entities/value objects/services modeled cleanly |
 | **review-architecture** | When the same problem also needs a broader Rails structure review |
 | **refactor-code** | When the recommended improvement needs incremental extraction instead of a rewrite |
-
----
-
-## Appendix: Worked Leakage Example
-
-> Consult this section when you need a concrete model for structuring a finding.
-
-**Scenario:** A `Fleet::Vehicle` model has an `after_save` callback that calls `Billing::Invoice.generate_for(self)`. The Fleet context is directly triggering billing logic, leaking into Billing's responsibility.
-
-**Sample finding block:**
-
-```
-Severity: High
-Contexts involved: Fleet, Billing
-Leaked term / ownership conflict: Fleet::Vehicle owns invoice generation trigger; Billing should own when invoices are created.
-Why the current boundary is risky: Changes to billing rules require modifying a Fleet model, coupling release cycles and obscuring business rules.
-Smallest credible improvement: Replace the callback with a domain event (VehicleCheckedIn) published by Fleet and subscribed to by Billing. Fleet emits facts; Billing decides what to do with them.
-```
-
-## Appendix: Common Pitfalls
-
-> Consult this section when a proposed boundary change feels off but you cannot name why.
-
-- Treating a shared database table as proof of a shared context — storage and domain boundaries are independent concerns.
-- Splitting into new contexts before the business language is stable enough to name them clearly.
-- Mistaking a large Rails namespace for a bounded context without checking whether it has a single, coherent set of rules and an identifiable owner.
-
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md)

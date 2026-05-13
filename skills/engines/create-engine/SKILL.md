@@ -9,6 +9,7 @@ metadata:
   user-invocable: "true"
   version: 1.1.0
 ---
+
 # Create Engine
 
 Use this skill when the task is to create, scaffold, or refactor a Rails engine.
@@ -48,7 +49,7 @@ VERIFICATION COMMANDS:
 12. No migration auto-apply patterns: `grep -r "db:migrate\|ActiveRecord::Migrator\|config.paths\['db/migrate'\]" lib/` returns nothing.
 ```
 
-## Workflow
+## Core Process
 
 1. Identify the engine type before writing code. Scaffold with the correct generator:
    ```bash
@@ -56,7 +57,7 @@ VERIFICATION COMMANDS:
    rails plugin new my_engine --full        # full engine (non-isolated)
    rails plugin new my_engine               # plain Railtie/gem
    ```
-2. Define the host-app contract (see Host App Contract section).
+2. Define the host-app contract.
 3. Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.
 4. Implement features behind the namespace. **Checkpoint:** mount engine in dummy app routes and verify with `bundle exec rails routes`.
 5. Plan and write minimum integration coverage through the dummy app.
@@ -64,10 +65,10 @@ VERIFICATION COMMANDS:
 
 If the user does not specify the engine type, infer it from the requested behavior and say which type you chose.
 
-## Recommended Structure
+## Extended Resources
 
+**Recommended Structure**
 Use a structure close to this:
-
 ```text
 my_engine/
   lib/
@@ -88,22 +89,15 @@ my_engine/
   spec/ or test/
     dummy/
 ```
+Keep the root module small.
 
-Keep the root module small:
-- `lib/my_engine.rb`: requires version, engine, and public configuration entrypoints.
-- `lib/my_engine/engine.rb`: engine class, initializers, autoload/eager-load behavior, asset/config hooks.
-- `lib/my_engine/version.rb`: version only.
-
-## Host App Contract
-
-This is the single authoritative definition of the engine's integration surface. Define it before implementation and keep it updated throughout.
-
+**Host App Contract**
+Define it before implementation and keep it updated throughout.
 - **What the host app must add:** mount route, initializer, migrations, credentials, background jobs, or assets.
 - **What the engine exposes:** models, controllers, helpers, configuration, rake tasks, generators, middleware, or events.
 - **Which extension points are supported:** config block, adapter interface, callbacks, or service objects.
 
 Prefer one explicit configuration surface, for example:
-
 ```ruby
 MyEngine.configure do |config|
   config.user_class = "User"
@@ -111,21 +105,15 @@ MyEngine.configure do |config|
 end
 ```
 
-Do not scatter configuration across unrelated constants and initializers.
-
-## Testing Expectations
-
+**Testing Expectations**
 Minimum coverage through the dummy app (not just isolated classes):
-
 - Engine integration tests through the mounted dummy app.
 - Routing/request tests for all mountable engine endpoints.
 - Configuration tests for each supported host customization option.
 - Generator tests when install/setup generators exist.
 
-## Examples
-
+**Examples**
 **Minimal root module:**
-
 ```ruby
 # lib/my_engine.rb
 require "my_engine/version"
@@ -146,7 +134,6 @@ end
 ```
 
 **Minimal mountable engine class:**
-
 ```ruby
 # lib/my_engine/engine.rb
 module MyEngine
@@ -162,7 +149,6 @@ end
 ```
 
 **Routes namespaced under engine:**
-
 ```ruby
 # config/routes.rb
 MyEngine::Engine.routes.draw do
@@ -171,9 +157,18 @@ MyEngine::Engine.routes.draw do
 end
 ```
 
-## Optional Reference Pattern
+- [reference.md](reference.md)
+- [EXAMPLES.md](EXAMPLES.md)
+- [TESTING.md](TESTING.md)
+- [assets/examples.md](assets/examples.md)
+- [assets/release-checklist.md](assets/release-checklist.md)
 
-For a reusable starter layout and file stubs, read [reference.md](reference.md).
+## Output Style
+
+1. Use idiomatic Rails engine patterns.
+2. Outline structure and host-app contract early.
+3. Ensure configuration points are documented.
+4. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -184,10 +179,3 @@ For a reusable starter layout and file stubs, read [reference.md](reference.md).
 | document-engine | README, installation guide, host-app contract documentation |
 | create-engine-installer | Generator-heavy setup, install scripts, copy migrations |
 | generate-api-collection | When the engine exposes HTTP endpoints (generate/update Postman collection) |
-
-## Assets & Resources
-
-- **[EXAMPLES.md](EXAMPLES.md)** — Full worked examples including mountable auth engine, background job engine, and common mistakes
-- **[TESTING.md](TESTING.md)** — Comprehensive testing guide with dummy app setup, configuration tests, and CI examples
-- **[assets/examples.md](assets/examples.md)** — Code snippets and patterns for engine structure
-- **[assets/release-checklist.md](assets/release-checklist.md)** — Release preparation checklist

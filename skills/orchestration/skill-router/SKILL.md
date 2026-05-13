@@ -15,20 +15,30 @@ metadata:
 ---
 # Skill Router
 
+## Quick Reference
+
+| Scenario | Primary Skill |
+|----------|---------------|
+| Unfamiliar codebase / ambiguity | `load-context` |
+| Planning a feature | `create-prd` then `generate-tasks` |
+| Choosing where to start testing | `plan-tests` |
+| Reviewing code | `code-review` |
+| Fixing a bug | `triage-bug` |
+
+## HARD-GATE
+
+```text
+Non-negotiable: no implementation code until a test exists, runs, and fails for the right reason (feature missing, not config/syntax).
+ALWAYS identify the matching skill and name it explicitly as the next skill to use before responding further.
+```
+
+## Core Process
+
 Triages and decomposes any Ruby on Rails request into ordered sub-tasks, then delegates to the correct specialized skill. Enforces the Tests Gate Implementation mandate across all code-producing work.
 
-When a task arrives, identify the matching skill from the tables below and **name it explicitly as the next skill to use** before responding further. Generated artifacts (YARD docs, Postman collections, READMEs) must be in **English** unless the user explicitly requests another language.
+When a task arrives, identify the matching skill from the tables below and **name it explicitly as the next skill to use** before responding further.
 
-**Invocation example:**
-> **User:** "I want to add a payment feature but I'm not sure where to start."
->
-> **Claude:** "This is a feature request with unclear scope. I'll start by loading the codebase context, then create a PRD.\n\nNext skill: skills/context/load-context"
-
-## CROSS-CUTTING MANDATE: Tests Gate Implementation
-
-Non-negotiable: no implementation code until a test exists, runs, and fails for the right reason (*feature missing*, not config/syntax).
-
-## Core Skills (Most Common)
+### Core Skills (Most Common)
 
 | Skill | Use when... |
 | ----- | ----------- |
@@ -43,7 +53,7 @@ Non-negotiable: no implementation code until a test exists, runs, and fails for 
 | **create-prd** | Planning a feature or writing requirements |
 | **generate-tasks** | Breaking a PRD into implementation tasks |
 
-## Skill Priority
+### Skill Priority
 
 When multiple skills could apply: TDD → Planning → Domain discovery → Process (refactor-code) → Domain implementation (rails-\*, ruby-\*). Use plan-tests when the first failing spec is not obvious.
 
@@ -54,33 +64,7 @@ When multiple skills could apply: TDD → Planning → Domain discovery → Proc
 
 **Fallback for ambiguous requests:** If no clear skill match, default to `load-context` to load codebase context, then re-evaluate based on findings.
 
-## Routing Examples
-
-> **User:** "There's a bug where orders placed at midnight sometimes get the wrong price."
->
-> **Match:** Concrete bug report with a reproduction path. See "Bug fix" workflow below.
->
-> **Next skill: skills/testing/triage-bug**
-
----
-
-> **User:** "Help me improve this Rails app."
->
-> **Match:** Vague request, no clear skill. Use fallback: load context first.
->
-> **Next skill: skills/context/load-context**
-
----
-
-> **User:** "I have a PR that adds a new controller, changes the Order model, adds a migration, and introduces a service object."
->
-> **Match:** Multi-concern changeset. Load context, then decompose into appropriate review skills.
->
-> **Next skill: skills/context/load-context**
-
-For additional routing examples (DDD-first features, GraphQL APIs, engines, edge cases), see [assets/examples.md](assets/examples.md).
-
-## Typical Workflows
+### Typical Workflows
 
 Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: skills/workflows/tdd-workflow"*, before proceeding with that skill's instructions.
 
@@ -91,10 +75,25 @@ skills/context/load-context → **[CHECK: context loaded]** → skills/workflows
 
 **Bug fix:** skills/testing/triage-bug → **[GATE: reproduction spec fails]** → skills/workflows/tdd-workflow → fix → verify passes
 
-For additional workflows (DDD-first, code review, engines, refactoring, GraphQL), see [assets/workflows.md](assets/workflows.md).
-
-## Assets
+## Extended Resources
 
 - [assets/examples.md](assets/examples.md) — 20+ routing examples covering ambiguous requests, multi-concern PRs, DDD-first features, engines, and edge cases
 - [assets/workflows.md](assets/workflows.md) — Extended workflow definitions for DDD-first, code review, engines, refactoring, and GraphQL
 - [docs/reference/skill-catalog.md](../../../docs/reference/skill-catalog.md) — Complete skill catalog with trigger words, descriptions, and stage-based navigation
+
+## Output Style
+
+1. **Routing statement**: Clearly state the next skill being invoked.
+   ```text
+   This is a feature request with unclear scope. I'll start by loading the codebase context, then create a PRD.
+
+   Next skill: skills/context/load-context
+   ```
+2. **Language**: Generated artifacts (YARD docs, Postman collections, READMEs) and output MUST be in English unless explicitly requested otherwise.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **load-context** | Default for ambiguous requests |
+| **create-prd** | For new features |

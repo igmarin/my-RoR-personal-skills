@@ -14,13 +14,19 @@ metadata:
 ---
 # Respond to Review
 
-Use this skill when **you have received review feedback** on your own Rails code (PR comments, pair review, async review). This is the counterpart to **code-review**, which covers *giving* a review.
+## Quick Reference
 
-**Core principle:** Verify before implementing. Technical acknowledgment over performative agreement. Re-review after significant changes.
+| Category | Description | Action |
+|----------|-------------|--------|
+| **Correct + Critical** | Real security, crash, or data risk | Fix immediately, re-review |
+| **Correct + Suggestion** | Real improvement, not blocking | Fix in this PR or ticket follow-up |
+| **Correct + Nice to have** | Style, minor optimization | Optional — acknowledge explicitly |
+| **Incorrect** | Reviewer lacks context or misread the code | Push back with technical reasoning |
+| **Ambiguous** | Unclear what change is actually requested | Clarify before implementing |
 
-## HARD-GATE: Receiving Review Feedback
+## HARD-GATE
 
-```
+```text
 WHEN receiving code review feedback:
 
 1. READ:      Read all feedback completely before reacting
@@ -30,11 +36,17 @@ WHEN receiving code review feedback:
 5. RESPOND:   Technical acknowledgment, clarifying question, or reasoned pushback
 6. IMPLEMENT: One item at a time — test after each change
 7. RE-REVIEW: Trigger a re-review if any Critical items were addressed
+
+DO NOT start implementing before completing steps 1-4.
 ```
 
-**DO NOT start implementing before completing steps 1-4.**
+## Core Process
 
-## Forbidden Responses
+Use this skill when **you have received review feedback** on your own Rails code (PR comments, pair review, async review). This is the counterpart to **code-review**, which covers *giving* a review.
+
+**Core principle:** Verify before implementing. Technical acknowledgment over performative agreement. Re-review after significant changes.
+
+### Forbidden Responses
 
 These responses skip verification and add zero signal:
 
@@ -48,19 +60,11 @@ These responses skip verification and add zero signal:
 
 **Instead:** Restate the technical requirement, ask clarifying questions, push back with reasoning if wrong, or just start implementing one item after reading all feedback.
 
-## Evaluating Feedback
+### Evaluating Feedback
 
-Before implementing any suggestion, classify it:
+Before implementing any suggestion, classify it based on the Quick Reference table above.
 
-| Category | Description | Action |
-|----------|-------------|--------|
-| **Correct + Critical** | Real security, crash, or data risk | Fix immediately, re-review |
-| **Correct + Suggestion** | Real improvement, not blocking | Fix in this PR or ticket follow-up |
-| **Correct + Nice to have** | Style, minor optimization | Optional — acknowledge explicitly |
-| **Incorrect** | Reviewer lacks context or misread the code | Push back with technical reasoning |
-| **Ambiguous** | Unclear what change is actually requested | Clarify before implementing |
-
-## Pushing Back
+### Pushing Back
 
 Push back when a suggestion is technically incorrect for the codebase. Use this structure:
 
@@ -68,7 +72,7 @@ Push back when a suggestion is technically incorrect for the codebase. Use this 
 2. Explain the relevant codebase constraint or reason
 3. Propose an alternative if one exists, or explain why no change is needed
 
-```
+```text
 "I see the concern about N+1 here. In this case the association is already
 preloaded at line 42 via `includes(:orders)`. Adding another `eager_load`
 would run a duplicate JOIN. Happy to add a comment clarifying this if helpful."
@@ -76,7 +80,7 @@ would run a duplicate JOIN. Happy to add a comment clarifying this if helpful."
 
 **Never:** Push back without technical evidence. If unsure, verify before claiming it's fine.
 
-## Implementation Order (Multi-Item Feedback)
+### Implementation Order (Multi-Item Feedback)
 
 1. **Clarify** anything ambiguous FIRST — before touching code
 2. **Critical** blocking issues (crashes, security, data loss)
@@ -85,7 +89,7 @@ would run a duplicate JOIN. Happy to add a comment clarifying this if helpful."
 5. **Test** each fix individually — run the relevant spec after each change
 6. **Verify** no regressions — run full suite before requesting re-review
 
-## Re-Review Trigger
+### Re-Review Trigger
 
 After implementing feedback, decide whether to request a re-review:
 
@@ -96,7 +100,7 @@ After implementing feedback, decide whether to request a re-review:
 | Only Nice to have or cosmetic fixes | Comment what was done — no re-review needed |
 | Architecture or class structure changed | Request re-review — mandatory |
 
-## Common Mistakes & Red Flags
+### Common Mistakes & Red Flags
 
 | Mistake / Red Flag | Reality |
 |--------------------|----------|
@@ -106,9 +110,14 @@ After implementing feedback, decide whether to request a re-review:
 | Skipping re-review after Critical fixes | A fix can introduce new issues — re-review is mandatory |
 | Asking for re-review after cosmetic changes | Wastes reviewer time — only request when logic changed |
 
-## Supporting Files
+## Extended Resources
 
-- [Review response templates](assets/response_templates.md) provide copy-ready response patterns for common review outcomes.
+- [assets/response_templates.md](assets/response_templates.md) provide copy-ready response patterns for common review outcomes.
+
+## Output Style
+
+1. **Format**: Direct responses using technical arguments. State what was checked and why you agree or disagree.
+2. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

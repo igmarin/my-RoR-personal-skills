@@ -13,9 +13,12 @@ metadata:
 ---
 # Implement Authorization
 
-Implement and test authorization patterns in Rails applications.
+## Quick Reference
 
-**Files:** [SKILL.md](./SKILL.md) · [EXAMPLES.md](./EXAMPLES.md) · [references/workflow.md](./references/workflow.md)
+| Gem | Pattern | Best For |
+|-----|---------|----------|
+| **Pundit** | Explicit policy classes | Complex per-resource rules |
+| **CanCanCan** | Centralized Ability class | Simple role-based permissions |
 
 ## HARD-GATE
 
@@ -25,14 +28,11 @@ NEVER rely on presence checks alone — check specific permissions
 ALWAYS use policy objects, never inline authorization logic in controllers
 ```
 
-## Quick Reference
+## Core Process
 
-| Gem | Pattern | Best For |
-|-----|---------|----------|
-| **Pundit** | Explicit policy classes | Complex per-resource rules |
-| **CanCanCan** | Centralized Ability class | Simple role-based permissions |
+Implement and test authorization patterns in Rails applications.
 
-## Implementation Workflow
+### Implementation Workflow
 
 1. **Add gem** — add `pundit` or `cancancan` to Gemfile and run `bundle install`
 2. **Generate base** — run the gem's installer (`rails g pundit:install` or `rails g cancan:ability`)
@@ -44,9 +44,9 @@ ALWAYS use policy objects, never inline authorization logic in controllers
 
 See [references/workflow.md](references/workflow.md) for the complete implementation guide with additional detail.
 
-## Patterns
+### Patterns
 
-### Pundit
+#### Pundit
 
 ```ruby
 class PostPolicy < ApplicationPolicy
@@ -56,7 +56,7 @@ class PostPolicy < ApplicationPolicy
 end
 ```
 
-### CanCanCan
+#### CanCanCan
 
 ```ruby
 class Ability
@@ -69,7 +69,7 @@ class Ability
 end
 ```
 
-## Troubleshooting
+### Troubleshooting
 
 | Error | Likely Cause | Fix |
 |-------|-------------|-----|
@@ -77,11 +77,11 @@ end
 | `Pundit::AuthorizationNotPerformedError` | `authorize` not called in a controller action | Add `authorize @record` in the action, or `after_action :verify_authorized` to catch misses |
 | `CanCan::AccessDenied` unexpectedly raised | Ability rules not matching the current user/role | Inspect `current_ability.can?(:action, @record)` in the console to debug rule evaluation |
 
-## Testing
+### Testing
 
 Cover every role (admin, owner, guest) in both policy specs and request specs.
 
-### Minimal Pundit policy spec
+#### Minimal Pundit policy spec
 
 ```ruby
 RSpec.describe PostPolicy do
@@ -107,7 +107,21 @@ RSpec.describe PostPolicy do
 end
 ```
 
-See [EXAMPLES.md](EXAMPLES.md) for complete testing examples including:
-- Policy specs with `permit_action` matchers (admin, owner, and guest contexts)
-- Request specs with role matrix
-- Shared examples for reusable patterns
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md) includes complete testing examples including:
+  - Policy specs with `permit_action` matchers (admin, owner, and guest contexts)
+  - Request specs with role matrix
+  - Shared examples for reusable patterns
+- [references/workflow.md](./references/workflow.md)
+
+## Output Style
+
+1. **Clarity**: Show clear authorization policies with complete specs across the role matrix.
+2. **Language**: Must be in English unless explicitly requested otherwise.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **write-tests** | When implementing authorization tests. |

@@ -13,20 +13,6 @@ metadata:
 ---
 # Code Review
 
-When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **apply-code-conventions** and **apply-stack-conventions**.
-
-**Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.
-
-## HARD-GATE: After implementation (before PR)
-
-```text
-After green tests + linters pass + YARD + doc updates:
-1. Self-review the full branch diff using the Review Order below.
-2. Fix Critical items; resolve or ticket Suggestion items.
-3. Only then open the PR.
-generate-tasks must include a "Code review before merge" task.
-```
-
 ## Quick Reference
 
 | Area | Key Checks |
@@ -39,7 +25,23 @@ generate-tasks must include a "Code review before merge" task.
 | Security | Strong params, no `html_safe` on user input |
 | Jobs | Idempotent, retriable, appropriate backend |
 
-## Review Order
+## HARD-GATE
+
+```text
+After green tests + linters pass + YARD + doc updates:
+1. Self-review the full branch diff using the Review Order below.
+2. Fix Critical items; resolve or ticket Suggestion items.
+3. Only then open the PR.
+generate-tasks must include a "Code review before merge" task.
+```
+
+## Core Process
+
+When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **apply-code-conventions** and **apply-stack-conventions**.
+
+**Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.
+
+### Review Order
 
 Work through the diff in this sequence. Detailed criteria: [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md).
 
@@ -51,7 +53,7 @@ Configuration → Routing → Controllers → Views → Models → Associations 
 - **Single file**: Apply all relevant review areas to that file.
 - **Test-only changes**: Focus on test quality and organization.
 
-## Severity Levels
+### Severity Levels
 
 Use **only** these labels:
 
@@ -59,37 +61,43 @@ Use **only** these labels:
 - **`Suggestion`** — conventions, performance, or "Thin controller -> fat model" anti-patterns.
 - **`Nice to have`** — small style or micro-optimization.
 
-### Always Critical (flag every occurrence):
+**Always Critical (flag every occurrence):**
 - `params.require(...).permit!` — privilege escalation
 - `html_safe` or `raw` on user-supplied content — XSS
 - **Business logic inside a controller action** — pricing, tax, or domain calculation
 - Unparameterized / string-interpolated SQL — injection
 - Destructive migration without a safe path on large tables
 
-## Output Style
-
-Group findings by severity. See [assets/examples.md](./assets/examples.md) for JSON/PR comment shapes.
-
-```text
-## Review — <PR title or area>
-
-### Critical
-- [path/to/file.rb:LINE] (Area) One-line risk. **Mitigation:** concrete next step.
-
-### Suggestion
-- [path/to/file.rb:LINE] (Area) ... **Mitigation:** ...
-
-**Actions required:** <one line per severity level found — e.g. Critical -> block merge>
-```
-
-**Tag (Area) from:** Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Cover **≥4** distinct areas if applicable.
-
-## Re-review Criteria
+### Re-review Criteria
 
 Re-diff the branch after:
 1. **Any** Critical fix (mandatory).
 2. **>3** Suggestion fixes or any architecture change.
 3. Changes affecting queries, auth, or migrations.
+
+## Extended Resources
+
+- [assets/checklist.md](assets/checklist.md)
+- [assets/examples.md](assets/examples.md)
+
+## Output Style
+
+Group findings by severity. See [assets/examples.md](./assets/examples.md) for JSON/PR comment shapes.
+
+1. **Findings Format**: 
+   ```text
+   ## Review — <PR title or area>
+
+   ### Critical
+   - [path/to/file.rb:LINE] (Area) One-line risk. **Mitigation:** concrete next step.
+
+   ### Suggestion
+   - [path/to/file.rb:LINE] (Area) ... **Mitigation:** ...
+
+   **Actions required:** <one line per severity level found — e.g. Critical -> block merge>
+   ```
+2. **Tagging**: Tag (Area) from Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Cover **≥4** distinct areas if applicable.
+3. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -98,7 +106,3 @@ Re-diff the branch after:
 | **respond-to-review** | When receiving feedback and deciding implementation |
 | **review-architecture** | When review reveals structural problems |
 | **review-migration** | When reviewing migrations on large tables |
-
-## Assets
-- [assets/checklist.md](assets/checklist.md)
-- [assets/examples.md](assets/examples.md)

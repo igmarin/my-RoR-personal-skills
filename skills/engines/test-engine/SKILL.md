@@ -9,6 +9,7 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Test Engine
 
 Use this skill when the task is to create or improve test coverage for a Rails engine.
@@ -16,7 +17,7 @@ Use this skill when the task is to create or improve test coverage for a Rails e
 ## Quick Reference
 
 | Spec Type | Purpose |
-|-----------|---------||
+|-----------|---------|
 | Request | Proves mounted endpoints work; exercises real routing and controller |
 | Routing | Verifies engine route expectations and mount behavior |
 | Generator | Covers install commands, copied files, idempotency |
@@ -25,23 +26,18 @@ Use this skill when the task is to create or improve test coverage for a Rails e
 
 ## HARD-GATE
 
-**EVERY engine MUST have a dummy app for testing.**
-
-Generate one if it doesn't exist:
-
-```bash
+```text
+EVERY engine MUST have a dummy app for testing.
+If it doesn't exist, generate it:
 cd my_engine && bundle exec rails plugin new . --dummy-path=spec/dummy --skip-git
-```
 
-**Validate the dummy app boots before proceeding:**
-
-```bash
+Validate the dummy app boots before proceeding:
 cd spec/dummy && bundle exec rails runner "puts 'Boot OK'"
-```
 
 If this fails, check the engine's `engine.rb` initializer order and ensure the engine is correctly mounted in `spec/dummy/config/routes.rb` before writing any specs.
+```
 
-## Testing Order
+## Core Process
 
 1. Identify the engine type and public behaviors.
 2. Decide which behaviors need unit tests versus dummy-app integration tests.
@@ -49,17 +45,6 @@ If this fails, check the engine's `engine.rb` initializer order and ensure the e
 4. Add request, routing, configuration, and generator coverage as needed.
 5. Add regression tests for coupling or reload bugs before refactoring.
 6. Verify: dummy app exercises real host integration; routes tested through engine namespace; configurable seams covered with at least one non-default case; generators safe to run twice.
-
-## Minimum Baseline
-
-For a non-trivial engine, aim for:
-
-- one dummy-app boot or integration spec
-- one request or routing spec for mounted endpoints
-- one configuration spec for host customization
-- unit tests for public services or POROs
-
-If generators exist, add generator specs. If decorators or reload hooks exist, add reload-focused coverage.
 
 **Minimal request spec to prove the engine mounts:**
 
@@ -93,16 +78,35 @@ RSpec.describe MyEngine::Configuration do
 end
 ```
 
+## Extended Resources
+
+**Minimum Baseline**
+For a non-trivial engine, aim for:
+- one dummy-app boot or integration spec
+- one request or routing spec for mounted endpoints
+- one configuration spec for host customization
+- unit tests for public services or POROs
+If generators exist, add generator specs. If decorators or reload hooks exist, add reload-focused coverage.
+
 For generator and reload-safety spec examples, see [assets/examples.md](assets/examples.md).
 
-## Pitfalls
-
+**Pitfalls**
 | Pitfall | What to do |
 |---------|------------|
 | Skipping reload-safety tests | Add regression coverage for decorators and patches in development |
 | Tests pass only with specific Rails version | Run a version matrix; pin nothing unless required |
 | Request specs use stubs instead of real wiring | Mount the engine in dummy and call through it |
 | Install generators without file assertions | Assert copied files and idempotency in generator specs |
+
+- [assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)
+- [assets/examples.md](assets/examples.md)
+- [EXAMPLES.md](EXAMPLES.md)
+
+## Output Style
+
+1. Ensure the dummy app is set up and booting.
+2. Structure specs logically, starting with the simplest integration test.
+3. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -111,13 +115,3 @@ For generator and reload-safety spec examples, see [assets/examples.md](assets/e
 | create-engine | When structuring the engine for testability or adding configuration seams |
 | review-engine | When validating test coverage adequacy or identifying gaps |
 | write-tests | When improving spec structure, matchers, or shared examples |
-
-## Assets
-
-- [assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)
-- [assets/examples.md](assets/examples.md)
-
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md)

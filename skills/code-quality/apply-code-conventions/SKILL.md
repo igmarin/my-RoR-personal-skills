@@ -17,14 +17,6 @@ metadata:
 
 **Style source of truth:** Style and formatting defer to the project's configured linter(s). This skill adds **non-style behavior** and **architecture guidance** only. For Hotwire + Tailwind specifics, see **apply-stack-conventions**.
 
-## Linter — initial analysis
-
-Detect → run → defer. Do not invent style rules.
-
-- Ruby: check for `.rubocop.yml` / `standard` gem → `bundle exec rubocop` or `bundle exec standardrb`
-- Frontend: check for `eslint.config.*`, `.eslintrc*`, `biome.json`, or `package.json` lint script → run accordingly
-- **If no config is found:** note this to the user — do not default to any tool.
-
 ## Quick Reference
 
 | Topic | Rule |
@@ -35,115 +27,82 @@ Detect → run → defer. Do not invent style rules.
 | Logging | First arg: static string; second arg: hash with `event:` key; no interpolation; backtrace on errors |
 | Deep stacks | Chain **apply-stack-conventions** → domain skills (services, jobs, RSpec) |
 
-## Code Review / Refactoring Workflow
+## HARD-GATE
+
+```text
+TESTS GATE IMPLEMENTATION:
+When this skill guides new behavior, the tests gate still applies:
+PRD → TASKS → TEST (write, run, fail) → IMPLEMENTATION → …
+No implementation code before a failing test. See write-tests.
+```
+
+## Core Process
 
 When reviewing or refactoring Rails code, follow this sequence:
 
-1. **Run linter** — detect config, run the appropriate tool, note absence if none found.
-2. **Check area-specific rules** — apply the "Apply by area" table below to each changed path.
-3. **Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.
-4. **Chain to specialised skills** — use the Integration table to pull in deeper guidance (security, jobs, specs, etc.) as needed.
+1. **Run linter** — Detect config (e.g., `.rubocop.yml`), run the appropriate tool, note absence if none found. Do not invent style rules.
+2. **Apply area-specific rules** — Check path patterns (e.g., models, background jobs, controllers) and apply targeted guidance.
+3. **Verify tests gate** — Confirm failing tests exist before any new behavior; run specs and checkpoints.
+4. **Enforce structured logging** — Ensure all `Rails.logger` calls use static strings + structured hashes with an `event:` key, plus backtrace for errors.
+5. **Enforce comment discipline** — Ensure all tags (`TODO:`, `FIXME:`) have actionable context (owner, ticket).
+6. **Chain to specialised skills** — Use the Integration table to pull in deeper guidance (security, jobs, specs) as needed.
 
-## Comments and tagged notes
+## Sub-Rules
 
-Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY in these triggers; every tag carries actionable context (owner, ticket id, deadline, or next step). Naked tags (`# TODO: fix this`) fail review.
-
-| Trigger | Required tag |
-|---------|-------------|
-| Business-rule constant (rates, caps, thresholds) | `NOTE:` with the rule's source/owner |
-| Deferred work / known shortcut | `TODO:` with ticket or next step |
-| Workaround for a bug or external limitation | `HACK:` or `FIXME:` with the upstream issue |
-| Performance tradeoff or hot path | `OPTIMIZE:` with the measured concern |
-
+### Comments and tagged notes
+Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY in these triggers; every tag carries actionable context. Naked tags (`# TODO: fix this`) fail review.
 ```ruby
 # BAD — naked tag, no context
 # TODO: fix this
-rate = TIER_RATES.fetch(tier, 0.0)
-
-# GOOD
-# NOTE: 50% cap set by Pricing policy v3 (PRI-118, owner: pricing-team).
-MAX_DISCOUNT = 0.50
 
 # GOOD — TODO with next step + dependency
-# TODO: replace TIER_RATES with DB-backed lookup (PRI-482; blocked on legal).
-rate = TIER_RATES.fetch(tier, 0.0)
+# TODO(jsmith, JIRA-1234): replace TIER_RATES with DB-backed lookup once billing API v2 is stable.
 ```
 
-## Structured Logging
-
+### Structured Logging
 **MANDATORY SHAPE — every `Rails.logger.*` call uses exactly two positional arguments.**
-
-```text
-Rails.logger.<level>(static_string_message, { event: "dot.namespaced", ...domain_fields })
-#                    └── 1st arg: STRING ──┘  └─────────── 2nd arg: HASH ───────────┘
-```
-
-- **1st arg (string):** a static string literal — no interpolation, no variables. Log aggregators group on this dimension.
-- **2nd arg (hash):** first key is always `event:` with a dot-namespaced value (do NOT use `:type`, `:action`, or `:name`). All dynamic data goes here.
-- **Errors:** every `rescue` logs both `e.message` and `e.backtrace.first(5).join("\n")` as hash fields — backtrace is non-optional.
-
 ```ruby
-# BAD — interpolation destroys log aggregator grouping; single-arg call loses structured fields
-Rails.logger.info("Processing order #{order.id}")
-Rails.logger.info(event: "order.processing_started", order_id: order.id)
-
-# GOOD
-Rails.logger.info("order.processing_started", {
-  event: "order.processing_started",
-  order_id: order.id,
-  user_id: user.id
-})
+Rails.logger.<level>(static_string_message, { event: "dot.namespaced", ...domain_fields })
 
 # GOOD — error path with backtrace
 rescue StandardError => e
   Rails.logger.error("order.processing_failed", {
     event: "order.processing_failed",
-    order_id: order.id,
     error: e.message,
     backtrace: e.backtrace.first(5).join("\n")
   })
   raise
 end
 ```
+- **1st arg (string):** static string literal.
+- **2nd arg (hash):** first key is always `event:`.
 
-## Apply by area (path patterns)
-
-Rules below apply **when those paths exist** in the project. If a path is absent, skip that row.
-
+### Apply by area (path patterns)
 | Area | Path pattern | Guidance |
 |------|--------------|----------|
-| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck` / `exists?` / `find_each`. N+1: run `bullet` → fix eager loads → re-run clean |
-| **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Depth: **implement-background-job** |
-| **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions + layer `rescue_from`; specs must cover rescue paths |
-| **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logs (see above); APM spans/tags on hot paths when stack has APM |
-| **Controllers** | `app/controllers/**/*_controller.rb` | Strong params; thin actions → services; IDOR / PII → **security-check** |
-| **Repositories** | `app/repositories/**/*.rb` | New repos only for SQL, caching, clear boundary, or external I/O — document **why** |
-| **RSpec** | `spec/**/*_spec.rb` | FactoryBot; request over controller specs; `env:` (or project pattern) for ENV; **`let` > `let!`** unless eager setup required; avoid heavy `before` when `let` is clearer |
-| **Serializers** | `app/serializers/**/*.rb` | Explicit keys; no N+1; preload associations passed in |
-| **Service objects** | `app/services/**/*.rb` | Single responsibility; `.call` / injected deps per **create-service-object**; after extract, specs + caller still green |
-| **SQL security** | Raw SQL anywhere | Bind params / `sanitize_sql_array`; whitelist dynamic `ORDER BY`; document **why** raw SQL |
+| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck` / `exists?` / `find_each`. |
+| **Controllers** | `app/controllers/**/*_controller.rb` | Strong params; thin actions → services; IDOR / PII → **security-check**. |
+| **RSpec** | `spec/**/*_spec.rb` | FactoryBot; `let` > `let!` unless eager setup required. |
+| **Service objects** | `app/services/**/*.rb` | Single responsibility; `.call` / injected deps. |
 
-## RSpec and `let_it_be` (test-prof)
-
+### RSpec and `let_it_be` (test-prof)
 Only recommend `let_it_be` if `test-prof` is already in `Gemfile.lock`. Otherwise default to `let`; reach for `let!` only when lazy evaluation would break the example. Don't introduce `test-prof` unless asked.
 
-## HARD-GATE: Tests Gate Implementation
+## Extended Resources (Progressive Disclosure)
 
-When this skill guides **new behavior**, the **tests gate** still applies:
+Load these files only when their specific content is needed:
 
-```text
-PRD → TASKS → TEST (write, run, fail) → IMPLEMENTATION → …
-```
-
-No implementation code before a failing test. See **write-tests** and **rails-agent-skills**.
+- **[assets/checklist.md](assets/checklist.md)** — Use for detailed code review checklists.
+- **[assets/snippets.md](assets/snippets.md)** — Use for quick code snippets of common patterns.
 
 ## Output Style
 
-Every Rails-code task lands these:
+When applying conventions, your output MUST include:
 
-1. **Comments** follow the **Comments and tagged notes** section: no what-comments; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) on every assumption, deferred work, or business-rule constant; every tag carries actionable context (owner, ticket id, deadline).
-2. **Logging** follows **Structured Logging** above — static first arg, hash second arg with `event:`, and a backtrace line on every error rescue.
-3. **Linter detection noted** — when reviewing or refactoring, state which linter config you detected (or its absence) before any style claim.
+1. **Comments** — No what-comments; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) on every assumption, deferred work, or business-rule constant; every tag carries actionable context (owner, ticket id, deadline).
+2. **Logging** — Follow Structured Logging rules: static first arg, hash second arg with `event:`, and a backtrace line on every error rescue.
+3. **Linter detection noted** — When reviewing or refactoring, state which linter config you detected (or its absence) before any style claim.
+4. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -156,8 +115,3 @@ Every Rails-code task lands these:
 | **write-tests** | Spec style, **tests gate** (red/green/refactor), request vs controller specs |
 | **security-check** | Controllers, params, IDOR, PII |
 | **code-review** | Full PR pass before merge |
-
-## Assets
-
-- [assets/checklist.md](assets/checklist.md)
-- [assets/snippets.md](assets/snippets.md)

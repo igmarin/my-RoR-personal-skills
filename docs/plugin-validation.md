@@ -318,14 +318,14 @@ chmod +x .git/hooks/pre-commit
 
 ### When Adding a New Skill
 
-1. Create the skill directory and `SKILL.md`:
+1. Create the skill directory and `SKILL.md` (place it in an appropriate category under `skills/`):
    ```bash
-   mkdir my-new-skill
+   mkdir -p skills/planning/my-new-skill
    echo "---
    name: my-new-skill
    description: What this skill does
    type: skill
-   ---" > my-new-skill/SKILL.md
+   ---" > skills/planning/my-new-skill/SKILL.md
    ```
 
 2. Run validation to ensure frontmatter is correct:

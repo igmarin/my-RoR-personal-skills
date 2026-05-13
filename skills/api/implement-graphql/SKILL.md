@@ -4,7 +4,8 @@ license: MIT
 description: >
   Use when building or reviewing GraphQL APIs in Rails with the graphql-ruby gem.
   Covers schema design, N+1 prevention with dataloaders, field-level auth, query
-  limits, error handling, and testing resolvers/mutations with RSpec.
+  limits, error handling, and testing resolvers/mutations with RSpec. Trigger words: 
+  graphql, graphql-ruby, resolver, mutation, dataloader, schema.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -27,162 +28,50 @@ Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a 
 
 ```text
 Tests gate implementation — write specs before resolver code (see write-tests).
-Before shipping a resolver/mutation slice, ALL of the following must be true (details in linked sections; do not duplicate checks in prose here):
+Before shipping a resolver/mutation slice, ALL of the following must be true:
 - N+1 Prevention: use `dataloader.with(Source, Model).load(id)` — NEVER `object.association`
 - Authorization: sensitive fields have field-level guards (not type-level alone).
 - Type Conventions: paginated collections use Types::*Type.connection_type, not plain arrays.
 - Schema safeguards: AppSchema disables introspection in production and sets max_depth / max_complexity.
-- TESTING.md: specs in `spec/graphql/` use `AppSchema.execute` — **ALL spec files** (resolver specs AND mutation specs). Never use HTTP controller dispatch for GraphQL specs.
+- TESTING.md: specs in `spec/graphql/` use `AppSchema.execute`. Never use HTTP controller dispatch for GraphQL specs.
 - Error Handling: mutations return `{ result, errors }` with rescue blocks — no unhandled exceptions.
 - Documentation: `description:` on every field in every type.
 - Resolver Structure: dedicated resolver classes, not inline field blocks.
 ```
 
-## Workflow: Adding a New Resolver or Mutation
+## Core Process
 
-```text
-1. SPEC:       Write failing spec (happy path + auth + validation error case) — see TESTING.md
-2. TYPE:       Arguments and return types — Type Conventions for pagination shape
-3. IMPLEMENT:  Resolver/mutation class delegating to a service object
-4. N+1 CHECK:  N+1 Prevention (dataloader on every association load from GraphQL)
-5. AUTH CHECK: Authorization (field-level guards where data is sensitive)
-6. FINAL CHECK: Verify every HARD-GATE item above against the code you wrote — all 8 must be true
-7. RUN:        Full suite green before PR
-```
+1. **SPEC:** Write failing spec (happy path + auth + validation error case) — see [TESTING.md](./TESTING.md).
+2. **TYPE:** Define arguments and return types. Use `connection_type` for pagination shapes. Do not leak internal model names.
+3. **IMPLEMENT:** Create resolver/mutation class delegating to a service object. Use dedicated classes instead of inline field blocks.
+4. **N+1 CHECK:** Ensure dataloader is used on every association load. Use `bullet` and `db-query-matchers` in specs.
+   ```ruby
+   # ✅ batches loads across all records
+   def buyer
+     dataloader.with(Sources::RecordById, Buyer).load(object.buyer_id)
+   end
+   ```
+5. **AUTH CHECK:** Apply field-level guards where data is sensitive using Pundit or custom context guards.
+   ```ruby
+   field :internal_notes, String, null: true do
+     guard -> (_obj, _args, ctx) { ctx[:current_user]&.admin? }
+   end
+   ```
+6. **FINAL CHECK:** Verify every HARD-GATE item is met. Ensure your mutations return `{ result, errors }` shapes on failure.
+   ```ruby
+   rescue ActiveRecord::RecordInvalid => e
+     { order: nil, errors: e.record.errors.full_messages }
+   ```
+7. **RUN:** Ensure the full test suite is green before PR.
 
 **DO NOT proceed to step 3 before step 1 is written and failing.**
 
-## Schema Design
+## Extended Resources (Progressive Disclosure)
 
-### Type Conventions
+Load these files only when their specific content is needed:
 
-- Match type and field names to domain language — do not leak internal model names.
-- **Paginated collections:** use `connection_type`, never a plain array of nodes.
-
-```ruby
-field :orders, Types::OrderType.connection_type, null: false, resolver: Resolvers::Orders::ListResolver
-```
-
-### Resolver Structure
-
-- Prefer **dedicated resolver classes** over inline field blocks for non-trivial logic.
-- Keep `QueryType` and `MutationType` as entry points only — delegate: `field :summary, resolver: Resolvers::Orders::SummaryResolver`.
-
-## N+1 Prevention
-
-### Detection
-
-- Enable `bullet` gem in development — treat GraphQL N+1s as **Critical** severity.
-- Assert query counts with `expect { }.to make_database_queries(count: N)` using `db-query-matchers`.
-
-### Resolution
-
-**FORBIDDEN:** Never call `object.association` directly and never use `.includes` on the scope — every association load MUST go through the dataloader (graphql-ruby 1.12+). This applies both in type field definitions and in list resolvers:
-
-```ruby
-# ❌ causes N+1 for every record in the list
-def buyer; object.buyer; end
-
-# ✅ batches loads across all records
-def buyer
-  dataloader.with(Sources::RecordById, Buyer).load(object.buyer_id)
-end
-```
-
-List resolvers must also prime the dataloader for each association the returned records will expose:
-
-```ruby
-# app/graphql/resolvers/orders/list_resolver.rb
-class Resolvers::Orders::ListResolver < Resolvers::BaseResolver
-  type Types::OrderType.connection_type, null: false
-
-  def resolve
-    orders = Order.for_user(context[:current_user])
-    orders.each { |order| dataloader.with(Sources::RecordById, Buyer).load(order.buyer_id) }
-    orders
-  end
-end
-```
-
-**Source class definition:**
-
-```ruby
-# app/graphql/sources/record_by_id.rb
-class Sources::RecordById < GraphQL::Dataloader::Source
-  def initialize(model_class)
-    @model_class = model_class
-  end
-
-  def fetch(ids)
-    records = @model_class.where(id: ids).index_by(&:id)
-    ids.map { |id| records[id] }
-  end
-end
-```
-
-## Authorization
-
-### Field-Level Authorization
-
-```ruby
-field :internal_notes, String, null: true do
-  guard -> (_obj, _args, ctx) { ctx[:current_user]&.admin? }
-end
-```
-
-For Pundit: `authorize! object, to: :read?, with: OrderPolicy` in the resolver's `resolve` method.
-
-## Schema safeguards
-
-```ruby
-class AppSchema < GraphQL::Schema
-  disable_introspection_entry_points if Rails.env.production?
-
-  max_depth 10
-  max_complexity 300
-end
-```
-
-Adjust depth/complexity to your API; document the chosen limits in the PR or schema comments if non-default.
-
-## Error Handling
-
-```ruby
-class Mutations::CreateOrder < Mutations::BaseMutation
-  argument :product_id, ID, required: true
-
-  field :order, Types::OrderType, null: true
-  field :errors, [String], null: false
-
-  def resolve(product_id:)
-    result = Orders::CreateOrder.call(user: context[:current_user], product_id: product_id)
-    result.success? ? { order: result.order, errors: [] } : { order: nil, errors: result.errors }
-  rescue ActiveRecord::RecordInvalid => e
-    { order: nil, errors: e.record.errors.full_messages }
-  rescue StandardError => e
-    Rails.logger.error("Mutation failed: #{e.class}: #{e.message}")
-    { order: nil, errors: ['An unexpected error occurred'] }
-  end
-end
-```
-
-## Testing
-
-See [TESTING.md](./TESTING.md) for the spec template, paths, and checklist (happy path, unauthenticated, unauthorized, validation `errors`, N+1 counts, limits).
-
-## Documentation
-
-Write `description:` inline on **every** field in every type — no field left undescribed:
-
-```ruby
-class Types::OrderType < Types::BaseObject
-  description "A customer order containing one or more line items."
-
-  field :id, ID, null: false, description: "Unique identifier."
-  field :status, String, null: false, description: "Current order status: pending, confirmed, shipped, delivered."
-  field :total_cents, Integer, null: false, description: "Total order amount in cents."
-end
-```
+- **[TESTING.md](./TESTING.md)** — For the spec template, paths, and checklist (happy path, unauthenticated, unauthorized, validation errors, N+1 counts, limits).
+- **[EXAMPLES.md](EXAMPLES.md)** — For detailed code examples of dataloaders, mutations, and types.
 
 ## Output Style
 
@@ -194,6 +83,7 @@ When implementing GraphQL, your output MUST include:
 4. **Authorization and limits** — Field-level guards, Pundit checks, introspection/depth/complexity decisions.
 5. **Error shape** — Mutation `{ result, errors }` or equivalent structured failure behavior.
 6. **Verification** — `spec/graphql/` commands covering happy path, auth, validation errors, N+1 counts, and schema limits.
+7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -203,7 +93,3 @@ When implementing GraphQL, your output MUST include:
 | **plan-tests** | Choose first failing spec (mutation vs query vs resolver unit) |
 | **write-tests** | Full TDD cycle for resolvers and mutations |
 | **security-check** | Auth, introspection disable, query depth/complexity limits |
-
-## Assets
-
-- [EXAMPLES.md](EXAMPLES.md)

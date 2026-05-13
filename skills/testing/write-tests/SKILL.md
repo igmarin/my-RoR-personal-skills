@@ -6,7 +6,7 @@ description: >
   Covers spec type selection, factory design, flaky test fixes, shared examples, deterministic
   assertions, test-driven development discipline, and choosing the best first failing
   spec for Rails changes. Also applies when choosing between model, request, system,
-  and job specs.
+  and job specs. Trigger words: write spec, rspec, test-driven development, testing.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -33,11 +33,26 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 | Example names | Present tense: `it 'returns the user'`; **NEVER** `it 'should ...'`; **NEVER** contains `and` — see [One Behavior Per Example](#one-behavior-per-example) |
 | `aggregate_failures` | Use when asserting multiple related items in one example |
 
-## TDD Workflow
+## HARD-GATE
+
+```text
+TESTS GATE IMPLEMENTATION:
+DO NOT write implementation code before a failing test exists.
+When writing tests for new behavior, follow the TDD workflow exactly:
+1. Write spec
+2. Run spec and verify it fails
+3. Implement minimal code
+4. Run spec and verify it passes
+
+ONE BEHAVIOR PER EXAMPLE:
+The word "and" in an `it` / `specify` description signals two behaviors in one example. Split it every time — no exceptions.
+```
+
+## Core Process
 
 When driving new behaviour with RSpec, follow this sequence:
 
-1. **Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system).
+1. **Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system). See table below for guidance.
 2. **Run it and confirm the failure message** — the error should be about missing code, not a setup problem.
 3. **Implement the minimum code** to make the spec pass.
 4. **Refactor** — clean up duplication and naming while keeping the suite green.
@@ -52,12 +67,7 @@ When driving new behaviour with RSpec, follow this sequence:
 | Background processing | Job spec |
 | Cross-layer user journey | System spec (sparingly) |
 
-## Factory Design
-
-Minimal factories only. Never rely on factory defaults for business logic — set explicitly or use traits. Avoid `create` when `build`/`build_stubbed` suffices.
-
-## Service Spec (anchor pattern)
-
+### Service Spec (anchor pattern)
 ```ruby
 RSpec.describe Invoices::MarkOverdue do
   describe '.call' do
@@ -65,61 +75,23 @@ RSpec.describe Invoices::MarkOverdue do
 
     context 'when the invoice is overdue and unpaid' do
       let(:invoice) { create(:invoice, due_date: 2.days.ago, paid_at: nil) }
-
       it 'marks the invoice overdue' do
         expect { result }.to change { invoice.reload.overdue? }.from(false).to(true)
-      end
-    end
-
-    context 'when the invoice is already paid' do
-      let(:invoice) { create(:invoice, due_date: 2.days.ago, paid_at: 1.day.ago) }
-
-      it 'does not change the invoice' do
-        expect { result }.not_to change { invoice.reload.updated_at }
       end
     end
   end
 end
 ```
 
-## Shared Examples
-
-Use only when the same behavioural contract applies to multiple subjects without per-example `let` overrides. Avoid when each context needs different setup — that signals a wrong abstraction.
-
-## One Behavior Per Example
-
-The word **"and"** in an `it` / `specify` description signals two behaviors in one example. Split it every time — no exceptions for any spec type (model, request, service, job, mailer, system).
-
+### One Behavior Per Example
 ```ruby
 # BAD — two assertions; if the first fails, the second never runs
 it 'returns 201 and creates the record' do; end
-it 'saves the order and sends the confirmation email' do; end
 
 # GOOD — one observable outcome per example
 it 'returns 201' do; end
 it 'creates the record' do; end
-
-it 'saves the order' do; end
-it 'sends the confirmation email' do; end
 ```
-
-**Self-check before finalizing any spec:** scan every `it '...'` / `it "..."` / `specify '...'` string for `and` (case-insensitive, word-boundary). Every hit is a required split.
-
-## Output Style
-
-When asked to write or review RSpec specs, your output MUST satisfy each rule below. Each is graded independently — one violation drops the whole check.
-
-1. **Spec file path** mirrors the source: `app/foo/bar.rb` → `spec/foo/bar_spec.rb`.
-2. **`# frozen_string_literal: true`** as the first line of every spec file.
-3. **`RSpec.describe`** uses the full constant path (`RSpec.describe Module::Class do`), not a string.
-4. **`describe '#method'` / `describe '.class_method'`** for each method under test.
-5. **`context 'when ...'` / `context 'with ...'`** for scenario variations — never use `context` to group methods.
-6. **`let` for test data**, `let!` ONLY when the object must exist before the action under test.
-7. **No `let_it_be`** unless the project already depends on `test-prof` (check `Gemfile.lock` first).
-8. **NO "and" in any example description** — see [One Behavior Per Example](#one-behavior-per-example). Perform an explicit scan before returning the spec.
-9. **`subject(:result) { ... }`** for service / PORO specs invoking `.call`.
-10. **`travel_to` / `freeze_time`** for any time-dependent assertion — never set past `Time.now` or stub `Time.current` directly.
-11. **External boundaries mocked** at the class-method level (`allow(SomeClient).to receive(:method)`); ActiveRecord finders are NEVER mocked.
 
 ## Flaky Tests & Deterministic Assertions
 
@@ -133,8 +105,35 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 | Race conditions | Explicit Capybara waits; avoid `sleep` |
 | Imprecise assertions | `change.from().to()` over final state; exact values over `be_truthy`/`be_falsey`; never assert `updated_at` |
 
+## Extended Resources (Progressive Disclosure)
 
-## Extended Resources
+Load these files only when their specific content is needed:
 
-- [EXAMPLES.md](EXAMPLES.md)
-- [assets/spec_templates.md](assets/spec_templates.md)
+- **[EXAMPLES.md](EXAMPLES.md)** — For code examples of service specs, shared examples, and factory design.
+- **[assets/spec_templates.md](assets/spec_templates.md)** — Standard templates for different types of specs.
+
+## Output Style
+
+When asked to write or review RSpec specs, your output MUST satisfy each rule below. Each is graded independently — one violation drops the whole check.
+
+1. **Spec file path** mirrors the source: `app/foo/bar.rb` → `spec/foo/bar_spec.rb`.
+2. **`# frozen_string_literal: true`** as the first line of every spec file.
+3. **`RSpec.describe`** uses the full constant path (`RSpec.describe Module::Class do`), not a string.
+4. **`describe '#method'` / `describe '.class_method'`** for each method under test.
+5. **`context 'when ...'` / `context 'with ...'`** for scenario variations — never use `context` to group methods.
+6. **`let` for test data**, `let!` ONLY when the object must exist before the action under test.
+7. **No `let_it_be`** unless the project already depends on `test-prof` (check `Gemfile.lock` first).
+8. **NO "and" in any example description** — Split them. Perform an explicit scan before returning the spec.
+9. **`subject(:result) { ... }`** for service / PORO specs invoking `.call`.
+10. **`travel_to` / `freeze_time`** for any time-dependent assertion — never set past `Time.now` or stub `Time.current` directly.
+11. **External boundaries mocked** at the class-method level (`allow(SomeClient).to receive(:method)`); ActiveRecord finders are NEVER mocked.
+12. **Language** — Must be in English unless explicitly requested otherwise.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **plan-tests** | Choosing the best first failing spec for a Rails change |
+| **create-service-object** | Providing test structure for the `.call` pattern |
+| **refactor-code** | Adding characterization tests before refactoring |
+| **implement-graphql** | Writing specs for GraphQL resolvers and mutations |

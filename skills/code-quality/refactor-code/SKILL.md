@@ -9,7 +9,7 @@ description: >
   before touching the code), safe extraction in small steps, and verification after
   every step. Do NOT use for bug fixes or new features — those follow the TDD gate
   in write-tests. Do NOT mix structural changes with behavior changes in
-  the same step.
+  the same step. Trigger words: refactor, restructure, extract service, split class, reduce duplication.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -32,7 +32,7 @@ Use this skill when the task is to change structure without changing intended be
 
 ## HARD-GATE
 
-```
+```text
 NO REFACTORING WITHOUT CHARACTERIZATION TESTS FIRST.
 NEVER mix behavior changes with structural refactors in the same step —
   if behavior changes are also needed, complete the structural refactor first,
@@ -41,41 +41,13 @@ ONE boundary per refactoring step — never extract two abstractions in the same
 If a public interface changes, document the compatibility shim and its removal condition.
 ```
 
-## Core Rules
+## Core Process
 
-- Keep public interfaces stable until callers are migrated.
-- Prefer adapters, facades, or wrappers for transitional states.
-- Stop and simplify if the refactor introduces more indirection than clarity.
+### 1. Define stable behavior
+Identify the exact inputs and outputs of the logic being refactored. Keep public interfaces stable until callers are migrated. Prefer adapters, facades, or wrappers for transitional states.
 
-## Good First Moves
-
-- Rename unclear methods or objects
-- Isolate duplicated logic behind a shared object
-- Extract query or service objects from repeated workflows
-- Wrap external integrations before moving call sites
-- Add narrow seams before deleting old code paths
-
-## Verification Protocol
-
-**EXTREMELY-IMPORTANT:** Run verification after every refactoring step.
-
-```
-AFTER each step:
-1. Run the full test suite
-2. Read the output — check exit code, count failures
-3. If tests fail: STOP, undo the step, investigate
-4. If tests pass: proceed to next step
-5. ONLY claim completion with evidence from the last test run —
-   report the last line of output (e.g. "5 examples, 0 failures")
-
-Report test run output at EACH step — not only at the end. At least two separate evidence entries at different sequence points are required.
-```
-
-**Forbidden claims:** "Should work now", "Looks correct", "I'm confident" — run the tests and report evidence instead.
-
-## Characterization Test Template
-
-**Write this before touching any production file.** This is not optional — no refactoring step begins until this test exists and passes on the current (un-refactored) code.
+### 2. Add characterization tests
+**Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code.
 
 ```ruby
 # spec/requests/orders_spec.rb  (or service/model spec — mirror the file being refactored)
@@ -93,15 +65,16 @@ RSpec.describe "Orders#create current behavior", type: :request do
   end
 end
 ```
+Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code.
 
-Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code before any refactoring begins. If it fails, stop and fix the test or the existing code first.
+### 3. Choose the smallest safe slice
+Good first moves include: renaming unclear methods, isolating duplicated logic behind a shared object, or wrapping external integrations before moving call sites. Add narrow seams before deleting old code paths.
 
-## Minimal Inline Example
+### 4. Execute extraction/refactor (One step at a time)
+Extract, move, or rename logic. Stop and simplify if the refactor introduces more indirection than clarity.
 
-The default tiny slice when extracting controller orchestration:
-
-**Before (controller does orchestration):**
-
+#### Minimal Inline Example (Controller orchestration extraction)
+**Before:**
 ```ruby
 def create
   order = OrderCreator.new(params).call
@@ -109,9 +82,7 @@ def create
   redirect_to order_path(order)
 end
 ```
-
-**After (same behavior, extraction only):**
-
+**After:**
 ```ruby
 def create
   order = Orders::CreateOrder.call(params: params)
@@ -119,17 +90,39 @@ def create
 end
 ```
 
+### 5. Verification Protocol
+Run verification after every refactoring step:
+1. Run the full test suite.
+2. Read the output — check exit code, count failures.
+3. If tests fail: STOP, undo the step, investigate.
+4. If tests pass: proceed to next step.
+5. ONLY claim completion with evidence from the last test run — report the last line of output (e.g. "5 examples, 0 failures").
+
+Report test run output at EACH step — not only at the end. At least two separate evidence entries at different sequence points are required.
+**Forbidden claims:** "Should work now", "Looks correct", "I'm confident" — run the tests and report evidence instead.
+
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
+
+- **[EXAMPLES.md](./EXAMPLES.md)** — End-to-end refactor sequences and anti-pattern examples.
+- **[HEURISTICS.md](./HEURISTICS.md)** — Common mistakes, red flags, and review heuristics.
+- **[INTEGRATION.md](./INTEGRATION.md)** — How to chain this skill with related skills.
+- **[assets/characterization_tests.md](assets/characterization_tests.md)** — Detailed guidance on writing characterization tests.
+- **[assets/examples.md](assets/examples.md)** — More code examples.
+
 ## Output Style
 
-When asked to refactor:
+When asked to refactor, your output MUST include:
 
-1. State the stable behavior that must not change.
-2. Propose the smallest safe sequence — each step extracts exactly ONE boundary. A step that moves two abstractions is too large; split it.
-3. Show the characterization test code in your output — do not touch any production file until the test exists and passes.
-4. **Adhere to SRP:** Ensure the extracted object has a Single Responsibility.
-5. **YARD Documentation:** Include YARD tags for all public methods in the extracted object.
-6. **Compatibility shims (required when public interface changes):** For each shim, state: (a) what the shim is, (b) why it exists, (c) the specific condition under which it will be removed. If no public interface changes, state "No compatibility shims needed — public interface unchanged."
-7. Follow Verification Protocol after each step — report evidence mid-sequence AND at the end.
+1. **Stable behavior statement** — State the stable behavior that must not change.
+2. **Safe sequence plan** — Propose the smallest safe sequence — each step extracts exactly ONE boundary. A step that moves two abstractions is too large; split it.
+3. **Characterization test code** — Show the characterization test code in your output — do not touch any production file until the test exists and passes.
+4. **Adhere to SRP** — Ensure the extracted object has a Single Responsibility.
+5. **YARD Documentation** — Include YARD tags for all public methods in the extracted object.
+6. **Compatibility shims (required when public interface changes)** — For each shim, state: (a) what the shim is, (b) why it exists, (c) the specific condition under which it will be removed. If no public interface changes, state "No compatibility shims needed — public interface unchanged."
+7. **Verification evidence** — Follow Verification Protocol after each step — report test evidence mid-sequence AND at the end.
+8. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -139,11 +132,3 @@ When asked to refactor:
 | **review-architecture** | When refactor reveals structural problems ([details](./INTEGRATION.md#review-architecture)) |
 | **code-review** | For reviewing the refactored code ([details](./INTEGRATION.md#code-review)) |
 | **create-service-object** | When extracting logic into service objects ([details](./INTEGRATION.md#create-service-object)) |
-
-## References
-
-- [EXAMPLES.md](./EXAMPLES.md): End-to-end refactor sequences and anti-pattern examples
-- [HEURISTICS.md](./HEURISTICS.md): Common mistakes, red flags, and review heuristics
-- [INTEGRATION.md](./INTEGRATION.md): How to chain this skill with related skills
-- [assets/characterization_tests.md](assets/characterization_tests.md)
-- [assets/examples.md](assets/examples.md)

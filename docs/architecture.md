@@ -25,11 +25,14 @@ rails-agent-skills/
 │   ├── architecture.md
 │   ├── workflow-guide.md
 │   └── skill-template.md
-├── skill-router/ # Bootstrap skill (loaded at session start)
-│   └── SKILL.md
-├── <skill-name>/            # One directory per skill
-│   ├── SKILL.md             # Main skill file (required)
-│   └── reference.md         # Optional reference material
+├── workflows/               # Orchestration skills
+│   └── tdd-workflow/
+│       └── SKILL.md
+├── skills/                  # Categorized skills
+│   └── <category>/          # e.g., planning, testing, code-quality
+│       └── <skill-name>/    # One directory per skill
+│           ├── SKILL.md     # Main skill file (required)
+│           └── reference.md # Optional reference material
 ├── README.md
 └── .gitignore
 ```

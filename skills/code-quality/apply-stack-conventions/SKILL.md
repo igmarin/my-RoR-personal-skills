@@ -14,10 +14,6 @@ metadata:
 ---
 # Apply Stack Conventions
 
-When **writing or generating** code for this project, follow these conventions. Stack: Ruby on Rails, PostgreSQL, Hotwire (Turbo + Stimulus), Tailwind CSS.
-
-**Style:** If the project uses a linter, treat it as the source of truth for formatting. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **apply-code-conventions**.
-
 ## Quick Reference
 
 | Stack area | Default convention |
@@ -28,9 +24,9 @@ When **writing or generating** code for this project, follow these conventions. 
 | Tailwind | Use utilities in views; extract repeated UI into partials/components |
 | Auth | Apply Devise authentication and Pundit authorization to protected resources |
 
-## HARD-GATE: Tests Gate Implementation
+## HARD-GATE
 
-```
+```text
 ALL new code MUST have its test written and validated BEFORE implementation.
   1. Write the spec: bundle exec rspec spec/[path]_spec.rb
   2. Verify it FAILS — output must show the feature does not exist yet
@@ -40,7 +36,13 @@ ALL new code MUST have its test written and validated BEFORE implementation.
 See write-tests for the full gate cycle.
 ```
 
-## Feature Development Workflow
+## Core Process
+
+When **writing or generating** code for this project, follow these conventions. Stack: Ruby on Rails, PostgreSQL, Hotwire (Turbo + Stimulus), Tailwind CSS.
+
+**Style:** If the project uses a linter, treat it as the source of truth for formatting. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **apply-code-conventions**.
+
+### Feature Development Workflow
 
 For a typical feature, compose stack patterns in this order:
 
@@ -53,9 +55,9 @@ For a typical feature, compose stack patterns in this order:
 
 Each step should remain testable in isolation before wiring to the next layer.
 
-## Key Code Patterns
+### Key Code Patterns
 
-### Hotwire: Turbo Frames
+#### Hotwire: Turbo Frames
 
 ```erb
 <%# Wrap a section to be replaced without a full page reload %>
@@ -67,7 +69,7 @@ Each step should remain testable in isolation before wiring to the next layer.
 <%= link_to "Edit", edit_order_path(@order), data: { turbo_frame: "order-#{@order.id}" } %>
 ```
 
-### Hotwire: Turbo Streams (broadcast from controller)
+#### Hotwire: Turbo Streams (broadcast from controller)
 
 ```ruby
 respond_to do |format|
@@ -82,7 +84,7 @@ respond_to do |format|
 end
 ```
 
-### Avoiding N+1 — Eager Loading
+#### Avoiding N+1 — Eager Loading
 
 ```ruby
 # BAD — triggers one query per order
@@ -93,7 +95,7 @@ end
 @orders = Order.includes(:line_items).where(user: current_user)
 ```
 
-### Service Object (complex business logic out of the controller)
+#### Service Object (complex business logic out of the controller)
 
 ```ruby
 # Controller stays thin — delegate to service
@@ -108,11 +110,11 @@ end
 
 See **create-service-object** for the full `.call` pattern and response format.
 
-## Security
+### Security
 
 This project uses **Devise** for authentication and **Pundit** for authorization. Apply these on every feature that introduces access-controlled resources.
 
-## Pitfalls to Avoid
+### Pitfalls to Avoid
 
 | Issue | Correct approach |
 |-------|------------------|
@@ -130,6 +132,7 @@ When applying stack conventions, your output MUST include:
 3. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
 4. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
 5. **Verification** — List Rails specs, system tests, linting, and any browser/manual checks run.
+6. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

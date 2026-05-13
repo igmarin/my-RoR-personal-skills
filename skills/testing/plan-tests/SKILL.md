@@ -13,10 +13,6 @@ metadata:
 ---
 # Plan Tests
 
-Use this skill when the hardest part of the task is deciding where TDD should start.
-
-**Core principle:** Start at the highest-value boundary that proves the behavior with the least unnecessary setup.
-
 ## Quick Reference
 
 | Change type | First spec | Path | Why |
@@ -30,7 +26,27 @@ Use this skill when the hardest part of the task is deciding where TDD should st
 | Bug fix | Reproduction spec | Where the bug is observed | Proves the fix and prevents regression |
 | Unsure between layers | Higher boundary first | — | Easier to prove real behavior before drilling down |
 
-## Process
+## HARD-GATE
+
+```text
+CHECKPOINT: Test Design Review
+
+1. Present: Show the failing spec(s) written
+2. Ask:
+   - Does this test cover the right behavior?
+   - Is the boundary correct (request vs service vs model)?
+   - Are the most important edge cases represented?
+   - Is the failure reason correct (feature missing, not setup error)?
+3. Confirm: Only proceed to implementation once test design is approved.
+```
+
+## Core Process
+
+Use this skill when the hardest part of the task is deciding where TDD should start.
+
+**Core principle:** Start at the highest-value boundary that proves the behavior with the least unnecessary setup.
+
+### Process
 
 1. **Name the behavior:** State the user-visible outcome or invariant to prove.
 2. **Locate the boundary:** Decide where the behavior is observed first: HTTP request, service entry point, model rule, job execution, engine integration, or external adapter.
@@ -40,9 +56,9 @@ Use this skill when the hardest part of the task is deciding where TDD should st
 6. **Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.
 7. **Hand off:** Continue with `write-tests`, `test-service`, `test-engine`, or the implementation skill that fits the slice.
 
-## Examples
+### Examples
 
-### Good: New JSON Endpoint
+#### Good: New JSON Endpoint
 
 ```ruby
 # Behavior: POST /orders validates params and returns 201 with JSON payload
@@ -63,7 +79,7 @@ RSpec.describe "POST /orders", type: :request do
 end
 ```
 
-### Good: New Orchestration Service
+#### Good: New Orchestration Service
 
 ```ruby
 # Behavior: Orders::CreateOrder validates inventory, persists, and enqueues follow-up work
@@ -83,25 +99,7 @@ RSpec.describe Orders::CreateOrder do
 end
 ```
 
-## Test Feedback Checkpoint
-
-After writing and running the first failing spec, **pause before implementation** and present the test for review:
-
-```
-CHECKPOINT: Test Design Review
-
-1. Present: Show the failing spec(s) written
-2. Ask:
-   - Does this test cover the right behavior?
-   - Is the boundary correct (request vs service vs model)?
-   - Are the most important edge cases represented?
-   - Is the failure reason correct (feature missing, not setup error)?
-3. Confirm: Only proceed to implementation once test design is approved.
-```
-
-**Hand off:** After test design is confirmed → `write-tests` for the full TDD gate cycle.
-
-## Pitfalls
+### Pitfalls
 
 | Pitfall | What to do |
 |---------|------------|
@@ -113,6 +111,15 @@ CHECKPOINT: Test Design Review
 | Jumping to system specs too early | Reserve for critical browser flows that lower layers cannot prove |
 | "We'll add the request spec later" | The spec is the gate — implement only after the first slice is failing for the right reason |
 | First spec requires excessive factory setup | Excessive setup = wrong boundary. Simplify or move the slice. |
+
+## Extended Resources
+
+*None specific.*
+
+## Output Style
+
+1. **Test Proposal**: Clearly present the proposed failing spec with the correct boundary context.
+2. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

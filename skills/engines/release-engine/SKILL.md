@@ -12,15 +12,12 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Release Engine
 
 Use this skill when the task is to ship a Rails engine as a gem or prepare a new version.
 
-## HARD-GATE
-
-**DO NOT release without updating CHANGELOG and version file.**
-
-## Versioning & Quick Reference
+## Quick Reference
 
 | Bump | When to use | Action |
 |------|-------------|--------|
@@ -28,9 +25,13 @@ Use this skill when the task is to ship a Rails engine as a gem or prepare a new
 | **Minor** | Backward-compatible features and new extension points | Update version constant, document under Added/Changed |
 | **Major** | Breaking changes to API, setup, routes, migrations, config, or supported framework versions | Update version constant, document under Changed/Deprecated; write explicit upgrade notes |
 
-If the engine requires host changes during upgrade, document them explicitly even if the version bump is minor.
+## HARD-GATE
 
-## Release Order
+```text
+DO NOT release without updating CHANGELOG and version file.
+```
+
+## Core Process
 
 1. Confirm scope and compatibility impact — is this patch, minor, or major?
 2. Run full test suite: `bundle exec rspec`. Fix all failures before proceeding.
@@ -41,13 +42,14 @@ If the engine requires host changes during upgrade, document them explicitly eve
 7. Confirm installation docs and README match the release — update if needed.
 8. Publish: `gem push *.gem`.
 
-## Changelog Guidelines
+## Extended Resources
 
+**Changelog Guidelines**
 - Document user-visible changes, not commits; group by Added/Changed/Fixed/Deprecated.
 - For deprecations, document removal plan and replacement; keep deprecated code for at least one minor cycle.
+- If the engine requires host changes during upgrade, document them explicitly even if the version bump is minor.
 
-## Examples
-
+**Examples**
 ```markdown
 ## [1.2.0] - 2024-03-15
 ### Added
@@ -56,27 +58,20 @@ If the engine requires host changes during upgrade, document them explicitly eve
 - Minimum Rails version is now 7.0.
 ```
 
-See [assets/examples.md](assets/examples.md) for a full changelog entry and upgrade note template.
-
-## Extended Resources (Progressive Disclosure)
-
-Load these files only when their specific content is needed:
-
-- **[assets/release_checklist.md](assets/release_checklist.md)** — Use when you need a detailed step-by-step verification checklist before finalizing the release
-- **[assets/release_notes_template.md](assets/release_notes_template.md)** — Use when drafting GitHub release notes or long-form release announcements
-- **[assets/examples.md](assets/examples.md)** — Reference for full changelog entries and upgrade note templates
+- [assets/release_checklist.md](assets/release_checklist.md)
+- [assets/release_notes_template.md](assets/release_notes_template.md)
+- [assets/examples.md](assets/examples.md)
 
 ## Output Style
 
-When asked to prepare a release, produce a release summary ready for team lead review, with code blocks for all file changes. Required deliverables:
-
-1. **Version bump recommendation** — patch/minor/major with explicit reasoning
-2. **Version constant** — updated `lib/<engine>/version.rb`
-3. **CHANGELOG entries** — under Added/Changed/Fixed/Deprecated headers
-4. **Upgrade notes** — host app steps (config, migrations, dependencies)
-5. **Gemspec verification** — metadata, files, and dependency ranges confirmed
-6. **Test suite status** — pass/fail result of `bundle exec rspec`
-7. **Release blockers** — open issues, or explicitly "No blockers"
+1. Version bump recommendation — patch/minor/major with explicit reasoning.
+2. Version constant — updated `lib/<engine>/version.rb`.
+3. CHANGELOG entries — under Added/Changed/Fixed/Deprecated headers.
+4. Upgrade notes — host app steps (config, migrations, dependencies).
+5. Gemspec verification — metadata, files, and dependency ranges confirmed.
+6. Test suite status — pass/fail result of `bundle exec rspec`.
+7. Release blockers — open issues, or explicitly "No blockers".
+8. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

@@ -17,20 +17,7 @@ Use this skill when documenting Ruby classes and public methods with YARD.
 
 **Core principle:** Every public class and public method has YARD documentation so the contract is clear and tooling can generate API docs.
 
-## HARD-GATE: After implementation
-
-```
-After any feature or fix that adds or changes public Ruby API (classes, modules, public methods):
-
-1. Add or update YARD on those surfaces before the work is considered done.
-2. All YARD text must be in English unless user explicitly requests otherwise.
-
-Task lists from generate-tasks MUST include explicit YARD sub-tasks after implementation.
-```
-
-## Tag Reference
-
-Canonical examples for common tags: [EXAMPLES.md](./EXAMPLES.md) — includes `@param`, `@return`, and `@raise` tag usage.
+## Quick Reference
 
 | Scope | Rule |
 |-------|------|
@@ -39,10 +26,27 @@ Canonical examples for common tags: [EXAMPLES.md](./EXAMPLES.md) — includes `@
 | Public `initialize` | Add `@param` for constructor inputs when initialization is part of the public contract |
 | Private methods | Document only if behavior is non-obvious; same tag rules |
 
-## Standard Tags with Examples
+## HARD-GATE
+
+```text
+AFTER IMPLEMENTATION GATE:
+After any feature or fix that adds or changes public Ruby API (classes, modules, public methods):
+1. Add or update YARD on those surfaces before the work is considered done.
+2. All YARD text must be in English unless user explicitly requests otherwise.
+Task lists from generate-tasks MUST include explicit YARD sub-tasks after implementation.
+```
+
+## Core Process
+
+1. **Identify Public Surfaces:** Locate all new or modified public classes, modules, and methods.
+2. **Add Class-Level Docs:** Provide a one-line summary describing the responsibility of the class or module.
+3. **Add Method-Level Docs:** For every public method, add `@param` (and `@option` for hash arguments), `@return`, and `@raise` tags.
+4. **Document Exceptions:** List each exception separately with its own `@raise` tag, even if the method rescues it internally.
+5. **Verify Completeness:** Run `yard stats --list-undoc` and `yard doc` to ensure no public surfaces are missing documentation.
+
+## Tag Examples
 
 ### Class-level
-
 ```ruby
 # Responsible for validating and executing animal transfers between shelters.
 # @since 1.2.0
@@ -50,73 +54,38 @@ module AnimalTransfers
   class TransferService
 ```
 
-### Method-level: params, options, return, and example
-
-Use `@option` for every valid key in hash params. Include at least one `@example` on `.call` or the main public entry point.
-
+### Method-level
 ```ruby
 # Performs the transfer and returns a standardized response.
 # @param params [Hash] Transfer parameters
 # @option params [Hash] :source_shelter Shelter hash with :shelter_id
 # @option params [Hash] :target_shelter Target shelter with :shelter_id
 # @return [Hash] Result with :success and :response keys
+# @raise [InvalidShelterError] when the shelter does not exist
 # @example Basic usage
 #   result = TransferService.call(source_shelter: { shelter_id: 1 }, target_shelter: { shelter_id: 2 })
 #   result[:success] # => true
 def self.call(params)
 ```
 
-### Method-level: exceptions
+## Extended Resources (Progressive Disclosure)
 
-Document `@raise` for every exception a method can raise — **even if the method rescues it internally**. One tag per exception class.
+Load these files only when their specific content is needed:
 
-```ruby
-# Processes the billing update for the given plan.
-# @param plan_id [Integer] ID of the target plan
-# @raise [InvalidPlanError] when the plan does not exist or is inactive
-# @raise [PaymentGatewayError] when the payment provider rejects the charge
-# @return [Hash] Result with :success and :response keys
-def self.call(plan_id:)
-```
+- **[EXAMPLES.md](./EXAMPLES.md)** — Canonical examples for common tags, including `@param`, `@return`, and `@raise` tag usage.
+- **[references/tagged-notes.md](references/tagged-notes.md)** — Guidelines on tagged notes (`TODO:`, `FIXME:`).
+- **[ADVANCED_TAGS.md](./ADVANCED_TAGS.md)** — Guidance for advanced tags (`@abstract`, `@deprecated`, `@api private`, `@yield`, `@overload`).
 
-### Nullable / conditional returns
+## Output Style
 
-```ruby
-# Validates source and target shelters and returns the first validation error.
-# @param source_id [Integer] Source shelter ID
-# @param target_id [Integer] Target shelter ID
-# @return [nil, String] nil if valid, error message otherwise
-def self.validate_shelters!(source_id, target_id)
-```
+When writing or reviewing YARD docs, your output MUST satisfy:
 
-## Anti-pattern
-
-```ruby
-# Updates billing.  (Too vague; no @param/@return/@raise)
-def self.call(plan_id:)
-```
-
-## Pitfalls
-
-| Pitfall | What to do |
-|---------|------------|
-| Only one `@raise` for multiple exceptions | One `@raise` per exception class, even if rescued internally |
-| Skipping `@option` for hash params | List every valid key and type |
-| YARD text not in English | Write in English unless the user explicitly requests otherwise |
-
-## Inline tagged notes
-
-YARD documents the contract; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) document the *why* on the same code. Every tag carries actionable context (owner, ticket, next step); naked tags fail review. See [references/tagged-notes.md](references/tagged-notes.md) and **apply-code-conventions**.
-
-## Verification
-
-Run validation before considering documentation complete:
-
-1. `yard stats --list-undoc`
-2. `yard doc`
-3. If output shows undocumented public surfaces you changed, update YARD and re-run.
-
-For advanced tags (`@abstract`, `@deprecated`, `@api private`, `@yield`, `@overload`) see [ADVANCED_TAGS.md](./ADVANCED_TAGS.md).
+1. **Class/Module Summary** — Every new or modified public class/module has a descriptive summary.
+2. **Method Tags** — Every public method must have `@param` (or `@option`), `@return`, and `@raise` tags.
+3. **Discrete `@raise` Tags** — One `@raise` tag per exception class. Do not group multiple exceptions into a single tag.
+4. **Explicit Return Structures** — For `.call` methods or complex returns, the `@return` tag MUST specify the exact structure (e.g., `[Hash] Result with :success and :response keys`).
+5. **Tagged Notes Context** — Inline tagged notes (`TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:`) must carry actionable context (owner, ticket, next step). No naked tags.
+6. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

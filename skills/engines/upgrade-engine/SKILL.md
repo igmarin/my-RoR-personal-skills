@@ -11,20 +11,10 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Upgrade Engine
 
 **Core principle:** Every claimed Rails/Ruby version must be in the CI matrix. Prefer explicit support targets over accidental compatibility.
-
-## HARD-GATE
-
-```
-Before claiming support for a Rails/Ruby version:
-  1. bundle exec rake zeitwerk:check        # verify autoloading on each version
-  2. bundle exec rspec                       # full suite per matrix version
-  3. CI matrix must pass — not just main Rails version
-
-DO NOT ship compatibility changes without verifying both autoloading and full suite.
-```
 
 ## Quick Reference
 
@@ -35,7 +25,18 @@ DO NOT ship compatibility changes without verifying both autoloading and full su
 | Feature detection | Use `respond_to?`, `defined?`, or adapter seams instead of `Rails.version` |
 | Test matrix | CI runs against each claimed Rails/Ruby combination |
 
-## Core Checks
+## HARD-GATE
+
+```text
+Before claiming support for a Rails/Ruby version:
+  1. bundle exec rake zeitwerk:check        # verify autoloading on each version
+  2. bundle exec rspec                       # full suite per matrix version
+  3. CI matrix must pass — not just main Rails version
+
+DO NOT ship compatibility changes without verifying both autoloading and full suite.
+```
+
+## Core Process
 
 1. Define supported Ruby and Rails versions — state them in gemspec and README.
 2. Run `bundle exec rake zeitwerk:check` — file paths must match constant names exactly.
@@ -43,7 +44,6 @@ DO NOT ship compatibility changes without verifying both autoloading and full su
 4. Verify gemspec dependency bounds match tested versions: `spec.add_dependency "rails", ">= 7.0", "< 8.0"` — bounds must match what CI actually tests.
 5. Check optional integrations (jobs, mailers, assets, routes) per version.
 6. CI matrix must run against each claimed Rails/Ruby combination:
-
 ```yaml
 strategy:
   matrix:
@@ -52,8 +52,9 @@ strategy:
       - { ruby: "3.3", rails: "7.2" }
 ```
 
-## Pitfalls
+## Extended Resources
 
+**Pitfalls**
 | Problem | Correct approach |
 |---------|------------------|
 | `Rails.version` branching | Use `respond_to?`, `defined?`, or adapter seams — version checks are brittle |
@@ -63,8 +64,7 @@ strategy:
 | Reload-unsafe hooks at load time | Move to `config.to_prepare` — it runs on each reload in development |
 | Tests only on one Rails version | CI matrix required before claiming multi-version support |
 
-## Key Example: Feature Detection
-
+**Key Example: Feature Detection**
 ```ruby
 # ❌ Bad — brittle, wrong for patch versions
 if Rails.version >= "7.0"
@@ -77,16 +77,17 @@ if ActiveSupport::Cache.respond_to?(:format_version=)
 end
 ```
 
-If an EXAMPLES.md is present in the repository, consult it for additional patterns covering gemspec bounds, Zeitwerk file/constant naming, reload-safe hooks, and CI matrix YAML. If not, the Pitfalls table and Key Example above cover the most common cases.
+- [assets/compatibility_matrix.md](assets/compatibility_matrix.md)
+- [assets/zeitwerk_notes.md](assets/zeitwerk_notes.md)
+- [EXAMPLES.md](EXAMPLES.md)
 
 ## Output Style
-
-When asked to improve compatibility:
 
 1. State the support matrix being targeted.
 2. List the most likely breakpoints.
 3. Make compatibility changes in isolated, testable seams.
 4. Recommend matrix coverage if it does not exist.
+5. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -95,15 +96,3 @@ When asked to improve compatibility:
 | test-engine | Test matrix setup, CI configuration, multi-version tests |
 | create-engine | Engine structure, host contract, namespace design |
 | release-engine | Versioning, changelog, upgrade notes for compatibility changes |
-
-## Assets
-
-The following supplementary files may be present in the repository. Consult them if available; the skill body above is self-contained if they are not.
-
-- [assets/compatibility_matrix.md](assets/compatibility_matrix.md) — version support matrix template
-- [assets/zeitwerk_notes.md](assets/zeitwerk_notes.md) — extended Zeitwerk naming and configuration notes
-
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md)

@@ -9,11 +9,10 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Review Engine
 
 Use this skill when the task is to review an existing Rails engine or propose improvements.
-
-Prioritize architectural risks over style comments. The main review targets are coupling, unclear host contracts, unsafe initialization, and weak integration coverage.
 
 ## Quick Reference
 
@@ -25,85 +24,31 @@ Prioritize architectural risks over style comments. The main review targets are 
 | Migrations | Documented, copied via generator; no implicit or destructive steps |
 | Dummy app | Present in spec/; used for integration tests; exercises real mount and config |
 
-## Review Order
+## HARD-GATE
 
-1. **Identify the engine type and purpose.**
-   - Read `lib/<engine_name>/engine.rb` and `lib/<engine_name>/railtie.rb` (if present).
-   - Confirm whether it is isolated (`isolate_namespace`) or plain.
+```text
+Before writing findings, confirm every row in the Quick Reference table has been addressed:
+- [ ] Namespace isolation verified
+- [ ] Host integration points checked
+- [ ] `engine.rb` initializer blocks inspected
+- [ ] Migration/generator flow confirmed
+- [ ] Dummy app presence and usage confirmed
+- [ ] Integration tests exercise real mount
 
-2. **Inspect the namespace and public API surface.**
-   - `grep -r "isolate_namespace" lib/` — must appear in the engine class.
-   - `grep -rn "::\|^[A-Z]" lib/` — look for unqualified top-level constant references that may leak into or depend on the host.
+If any box cannot be checked (e.g., file not provided), record it as an open assumption.
+```
 
-3. **Check host-app integration points.**
-   - `grep -rn "Rails.application\|::User\|::Account\|::Current" lib/` — flag direct host constant references.
-   - Verify that any host dependency flows through a config seam or adapter (e.g., `MyEngine.config.user_finder`).
+## Core Process
 
-4. **Check initialization and reload behavior.**
-   - Inspect every `initializer`, `config.to_prepare`, and `ActiveSupport.on_load` block in `engine.rb`.
-   - `grep -n "initializer\|on_load\|to_prepare\|autoload" lib/<engine_name>/engine.rb`
-   - Flag anything that mutates global state or runs code at `require` time outside an initializer block.
+1. **Identify the engine type and purpose.** Read `lib/<engine_name>/engine.rb` and `lib/<engine_name>/railtie.rb`. Confirm isolated vs plain.
+2. **Inspect the namespace and public API surface.** Check for `isolate_namespace` and unqualified top-level constant references.
+3. **Check host-app integration points.** Flag direct host constant references. Verify host dependencies flow through config seams.
+4. **Check initialization and reload behavior.** Inspect `initializer`, `config.to_prepare`, and `ActiveSupport.on_load`. Flag anything that mutates global state at `require` time outside an initializer block.
+5. **Check migrations, generators, and install flow.** Confirm migrations are copied via a generator. Check for destructive or irreversible migrations.
+6. **Check dummy-app and integration tests.** Confirm `spec/dummy/` exists and exercises the mount point.
+7. **Summarize findings by severity.** Flag High findings first. Do not surface Low findings before architecture issues.
 
-5. **Check migrations, generators, and install flow.**
-   - Confirm migrations are copied via a generator (`rails g <engine>:install`) rather than loaded directly.
-   - `grep -rn "migrations_paths\|railties_order" lib/` — check for implicit or order-dependent migration setup.
-   - Check for destructive or irreversible migrations (missing `down` or `change` with unsafe operations).
-
-6. **Check dummy-app and integration tests.**
-   - Confirm `spec/dummy/` (or `test/dummy/`) exists and contains a mounted route in `config/routes.rb`.
-   - `grep -rn "mount\|routes" spec/dummy/config/routes.rb`
-   - Verify integration tests boot the dummy app and exercise the mount point, not just unit-test engine classes in isolation.
-
-7. **Pre-summary validation checkpoint.**
-   Before writing findings, confirm every row in the Quick Reference table has been addressed:
-   - [ ] Namespace isolation verified
-   - [ ] Host integration points checked
-   - [ ] `engine.rb` initializer blocks inspected
-   - [ ] Migration/generator flow confirmed
-   - [ ] Dummy app presence and usage confirmed
-   - [ ] Integration tests exercise real mount
-
-   If any box cannot be checked (e.g., file not provided), record it as an open assumption.
-
-8. **Summarize findings by severity.**
-
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|----------|
-| Reviewing code style before architecture | Style is low impact; coupling, host assumptions, and unsafe init cause production failures |
-| Missing dummy app coverage check | Dummy app must exist and be used; engines without it cannot prove host integration works |
-| Ignoring engine.rb | engine.rb often contains boot-time side effects; always inspect it |
-
-## Severity Tiers
-
-See [FINDINGS.md](./FINDINGS.md) for the full High / Medium / Low severity lists and Common Fixes if available. Otherwise apply these inline definitions:
-
-- **High** — causes production failures or breaks host integration (e.g., direct host constant coupling, unsafe boot-time side effects, irreversible migrations without a `down` method).
-- **Medium** — degrades maintainability or makes the engine fragile across host apps (e.g., undocumented configuration seams, missing install generator, no dummy app).
-- **Low** — style or minor clarity issues; do not surface before architecture findings.
-
-Flag High findings first. Do not surface Low findings before architecture issues.
-
-## Output Format
-
-Write findings first. For each finding include:
-
-- severity
-- affected file or area
-- why it is risky
-- the smallest credible fix
-
-Then include:
-
-- open assumptions
-- recommended next changes
-
-If no meaningful findings exist, say so explicitly and mention any residual testing gaps.
-
-## Examples
-
-**High-severity finding (engine reaching into host):**
+**High-severity finding example (engine reaching into host):**
 
 ```ruby
 # Bad: engine assumes host model
@@ -113,8 +58,7 @@ class MyEngine::SomeService
   end
 end
 ```
-
-- **Severity:** High. **Area:** `MyEngine::SomeService`. **Risk:** Engine depends on host `User`; breaks when used in another app. **Fix:** Introduce config: `MyEngine.config.user_finder = ->(id) { User.find(id) }` (or an adapter), and use that in the engine.
+*Fix: Introduce config (`MyEngine.config.user_finder = ->(id) { User.find(id) }`) and use that.*
 
 **Good (configuration seam):**
 
@@ -127,7 +71,27 @@ class MyEngine::SomeService
 end
 ```
 
-See [assets/examples.md](assets/examples.md) for additional annotated examples if available.
+## Extended Resources
+
+**Severity Tiers**
+- **High** — causes production failures or breaks host integration (e.g., direct host constant coupling, unsafe boot-time side effects, irreversible migrations without a `down` method).
+- **Medium** — degrades maintainability or makes the engine fragile across host apps (e.g., undocumented configuration seams, missing install generator, no dummy app).
+- **Low** — style or minor clarity issues; do not surface before architecture findings.
+
+**Common Mistakes**
+- Reviewing code style before architecture.
+- Missing dummy app coverage check (dummy app must exist and be used).
+- Ignoring `engine.rb` (often contains boot-time side effects).
+
+- [FINDINGS.md](./FINDINGS.md)
+- [assets/examples.md](assets/examples.md)
+
+## Output Style
+
+1. Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.
+2. Then include open assumptions and recommended next changes.
+3. If no meaningful findings exist, explicitly state so and mention residual testing gaps.
+4. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

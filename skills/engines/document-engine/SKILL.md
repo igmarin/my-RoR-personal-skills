@@ -11,34 +11,37 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Document Engine
 
-All generated documentation (README, guides, examples) must be in **English** unless the user explicitly requests another language.
+Use this skill when writing or maintaining documentation for Rails engines.
 
-## Recommended README Shape
+## Quick Reference
 
-1. Purpose — what the engine does and when to use it
-2. Installation — gem add, bundle, run install generator
-3. Mounting — explicit `mount MyEngine::Engine, at: '/path'` in routes
-4. Configuration — all options with defaults, required vs optional
-5. Usage examples — copyable code for typical workflows
-6. Migrations / operational steps — install generator, one-time setup
-7. Extension points — adapters, callbacks, config blocks
-8. Development and testing — how to run tests or contribute
+| Section | Focus |
+|---------|-------|
+| Installation | gem add, bundle, run install generator |
+| Mounting | explicit `mount MyEngine::Engine, at: '/path'` in routes |
+| Configuration | all options with defaults, required vs optional |
+| Usage | copyable code for typical workflows |
+| Migrations | install generator, one-time setup |
 
-## Documentation Rules
+## HARD-GATE
 
-- Document required host-app steps before optional customization.
-- Keep examples copyable and close to real code.
-- Show the minimum working install path first.
-- If the engine assumes any host model, job backend, or auth integration, say so explicitly.
-- Document upgrade-impacting changes when setup evolves.
+```text
+All generated documentation (README, guides, examples) MUST explicitly document:
+1. Required host-app steps before optional customization.
+2. Minimum working install path first.
+3. Any assumptions about host models, job backends, or auth integrations.
+```
 
-## Documentation Gaps to Check
+## Core Process
 
-See [CHECKLIST.md](./CHECKLIST.md) for the full gap checklist. Critical gaps: installation steps, all config options with defaults, explicit mount path, migration timing, host model/auth assumptions.
-
-## Examples
+1. Document required host-app steps before optional customization.
+2. Keep examples copyable and close to real code.
+3. Show the minimum working install path first.
+4. If the engine assumes any host model, job backend, or auth integration, say so explicitly.
+5. Document upgrade-impacting changes when setup evolves.
 
 **README snippet (install + mount):**
 
@@ -72,15 +75,33 @@ In `config/initializers/my_engine.rb`:
     end
 ```
 
-## Output Style
+## Extended Resources
 
-When asked to write docs:
+**Recommended README Shape**
+1. Purpose — what the engine does and when to use it
+2. Installation — gem add, bundle, run install generator
+3. Mounting — explicit `mount MyEngine::Engine, at: '/path'` in routes
+4. Configuration — all options with defaults, required vs optional
+5. Usage examples — copyable code for typical workflows
+6. Migrations / operational steps — install generator, one-time setup
+7. Extension points — adapters, callbacks, config blocks
+8. Development and testing — how to run tests or contribute
+
+**Documentation Gaps to Check**
+See [CHECKLIST.md](./CHECKLIST.md) for the full gap checklist. Critical gaps: installation steps, all config options with defaults, explicit mount path, migration timing, host model/auth assumptions.
+
+- [assets/configuration.md](assets/configuration.md)
+- [assets/examples.md](assets/examples.md)
+- [assets/installation.md](assets/installation.md)
+
+## Output Style
 
 1. Start with the minimum install path.
 2. Show one realistic configuration example.
 3. Document operational steps explicitly.
 4. Keep sections short and task-oriented.
 5. Check each row in the Documentation Gaps checklist against the draft. A checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.
+6. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -90,9 +111,3 @@ When asked to write docs:
 | create-engine-installer | Install generators, setup steps to document |
 | release-engine | Changelog, upgrade notes, version documentation |
 | generate-api-collection | When documenting or adding API endpoints (keep Postman collection in sync) |
-
-## Assets
-
-- [assets/configuration.md](assets/configuration.md)
-- [assets/examples.md](assets/examples.md)
-- [assets/installation.md](assets/installation.md)

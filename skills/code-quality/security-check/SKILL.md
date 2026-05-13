@@ -12,22 +12,6 @@ metadata:
 ---
 # Security Check
 
-Use this skill when the task is to review or harden Rails code from a security perspective.
-
-**Core principle:** Prioritize exploitable issues over style. Assume any untrusted input can be abused.
-
-## HARD-GATE: Authorization Findings Lead the Report
-
-```
-BEFORE returning your security review, verify:
-  1. The FIRST finding section in your output is "Authentication & Authorization"
-  2. SQL injection, XSS, or other findings come AFTER auth/authz — even if
-     they feel more severe or were discovered first
-  3. If no auth/authz issue exists, the report still opens with an explicit
-     "Authentication & Authorization: no issues found" line BEFORE any other
-     finding category
-```
-
 ## Quick Reference
 
 | Area | Key Checks |
@@ -40,7 +24,25 @@ BEFORE returning your security review, verify:
 | Secrets | Encrypted credentials, never in code or logs |
 | Files | Validate filename, content type, destination |
 
-## Review Order
+## HARD-GATE
+
+```text
+BEFORE returning your security review, verify:
+  1. The FIRST finding section in your output is "Authentication & Authorization"
+  2. SQL injection, XSS, or other findings come AFTER auth/authz — even if
+     they feel more severe or were discovered first
+  3. If no auth/authz issue exists, the report still opens with an explicit
+     "Authentication & Authorization: no issues found" line BEFORE any other
+     finding category
+```
+
+## Core Process
+
+Use this skill when the task is to review or harden Rails code from a security perspective.
+
+**Core principle:** Prioritize exploitable issues over style. Assume any untrusted input can be abused.
+
+### Review Order
 
 1. Check authentication and authorization boundaries.
 2. Check parameter handling and sensitive attribute assignment.
@@ -49,9 +51,9 @@ BEFORE returning your security review, verify:
 5. Check secrets, logging, and operational exposure.
 6. **Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).
 
-## Severity Levels
+### Severity Levels
 
-### High
+#### High
 
 - Missing or bypassable authorization checks
 - SQL, shell, YAML, or constantization injection paths
@@ -59,7 +61,7 @@ BEFORE returning your security review, verify:
 - File upload handling that trusts filename, content type, or destination blindly
 - Secrets or tokens stored in code, logs, or unsafe config
 
-### Medium
+#### Medium
 
 - Unscoped mass assignment through weak parameter filtering
 - User-controlled HTML rendered without clear sanitization
@@ -67,7 +69,7 @@ BEFORE returning your security review, verify:
 - Security-relevant behavior hidden in callbacks or background jobs without guardrails
 - Brittle custom auth logic where framework primitives would be safer
 
-## Review Checklist
+### Review Checklist
 
 - Are permissions enforced on every sensitive action?
 - Are untrusted inputs validated before database, filesystem, or network use?
@@ -75,7 +77,7 @@ BEFORE returning your security review, verify:
 - Are secrets stored and logged safely?
 - Are security assumptions explicit and testable?
 
-## Examples
+### Examples
 
 **High-severity (unscoped redirect):**
 
@@ -100,27 +102,30 @@ params.require(:user).permit!
 params.require(:user).permit(:name, :email)
 ```
 
-## Pitfalls
+### Pitfalls
 
-See [PITFALLS.md](./PITFALLS.md) for the full list. Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user content, SQL string interpolation, secrets in committed files.
+Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user content, SQL string interpolation, secrets in committed files. See extended resources for the full list.
+
+## Extended Resources
+
+- [PITFALLS.md](./PITFALLS.md) for the full list of pitfalls.
 
 ## Output Style
 
-Section order per the HARD-GATE. Every heading appears even when empty (write "No issues found.").
-
-```
-## Authentication & Authorization
-## Parameter Handling & Mass Assignment
-## Query Safety (SQL / NoSQL / shell injection)
-## Output Encoding & Redirects
-## Secrets, Logging & Operational Exposure
-```
-
-Each finding carries:
-- **Severity:** **High** or **Medium** (not "Critical")
-- **Attack path:** input → reach → impact
-- **Affected file:** path + line, e.g. `app/controllers/documents_controller.rb:42`
-- **Mitigation:** smallest credible fix
+1. **Format**: Section order per the HARD-GATE. Every heading appears even when empty (write "No issues found.").
+   ```text
+   ## Authentication & Authorization
+   ## Parameter Handling & Mass Assignment
+   ## Query Safety (SQL / NoSQL / shell injection)
+   ## Output Encoding & Redirects
+   ## Secrets, Logging & Operational Exposure
+   ```
+2. **Finding details**: Each finding carries:
+   - **Severity:** **High** or **Medium** (not "Critical")
+   - **Attack path:** input → reach → impact
+   - **Affected file:** path + line, e.g. `app/controllers/documents_controller.rb:42`
+   - **Mitigation:** smallest credible fix
+3. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

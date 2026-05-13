@@ -19,7 +19,15 @@ metadata:
 ---
 # Load Context
 
-Load minimum context before any code, spec, or PRD in an existing Rails codebase. A fifteen-second read of `db/schema.rb`, `config/routes.rb`, and one neighbor saves a full retry.
+## Quick Reference
+
+| Area | What to check |
+|------|---------------|
+| Schema | `db/schema.rb` for tables and columns |
+| Routes | `config/routes.rb` for surrounding paths |
+| Deps | `Gemfile.lock` for Rails version and gems |
+| Neighbors | Closest existing sibling file to match style |
+| Specs | Closest existing test for behavior drift |
 
 ## HARD-GATE
 
@@ -31,7 +39,11 @@ ALWAYS cite the files you read (path:line where possible) so the user can verify
 ALWAYS re-check context when the user's request changes scope mid-conversation.
 ```
 
-## Process
+## Core Process
+
+Load minimum context before any code, spec, or PRD in an existing Rails codebase. A fifteen-second read of `db/schema.rb`, `config/routes.rb`, and one neighbor saves a full retry.
+
+### Process
 
 1. **Scope the change:** In one sentence, name the Rails layer touched (controller, model, service, job, engine, view/Turbo, migration, API, GraphQL).
 2. **Load baseline Rails context:** Read at minimum:
@@ -53,30 +65,7 @@ ALWAYS re-check context when the user's request changes scope mid-conversation.
 Do not pick silently.
 7. **Hand off:** With context loaded, proceed to the next skill (`create-prd`, `generate-tasks`, `plan-tests`, `apply-stack-conventions`, etc.). The Context Summary travels with the task.
 
-## Output Style
-
-Every invocation of this skill MUST produce a **Context Summary** in this exact shape, before any code or spec is proposed:
-
-```text
-### Context Summary
-- Scope: <one line — Rails layer and nearest class/file area>
-- Rails version: <from Gemfile.lock>
-- Relevant tables: <table names from db/schema.rb, columns that matter>
-- Relevant routes: <resource/member routes from config/routes.rb>
-- Nearest pattern: <path:line — one existing file that solves a similar problem>
-- Nearest spec: <path:line — existing spec for this area (or NONE)>
-- Engine boundary: <engine name or N/A>
-- Gotchas: <domain gem quirks, enum mappings, polymorphic edges, counter caches, soft-delete, single-table inheritance — only list if present>
-- Confusion: <NONE, or a one-line pointer to the Confusion Block below>
-```
-
-Additional MUSTs:
-
-1. **One neighbor per layer.** Do not dump 5 similar files; pick the closest match and name it.
-2. **Facts only, no code.** The summary lists facts about the codebase, not proposed implementation.
-3. **Hand-off line.** End the reply with: `Context loaded. Next: <skill-name> — <one-line reason>.`
-
-## Pitfalls
+### Pitfalls
 
 | Pitfall | What to do |
 |---------|------------|
@@ -84,6 +73,32 @@ Additional MUSTs:
 | Citing paths without line numbers | Use `path:line` when referencing a method, class, or association |
 | Ignoring engine boundaries | Name the engine and its host integration points when a mounted engine is touched |
 | Ignoring spec/code drift | A passing stale spec is worse than a missing spec — call it out in Confusion |
+
+## Extended Resources
+
+- [EXAMPLES.md](EXAMPLES.md)
+- [references/confusion-management.md](references/confusion-management.md)
+- [references/context-sources.md](references/context-sources.md)
+
+## Output Style
+
+1. **Context Summary**: Every invocation MUST produce a Context Summary in this exact shape:
+   ```text
+   ### Context Summary
+   - Scope: <one line — Rails layer and nearest class/file area>
+   - Rails version: <from Gemfile.lock>
+   - Relevant tables: <table names from db/schema.rb, columns that matter>
+   - Relevant routes: <resource/member routes from config/routes.rb>
+   - Nearest pattern: <path:line — one existing file that solves a similar problem>
+   - Nearest spec: <path:line — existing spec for this area (or NONE)>
+   - Engine boundary: <engine name or N/A>
+   - Gotchas: <domain gem quirks, enum mappings, polymorphic edges, counter caches, soft-delete, single-table inheritance — only list if present>
+   - Confusion: <NONE, or a one-line pointer to the Confusion Block below>
+   ```
+2. **One neighbor per layer**: Do not dump 5 similar files; pick the closest match and name it.
+3. **Facts only, no code**: The summary lists facts about the codebase, not proposed implementation.
+4. **Hand-off line**: End the reply with: `Context loaded. Next: <skill-name> — <one-line reason>.`
+5. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -93,10 +108,3 @@ Additional MUSTs:
 | **plan-tests** | Nearest spec in the summary usually reveals the right first failing spec |
 | **triage-bug** / **refactor-code** | Context precedes reproduction or characterization tests |
 | **review-architecture** / **define-domain-language** | When context reveals boundary or naming drift |
- 
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md)
-- [references/confusion-management.md](references/confusion-management.md)
-- [references/context-sources.md](references/context-sources.md)

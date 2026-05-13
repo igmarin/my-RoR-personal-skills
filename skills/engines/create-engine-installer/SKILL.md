@@ -12,13 +12,12 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Create Engine Installer
 
 Use this skill when the task is to design or review how a host app installs and configures a Rails engine — generating initializers, copying migrations, mounting routes, or exposing a single install command.
 
-**Core principle:** Setup must be explicit, repeatable, and safe to rerun. Never modify the host app at boot time.
-
-## Installer Components
+## Quick Reference
 
 | Component | Purpose | Key constraint |
 |-----------|---------|----------------|
@@ -27,10 +26,10 @@ Use this skill when the task is to design or review how a host app installs and 
 | Initializer | Provides configuration defaults | Generated once, editable by host |
 | Routes | Adds `mount Engine, at: '/path'` | Check for existing mount before injecting |
 
-## HARD-GATE: Validation Workflow
+## HARD-GATE
 
-```
-WHEN building or reviewing an install generator:
+```text
+Validation Workflow WHEN building or reviewing an install generator:
 
 1. GENERATE:  Run the generator against a clean host app
 2. VERIFY:    Check output files exist in the correct host paths
@@ -38,19 +37,18 @@ WHEN building or reviewing an install generator:
 4. CONFIRM:   No duplicate files, routes, or initializer blocks inserted
 5. DOCUMENT:  List what was generated vs. what the user must do manually
 6. TEST:      Cover both single-run and rerun behavior in generator specs
+
+DO NOT ship a generator without completing steps 3 and 4.
 ```
 
-**DO NOT ship a generator without completing steps 3 and 4.**
+## Core Process
 
-## Constraints
-
-| Constraint | Do | Avoid |
-|---|---|---|
-| Boot-time mutation | Configure only in initializers | Modifying host files or state at load time from `engine.rb` or initializers |
-| Idempotency | Guard with `File.exist?` or Thor's `inject_into_file` with a marker | Overwriting or inserting routes, initializers, or migrations without checking |
-| Migrations | Copy to host `db/migrate`; host runs them | Applying migrations automatically |
-| Manual steps | Document rollback steps and required env vars | Leaving install gaps undocumented |
-| Docs accuracy | Match install docs to generator behavior | Docs that describe a different install path than the generator produces |
+1. Ensure setup is explicit, repeatable, and safe to rerun.
+2. Configure only in initializers (avoid boot-time mutation).
+3. Guard operations with `File.exist?` or Thor's `inject_into_file` with a marker to ensure idempotency.
+4. Copy migrations to host `db/migrate`; let the host run them.
+5. Document rollback steps and required env vars.
+6. Ensure install docs match generator behavior exactly.
 
 **Idempotency guards — check before creating or injecting:**
 
@@ -82,16 +80,25 @@ it 'does not duplicate the route mount on rerun' do
 end
 ```
 
-See [EXAMPLES.md](./EXAMPLES.md) for a full generator class and complete spec suite, including migration copy helpers and multi-step install scenarios.
+## Extended Resources
 
-## Generator Checklist
-
+**Generator Checklist**
 - [ ] Files created in correct host paths
 - [ ] No duplicate inserts on rerun (validated manually and in specs)
 - [ ] Sensible defaults that are easy to edit
 - [ ] Clear output telling the user what remains manual
 - [ ] Rollback steps documented
 - [ ] Install docs match what the generator actually produces
+
+- [EXAMPLES.md](./EXAMPLES.md) (full generator class and complete spec suite)
+- [assets/README.md](assets/README.md)
+
+## Output Style
+
+1. Use idiomatic Rails Thor generator commands.
+2. Provide clear, minimal, idempotent generator code.
+3. Output clear terminal instructions for the user.
+4. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
@@ -100,7 +107,3 @@ See [EXAMPLES.md](./EXAMPLES.md) for a full generator class and complete spec su
 | create-engine | When designing the engine structure that installers will configure |
 | document-engine | When documenting install steps or upgrade instructions |
 | test-engine | When adding generator specs or dummy-app install coverage |
-
-## Assets
-
-- [assets/README.md](assets/README.md)

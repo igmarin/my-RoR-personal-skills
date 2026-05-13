@@ -10,6 +10,7 @@ metadata:
   user-invocable: "true"
   version: 1.0.0
 ---
+
 # Generate API Collection
 
 **Core principle:** Every API surface (Rails app or engine) has a single API collection file that stays in sync with its endpoints.
@@ -25,11 +26,10 @@ metadata:
 | Variables | Use `{{base_url}}` for the base URL so the collection works across environments |
 | Per request | method, URL, headers, body, **description**, and **test scripts** (e.g. `pm.response.to.have.status(200)`) |
 | Folders | Group related endpoints into folders using nested `item` arrays |
-| Validation | See validation steps in the HARD-GATE section below |
 
-## HARD-GATE: Generate on Endpoint Change
+## HARD-GATE
 
-```
+```text
 When you create or modify a REST API endpoint (new or changed route and controller action),
 you MUST also create or update the corresponding API collection file so the
 flow can be tested. Do not leave the collection missing or outdated.
@@ -39,15 +39,20 @@ Each request MUST include a description and at least one basic test script (e.g.
 EXCEPTION: GraphQL endpoints — use implement-graphql instead.
 ```
 
-After generating or updating the collection, validate the output:
-- Confirm the JSON is syntactically valid.
-- Verify the collection can be imported into a compatible API client (e.g. Postman) without errors.
-- Confirm all new or changed endpoints are represented and that `{{base_url}}` (or equivalent) is used consistently.
+## Core Process
 
-## Collection Structure (Postman v2.1)
+1. Create or open the corresponding API collection JSON file.
+2. Group related endpoints into folders using nested `item` arrays.
+3. Use `{{base_url}}` for the base URL.
+4. Add method, URL, headers, body, description, and test scripts.
+5. Confirm the JSON is syntactically valid.
+6. Verify the collection can be imported into a compatible API client (e.g. Postman) without errors.
+7. Confirm all new or changed endpoints are represented and that `{{base_url}}` (or equivalent) is used consistently.
 
+## Extended Resources
+
+**Collection Structure (Postman v2.1)**
 Ensure the collection includes the `info` block, folders (nested `item` arrays), and `event` scripts:
-
 ```json
 {
   "info": {
@@ -85,15 +90,24 @@ Ensure the collection includes the `info` block, folders (nested `item` arrays),
 }
 ```
 
-See [EXAMPLES.md](./EXAMPLES.md) for a multi-endpoint collection with auth token variables.
-
-## Common Mistakes
-
+**Common Mistakes**
 | Mistake | Reality |
 |---------|---------|
 | Missing Content-Type or body for POST/PUT | Include headers and example body so the request works out of the box |
 | Skipping validation after generation | Always verify the JSON is well-formed and imports correctly before committing (see HARD-GATE) |
 
+- [EXAMPLES.md](./EXAMPLES.md)
+
+## Output Style
+
+1. Ensure the JSON is perfectly valid.
+2. Ensure descriptions and basic tests are present.
+3. Use environment variables like `{{base_url}}`.
+4. Language — Must be in English unless explicitly requested otherwise.
+
 ## Integration
 
-Chain to **create-engine** when the engine exposes HTTP endpoints.
+| Skill | When to chain |
+|-------|---------------|
+| **create-engine** | When the engine exposes HTTP endpoints |
+| **version-api** | When a new version requires a collection update |

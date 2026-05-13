@@ -10,11 +10,18 @@ metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Optimize Performance
 
 Identify and fix performance bottlenecks in Rails applications.
 
-**Files:** [SKILL.md](./SKILL.md) · [EXAMPLES.md](./EXAMPLES.md) · [references/tools.md](./references/tools.md)
+## Quick Reference
+
+| Tool | Use |
+|------|-----|
+| `bullet` | N+1 detection in development |
+| `rack-mini-profiler` | Endpoint timing breakdown |
+| `EXPLAIN ANALYZE` | Query plan analysis |
 
 ## HARD-GATE
 
@@ -37,17 +44,7 @@ appears in your output. Reordering for narrative flow fails the audit even
 when the underlying work was correct.
 ```
 
-## Tools Quick Reference
-
-| Tool | Use |
-|------|-----|
-| `bullet` | N+1 detection in development |
-| `rack-mini-profiler` | Endpoint timing breakdown |
-| `EXPLAIN ANALYZE` | Query plan analysis |
-
-See [references/tools.md](references/tools.md) for detailed configuration.
-
-## Optimization Workflow
+## Core Process
 
 1. **Measure baseline** — record current timing
 2. **Write regression spec** — assert query count
@@ -56,8 +53,9 @@ See [references/tools.md](references/tools.md) for detailed configuration.
 5. **Verify** — confirm improvement with EXPLAIN ANALYZE
 6. **Validate** — regression spec passes
 
-## N+1 Prevention
+## Extended Resources
 
+**N+1 Prevention**
 ```ruby
 # Bad
 Post.all.each { |p| p.author.name }
@@ -66,10 +64,8 @@ Post.all.each { |p| p.author.name }
 Post.includes(:author).each { |p| p.author.name }
 ```
 
-## Regression Spec (Query Count Assertion)
-
+**Regression Spec (Query Count Assertion)**
 Write this spec **before** applying any optimization to lock in the expected query count:
-
 ```ruby
 RSpec.describe "Post index performance" do
   it "loads posts with authors in a fixed number of queries" do
@@ -81,13 +77,10 @@ RSpec.describe "Post index performance" do
   end
 end
 ```
-
 Use the `db-query-matchers` gem or a custom `make_database_queries` matcher. The spec must pass after the fix and fail if a future change reintroduces the N+1.
 
-## EXPLAIN ANALYZE Verification
-
+**EXPLAIN ANALYZE Verification**
 Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:
-
 ```sql
 EXPLAIN ANALYZE
   SELECT posts.*, users.name
@@ -96,22 +89,15 @@ EXPLAIN ANALYZE
   WHERE posts.published = true;
 ```
 
-Key things to check in the output:
-- `Seq Scan` on large tables → should become `Index Scan` after adding an index
-- `actual time` rows — confirm the new value is lower than the baseline
-- `rows` estimate accuracy — large discrepancies indicate stale statistics (`ANALYZE table_name`)
-
-## Examples
-
-See [EXAMPLES.md](EXAMPLES.md) for complete examples including:
-- N+1 fixes with `includes`, `preload`, `joins`
-- Fragment caching and Russian doll caching
-- Query optimization with `pluck` and `find_each`
-- Regression testing with custom matchers
+- [SKILL.md](./SKILL.md)
+- [EXAMPLES.md](./EXAMPLES.md)
+- [references/tools.md](./references/tools.md)
+- [Rails Performance Guide](https://guides.rubyonrails.org/v4.1/performance_testing.html)
+- [Active Record Querying](https://guides.rubyonrails.org/active_record_querying.html)
+- [rack-mini-profiler](https://github.com/MiniProfiler/rack-mini-profiler)
+- [Bullet gem](https://github.com/flyerhzm/bullet)
 
 ## Output Style
-
-Report sections, in the HARD-GATE order:
 
 1. **Baseline** — timing or query count with source (log line, profiler output, EXPLAIN row).
 2. **Bottleneck** — specific cause + the tool that surfaced it (`bullet`, `rack-mini-profiler`, or `EXPLAIN ANALYZE` — at least one named).
@@ -120,10 +106,11 @@ Report sections, in the HARD-GATE order:
 5. **Regression spec — GREEN** — rerun output at the new count.
 6. **EXPLAIN ANALYZE** — actual output rows for any DB-touching change; call out `Seq Scan → Index Scan` or `actual time` delta.
 7. **Quantified improvement** — `queries: N → M`, `p95: X ms → Y ms`. Numbers, not adjectives.
+8. Language — Must be in English unless explicitly requested otherwise.
 
-## Further Reading
+## Integration
 
-- [Rails Performance Guide](https://guides.rubyonrails.org/v4.1/performance_testing.html)
-- [Active Record Querying](https://guides.rubyonrails.org/active_record_querying.html)
-- [rack-mini-profiler](https://github.com/MiniProfiler/rack-mini-profiler)
-- [Bullet gem](https://github.com/flyerhzm/bullet)
+| Skill | When to chain |
+|-------|---------------|
+| **write-tests** | For regression specs |
+| **review-migration** | When adding an index |

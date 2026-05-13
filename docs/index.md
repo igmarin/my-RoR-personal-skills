@@ -7,6 +7,7 @@ Master index for the Rails Agent Skills library. Start here to navigate the publ
 - [Root README](../README.md) - Project value, audience, install paths, and documentation map.
 - [Implementation Guide](implementation-guide.md) - Installation overview for MCP and legacy alternatives.
 - [MCP Server README](../mcp_server/README.md) - Canonical MCP setup, Docker, and official registry details.
+- [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
 - [Workflow Guide](workflow-guide.md) - How to chain skills in real Rails work.
 - [Skill Catalog](reference/skill-catalog.md) - Complete list of 42 public skills and 5 callable workflows.
 

@@ -62,7 +62,14 @@ The skills are not long-form tutorials. They are executable instructions for AI 
 
 ## Start Here
 
-The recommended way to use this library is through the MCP server. MCP keeps the agent context small: docs and workflows are exposed as resources, available skills are discoverable through `list_skills`, and individual skills are loaded on demand. The `use_skill` tool returns a specific skill's `SKILL.md` only when the agent needs it.
+Rails Agent Skills can be invoked in three distinct ways depending on your environment and desired level of autonomy:
+1. **MCP (`use_skill`)**: Autonomous tool calls by the agent (e.g., Claude Desktop, Cursor).
+2. **Chat Commands**: Explicitly forcing the agent to use a skill via `@skill-name` or `/skill-name`.
+3. **CLI (`gh skill` / `tessl`)**: Manual installation or evaluations in the terminal.
+
+**[Read the complete guide on Calling Skills and Workflows](docs/calling-skills.md)** for syntax examples and when to use each method.
+
+The recommended way for autonomous usage is through the MCP server. MCP keeps the agent context small: docs and workflows are exposed as resources, available skills are discoverable through `list_skills`, and individual skills are loaded on demand. The `use_skill` tool returns a specific skill's `SKILL.md` only when the agent needs it.
 
 | Path | Best for | Start here |
 |------|----------|------------|
@@ -117,38 +124,36 @@ When configuring MCP in external tools, use absolute paths for `cwd` and `BUNDLE
 
 ## Daily Workflow
 
-Most Rails work should start with the TDD feature loop:
+Depending on your environment (MCP vs. Chat Commands), you can orchestrate your daily Rails work using these common loops. For explicit control in Cursor or Windsurf, prepend these with `@` (e.g., `@load-context`). In MCP, simply describe the goal and the agent will load them automatically.
 
+**The core TDD feature loop:**
 ```text
 load-context
   -> plan-tests
   -> write-tests
-  -> verify failing test
-  -> implement
-  -> verify passing test
+  -> [verify failing test]
+  -> [implement]
+  -> [verify passing test]
   -> write-yard-docs
   -> code-review
 ```
 
-For a new feature from scratch:
-
+**For a new feature from scratch:**
 ```text
 create-prd -> generate-tasks -> TDD feature loop
 ```
 
-For a bug:
-
+**For a bug:**
 ```text
-triage-bug -> plan-tests -> failing reproduction spec -> minimal fix -> code-review
+triage-bug -> plan-tests -> [failing reproduction spec] -> [minimal fix] -> code-review
 ```
 
-For a Rails engine:
-
+**For a Rails engine:**
 ```text
 create-engine -> test-engine -> document-engine -> review-engine -> release-engine
 ```
 
-See [docs/workflow-guide.md](docs/workflow-guide.md) and [docs/workflows/](docs/workflows/) for the full workflow guide.
+See [docs/workflow-guide.md](docs/workflow-guide.md) and [docs/workflows/](docs/workflows/) for the full workflow guide containing detailed Mermaid diagrams of each phase.
 
 ## Skill Catalog
 

@@ -51,6 +51,7 @@ Tessl validates publishable skills from `tile.json` using `tessl-evals/`. The up
 ## Reference & Authoring
 
 - [Skill Catalog](reference/skill-catalog.md) - Complete list of 42 public skills and 5 callable workflows.
+- [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
 - [Integration Matrix](reference/integration-matrix.md) - How skills connect.
 - [Workflow Guide](workflow-guide.md) - Narrative guide for daily use.
 - [Implementation Guide](implementation-guide.md) - IDE and MCP setup overview.

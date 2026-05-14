@@ -76,7 +76,17 @@ Extended routing examples covering common, ambiguous, and edge-case scenarios. E
 >
 > **Match:** Multi-concern changeset. Decompose before reviewing.
 >
-> **Chain:** `load-context` → `code-review` (controller + model) → `review-migration` (migration) → `create-service-object` (service pattern check) → `security-check` (if auth/input handling touched)
+> **Chain:** `load-context` → `security-check` (if auth/input handling touched) → `review-migration` (migration) → `review-architecture` (service/model boundary) → `code-review` (controller + model + tests)
+>
+> **Next skill: skills/context/load-context**
+
+### 7b. Multi-Concern Engine PR
+
+> **User:** "Review this engine PR. It changes the install generator, adds copied migrations, mounts routes in the dummy app, and touches authorization."
+>
+> **Match:** Multi-concern engine changeset. Do not collapse this to a single code review.
+>
+> **Chain:** `load-context` → `security-check` (authorization) → `review-migration` (copied migrations) → `review-engine` (host integration, dummy app, namespace) → `code-review` (final branch diff)
 >
 > **Next skill: skills/context/load-context**
 

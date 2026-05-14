@@ -24,6 +24,7 @@ metadata:
 | Gemspec bounds | `add_dependency` and `required_ruby_version` match tested versions |
 | Feature detection | Use `respond_to?`, `defined?`, or adapter seams instead of `Rails.version` |
 | Test matrix | CI runs against each claimed Rails/Ruby combination |
+| Optional integrations | Jobs, mailers, assets, routes, and generators are checked on each version |
 
 ## HARD-GATE
 
@@ -42,7 +43,7 @@ DO NOT ship compatibility changes without verifying both autoloading and full su
 2. Run `bundle exec rake zeitwerk:check` — file paths must match constant names exactly.
 3. Check initializer behavior across boot and reload — use `config.to_prepare` for reload-sensitive hooks.
 4. Verify gemspec dependency bounds match tested versions: `spec.add_dependency "rails", ">= 7.0", "< 8.0"` — bounds must match what CI actually tests.
-5. Check optional integrations (jobs, mailers, assets, routes) per version.
+5. Check optional integrations (jobs, mailers, assets, routes, install generators, dummy-app mounts) per version. State the check even if an integration is absent.
 6. CI matrix must run against each claimed Rails/Ruby combination:
 ```yaml
 strategy:
@@ -87,7 +88,8 @@ end
 2. List the most likely breakpoints.
 3. Make compatibility changes in isolated, testable seams.
 4. Recommend matrix coverage if it does not exist.
-5. Language — Must be in English unless explicitly requested otherwise.
+5. Include an **Optional integration matrix** with rows for jobs, mailers, assets, routes, generators, and dummy app mount. For each row, state `present/absent`, the file path checked, and the per-version verification command.
+6. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

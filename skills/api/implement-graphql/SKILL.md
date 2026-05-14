@@ -21,6 +21,7 @@ Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a 
 | Specs | Use `AppSchema.execute` in `spec/graphql/`; do not dispatch HTTP controller specs |
 | Resolver shape | Dedicated resolver/mutation classes, not inline complex field blocks |
 | Associations | Use GraphQL dataloader sources, never direct `object.association` loads |
+| Collection resolvers | Return a scoped relation and prime dataloader records that exposed fields will load |
 | Collections | Use `Types::*Type.connection_type` for paginated collections |
 | Security | Field-level authorization plus depth/complexity limits |
 
@@ -37,6 +38,7 @@ Before shipping a resolver/mutation slice, ALL of the following must be true:
 - Error Handling: mutations return `{ result, errors }` with rescue blocks — no unhandled exceptions.
 - Documentation: `description:` on every field in every type.
 - Resolver Structure: dedicated resolver classes, not inline field blocks.
+- Dataloader Priming: collection resolvers prime records for association fields that will call dataloader.
 ```
 
 ## Core Process
@@ -44,7 +46,7 @@ Before shipping a resolver/mutation slice, ALL of the following must be true:
 1. **SPEC:** Write failing spec (happy path + auth + validation error case) — see [TESTING.md](./TESTING.md).
 2. **TYPE:** Define arguments and return types. Use `connection_type` for pagination shapes. Do not leak internal model names.
 3. **IMPLEMENT:** Create resolver/mutation class delegating to a service object. Use dedicated classes instead of inline field blocks.
-4. **N+1 CHECK:** Ensure dataloader is used on every association load. Use `bullet` and `db-query-matchers` in specs.
+4. **N+1 CHECK:** Ensure dataloader is used on every association load. For list resolvers, prime the dataloader with the records returned by the relation before fields resolve associated objects. Use `bullet` and `db-query-matchers` in specs.
    ```ruby
    # ✅ batches loads across all records
    def buyer
@@ -83,7 +85,8 @@ When implementing GraphQL, your output MUST include:
 4. **Authorization and limits** — Field-level guards, Pundit checks, introspection/depth/complexity decisions.
 5. **Error shape** — Mutation `{ result, errors }` or equivalent structured failure behavior.
 6. **Verification** — `spec/graphql/` commands covering happy path, auth, validation errors, N+1 counts, and schema limits.
-7. **Language** — Must be in English unless explicitly requested otherwise.
+7. **Hard-gate checklist** — Explicitly verify all hard-gate items, including resolver structure, type conventions, and dataloader priming.
+8. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

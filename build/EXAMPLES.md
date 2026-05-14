@@ -19,10 +19,12 @@ end
 Expected proof shape:
 
 ```markdown
+- Read phase: task brief, `spec/models/user_spec.rb`, `app/models/user.rb`, related role/policy specs if present
 - First command: `bundle exec rspec spec/models/user_spec.rb`
 - Expected RED: `NoMethodError: undefined method 'admin?'`
 - GREEN rerun: `bundle exec rspec spec/models/user_spec.rb` passes
 - Broader check: `bundle exec rspec`
+- SearchService regression checklist: Not applicable — task does not touch SearchService
 ```
 
 ## Bug Fix Loop

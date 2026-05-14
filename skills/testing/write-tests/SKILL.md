@@ -103,7 +103,7 @@ it 'creates the record' do; end
 | External HTTP | `WebMock` / `VCR`; never allow real network in CI |
 | DB state bleed | Transactional fixtures or `DatabaseCleaner`; never share `let!` across contexts |
 | Race conditions | Explicit Capybara waits; avoid `sleep` |
-| Imprecise assertions | `change.from().to()` over final state; exact values over `be_truthy`/`be_falsey`; never assert `updated_at` |
+| Imprecise assertions | `change.from().to()` over final state; exact values over `be_truthy`/`be_falsey`; see rule 16 for `updated_at` |
 
 ## Extended Resources (Progressive Disclosure)
 

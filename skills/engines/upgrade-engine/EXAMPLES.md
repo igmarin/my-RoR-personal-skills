@@ -57,3 +57,16 @@ steps:
 ```
 
 Each claimed version in `add_dependency` must have a matching row in the matrix.
+
+## Optional Integration Matrix
+
+Include this in upgrade reports so compatibility checks cover more than gemspec and Zeitwerk.
+
+| Integration | Status | File path checked | Per-version verification |
+|-------------|--------|-------------------|--------------------------|
+| Jobs | present/absent | `app/jobs/my_engine/...` | `bundle exec rspec spec/jobs` across matrix |
+| Mailers | present/absent | `app/mailers/my_engine/...` | `bundle exec rspec spec/mailers` across matrix |
+| Assets | present/absent | `app/assets`, `app/javascript`, `app/views` | dummy app boot + asset build/importmap check |
+| Routes | present/absent | `config/routes.rb`, `spec/dummy/config/routes.rb` | request specs against mounted dummy app |
+| Install generators | present/absent | `lib/generators/my_engine/install_generator.rb` | run generator twice in dummy app; verify idempotence |
+| Dummy app mount | present/absent | `spec/dummy/config/routes.rb` | `bundle exec rspec spec/requests` on each Rails version |

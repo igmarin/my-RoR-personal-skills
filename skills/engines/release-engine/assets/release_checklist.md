@@ -11,7 +11,7 @@ This checklist ensures a safe, repeatable release for a Rails engine gem.
 - [ ] Ensure migrations are namespaced and reversible; run migration smoke tests in dummy app
 - [ ] Build gem locally: `bundle exec rake build` and test `gem install` into a sandboxed project
 - [ ] Validate gemspec: required metadata, licenses, files included/excluded
-- [ ] Inspect packaged files before publishing: `gem contents <engine>-<version>.gem` or `tar tf <engine>-<version>.gem`
+- [ ] Inspect packaged files before publishing: `tar tf <engine>-<version>.gem` for local `.gem` archives (`gem contents` is for installed gems by name)
 - [ ] Dry-run push before publishing: `gem push --dry-run <engine>-<version>.gem`
 - [ ] Run any packaging CI checks (e.g., RubyGems credentials, signing)
 - [ ] Draft GitHub release notes from `assets/release_notes_template.md`

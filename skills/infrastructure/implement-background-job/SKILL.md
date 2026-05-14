@@ -33,7 +33,7 @@ Use this skill when the task is to add, configure, or review background jobs in 
 ```text
 EVERY job MUST have its test written and validated BEFORE implementation.
   1. Write the job spec (idempotency, retry, error handling)
-  2. Run the spec — verify it fails because the job does not exist yet
+  2. Run the spec — verify the job does not yet exhibit the intended behavior
   3. ONLY THEN write the job class
 
 EVERY job that performs a side effect (charge, email, API call) MUST have
@@ -117,7 +117,7 @@ end
 
 1. **Scope** — State that the task adds, configures, or reviews a Rails background job.
 2. **Backend decision** — Name the Rails version/scale assumption and selected backend: Solid Queue for Rails 8 defaults, Sidekiq + Redis for high throughput or Rails 7-style setups.
-3. **Spec-first proof** — Show the job spec written first, covering idempotency, retry, and error handling; include the command run and confirm it fails because the job does not exist yet before implementation.
+3. **Spec-first proof** — Show the job spec written first, covering idempotency, retry, and error handling; include the command run and confirm it fails because the job does not yet exhibit the intended behavior before implementation.
 4. **Thin perform contract** — Show that `perform` receives IDs, loads the record from the passed ID, checks idempotency/permanent no-op conditions before side effects, and delegates work to a service object.
 5. **Retry/discard config** — Use explicit `retry_on` with an `attempts:` limit and `discard_on` for at least one permanent error.
 6. **Double-run verification** — Include a check that enqueueing or performing the job twice makes the second run a no-op.

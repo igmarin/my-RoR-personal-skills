@@ -58,7 +58,15 @@ module Resolvers
       type Types::OrderType.connection_type, null: false
 
       def resolve
-        context[:current_user].orders.order(created_at: :desc)
+        scope = context[:current_user].orders.order(created_at: :desc)
+
+        # Prime associated records that OrderType fields may resolve through dataloader.
+        # The buyer field below calls dataloader.load(object.user_id), so prime User.
+        user_ids = scope.reselect(:user_id).distinct.pluck(:user_id)
+        users = User.where(id: user_ids).index_by(&:id)
+        dataloader.with(Sources::RecordById, User).merge(users)
+
+        scope
       end
     end
   end
@@ -240,6 +248,7 @@ end
 | `description` on every type and field | `description "..."` on class + each `field` | Sections 1, 3, 4 |
 | Paginated list uses `connection_type` | `Types::OrderType.connection_type` | Section 1 |
 | Association loads use dataloader | `dataloader.with(Sources::RecordById, Model).load(fk)` | Section 2 |
+| Collection resolver primes dataloader | `dataloader.with(...).merge({ id => record })` before returning the scope | Section 2 |
 | `Sources::RecordById` defined | `class Sources::RecordById < GraphQL::Dataloader::Source` | Section 2 |
 | Sensitive fields have field-level guard | `guard -> (_obj, _args, ctx) { ctx[:current_user]&.role? }` | Section 3 |
 | Mutation returns `errors` array | `field :errors, [String], null: false` | Section 4 |

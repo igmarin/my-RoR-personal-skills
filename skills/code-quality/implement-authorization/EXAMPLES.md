@@ -203,7 +203,8 @@ ability.authorize! :update, post
 
 ```bash
 # HTTP check
-curl -i -X PATCH /posts/admin-only
+curl -i -X PATCH http://localhost:3000/posts/admin-only \
+  -H "Authorization: Bearer <token_for_user_without_permission>"
 # Expected: 403 Forbidden, or the app's configured denied-access response
 ```
 

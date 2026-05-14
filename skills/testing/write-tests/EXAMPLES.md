@@ -2,6 +2,19 @@
 
 Executable spec patterns for common Rails scenarios.
 
+## TDD Proof Header
+
+Use this proof shape before showing specs for new behavior:
+
+```markdown
+- Selected boundary: request/model/service spec because [reason]
+- Spec file: `spec/...`
+- First command: `bundle exec rspec spec/...`
+- Expected RED: `[NameError / NoMethodError / RoutingError / failing expectation]` because the behavior is missing, not because setup is broken
+- GREEN rerun: `bundle exec rspec spec/...`
+- Broader check: `bundle exec rspec`
+```
+
 ## Request Spec (endpoint behavior)
 
 ```ruby
@@ -10,9 +23,13 @@ RSpec.describe 'POST /orders', type: :request do
   let(:product) { create(:product, stock: 5) }
 
   context 'when product is in stock' do
-    it 'creates the order and returns 201' do
+    it 'returns 201' do
       post orders_path, params: { order: { product_id: product.id, quantity: 1 } }, as: :json
       expect(response).to have_http_status(:created)
+    end
+
+    it 'returns the order id' do
+      post orders_path, params: { order: { product_id: product.id, quantity: 1 } }, as: :json
       expect(response.parsed_body['id']).to be_present
     end
   end
@@ -22,8 +39,11 @@ RSpec.describe 'POST /orders', type: :request do
 
     it 'returns 422 with an error message' do
       post orders_path, params: { order: { product_id: product.id, quantity: 1 } }, as: :json
-      expect(response).to have_http_status(:unprocessable_entity)
-      expect(response.parsed_body['error']).to eq('Out of stock')
+
+      aggregate_failures do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.parsed_body['error']).to eq('Out of stock')
+      end
     end
   end
 end
@@ -47,8 +67,11 @@ RSpec.describe Order, type: :model do
   describe 'validations' do
     it 'is invalid without a product' do
       order = build(:order, product: nil)
-      expect(order).not_to be_valid
-      expect(order.errors[:product]).to include("can't be blank")
+
+      aggregate_failures do
+        expect(order).not_to be_valid
+        expect(order.errors[:product]).to include("can't be blank")
+      end
     end
   end
 end
@@ -65,16 +88,20 @@ RSpec.describe Orders::CreateOrder do
     subject(:result) { described_class.call(user: user, product_id: product.id, quantity: 1) }
 
     it 'returns success with the new order' do
-      expect(result[:success]).to be true
-      expect(result[:response][:order]).to be_persisted
+      aggregate_failures do
+        expect(result[:success]).to be true
+        expect(result[:response][:order]).to be_persisted
+      end
     end
 
     context 'when out of stock' do
       before { product.update!(stock: 0) }
 
-      it 'returns failure with an error message' do
-        expect(result[:success]).to be false
-        expect(result[:response][:error][:message]).to eq('Out of stock')
+    it 'returns failure with an error message' do
+        aggregate_failures do
+          expect(result[:success]).to be false
+          expect(result[:response][:error][:message]).to eq('Out of stock')
+        end
       end
     end
   end
@@ -98,9 +125,11 @@ RSpec.describe Campaigns::DeliveryService do
     context 'when delivery succeeds' do
       before { allow(SendgridClient).to receive(:deliver).and_return({ success: true }) }
 
-      it 'returns delivered count' do
-        expect(result[:success]).to be true
-        expect(result[:response][:delivered_count]).to eq(1)
+    it 'returns delivered count' do
+        aggregate_failures do
+          expect(result[:success]).to be true
+          expect(result[:response][:delivered_count]).to eq(1)
+        end
       end
     end
 

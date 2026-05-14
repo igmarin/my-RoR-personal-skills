@@ -46,6 +46,7 @@ Call `AppSchema.execute` directly in GraphQL specs. Do not route these checks th
 - **Authorization** — unauthenticated (no context user), unauthorized (wrong role)
 - **Validation errors** — mutation returns errors array, not exception
 - **N+1** — query count matchers for resolvers with associations
+- **Dataloader priming** — list resolvers prime returned records before type fields load associated records through dataloader
 - **Depth/complexity limits** — exceeding limits returns an error, not data
 
 ## Spec Paths

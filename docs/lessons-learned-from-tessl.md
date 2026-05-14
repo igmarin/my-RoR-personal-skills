@@ -138,16 +138,16 @@ The pattern is the same across all six:
 
 > Make the behavior visible in the artifact the evaluator sees.
 
-The batch result was instructive. The full run improved the current aggregate from `89.2%` to `91.0%`, but still did not beat the main baseline of `92.0%`.
+The batch result was instructive. The full run `019e22af-bf68-7197-a02f-0d627a234104` from `2026-05-13T18:53:23Z` improved the current aggregate from `89.2%` in run `019e22a8-7ec4-74cd-bd04-39e68602bbd6` from `2026-05-13T18:45:28Z` to `91.0%`, but still did not beat the main baseline of `92.0%` from run `019e21a7-c4ef-768d-846e-e2138334102b`.
 
 The batch was not uniformly good:
 
-- `respond-to-review` reached `100.0`.
-- `review-architecture` reached `92.0`.
-- `implement-background-job` reached `100.0`.
-- `create-service-object` fell to `72.0`.
-- `integrate-api-client` landed at `90.0`, below its stronger main result.
-- `plan-tickets` fell to `65.0`.
+- `respond-to-review` reached `100.0` in run `019e22af-bf68-7197-a02f-0d627a234104` from `2026-05-13T18:53:23Z`.
+- `review-architecture` reached `92.0` in run `019e22af-bf68-7197-a02f-0d627a234104` from `2026-05-13T18:53:23Z`.
+- `implement-background-job` reached `100.0` in run `019e22af-bf68-7197-a02f-0d627a234104` from `2026-05-13T18:53:23Z`.
+- `create-service-object` fell to `72.0` in run `019e22af-bf68-7197-a02f-0d627a234104` from `2026-05-13T18:53:23Z`.
+- `integrate-api-client` landed at `90.0` in run `019e22af-bf68-7197-a02f-0d627a234104` from `2026-05-13T18:53:23Z`, below its stronger main result.
+- `plan-tickets` fell to `65.0` in run `019e22af-bf68-7197-a02f-0d627a234104` from `2026-05-13T18:53:23Z`.
 
 That produced a useful rule:
 
@@ -159,7 +159,7 @@ This is why batch size matters. Six changes were enough to move the aggregate, b
 
 After reverting the weaker half, the next necessary step is another eval against the exact retained worktree. That avoids pretending the previous batch score represents a state that no longer exists. In eval-driven skill work, every keep/revert decision creates a new artifact that deserves its own measurement.
 
-The follow-up kept-half run proved why this matters. After reverting the weaker half, `create-service-object` recovered to `95.0` and `integrate-api-client` recovered to `96.0`, but the aggregate landed at `90.0`, lower than the full batch's `91.0`.
+The follow-up kept-half run `019e22b9-bc3f-77be-9bf8-f91717b2beb9` from `2026-05-13T19:04:18Z` proved why this matters. After reverting the weaker half, `create-service-object` recovered to `95.0`, `integrate-api-client` recovered to `96.0`, and `plan-tickets` recovered to `72.0`, but the aggregate landed at `90.0`, lower than the full batch run's `91.0`.
 
 That does not mean the revert was wrong. It means aggregate movement is not only the sum of the edited skills. Some scenarios vary, and some persistent low-tail skills dominate the final average.
 
@@ -432,6 +432,34 @@ In this pass, the support files do three jobs:
 
 This is a different optimization layer from wording tweaks. It tests whether a small resource architecture can stabilize correlated behavior across several skills.
 
+The six-skill run was a partial win. The aggregate moved from `92.5%` to `92.7%`, still below the protected `93.0%`, but the targeted cluster showed which parts of the hypothesis worked:
+
+- `implement-authorization` moved from `76.7` to `96.7`.
+- `implement-calculator-pattern` moved from `78.0` to `93.0`.
+- `plan-tests` stayed at `100.0`.
+- `test-service` stayed at `100.0`.
+
+Two targets did not improve:
+
+- `build` fell from `76.3` to `69.3`, but the reasoning again showed the SearchService-specific rubric mismatch dominating a `User#admin?` task.
+- `write-tests` fell from `89.3` to `84.7`, with real remaining gaps: missing expected RED failure message and missing `aggregate_failures` around related assertions.
+
+That means the structural idea is useful, but not automatically enough. Companion files can stabilize a pattern only when the examples inside them also model the exact evidence the grader and a human reviewer need.
+
+The lesson:
+
+> Progressive disclosure helps when support files encode the same proof contract as the entrypoint.
+
+For the next pass, `write-tests` is the cleanest follow-up. `build` should wait until the SearchService scenario/rubric mismatch is addressed directly.
+
+The immediate correction is intentionally narrow. Rather than adding another skill cluster, the next patch updates only `write-tests` support examples so they model the exact proof the scorer missed:
+
+- a visible TDD proof header with focused command and expected RED failure class/message
+- `aggregate_failures` around related expectations
+- split request examples where one behavior should not be hidden behind another
+
+That keeps attribution clean. If this improves `write-tests`, the next cluster can be chosen from new evidence instead of from a mixed batch.
+
 ## Optimization Journey
 
 The workflow evolved over multiple iterations.
@@ -619,6 +647,35 @@ The rule I use now:
 - If a batch drops, bisect the batch before guessing.
 
 This is why eval optimization should be treated like performance work. One measurement is useful, but trends and controlled comparisons matter more.
+
+## New Best Runs Can Change the Next Batch
+
+The `write-tests` follow-up is a good example of why attribution matters.
+
+The previous six-skill experiment had mixed results, but its clearest repair was narrow: make `write-tests` examples show a visible TDD proof header, exact expected RED failure messages, and `aggregate_failures` around related assertions. That was not a broad rewrite. It was a correction to the evidence shape the model was producing.
+
+The next Sonnet 3x run landed at `93.2%`, a new best over the prior `93.0%` protected run. More importantly, `write-tests` moved from `84.7` to `95.3`.
+
+That changed the next decision.
+
+Before the result, a review/evidence cluster looked attractive because review-related skills often correlate. After the result, the lowest scores were different: `triage-bug`, `generate-tasks`, `build`, `skill-router`, `upgrade-engine`, and `implement-graphql`.
+
+The lesson:
+
+> The next batch should be selected from the latest measured state, not from the previous hypothesis.
+
+This is especially important in probabilistic evals. The strategy can be right at the time it is proposed and still become stale after the next run. The plan needs to be iterative enough to absorb that.
+
+The resulting six-skill batch focused on rubric alignment without turning the skills into eval-only artifacts:
+
+- `triage-bug` now anchors its primary example on the `POST /orders` out-of-stock request boundary and the `Orders::CreateOrder` fix path.
+- `generate-tasks` now requires exact paths inside every TDD quadruplet sub-task, not only in the Relevant Files section.
+- `build` now makes the Read phase inspectable and includes an explicit SearchService checklist section, marked not applicable when the task is not search-related.
+- `skill-router` now decomposes multi-concern PRs into ordered review chains instead of routing everything to `code-review`.
+- `upgrade-engine` now asks for an optional integration matrix across jobs, mailers, assets, routes, generators, and dummy app mounts.
+- `implement-graphql` now makes dataloader priming visible for collection resolvers, not only dataloader use in type fields.
+
+This is not just score chasing. Each change makes the skill produce a better professional artifact.
 
 ## Rubrics Reveal Missing Product Decisions
 

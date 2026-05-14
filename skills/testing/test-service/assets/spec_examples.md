@@ -12,6 +12,7 @@ Before implementation, report the proof:
 
 1) Unit test for service object
 
+```ruby
 # frozen_string_literal: true
 RSpec.describe Users::SyncService, type: :unit do
   describe '.call' do
@@ -28,6 +29,7 @@ RSpec.describe Users::SyncService, type: :unit do
     end
   end
 end
+```
 
 2) Error handling spec
 

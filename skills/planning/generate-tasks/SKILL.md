@@ -45,7 +45,7 @@ DO NOT combine the TDD quadruplet sub-tasks into a single task. They must be bro
    - If the user asks for strategy, sequencing, phases, or approach, produce a phased plan first.
    - If the user asks for implementation tasks, checklist, or exact steps, produce the detailed mode.
 4. **Draft Relevant Files Section:** List all files to create or modify including tests, docs, and diagrams. Infer test command (`bundle exec rspec` or `npm test`).
-5. **Draft Tasks:** Construct the sequential task list incorporating at least 3 TDD task groups (write spec, run fail, implement, run pass), followed by YARD, documentation updates, and a code review gate.
+5. **Draft Tasks:** Construct the sequential task list incorporating at least 3 TDD task groups (write spec, run fail, implement, run pass), followed by YARD, documentation updates, and a code review gate. Each sub-task line must name the exact `spec/...` or `app/...` path, not just the parent task.
 6. **Save:** Save the output as `tasks-[feature-name].md` in `/tasks/`. Use the same `[feature-name]` as the PRD if one was provided.
 7. **Verify Checkpoint:** Re-read the saved file and confirm all required elements from the Output Style are present.
 
@@ -63,15 +63,17 @@ When asked to generate tasks, your output MUST include:
 1. **Task 0.0** — "Create feature branch" with checkout command (e.g., `git checkout -b feature/name`).
 2. **Relevant Files section** — All files to create/modify with concrete paths, listed before Tasks.
 3. **TDD quadruplets** — At least 3 implementation groups with four sub-tasks each:
-   - `X.Xa` Write spec at `spec/...`
-   - `X.Xb` Run spec — verify it **fails**
-   - `X.Xc` Implement at `app/...`
-   - `X.Xd` Run spec — verify it **passes**
+   - `X.Xa` Write spec for `[behavior]` at `spec/...`
+   - `X.Xb` Run `bundle exec rspec spec/...` — verify it **fails**
+   - `X.Xc` Implement `[behavior]` at `app/...`
+   - `X.Xd` Run `bundle exec rspec spec/...` — verify it **passes**
+   Every `a/b/c/d` line must include the concrete file path or command path for that slice.
 4. **YARD parent task** — Add YARD docs to new/changed public API; name each file.
 5. **Documentation update task** — Update README, diagrams (Mermaid, ADRs), domain docs; list concrete paths.
 6. **Code review gate** — Self-review; fix blockers before opening PR.
 7. **Save location** — State that it was saved to `tasks-[feature-name].md` in `/tasks/` folder.
-8. **Language** — Must be in English unless explicitly requested otherwise.
+8. **Guidance used** — Briefly state whether `HEURISTICS.md` and/or `TASK_TEMPLATES.md` were used, and why.
+9. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

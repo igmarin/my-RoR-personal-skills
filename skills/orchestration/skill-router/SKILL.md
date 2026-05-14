@@ -64,6 +64,20 @@ When multiple skills could apply: TDD → Planning → Domain discovery → Proc
 
 **Fallback for ambiguous requests:** If no clear skill match, default to `load-context` to load codebase context, then re-evaluate based on findings.
 
+### Multi-Concern PR Review Chains
+
+When a request names several changed areas, do not route only to `code-review`. Decompose the changeset and name the ordered chain:
+
+| Changed area | Add this review skill |
+|--------------|-----------------------|
+| Controllers, models, services, jobs, or tests | `code-review` |
+| Migrations or schema changes | `review-migration` |
+| Authorization, authentication, secrets, uploads, redirects, or input handling | `security-check` |
+| Engine namespace, dummy app, install generator, host integration, or release surface | `review-engine` |
+| Boundary, orchestration, callback, or abstraction concerns | `review-architecture` |
+
+Start with `load-context` for an existing PR or unfamiliar codebase, then run the specialized review skills in risk order: security/data-loss first, migrations second, architecture/engine boundaries third, general code review last.
+
 ### Typical Workflows
 
 Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: skills/workflows/tdd-workflow"*, before proceeding with that skill's instructions.
@@ -74,6 +88,8 @@ skills/context/load-context → **[CHECK: context loaded]** → skills/workflows
 **Feature (standard):** skills/context/load-context → **[CHECK: context loaded]** → skills/planning/create-prd → **[CHECK: PRD approved]** → skills/planning/generate-tasks → **[CHECK: tasks complete]** → skills/workflows/tdd-workflow
 
 **Bug fix:** skills/testing/triage-bug → **[GATE: reproduction spec fails]** → skills/workflows/tdd-workflow → fix → verify passes
+
+**Multi-concern PR review:** skills/context/load-context → skills/code-quality/security-check *(if auth/input/secrets touched)* → skills/infrastructure/review-migration *(if schema touched)* → skills/engines/review-engine *(if engine touched)* → skills/code-quality/review-architecture *(if boundaries touched)* → skills/code-quality/code-review
 
 ## Extended Resources
 

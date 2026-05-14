@@ -2,7 +2,7 @@
 
 Use this template when the task is to choose the first failing spec.
 
-```markdown
+````markdown
 ## Behavior
 
 [User-visible behavior or invariant to prove]
@@ -41,4 +41,4 @@ end
 | Is the boundary correct? | Yes/No |
 | Are the most important edge cases represented or listed for follow-up? | Yes/No |
 | Is the failure reason correct? | Yes/No |
-```
+````

@@ -76,10 +76,11 @@ Load release assets conditionally and say which one informed the output:
 4. Upgrade notes — host app steps (config, migrations, dependencies).
 5. Gemspec verification — metadata, files, and dependency ranges confirmed.
 6. Test suite status — pass/fail result of `bundle exec rspec`.
-7. Asset usage — state which release asset was loaded, or explicitly say no optional asset was needed.
+7. Asset usage — state which release asset was loaded, or explicitly say no optional asset was needed. Mention `assets/release_checklist.md`, `assets/release_notes_template.md`, and `assets/examples.md` by name when deciding whether each was used.
 8. GitHub release notes — include a concise release-notes draft with summary, highlights, upgrade notes, and verification status.
 9. Release blockers — open issues, or explicitly "No blockers".
-10. Language — Must be in English unless explicitly requested otherwise.
+10. Dry-run command — include the exact command `gem build *.gemspec && gem push --dry-run *.gem` and a contents verification command such as `tar tf pkg/*.gem` or `gem contents`.
+11. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

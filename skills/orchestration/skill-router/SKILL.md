@@ -37,6 +37,7 @@ ALWAYS identify the matching skill and name it explicitly as the next skill to u
 Triages and decomposes any Ruby on Rails request into ordered sub-tasks, then delegates to the correct specialized skill. Enforces the Tests Gate Implementation mandate across all code-producing work.
 
 When a task arrives, identify the matching skill from the tables below and **name it explicitly as the next skill to use** before responding further.
+In an active response, make the routing statement the first substantive line before analysis or implementation. For reference artifacts, show at least one concrete active-response example using `Next skill: ...`.
 
 ### Core Skills (Most Common)
 
@@ -105,12 +106,13 @@ skills/context/load-context → **[CHECK: context loaded]** → skills/workflows
 
 ## Output Style
 
-1. **Routing statement**: Clearly state the next skill being invoked.
+1. **Routing statement**: Clearly state the next skill being invoked as the first substantive line of the response.
    ```text
-   This is a feature request with unclear scope. I'll start by loading the codebase context, then create a PRD.
-
    Next skill: skills/context/load-context
+
+   This is a feature request with unclear scope. I'll start by loading the codebase context, then create a PRD.
    ```
+   Put this routing statement before any deeper analysis. If multiple skills apply, first state the priority rule, then list the ordered chain.
 2. **Language**: Generated artifacts (YARD docs, Postman collections, READMEs) and output MUST be in English unless explicitly requested otherwise.
 
 ## Integration

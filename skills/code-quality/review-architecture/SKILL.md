@@ -30,6 +30,9 @@ metadata:
 DO NOT list findings that do not survive code-level confirmation.
 Verify each High-severity finding by reading the actual code to confirm it is a real structural problem.
 If verification reveals it is not genuine, downgrade it or remove it entirely.
+If no source files were provided or read, do not invent High findings. Return an
+architecture review checklist or assumptions block instead, and say code-level
+confirmation is required before reporting findings.
 ```
 
 ## Core Process
@@ -111,7 +114,7 @@ Fix: keep only `AuditLog.create!` in the callback; move Slack/mailer to an expli
    **Risk:** Controller runs a 5-step domain workflow. Partial state on failure; untestable without HTTP.
    **Improvement:** Extract to Orders::CreateOrder.call(params). Controller handles response/redirect only.
    ```
-5. **High-severity verification**: For every High finding, state the concrete code-level evidence read. If code-level confirmation is missing, downgrade or remove the finding.
+5. **High-severity verification**: For every High finding, state the concrete code-level evidence read. If code-level confirmation is missing, downgrade or remove the finding. Never use representative file paths or fabricated line numbers as evidence.
 6. **Completeness**: For each finding include severity, affected files or area, why the structure is risky, and the smallest credible improvement. Then list open assumptions and recommended next refactor steps.
 7. **Language**: Must be in English unless explicitly requested otherwise.
 

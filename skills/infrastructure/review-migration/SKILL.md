@@ -51,6 +51,7 @@ DO NOT drop columns before all code references are removed.
 - Backfill in batches outside a long transaction when volume is high.
 - Deploy code that tolerates both old and new schemas during transitions.
 - Use multi-step rollouts for renames, type changes, and unique constraints.
+- For every step, state the expected lock or table-rewrite risk explicitly; if negligible, say why.
 If the project uses `strong_migrations`, follow it. If it does not, apply the same safety rules manually.
 
 **Common Mistakes**
@@ -83,14 +84,24 @@ change_column_null :orders, :status, false
 change_column_default :orders, :status, from: nil, to: 'pending'
 ```
 
+**Type change rollout pattern:**
+```text
+1. Add the new typed column as nullable.
+2. Dual-write old and new columns from application code.
+3. Backfill in batches outside the migration transaction.
+4. Read from the new column after parity checks pass.
+5. Stop writing the old column, then drop it in a later deploy.
+```
+
 - [PATTERNS.md](./PATTERNS.md)
 
 ## Output Style
 
 1. List risks first.
-2. For each risk include: Migration step, likely failure mode or lock risk, safer rollout, rollback or forward-fix note.
+2. For each risk include: Migration step, likely failure mode, explicit lock/table-rewrite risk, safer rollout, rollback or forward-fix note.
 3. Ensure backwards compatibility steps are included.
-4. Language — Must be in English unless explicitly requested otherwise.
+4. Always include explicit phased patterns for column renames, type changes, and unique constraints. If one does not apply, mark it `Not applicable` and explain why.
+5. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

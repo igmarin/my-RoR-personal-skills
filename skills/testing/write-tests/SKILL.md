@@ -128,12 +128,13 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 9. **`subject(:result) { ... }`** for service / PORO specs invoking `.call`.
 10. **`travel_to` / `freeze_time`** for any time-dependent assertion — never set past `Time.now` or stub `Time.current` directly.
 11. **External boundaries mocked** at the class-method level (`allow(SomeClient).to receive(:method)`); ActiveRecord finders are NEVER mocked.
-12. **TDD failure proof** — State the smallest spec type chosen, the command run, and the expected failing message proving missing behavior rather than broken setup.
+12. **TDD failure proof** — State the smallest spec type chosen, the command run, and the observed or expected failing message proving missing behavior rather than broken setup.
 13. **Verification proof** — After implementation, state the passing focused rerun, the full relevant spec file, and the broader suite command when available.
-14. **Minimal factories** — Use only explicit attributes needed for the behavior; prefer traits for optional states and `build` / `build_stubbed` unless persistence is required.
-15. **Multiple related assertions** — Use `aggregate_failures` when one behavior needs several related expectations.
+14. **Minimal factories** — Use only explicit attributes needed for the behavior; prefer traits for optional states and `build` / `build_stubbed` unless persistence is required. Do not hide business-meaningful defaults in the factory.
+15. **Multiple related assertions** — Use `aggregate_failures` when one behavior needs several related expectations, and show it in the produced spec when relevant.
 16. **Timestamp assertions** — Never assert `updated_at` unless time is frozen and the timestamp change is the behavior under test.
-17. **Language** — Must be in English unless explicitly requested otherwise.
+17. **Self-audit** — Before returning, include a short checklist confirming no `it`/`specify` descriptions contain "and", every `let!` is justified, shared examples are actually included, and factories use the least-persistent setup that proves the behavior.
+18. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

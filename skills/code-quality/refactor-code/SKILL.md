@@ -45,6 +45,8 @@ If a public interface changes, document the compatibility shim and its removal c
 
 ### 1. Define stable behavior
 Identify the exact inputs and outputs of the logic being refactored. Keep public interfaces stable until callers are migrated. Prefer adapters, facades, or wrappers for transitional states.
+Make the adapter/facade/wrapper decision first-class in the plan: either name the transitional shim and its removal condition, or state why no shim is needed because the public interface remains unchanged.
+Include this as its own output subsection titled **Adapter/facade/wrapper decision** before listing refactoring steps.
 
 ### 2. Add characterization tests
 **Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code.
@@ -65,7 +67,7 @@ RSpec.describe "Orders#create current behavior", type: :request do
   end
 end
 ```
-Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code.
+Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code. If it fails, stop and fix the characterization test or current behavior mismatch before refactoring.
 
 ### 3. Choose the smallest safe slice
 Good first moves include: renaming unclear methods, isolating duplicated logic behind a shared object, or wrapping external integrations before moving call sites. Add narrow seams before deleting old code paths.
@@ -99,6 +101,7 @@ Run verification after every refactoring step:
 5. ONLY claim completion with evidence from the last test run — report the last line of output (e.g. "5 examples, 0 failures").
 
 Report test run output at EACH step — not only at the end. At least two separate evidence entries at different sequence points are required.
+Copy verification evidence as terminal-output blocks from the run. Do not express verification as `# =>` comments or expected-output annotations.
 **Forbidden claims:** "Should work now", "Looks correct", "I'm confident" — run the tests and report evidence instead.
 
 ## Extended Resources (Progressive Disclosure)
@@ -121,7 +124,7 @@ When asked to refactor, your output MUST include:
 4. **Adhere to SRP** — Ensure the extracted object has a Single Responsibility.
 5. **YARD Documentation** — Include YARD tags for all public methods in the extracted object.
 6. **Compatibility shims (required when public interface changes)** — For each shim, state: (a) what the shim is, (b) why it exists, (c) the specific condition under which it will be removed. If no public interface changes, state "No compatibility shims needed — public interface unchanged."
-7. **Verification evidence** — Follow Verification Protocol after each step — report test evidence mid-sequence AND at the end.
+7. **Verification evidence** — Follow Verification Protocol after each step — report actual command output evidence mid-sequence AND at the end as terminal-output blocks. Do not substitute expected output, required output, planned output, `# =>` annotations, or "must show 0 failures" language for observed evidence copied from the actual run.
 8. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration

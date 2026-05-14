@@ -89,9 +89,10 @@ end
 ## Output Style
 
 1. Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.
-2. Then include open assumptions and recommended next changes.
-3. If no meaningful findings exist, explicitly state so and mention residual testing gaps.
-4. Language — Must be in English unless explicitly requested otherwise.
+2. Include verification commands used, including `grep -r "isolate_namespace" lib/` for namespace isolation and a migration audit such as `grep -R "remove_column\|drop_table\|change_column" db/migrate lib/**/db/migrate` for destructive or irreversible changes.
+3. Then include open assumptions and recommended next changes.
+4. If no meaningful findings exist, explicitly state so and mention residual testing gaps.
+5. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

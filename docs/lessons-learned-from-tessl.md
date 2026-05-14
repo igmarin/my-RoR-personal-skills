@@ -689,6 +689,88 @@ The answer was yes. Run `019e2433-e7fa-7179-9303-96f47dae26ad`, labeled `post-bu
 
 This changed the optimization posture again. The lesson is not only that six-skill batches can work. It is that removing a stale skill can be a higher-quality move than optimizing it. Once the public surface is cleaner and the score is this strong, the next risk is overfitting. Broad edits should stop; future changes should be tiny, evidence-led, and measured against this `96.4%` protected baseline.
 
+## Chasing 98% Changes the Risk Profile
+
+The next optimization goal was more ambitious: see whether the cleaned 41-skill surface could move from the protected `96.4%` baseline toward `98%` or even `100%`.
+
+That changed the work in two ways.
+
+First, broad editing became too risky. At `96%+`, most skills are already doing the right thing. A batch that touches many skills is more likely to disturb a good path than to uncover a large hidden win. The safer strategy is to read the low-tail scoring reasons and patch only the smallest visible contract that explains a miss.
+
+Second, partial results became tempting but dangerous. Run `019e26e7-d68d-729d-9613-c2523301fe62`, labeled `v6-evidence-contract-low-tail-3x`, reached `98.05%` with `39/41` scenarios scored. That looked like the target had been reached. But two scenarios were still outstanding, and the low tail still contained real misses. A partial run can be useful evidence, but it should not be treated as a release decision.
+
+The important lesson:
+
+> Do not celebrate a 98% partial as a 98% result.
+
+The completed follow-up run `019e26ec-d7e8-70d4-a921-10fff675164f`, labeled `v6-sub90-anchor-pass-3x`, had all `41/41` scenario scores and landed at `97.12%` after refresh. Tessl still reported the run as `pending` in JSON, but every scenario had a score, so it was enough to compare the measured table.
+
+That result beat the protected `96.4%` baseline, but it did not reach `98%`.
+
+The patch still proved useful. It targeted three scorer-supported anchors:
+
+- `review-migration` moved from `88.0` in the partial evidence-contract run to `100.0`.
+- `review-engine` moved from `91.0` to `99.0`.
+- `refactor-code` moved from `88.0` to `89.0`.
+
+The changes were not broad rewrites. They were narrow evidence-contract fixes:
+
+- `review-migration` now requires explicit lock and table-rewrite notes, plus a type-change rollout pattern.
+- `review-engine` now asks for concrete namespace and destructive-migration audit commands.
+- `refactor-code` now makes the adapter/facade/wrapper choice first-class and forbids replacing observed output with planned or required output.
+
+This is the pattern that keeps working:
+
+> At high scores, optimize the receipt, not the essay.
+
+The remaining sub-90 results were `apply-stack-conventions` at `74.5`, `create-service-object` at `89.0`, and `refactor-code` at `89.0`. Those are not reasons to reopen broad editing. They are reasons to inspect the scorer reasons and decide whether each miss is stable, generalizable, and worth a tiny patch.
+
+There is another important moderation lesson from this pass. A tile can fail moderation for reasons unrelated to eval quality. Before continuing score work, the active skill and documentation surface was scanned for risky wording. The useful fixes were simple: replace legacy allow/deny terminology with neutral wording, and shorten the expanded KISS phrase to "Keep It Simple." No remaining targeted offensive/profane/violent terms were found in the active scanned surface.
+
+That belongs in the optimization process because release quality is not only eval score. A tile has to be publishable, understandable, and unlikely to trip avoidable moderation checks.
+
+The updated process rule:
+
+> After every Tessl eval that affects a decision, update the plan and the lessons article before moving on.
+
+Otherwise the team keeps the score but loses the reason. The run ID, the changed low tail, and the keep/revert decision are part of the artifact. Without that trail, later work starts guessing again.
+
+There is also a Tessl-specific caveat that affects how to interpret `SKILL.md` edits.
+
+Individual skill scoring appears to care heavily about the entrypoint file, but Tessl still uses the full skill folder as context when constructing or running the eval. That means a `SKILL.md`-only change can produce a large score movement, while old companion examples can still pull the model back toward weaker behavior.
+
+The practical rule:
+
+> Optimize `SKILL.md` first, then check only the support files that can contradict the new contract.
+
+This avoids two bad extremes. The first bad extreme is assuming `SKILL.md` is the entire world and leaving stale examples in place. The second is rewriting every support file after every score dip. The right middle path is to inspect companion files when the scorer points at a behavior shaped by examples, commands, templates, or output formats.
+
+The next two runs reinforced the same point about samples versus verdicts.
+
+Run `019e26f4-d556-772c-a3e9-6b7a4595bc4d`, labeled `v6-observed-output-response-contract-3x`, landed at `96.32%` with all `41/41` scenario scores present. It was not a new best, but it produced useful target evidence:
+
+- `create-service-object` moved from `89.0` to `100.0` after the response contract explicitly forbade raw ActiveRecord objects in `response`.
+- `apply-stack-conventions` moved only from `74.5` to `77.0`; the model still used hypothetical RED/GREEN comments instead of observed terminal output.
+- `refactor-code` slipped from `89.0` to `88.0`; the same expected-output problem remained.
+- `generate-tasks` fell to `52.0`, even though it was not the edited target in that pass.
+
+The next patch followed the full-folder-context caveat. `generate-tasks` had a companion template, and the failure was that the model summarized the task file instead of emitting the actual checklist. The patch updated both the entrypoint and `TASK_TEMPLATES.md`. The same pass tightened `apply-stack-conventions` and `refactor-code` to require copied terminal-output blocks instead of comment annotations.
+
+Run `019e26f9-ade8-71b5-b5f8-a6213acc7e49`, labeled `v6-full-checklist-terminal-proof-3x`, was not a new best either; it sat at `95.3%` with `40/41` scenario scores available. But it confirmed the target direction:
+
+- `generate-tasks` recovered from `52.0` to `100.0`.
+- `create-service-object` stayed at `100.0`.
+- `refactor-code` moved from `88.0` to `94.0`.
+- `apply-stack-conventions` stayed weak at `77.0`.
+
+The aggregate was pulled down by unrelated movement: `create-prd` at `40.0` and `setup-environment` at `80.0`.
+
+The lesson is uncomfortable but useful:
+
+> A patch can be locally correct and still fail as a release-candidate sample.
+
+At this score range, the right question is not only "did the average go up?" It is also "did the intended target move, and did unrelated variance dominate the run?" If the target moved and unrelated skills collapsed, the patch may still be worth keeping, but it needs another sample before becoming release evidence.
+
 ## Rubrics Reveal Missing Product Decisions
 
 The eval criteria often expose ambiguity in the skill itself.

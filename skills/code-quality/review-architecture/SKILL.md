@@ -105,14 +105,12 @@ Fix: keep only `AuditLog.create!` in the callback; move Slack/mailer to an expli
 2. **Order**: Begin with entry points. Then write findings ordered by review area.
 3. **Boundary-first lens**: Prioritize where domain logic lives, whether flow is explicit, and whether abstractions clarify the design or only move code around.
 4. **Finding Structure**: Every finding uses a four-field structure:
-
    ```text
    **Severity:** High
    **Affected file:** app/controllers/orders_controller.rb — OrdersController#create
    **Risk:** Controller runs a 5-step domain workflow. Partial state on failure; untestable without HTTP.
    **Improvement:** Extract to Orders::CreateOrder.call(params). Controller handles response/redirect only.
    ```
-
 5. **High-severity verification**: For every High finding, state the concrete code-level evidence read. If code-level confirmation is missing, downgrade or remove the finding.
 6. **Completeness**: For each finding include severity, affected files or area, why the structure is risky, and the smallest credible improvement. Then list open assumptions and recommended next refactor steps.
 7. **Language**: Must be in English unless explicitly requested otherwise.

@@ -18,7 +18,7 @@ Expected triage output (JSON):
   "minimal_fix_plan": [
     "Add the failing request spec before touching implementation",
     "Update Orders::CreateOrder to guard stock before creating the order",
-    "Return a handled 'Out of stock' error and no persisted order",
+    "Return { success: false, error: 'Out of stock' } and no persisted order",
     "Run the focused request spec, related order specs, and the full suite"
   ]
 }

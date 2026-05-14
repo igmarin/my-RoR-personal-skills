@@ -679,6 +679,16 @@ The resulting six-skill batch focused on rubric alignment without turning the sk
 
 This is not just score chasing. Each change makes the skill produce a better professional artifact.
 
+The measured result was strong: run `019e2423-6260-723c-b243-c4cdc8567b6e` completed at `94.9%`. The directly targeted skills moved sharply: `triage-bug` reached `92.3`, `generate-tasks` reached `95.0`, `skill-router` reached `91.0`, `upgrade-engine` reached `100.0`, and `implement-graphql` reached `98.7`.
+
+But the run also exposed a maintenance decision. The temporary root-level `build` skill improved to `90.3`, yet it was still a bridge artifact from an older repository layout. Retiring it was cleaner than continuing to optimize a skill that was no longer part of the intended public taxonomy.
+
+The next meaningful measurement was therefore not "can the 42-skill surface go higher?" It was "does the cleaned 41-skill surface preserve the useful gains?"
+
+The answer was yes. Run `019e2433-e7fa-7179-9303-96f47dae26ad`, labeled `post-build-retirement-41-skills-3x`, completed at `96.4%` across the cleaned 41-skill surface. That result matters because it removed an obsolete scenario and still preserved the useful rubric-alignment gains: `triage-bug` reached `100.0`, `generate-tasks` reached `98.0`, `upgrade-engine` reached `100.0`, and `implement-graphql` reached `98.7`.
+
+This changed the optimization posture again. The lesson is not only that six-skill batches can work. It is that removing a stale skill can be a higher-quality move than optimizing it. Once the public surface is cleaner and the score is this strong, the next risk is overfitting. Broad edits should stop; future changes should be tiny, evidence-led, and measured against this `96.4%` protected baseline.
+
 ## Rubrics Reveal Missing Product Decisions
 
 The eval criteria often expose ambiguity in the skill itself.

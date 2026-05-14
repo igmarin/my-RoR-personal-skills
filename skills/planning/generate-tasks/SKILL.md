@@ -41,6 +41,7 @@ DO NOT combine the TDD quadruplet sub-tasks into a single task. They must be bro
 
 1. **Analyze:** Extract Functional Requirements and Goals from the PRD, or use the feature description. Identify scope and main work areas.
 2. **Detect work type:** Rails monolith, engine, API-only, background job, or external integration — affects spec paths and follow-up skills.
+   - For new endpoint or controller behavior, order the first TDD group around the request spec before model/service persistence slices.
 3. **Determine Output Mode:** 
    - If the user asks for strategy, sequencing, phases, or approach, produce a phased plan first.
    - If the user asks for implementation tasks, checklist, or exact steps, produce the detailed mode.
@@ -74,6 +75,8 @@ When asked to generate tasks, your output MUST include:
 7. **Save location** — State that it was saved to `tasks-[feature-name].md` in `/tasks/` folder.
 8. **Guidance used** — Briefly state whether `HEURISTICS.md` and/or `TASK_TEMPLATES.md` were used, and why.
 9. **Language** — Must be in English unless explicitly requested otherwise.
+
+For endpoint work, the first TDD quadruplet should normally be the request spec slice. Add model or service slices after the request boundary is established unless the PRD is explicitly persistence-only.
 
 ## Integration
 

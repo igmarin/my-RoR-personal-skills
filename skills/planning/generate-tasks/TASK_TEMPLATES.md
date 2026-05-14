@@ -27,26 +27,31 @@ Check off each task when done: change `- [ ]` to `- [x]`. Update the file after 
 
 - [ ] 0.0 Create feature branch
   - [ ] 0.1 Create and checkout branch (e.g. `git checkout -b feature/[feature-name]`)
-- [ ] 1.0 [Parent task title]
-  - [ ] 1.1a Write spec for [behavior] (`spec/path/to/spec.rb`)
-  - [ ] 1.1b Run `bundle exec rspec spec/path/to/spec.rb` — verify it fails (feature does not exist yet)
-  - [ ] 1.1c Implement [behavior] to pass spec (`app/path/to/file.rb`)
-  - [ ] 1.1d Run `bundle exec rspec spec/path/to/spec.rb` — verify it passes and no other tests break
+- [ ] 1.0 Request boundary for endpoint/controller behavior *(use this first for new endpoints; replace with the correct first boundary for non-endpoint work)*
+  - [ ] 1.1a Write request spec for [user-visible behavior] (`spec/requests/path/to/spec.rb`)
+  - [ ] 1.1b Run `bundle exec rspec spec/requests/path/to/spec.rb` — verify it fails (feature does not exist yet)
+  - [ ] 1.1c Implement the smallest controller/route/service wiring needed for [behavior] (`config/routes.rb`, `app/controllers/path/to/controller.rb`, `app/services/path/to/service.rb`)
+  - [ ] 1.1d Run `bundle exec rspec spec/requests/path/to/spec.rb` — verify it passes
 - [ ] 2.0 [Parent task title]
   - [ ] 2.1a Write spec for [behavior] (`spec/path/to/spec.rb`)
   - [ ] 2.1b Run `bundle exec rspec spec/path/to/spec.rb` — verify it fails (feature does not exist yet)
   - [ ] 2.1c Implement [behavior] to pass spec (`app/path/to/file.rb`)
-  - [ ] 2.1d Run `bundle exec rspec spec/path/to/spec.rb` — verify it passes
-- [ ] 3.0 YARD and public API documentation
-  - [ ] 3.1 Add YARD to new/changed public classes and methods (`app/path/to/file.rb`) — English only
-  - [ ] 3.2 Run `yard doc` or project doc task if applicable — fix warnings on touched files
-- [ ] 4.0 Update documentation artifacts
-  - [ ] 4.1 Update README or module README if behavior or setup changed (`README.md` or `docs/...`)
-  - [ ] 4.2 Update diagrams or architecture docs if flows or boundaries changed (`docs/...`, ADRs)
-- [ ] 5.0 Code review before merge
-  - [ ] 5.1 Self-review full diff (code-review checklist); fix Critical/Suggestion items
-  - [ ] 5.2 Security/architecture pass if scope warrants (security-check, review-architecture)
-  - [ ] 5.3 Open PR or request review — attach summary of doc/YARD updates
+  - [ ] 2.1d Run `bundle exec rspec spec/path/to/spec.rb` — verify it passes and no other tests break
+- [ ] 3.0 [Parent task title]
+  - [ ] 3.1a Write spec for [behavior] (`spec/path/to/spec.rb`)
+  - [ ] 3.1b Run `bundle exec rspec spec/path/to/spec.rb` — verify it fails (feature does not exist yet)
+  - [ ] 3.1c Implement [behavior] to pass spec (`app/path/to/file.rb`)
+  - [ ] 3.1d Run `bundle exec rspec spec/path/to/spec.rb` — verify it passes
+- [ ] 4.0 YARD and public API documentation
+  - [ ] 4.1 Add YARD to new/changed public classes and methods (`app/path/to/file.rb`) — English only
+  - [ ] 4.2 Run `yard doc` or project doc task if applicable — fix warnings on touched files
+- [ ] 5.0 Update documentation artifacts
+  - [ ] 5.1 Update README or module README if behavior or setup changed (`README.md` or `docs/...`)
+  - [ ] 5.2 Update diagrams or architecture docs if flows or boundaries changed (`docs/...`, ADRs)
+- [ ] 6.0 Code review before merge
+  - [ ] 6.1 Self-review full diff (code-review checklist); fix Critical/Suggestion items
+  - [ ] 6.2 Security/architecture pass if scope warrants (security-check, review-architecture)
+  - [ ] 6.3 Open PR or request review — attach summary of doc/YARD updates
 
 ## Guidance Used
 

@@ -52,7 +52,7 @@ When the report is an order creation failure visible through `POST /orders`, def
 - **First failing spec:** `spec/requests/orders/create_spec.rb`
 - **Command:** `bundle exec rspec spec/requests/orders/create_spec.rb`
 - **Expected RED:** response is not `422` with `"Out of stock"` yet, or the service raises instead of returning a handled error.
-- **Smallest fix path:** `Orders::CreateOrder` handles the stock guard and returns an `"Out of stock"` error without creating the order.
+- **Smallest fix path:** `Orders::CreateOrder` handles the stock guard and returns `{ success: false, error: "Out of stock" }` without creating the order.
 
 Do not replace this with a pricing, model-only, or controller-only example unless the bug report points there.
 

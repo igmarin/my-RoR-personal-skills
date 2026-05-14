@@ -55,7 +55,13 @@ When a task arrives, identify the matching skill from the tables below and **nam
 
 ### Skill Priority
 
-When multiple skills could apply: TDD → Planning → Domain discovery → Process (refactor-code) → Domain implementation (rails-\*, ruby-\*). Use plan-tests when the first failing spec is not obvious.
+When multiple skills could apply, state this priority rule explicitly in the answer before routing:
+
+```text
+Priority: TDD → Planning → Domain discovery → Process/refactor → Domain implementation.
+```
+
+Use `plan-tests` when the first failing spec is not obvious.
 
 **Key disambiguation signals:**
 - `review-architecture` vs `code-review`: use architecture-review when the question is about system shape, service boundaries, or design patterns; use code-review when the subject is a concrete PR, file, or changeset.

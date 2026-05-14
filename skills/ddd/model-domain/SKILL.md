@@ -30,6 +30,9 @@ metadata:
 DO NOT introduce repositories, aggregates, or domain events just to sound "DDD".
 DO NOT fight Rails defaults when a normal model or service expresses the domain clearly.
 ALWAYS start from domain invariants, ownership, and lifecycle before choosing a pattern.
+MODELING OUTPUT IS NOT IMPLEMENTATION: do not include Ruby implementation code,
+migrations, or service bodies unless the user explicitly asks to move from
+modeling into build work.
 ```
 
 ## Core Process
@@ -71,7 +74,8 @@ When using this skill, return for each domain concept:
 3. **Suggested Rails home** — file path
 4. **Invariant or ownership reason** — name the rule that must stay true and the exact object or boundary responsible for enforcing it.
 5. **Patterns to avoid** — what not to reach for
-6. **Test handoff** — For every concept that may become code, name the `plan-tests` or `write-tests` follow-up before implementation; do not include implementation code unless the user explicitly moves from modeling into build work.
+6. **Test handoff** — For every concept that may become code, name both required follow-ups before implementation: `plan-tests` to choose the first failing spec, then `write-tests` to write and verify it. Do not include implementation code unless the user explicitly moves from modeling into build work.
+   State the first behavior to test, the likely spec type, and that implementation is deferred.
 7. **Next skill to chain** — `generate-tasks`, `plan-tests`, etc.
 8. **Language** — Must be in English unless explicitly requested otherwise.
 

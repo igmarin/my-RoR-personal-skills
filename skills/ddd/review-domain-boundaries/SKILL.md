@@ -66,6 +66,9 @@ rg 'Fleet::[A-Z]' app/services/billing/
 
 # Find callbacks that touch foreign concepts
 rg 'after_(create|update|save).*Job|after_(create|update|save).*Mailer' app/models/
+
+# Find invoice-generation triggers leaking out of Billing
+rg 'invoice|Invoice|Billing' app/models app/services app/jobs
 ```
 
 ### Common Pitfalls
@@ -86,6 +89,7 @@ rg 'after_(create|update|save).*Job|after_(create|update|save).*Mailer' app/mode
    - **Leaked term / ownership conflict**
    - **Why the current boundary is risky**
    - **Smallest credible improvement**
+   Include the ownership direction when it matters. For Fleet/Billing invoice leakage, use this exact direction: `Fleet::Vehicle` must not own the invoice generation trigger; Billing owns when invoices are created. Fleet should emit or expose the vehicle business fact, not directly decide invoice creation.
 2. **Structure**: Write findings first, then list open questions and recommended next skills.
 3. **Language**: Must be in English unless explicitly requested otherwise.
 

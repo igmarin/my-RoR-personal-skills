@@ -77,7 +77,7 @@ graph TB
 - **YAGNI** — You Ain't Gonna Need It
 - **PORO** — Plain Old Ruby Objects for complex logic
 - **CoC** — Convention over Configuration
-- **KISS** — Keep It Simple, Stupid
+- **KISS** — Keep It Simple
 
 ---
 

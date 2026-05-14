@@ -91,7 +91,7 @@ When implementing Hotwire, your output MUST include:
 2. **Chosen primitive** — Name Turbo Frame, Turbo Stream, Stimulus, or a combination, and why.
 3. **DOM contract** — List frame IDs, stream targets, Stimulus controller names, targets, values, and actions.
 4. **Server contract** — State controller response formats, broadcast triggers, partial names, and ActionCable channel/log checks when used.
-5. **Verification** — Include no-JavaScript degraded-mode check plus system/browser checks for frame, stream, or Stimulus behavior.
+5. **Verification** — Include no-JavaScript degraded-mode check plus system/browser checks for frame, stream, or Stimulus behavior. The degraded-mode checklist must explicitly include: `rails test:system` with the Capybara `:rack_test` driver, or the equivalent driver name in the test configuration, forms submit, links navigate, and data persists after reload.
 6. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration

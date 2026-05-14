@@ -98,7 +98,7 @@ Group findings by severity. See [assets/examples.md](./assets/examples.md) for J
    **Actions required:** <one line per severity level found — e.g. Critical -> block merge>
    ```
 2. **Tagging**: Tag (Area) from Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Cover **≥4** distinct areas if applicable.
-3. **Generate-tasks handoff** — If the review produces follow-up task planning, include a `Code review before merge` task in the `generate-tasks` output or explicitly state that no task handoff was requested.
+3. **Generate-tasks handoff** — Always include a `Code review before merge` task or task-list line, even when the user did not ask for a full task breakdown. If a full task list is out of scope, add a short handoff note with that exact task title.
 4. **Re-review trigger** — State whether Critical fixes, more than three Suggestion fixes, architecture changes, query changes, auth changes, or migration changes require a re-diff before PR approval.
 5. **Language**: Must be in English unless explicitly requested otherwise.
 

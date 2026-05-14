@@ -43,6 +43,7 @@ Task lists from generate-tasks MUST include explicit YARD sub-tasks after implem
 3. **Add Method-Level Docs:** For every public method, add `@param` (and `@option` for hash arguments), `@return`, and `@raise` tags.
 4. **Document Exceptions:** List each exception separately with its own `@raise` tag, even if the method rescues it internally.
 5. **Verify Completeness:** Run `yard stats --list-undoc` and `yard doc` to ensure no public surfaces are missing documentation.
+6. **Task-list handoff:** When producing or reviewing tasks from `generate-tasks`, add explicit YARD sub-tasks after implementation for every new or changed public Ruby API.
 
 ## Tag Examples
 
@@ -85,7 +86,8 @@ When writing or reviewing YARD docs, your output MUST satisfy:
 3. **Discrete `@raise` Tags** — One `@raise` tag per exception class. Do not group multiple exceptions into a single tag.
 4. **Explicit Return Structures** — For `.call` methods or complex returns, the `@return` tag MUST specify the exact structure (e.g., `[Hash] Result with :success and :response keys`).
 5. **Tagged Notes Context** — Inline tagged notes (`TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:`) must carry actionable context (owner, ticket, next step). No naked tags.
-6. **Language** — Must be in English unless explicitly requested otherwise.
+6. **Generate-tasks handoff** — If the output is a task list, include YARD documentation sub-tasks after implementation tasks. If the output is only a documentation artifact, state that future `generate-tasks` output must include those YARD sub-tasks.
+7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

@@ -88,7 +88,7 @@ end
 ### 4. Build the Builder Layer
 
 - Convert untrusted response to allowlisted structured data.
-- Create `initialize(attributes:)`, and whitelist output via `.slice(*@attributes)`.
+- Create `initialize(attributes:)`, and allowlist output via `.slice(*@attributes)`.
 - Write `spec/services/.../builder_spec.rb` using `instance_double` for unit tests and hash factories for API responses. Run the exact command and verify RED.
 - ONLY THEN implement data shaping.
 - Rerun the focused builder spec and confirm GREEN before starting `entity.rb`.
@@ -134,7 +134,7 @@ When implementing an API client, your output MUST include:
 3. **Green checkpoint per layer** — After each layer implementation, show the focused rerun and confirm GREEN before moving to the next layer.
 4. **Configuration contract** — Required env/config keys, defaults, timeout, retries, and missing-configuration error.
 5. **Error behavior** — HTTP failure, timeout, malformed JSON, auth failure, and sanitized error messages.
-6. **Data shaping** — Builder attribute whitelist, dropped prompt-injection fields, FactoryBot hash factories, and domain entity constants.
+6. **Data shaping** — Builder attribute allowlist, dropped prompt-injection fields, FactoryBot hash factories, and domain entity constants.
 7. **Domain entity method coverage** — Show specs for `.fetcher`, `.find`, and `.search`.
 8. **Verification** — Unit specs for each layer and any integration-contract checks run without live API dependence.
 9. **Language** — Must be in English unless explicitly requested otherwise.

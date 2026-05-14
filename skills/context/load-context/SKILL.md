@@ -51,6 +51,7 @@ Load minimum context before any code, spec, or PRD in an existing Rails codebase
    - `config/routes.rb` — routes that border the change
    - `Gemfile.lock` — confirm Rails version + domain gems (sidekiq, pundit, rspec, rails-i18n, graphql, etc.)
 3. **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. Use grep to find: `grep -r "class.*Controller" app/controllers`, `grep -r "class.*Service" app/services`, etc.
+   Include the grep command used for each neighbor search in the final Context Summary notes.
 4. **Detect drift:** If there is an existing spec for the area, compare what it asserts vs what the code currently does. Drift is a red flag — document it.
 5. **Post the Context Summary:** Before any proposal, output the template below (see Output Style).
 6. **Handle ambiguity:** If steps 2–4 surface a conflict (two patterns used, specs contradict code, missing requirement, unclear boundary), produce a Confusion Block:
@@ -96,9 +97,10 @@ Do not pick silently.
    - Confusion: <NONE, or a one-line pointer to the Confusion Block below>
    ```
 2. **One neighbor per layer**: Do not dump 5 similar files; pick the closest match and name it.
-3. **Facts only, no code**: The summary lists facts about the codebase, not proposed implementation.
-4. **Hand-off line**: End the reply with: `Context loaded. Next: <skill-name> — <one-line reason>.`
-5. **Language**: Must be in English unless explicitly requested otherwise.
+3. **Discovery commands**: List the grep/rg commands used to find the nearest controller, service, spec, factory, or sibling file. If a command was not run, state why.
+4. **Facts only, no code**: The summary lists facts about the codebase, not proposed implementation.
+5. **Hand-off line**: End the reply with: `Context loaded. Next: <skill-name> — <one-line reason>.`
+6. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

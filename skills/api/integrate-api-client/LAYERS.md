@@ -12,7 +12,7 @@ All values from external API responses are **untrusted** — sanitize before any
 |------|------|
 | Error messages | Use only `response.code` and `e.class` — never `response.body` or `e.message` |
 | Hash keys | `String(col['name'])` in Builder — coerce type, never trust API-supplied key names |
-| Field whitelist | `.slice(*ATTRIBUTES)` in Builder — drop every field not in ATTRIBUTES |
+| Field allowlist | `.slice(*ATTRIBUTES)` in Builder — drop every field not in ATTRIBUTES |
 | SQL | `ActiveRecord::Base.sanitize_sql` — never string-interpolate API values |
 | Downstream logic | Allowlist-filter all API fields through `ATTRIBUTES` before passing anywhere |
 
@@ -133,7 +133,7 @@ end
 
 ## 4. Builder (`builder.rb`)
 
-Transforms raw API response into attribute-filtered hashes. Always whitelist with `ATTRIBUTES`.
+Transforms raw API response into attribute-filtered hashes. Always allowlist with `ATTRIBUTES`.
 
 ```ruby
 module ServiceName

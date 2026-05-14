@@ -25,8 +25,7 @@ Check off each task when done: change `- [ ]` to `- [x]`. Update the file after 
 
 ## Tasks
 
-- [ ] 0.0 Create feature branch
-  - [ ] 0.1 Create and checkout branch (e.g. `git checkout -b feature/[feature-name]`)
+- [ ] 0.0 Create feature branch: `git checkout -b feature/[feature-name]`
 - [ ] 1.0 Request boundary for endpoint/controller behavior *(use this first for new endpoints; replace with the correct first boundary for non-endpoint work)*
   - [ ] 1.1a Write request spec for [user-visible behavior] (`spec/requests/path/to/spec.rb`)
   - [ ] 1.1b Run `bundle exec rspec spec/requests/path/to/spec.rb` — verify it fails (feature does not exist yet)

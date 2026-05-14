@@ -17,7 +17,7 @@ metadata:
 | Area | Key Checks |
 |------|------------|
 | Auth | Permissions on every sensitive action |
-| Params | No `permit!`, whitelist only safe attributes |
+| Params | No `permit!`, allowlist only safe attributes |
 | Queries | Parameterized — no string interpolation in SQL |
 | Redirects | Constrained to relative paths or allowlist |
 | Output | No `html_safe`/`raw` on user content |
@@ -35,6 +35,9 @@ BEFORE returning your security review, verify:
      "Authentication & Authorization: no issues found" line BEFORE any other
      finding category
 ```
+If no source files were provided or read, do not fabricate affected files,
+line numbers, or exploitable findings. Return a security review checklist and
+mark findings as requiring code-level verification.
 
 ## Core Process
 
@@ -98,7 +101,7 @@ redirect_to(SAFE_PATHS.include?(params[:return_to]) ? params[:return_to] : root_
 # Bad: privilege escalation risk
 params.require(:user).permit!
 
-# Good: explicit whitelist — never include role, admin, or privilege fields
+# Good: explicit allowlist — never include role, admin, or privilege fields
 params.require(:user).permit(:name, :email)
 ```
 
@@ -118,13 +121,17 @@ Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user cont
    ## Parameter Handling & Mass Assignment
    ## Query Safety (SQL / NoSQL / shell injection)
    ## Output Encoding & Redirects
+   ## File Handling, Network Calls & Background Job Inputs
    ## Secrets, Logging & Operational Exposure
    ```
+
+   Do not omit a category because the prompt is brief. If a category has no reproduced issue, write "No issues found" and state what evidence would be needed to verify it.
 2. **Finding details**: Each finding carries:
    - **Severity:** **High** or **Medium** (not "Critical")
    - **Attack path:** input → reach → impact
    - **Affected file:** path + line, e.g. `app/controllers/documents_controller.rb:42`
    - **Mitigation:** smallest credible fix
+   Do not use representative file paths as if they were confirmed evidence.
 3. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration

@@ -93,7 +93,9 @@ end
 1. Use idiomatic Rails seeding patterns.
 2. Structure factories clearly.
 3. Ensure no credentials are leaked.
-4. Language — Must be in English unless explicitly requested otherwise.
+4. Include a production-secret note: use `rails credentials:edit` for production secrets and never commit them in seeds, factories, examples, logs, or docs.
+5. Include verification commands: `rails db:seed`, a second idempotency run, and a `rails console` spot-check.
+6. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

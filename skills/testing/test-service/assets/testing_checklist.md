@@ -1,5 +1,10 @@
 # Service Testing Checklist
 
+- Show RED/GREEN proof before implementation:
+  - focused command
+  - expected RED failure reason
+  - focused GREEN rerun
+  - broader `bundle exec rspec spec/services/` check when available
 - Write unit tests for service public API (.call)
 - Verify error shapes for failures (result[:success] == false)
 - Use doubles for network/3rd-party calls and assert they were invoked correctly

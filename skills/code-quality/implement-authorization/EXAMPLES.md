@@ -178,6 +178,35 @@ RSpec.describe 'PATCH /posts/:id', type: :request do
 end
 ```
 
+### Unauthorized Manual Verification
+
+Use this shape in the final implementation report after automated specs pass.
+
+```ruby
+# Rails console — Pundit
+user = User.find_by!(email: 'member@example.com')
+post = Post.find_by!(slug: 'admin-only')
+
+Pundit.authorize(user, post, :update?)
+# raises Pundit::NotAuthorizedError
+```
+
+```ruby
+# Rails console — CanCanCan
+user = User.find_by!(email: 'member@example.com')
+post = Post.find_by!(slug: 'admin-only')
+ability = Ability.new(user)
+
+ability.authorize! :update, post
+# raises CanCan::AccessDenied
+```
+
+```bash
+# HTTP check
+curl -i -X PATCH /posts/admin-only
+# Expected: 403 Forbidden, or the app's configured denied-access response
+```
+
 ### Shared Examples
 
 ```ruby

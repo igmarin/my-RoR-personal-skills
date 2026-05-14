@@ -2,6 +2,7 @@
 
 This checklist ensures a safe, repeatable release for a Rails engine gem.
 
+- [ ] State that `assets/release_checklist.md` was loaded for release quality gates
 - [ ] Update version constant (lib/<engine>/version.rb) and commit on a release branch
 - [ ] Update CHANGELOG.md with user-facing changes (Keep entries short and factual)
 - [ ] Run full test suite for the engine and host integration (dummy app)
@@ -10,7 +11,10 @@ This checklist ensures a safe, repeatable release for a Rails engine gem.
 - [ ] Ensure migrations are namespaced and reversible; run migration smoke tests in dummy app
 - [ ] Build gem locally: `bundle exec rake build` and test `gem install` into a sandboxed project
 - [ ] Validate gemspec: required metadata, licenses, files included/excluded
+- [ ] Inspect packaged files before publishing: `gem contents <engine>-<version>.gem` or `tar tf <engine>-<version>.gem`
+- [ ] Dry-run push before publishing: `gem push --dry-run <engine>-<version>.gem`
 - [ ] Run any packaging CI checks (e.g., RubyGems credentials, signing)
+- [ ] Draft GitHub release notes from `assets/release_notes_template.md`
 - [ ] Tag release (annotated tag) and push tag to repo
 - [ ] Publish gem to Rubygems or private registry; verify package appears
 - [ ] Update README with installation/mount instructions and initializer notes

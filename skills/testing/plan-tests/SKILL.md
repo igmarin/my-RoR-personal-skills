@@ -52,7 +52,7 @@ Use this skill when the hardest part of the task is deciding where TDD should st
 2. **Locate the boundary:** Decide where the behavior is observed first: HTTP request, service entry point, model rule, job execution, engine integration, or external adapter.
 3. **Pick the smallest strong slice:** Choose the spec type that proves the behavior without dragging in unrelated layers. Do not choose the first spec based on convenience alone — do not start with a lower-level unit if the real risk is request, job, engine, or persistence wiring.
 4. **Suggest the path:** Name the likely spec path using normal Rails conventions (for example `spec/requests/...`, `spec/services/...`, `spec/jobs/...`, `spec/models/...`).
-5. **Write one failing example:** Keep it minimal; one example is enough to open the gate.
+5. **Write one failing example:** Keep it minimal; one example is enough to open the gate. Do not include multiple opening examples unless the user explicitly asks for expanded coverage; list additional cases as follow-up coverage instead.
 6. **Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.
 7. **Hand off:** Continue with `write-tests`, `test-service`, `test-engine`, or the implementation skill that fits the slice.
 
@@ -114,12 +114,18 @@ end
 
 ## Extended Resources
 
-*None specific.*
+Load only when needed:
+
+- [assets/first_slice_template.md](assets/first_slice_template.md) — Use when producing a complete first-slice decision artifact with boundary table, one opening example, RED proof, follow-up coverage, and HARD-GATE answers.
 
 ## Output Style
 
 1. **Test Proposal**: Clearly present the proposed failing spec with the correct boundary context.
-2. **Language**: Must be in English unless explicitly requested otherwise.
+2. **Opening gate**: Include exactly one first failing `it` example for the initial TDD gate. Put happy path, edge cases, enqueue checks, and validation errors under "Follow-up coverage" unless one of them is the chosen first slice.
+3. **Failure proof**: Show the focused command and the expected RED reason before implementation.
+4. **Design checkpoint**: Answer the four HARD-GATE review questions before handing off.
+5. **Template use**: If the answer needs a full planning artifact, load `assets/first_slice_template.md` and follow its structure.
+6. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

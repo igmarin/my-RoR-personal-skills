@@ -44,6 +44,12 @@ DO NOT release without updating CHANGELOG and version file.
 
 ## Extended Resources
 
+Load release assets conditionally and say which one informed the output:
+
+- Read `assets/release_checklist.md` when producing the release verification checklist or quality gates.
+- Read `assets/release_notes_template.md` when drafting GitHub release notes, a long-form announcement, or public release copy.
+- Read `assets/examples.md` only when the user needs concrete release examples.
+
 **Changelog Guidelines**
 - Document user-visible changes, not commits; group by Added/Changed/Fixed/Deprecated.
 - For deprecations, document removal plan and replacement; keep deprecated code for at least one minor cycle.
@@ -70,8 +76,10 @@ DO NOT release without updating CHANGELOG and version file.
 4. Upgrade notes — host app steps (config, migrations, dependencies).
 5. Gemspec verification — metadata, files, and dependency ranges confirmed.
 6. Test suite status — pass/fail result of `bundle exec rspec`.
-7. Release blockers — open issues, or explicitly "No blockers".
-8. Language — Must be in English unless explicitly requested otherwise.
+7. Asset usage — state which release asset was loaded, or explicitly say no optional asset was needed.
+8. GitHub release notes — include a concise release-notes draft with summary, highlights, upgrade notes, and verification status.
+9. Release blockers — open issues, or explicitly "No blockers".
+10. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

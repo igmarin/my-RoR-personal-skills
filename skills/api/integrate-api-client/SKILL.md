@@ -117,12 +117,19 @@ Load these files only when their specific content is needed:
 When implementing an API client, your output MUST include:
 
 1. **Layer map** — Auth, Client, Fetcher, Builder, and Domain Entity files and responsibilities.
-2. **Tests-first proof** — Spec command and expected failure before each implemented layer.
-3. **Configuration contract** — Required env/config keys, defaults, timeout, retries, and missing-configuration error.
-4. **Error behavior** — HTTP failure, timeout, malformed JSON, auth failure, and sanitized error messages.
-5. **Data shaping** — Builder attribute whitelist, dropped prompt-injection fields, FactoryBot hash factories, and domain entity constants.
-6. **Verification** — Unit specs for each layer and any integration-contract checks run without live API dependence.
-7. **Language** — Must be in English unless explicitly requested otherwise.
+2. **Tests-first proof before code** — Before showing implementation for each layer, list the spec file, exact command, and expected RED failure proving the layer or method does not exist yet:
+   - Auth spec before `auth.rb`
+   - Client spec before `client.rb`
+   - Fetcher spec before `fetcher.rb`
+   - Builder spec before `builder.rb`
+   - Domain Entity spec before `entity.rb`
+3. **Green checkpoint per layer** — After each layer implementation, show the focused rerun and confirm GREEN before moving to the next layer.
+4. **Configuration contract** — Required env/config keys, defaults, timeout, retries, and missing-configuration error.
+5. **Error behavior** — HTTP failure, timeout, malformed JSON, auth failure, and sanitized error messages.
+6. **Data shaping** — Builder attribute whitelist, dropped prompt-injection fields, FactoryBot hash factories, and domain entity constants.
+7. **Domain entity method coverage** — Show specs for `.fetcher`, `.find`, and `.search`.
+8. **Verification** — Unit specs for each layer and any integration-contract checks run without live API dependence.
+9. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

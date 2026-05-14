@@ -128,11 +128,12 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 When applying stack conventions, your output MUST include:
 
 1. **Stack decisions** — State which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
-2. **Tests-first proof** — Name the spec written or updated before implementation and the command used to verify it.
-3. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
-4. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
-5. **Verification** — List Rails specs, system tests, linting, and any browser/manual checks run.
-6. **Language** — Must be in English unless explicitly requested otherwise.
+2. **Tests-first proof before implementation** — Put the tests-first section before implementation code. Name the spec written or updated for each layer, the exact command (`bundle exec rspec spec/[path]_spec.rb`), and the expected RED output proving the feature is absent rather than misconfigured.
+3. **Layer isolation** — State how model/query, service, controller, view, Stimulus, and Tailwind changes remain independently testable before wiring them together.
+4. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
+5. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
+6. **Verification** — List the focused GREEN rerun with pass confirmation, Rails specs, system tests, linting, and any browser/manual checks run.
+7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

@@ -115,11 +115,14 @@ end
 
 ## Output Style
 
-1. Use explicit `retry_on` and `discard_on` configuration.
-2. Outline how idempotency is checked for side effects.
-3. Show tests covering retries and idempotency explicitly.
-4. If the task asks for an ops artifact, record backend, retry, and idempotency decisions in `process_log.md`.
-5. Language — Must be in English unless explicitly requested otherwise.
+1. **Scope** — State that the task adds, configures, or reviews a Rails background job.
+2. **Backend decision** — Name the Rails version/scale assumption and selected backend: Solid Queue for Rails 8 defaults, Sidekiq + Redis for high throughput or Rails 7-style setups.
+3. **Spec-first proof** — Show the job spec written first, covering idempotency, retry, and error handling; include the command run and confirm it fails because the job does not exist yet before implementation.
+4. **Thin perform contract** — Show that `perform` receives IDs, loads the record from the passed ID, checks idempotency/permanent no-op conditions before side effects, and delegates work to a service object.
+5. **Retry/discard config** — Use explicit `retry_on` with an `attempts:` limit and `discard_on` for at least one permanent error.
+6. **Double-run verification** — Include a check that enqueueing or performing the job twice makes the second run a no-op.
+7. **Ops artifact** — If the task asks for operations documentation, record backend, retry, recurring schedule, and idempotency decisions in `process_log.md`.
+8. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

@@ -111,6 +111,7 @@ Load these files only when their specific content is needed:
 
 - **[EXAMPLES.md](EXAMPLES.md)** — For code examples of service specs, shared examples, and factory design.
 - **[assets/spec_templates.md](assets/spec_templates.md)** — Standard templates for different types of specs.
+- **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** — Use when the task involves new behavior and the final answer must show RED/GREEN proof.
 
 ## Output Style
 
@@ -127,7 +128,12 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 9. **`subject(:result) { ... }`** for service / PORO specs invoking `.call`.
 10. **`travel_to` / `freeze_time`** for any time-dependent assertion — never set past `Time.now` or stub `Time.current` directly.
 11. **External boundaries mocked** at the class-method level (`allow(SomeClient).to receive(:method)`); ActiveRecord finders are NEVER mocked.
-12. **Language** — Must be in English unless explicitly requested otherwise.
+12. **TDD failure proof** — State the smallest spec type chosen, the command run, and the expected failing message proving missing behavior rather than broken setup.
+13. **Verification proof** — After implementation, state the passing focused rerun, the full relevant spec file, and the broader suite command when available.
+14. **Minimal factories** — Use only explicit attributes needed for the behavior; prefer traits for optional states and `build` / `build_stubbed` unless persistence is required.
+15. **Multiple related assertions** — Use `aggregate_failures` when one behavior needs several related expectations.
+16. **Timestamp assertions** — Never assert `updated_at` unless time is frozen and the timestamp change is the behavior under test.
+17. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

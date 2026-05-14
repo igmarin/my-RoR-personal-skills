@@ -47,7 +47,12 @@ Use for a single planned implementation task; use planning/review skills for bro
     - **Manual Check**: Perform task-specific verification (e.g., `curl` an endpoint or check logs).
 4. **Final Gate**: Confirm behavior matches the task, no unrelated scope was added, and all tests pass.
 
-See [EXAMPLES.md](./EXAMPLES.md) for compact TDD and bug-fix examples.
+## Extended Resources
+
+Load these only when their specific content is needed:
+
+- [EXAMPLES.md](./EXAMPLES.md) — Use for compact TDD and bug-fix examples.
+- [assets/tdd_proof_template.md](assets/tdd_proof_template.md) — Use when the final report needs a visible RED/GREEN proof template.
 
 ## Rules
 
@@ -55,7 +60,18 @@ See [EXAMPLES.md](./EXAMPLES.md) for compact TDD and bug-fix examples.
 
 ## Output Style
 
-Report: task completed, tests-first evidence, implementation summary, verification commands/results, and residual risk.
+Report in English with these sections:
+
+1. **Scope check** — State the named planned task being executed and confirm it is not broad architecture, planning, or a large refactor. Stop and ask if the task is vague or too large.
+2. **Read phase** — List the task/spec/code inputs reviewed before changing code.
+3. **Tests-first evidence** — Show the test file updated or added, the first command run, and the expected failure before implementation. Include this canonical model example when relevant: `bundle exec rspec spec/models/user_spec.rb` fails with `NoMethodError: undefined method 'admin?'`.
+4. **Implementation summary** — Summarize only the smallest code change needed for the planned task.
+5. **Verification commands/results** — Show the passing rerun of the same focused spec, the strongest full-suite command available (for example `bundle exec rspec`), and a task-specific manual check such as `curl` or log inspection.
+6. **SearchService regression checklist** — For search-related tasks, include:
+   - `☐ **Verify Failure**: Run the spec and see it crash in `SearchService`.`
+   - `☐ **Verify Pass**: Re-run the spec.`
+   - `☐ **Regression check**: Run all search-related specs.`
+7. **Residual risk** — Call out any critical check that could not be run.
 
 ## Integration
 

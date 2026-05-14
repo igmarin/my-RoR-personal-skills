@@ -100,8 +100,14 @@ rails server                 # then visit http://localhost:3000
 
 ## Output Style
 
-1. **Clarity**: Output the runbook cleanly so the user can easily copy and paste commands.
-2. **Language**: Must be in English unless explicitly requested otherwise.
+When asked to prepare environment setup, output `answer.md` with these sections:
+
+1. **Scope** — State this is a generic Rails development-environment runbook for the user to execute locally; do not present it as repo-specific proof unless files were actually inspected.
+2. **Short plan** — Summarize the workflow in order: inspect files, copy environment variables, start services, install dependencies, prepare database, run linters, verify tests/server.
+3. **Runbook artifact** — Provide concrete copy-paste commands for each setup step, including Docker health checks, dependency install, database setup, linter run, `bundle exec rspec`, and `rails server`.
+4. **Constraints and assumptions** — State that the agent does not execute setup commands, does not read filled `.env` secrets, does not echo credentials, and that the user supplies local values and decides whether to proceed on mismatches.
+5. **Verification gates** — Include the expected final checks and recovery steps: healthy `docker compose ps`, passing `bundle exec rspec`, app reachable at `http://localhost:3000`, and `rails db:migrate RAILS_ENV=test` before retrying specs when test DB setup fails.
+6. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

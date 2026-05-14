@@ -66,3 +66,23 @@ bundle exec rspec spec/policies
 ```
 
 Ensure every role and edge case is explicitly covered.
+
+## Step 7: Manual Denied-Action Verification
+
+After automated policy and request specs pass, attempt one denied action manually and record the result.
+
+For Pundit, call `Pundit.authorize` so the denied exception is explicit:
+
+```ruby
+Pundit.authorize(unauthorized_user, protected_record, :update?)
+# raises Pundit::NotAuthorizedError
+```
+
+For CanCanCan, call `authorize!`:
+
+```ruby
+Ability.new(unauthorized_user).authorize! :update, protected_record
+# raises CanCan::AccessDenied
+```
+
+If verifying through HTTP instead, record the request and the expected `403 Forbidden` or app-specific denied-access response.

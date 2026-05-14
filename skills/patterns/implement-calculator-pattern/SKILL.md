@@ -174,9 +174,15 @@ Each spec suite must cover: inactive plan, nil plan, each named variant, and unk
 2. **Component list** — Factory, BaseService, NullService, and every concrete strategy class.
 3. **Dispatch map** — `SERVICE_MAP` keys, concrete classes, and unknown/nil fallback to NullService.
 4. **Guard behavior** — Base guard, concrete `super` call, and NullService no-op behavior.
-5. **Tests-first proof** — Spec order and commands for Factory, BaseService, NullService, and concrete services.
-6. **Variant coverage** — Named variants, inactive/nil plan, and unknown variant contexts.
-7. Language — Must be in English unless explicitly requested otherwise.
+5. **Tests-first proof** — For each component, show the spec file, exact command, and expected RED failure before implementation:
+   - Factory: missing dispatch/fallback behavior
+   - BaseService: missing `calculate`, `should_calculate?`, or `compute_result` contract
+   - NullService: missing no-op fallback behavior
+   - Concrete services: missing variant-specific strategy behavior
+6. **Green checkpoint per component** — After each component implementation, show the focused rerun and confirm it passes before moving to the next component.
+7. **Variant coverage** — Factory, NullService, and every concrete service spec must show named variants, inactive plan, nil plan, and unknown variant contexts, or explicitly explain why a context does not apply.
+8. **Full verification** — End with the calculator spec directory command and the broader service/spec suite command when available.
+9. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

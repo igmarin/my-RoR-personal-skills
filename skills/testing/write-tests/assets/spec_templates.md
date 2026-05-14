@@ -2,6 +2,8 @@
 
 Purpose: compact, copy-paste ready spec templates and common matchers for this repo.
 
+Before using any template for new behavior, pair it with `tdd_proof_checklist.md` so the final artifact shows the focused command, expected RED failure, GREEN rerun, and broader verification.
+
 1) Request spec template
 
 RSpec.describe "API::V1::Users", type: :request do

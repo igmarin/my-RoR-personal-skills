@@ -46,7 +46,7 @@ DO NOT combine the TDD quadruplet sub-tasks into a single task. They must be bro
    - If the user asks for strategy, sequencing, phases, or approach, produce a phased plan first.
    - If the user asks for implementation tasks, checklist, or exact steps, produce the detailed mode.
 4. **Draft Relevant Files Section:** List all files to create or modify including tests, docs, and diagrams. Infer test command (`bundle exec rspec` or `npm test`).
-5. **Draft Tasks:** Construct the sequential task list incorporating at least 3 TDD task groups (write spec, run fail, implement, run pass), followed by YARD, documentation updates, and a code review gate. Each sub-task line must name the exact `spec/...` or `app/...` path, not just the parent task.
+5. **Draft Tasks:** Construct the sequential task list incorporating at least 3 TDD task groups (write spec, run fail, implement, run pass), followed by YARD, documentation updates, and a code review gate. Each TDD implementation sub-task line must name the exact file path (e.g., `spec/...`, `app/...`, `config/...`); documentation and review tasks should include relevant paths where applicable.
 6. **Save:** Save the output as `tasks-[feature-name].md` in `/tasks/`. Use the same `[feature-name]` as the PRD if one was provided.
 7. **Verify Checkpoint:** Re-read the saved file and confirm all required elements from the Output Style are present.
 

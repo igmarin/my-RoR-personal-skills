@@ -2,7 +2,7 @@
 
 This checklist ensures a safe, repeatable release for a Rails engine gem.
 
-- [ ] State that `assets/release_checklist.md` was loaded for release quality gates
+- [ ] Confirm that `assets/release_checklist.md` was loaded and applied to release quality gates
 - [ ] Update version constant (lib/<engine>/version.rb) and commit on a release branch
 - [ ] Update CHANGELOG.md with user-facing changes (Keep entries short and factual)
 - [ ] Run full test suite for the engine and host integration (dummy app)

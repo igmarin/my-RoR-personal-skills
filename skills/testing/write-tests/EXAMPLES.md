@@ -23,14 +23,13 @@ RSpec.describe 'POST /orders', type: :request do
   let(:product) { create(:product, stock: 5) }
 
   context 'when product is in stock' do
-    it 'returns 201' do
+    it 'creates the order and returns its id' do
       post orders_path, params: { order: { product_id: product.id, quantity: 1 } }, as: :json
-      expect(response).to have_http_status(:created)
-    end
 
-    it 'returns the order id' do
-      post orders_path, params: { order: { product_id: product.id, quantity: 1 } }, as: :json
-      expect(response.parsed_body['id']).to be_present
+      aggregate_failures do
+        expect(response).to have_http_status(:created)
+        expect(response.parsed_body['id']).to be_present
+      end
     end
   end
 
@@ -97,7 +96,7 @@ RSpec.describe Orders::CreateOrder do
     context 'when out of stock' do
       before { product.update!(stock: 0) }
 
-    it 'returns failure with an error message' do
+      it 'returns failure with an error message' do
         aggregate_failures do
           expect(result[:success]).to be false
           expect(result[:response][:error][:message]).to eq('Out of stock')

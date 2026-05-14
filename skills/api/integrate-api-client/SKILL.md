@@ -86,6 +86,7 @@ end
 - Rerun the focused fetcher spec and confirm GREEN before starting `builder.rb`.
 
 ### 4. Build the Builder Layer
+
 - Convert untrusted response to allowlisted structured data.
 - Create `initialize(attributes:)`, and whitelist output via `.slice(*@attributes)`.
 - Write `spec/services/.../builder_spec.rb` using `instance_double` for unit tests and hash factories for API responses. Run the exact command and verify RED.
@@ -93,6 +94,7 @@ end
 - Rerun the focused builder spec and confirm GREEN before starting `entity.rb`.
 
 ### 5. Build the Domain Entity
+
 - Define `ATTRIBUTES`, `DEFAULT_QUERY`, and `SEARCH_QUERY`.
 - Implement `.fetcher` wiring `Builder` and `Fetcher`.
 - Add `.find`/`.search` with `sanitize_sql` (no string interpolation).

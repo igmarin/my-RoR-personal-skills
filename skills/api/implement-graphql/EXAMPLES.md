@@ -45,6 +45,7 @@ end
 ## 2. Resolver with Dataloader (N+1 Prevention)
 
 Never load an association directly on `object`. Use `dataloader.with(Sources::RecordById, Model).load(foreign_key)`.
+Collection resolvers may prime dataloader entries for high-traffic or frequently requested associations, or when profiling shows a clear benefit. Avoid priming by default when eager loading is simpler, when the association is rarely requested, or when priming would overfetch records for fields the query did not ask for.
 
 ```ruby
 # app/graphql/resolvers/orders/list_resolver.rb
@@ -60,8 +61,8 @@ module Resolvers
       def resolve
         scope = context[:current_user].orders.order(created_at: :desc)
 
-        # Prime associated records that OrderType fields may resolve through dataloader.
-        # The buyer field below calls dataloader.load(object.user_id), so prime User.
+        # Optionally prime frequently requested records that fields may resolve through dataloader.
+        # The buyer field below calls dataloader.load(object.user_id), so profiling may justify priming User.
         user_ids = scope.reselect(:user_id).distinct.pluck(:user_id)
         users = User.where(id: user_ids).index_by(&:id)
         dataloader.with(Sources::RecordById, User).merge(users)
@@ -248,7 +249,7 @@ end
 | `description` on every type and field | `description "..."` on class + each `field` | Sections 1, 3, 4 |
 | Paginated list uses `connection_type` | `Types::OrderType.connection_type` | Section 1 |
 | Association loads use dataloader | `dataloader.with(Sources::RecordById, Model).load(fk)` | Section 2 |
-| Collection resolver primes dataloader | `dataloader.with(...).merge({ id => record })` before returning the scope | Section 2 |
+| Collection resolver may prime dataloader for frequently accessed associations | `dataloader.with(...).merge({ id => record })` before returning the scope when profiling supports it | Section 2 |
 | `Sources::RecordById` defined | `class Sources::RecordById < GraphQL::Dataloader::Source` | Section 2 |
 | Sensitive fields have field-level guard | `guard -> (_obj, _args, ctx) { ctx[:current_user]&.role? }` | Section 3 |
 | Mutation returns `errors` array | `field :errors, [String], null: false` | Section 4 |

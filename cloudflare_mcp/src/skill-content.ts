@@ -45,8 +45,6 @@ export function buildRawUrl(rawBase: string, path: string): string {
 }
 
 export function categoryFromPath(path: string): string {
-  if (path === "build/SKILL.md") return "build";
-
   const parts = path.split("/");
   if (parts[0] === "skills" && parts[1]) return parts[1];
   if (parts[0] === "workflows") return "workflow";

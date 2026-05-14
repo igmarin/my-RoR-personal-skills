@@ -24,10 +24,6 @@ def build_fixture_tree(base_dir)
     end
   end
 
-  build_dir = base.join('build')
-  build_dir.mkpath
-  build_dir.join('SKILL.md').write("# build\nBuild skill content.")
-
   base.join('skill-template').mkpath
   base.join('skill-template').join('SKILL.md').write('# Template')
 
@@ -50,7 +46,6 @@ def build_fixture_tree(base_dir)
   write_tile_manifest(
     base,
     {
-      'build' => 'build/SKILL.md',
       'code-review' => 'skills/code-quality/code-review/SKILL.md',
       'plan-tests' => 'skills/testing/plan-tests/SKILL.md',
       'create-service-object' => 'skills/patterns/create-service-object/SKILL.md'

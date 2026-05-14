@@ -105,7 +105,7 @@ while IFS= read -r skill_file; do
   if [ -n "$fm_name" ] && [ "$fm_name" != "$skill_name" ]; then
     check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
   fi
-done < <(find build skills workflows -name "SKILL.md" -not -path "*/.tessl/*" | sort)
+done < <(find skills workflows -name "SKILL.md" -not -path "*/.tessl/*" | sort)
 
 info "Total SKILL.md files found: $skill_count"
 
@@ -115,7 +115,7 @@ section "tile.json ↔ Disk Sync"
 
 if [ -f "tile.json" ]; then
   TILE_SKILL_PATHS=$(jq -r '.skills | .[].path' tile.json 2>/dev/null | sort)
-  DISK_SKILL_PATHS=$(find build skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#^\./##' | sort)
+  DISK_SKILL_PATHS=$(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#^\./##' | sort)
 
   while IFS= read -r path; do
     if printf '%s\n' "$TILE_SKILL_PATHS" | grep -qx "$path"; then

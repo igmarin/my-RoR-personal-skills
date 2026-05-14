@@ -20,7 +20,7 @@ That matters because Tessl currently scores the publishable skills from `tile.js
 mindmap
   root((rails-agent-skills))
     Tessl-scored tile
-      42 publishable skills
+      41 publishable skills
       tile.json
       tessl-evals
       with-context evals
@@ -75,6 +75,8 @@ mindmap
 The practical implication is that "the repo is good" and "the Tessl score is good" are related but not identical claims.
 
 Tessl is currently the scorecard for the publishable skill set. The workflows still matter because they describe how skills combine in real work, but they need a different evaluation lane.
+
+Later in the optimization loop, the temporary root-level `build` skill was retired from the published tile. Historical score notes below still mention it because those runs measured the earlier 42-skill surface.
 
 ## A Concrete Example: `apply-code-conventions`
 

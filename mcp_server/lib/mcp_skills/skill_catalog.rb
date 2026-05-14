@@ -81,8 +81,6 @@ module McpSkills
     end
 
     def category_from_path(path)
-      return 'build' if path == 'build/SKILL.md'
-
       parts = path.split('/')
       return parts[1] if parts[0] == 'skills' && parts[1]
       return 'workflow' if parts[0] == 'workflows'

@@ -14,13 +14,12 @@ class ResourceDiscoveryTest < Minitest::Test
     FileUtils.remove_entry(@tmpdir)
   end
 
-  def test_discovers_nested_skills_and_root_build_skill
+  def test_discovers_nested_skills
     skill_dirs = @discovery.skill_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s }
 
     assert_includes skill_dirs, 'skills/code-quality/code-review'
     assert_includes skill_dirs, 'skills/testing/plan-tests'
     assert_includes skill_dirs, 'skills/patterns/create-service-object'
-    assert_includes skill_dirs, 'build'
   end
 
   def test_discovers_root_workflows

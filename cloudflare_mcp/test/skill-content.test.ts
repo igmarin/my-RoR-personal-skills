@@ -13,7 +13,6 @@ import {
 const manifest: TileManifest = {
   skills: {
     "code-review": { path: "skills/code-quality/code-review/SKILL.md" },
-    build: { path: "build/SKILL.md" },
   },
 };
 
@@ -36,10 +35,6 @@ describe("resolveSkillPath", () => {
     expect(resolveSkillPath(manifest, "code-review")).toBe("skills/code-quality/code-review/SKILL.md");
   });
 
-  it("supports root build skill paths", () => {
-    expect(resolveSkillPath(manifest, "build/SKILL.md")).toBe("build/SKILL.md");
-  });
-
   it("returns null for unknown skills", () => {
     expect(resolveSkillPath(manifest, "missing")).toBeNull();
   });
@@ -54,10 +49,6 @@ describe("buildRawUrl", () => {
 });
 
 describe("categoryFromPath", () => {
-  it("returns build for the root build skill", () => {
-    expect(categoryFromPath("build/SKILL.md")).toBe("build");
-  });
-
   it("returns the nested skill category", () => {
     expect(categoryFromPath("skills/code-quality/code-review/SKILL.md")).toBe("code-quality");
   });
@@ -83,21 +74,11 @@ describe("skill loading", () => {
       return Promise.resolve(new Response(skillBody));
     }
 
-    if (url.endsWith("/build/SKILL.md")) {
-      return Promise.resolve(new Response("---\nname: build\ndescription: Build the tile.\n---\n# Build\n"));
-    }
-
     return Promise.resolve(new Response("not found", { status: 404 }));
   }
 
   it("lists structured skill metadata", async () => {
     await expect(listSkills(fetcher as typeof fetch, "https://example.test")).resolves.toEqual([
-      {
-        name: "build",
-        path: "build/SKILL.md",
-        category: "build",
-        description: "Build the tile.",
-      },
       {
         name: "code-review",
         path: "skills/code-quality/code-review/SKILL.md",
@@ -113,21 +94,10 @@ describe("skill loading", () => {
         return Promise.resolve(new Response(JSON.stringify(manifest)));
       }
 
-      if (url.endsWith("/build/SKILL.md")) {
-        return Promise.resolve(new Response("---\nname: build\ndescription: Build the tile.\n---\n# Build\n"));
-      }
-
       return Promise.resolve(new Response("not found", { status: 404 }));
     }
 
-    await expect(listSkills(partialFetcher as typeof fetch, "https://example.test")).resolves.toEqual([
-      {
-        name: "build",
-        path: "build/SKILL.md",
-        category: "build",
-        description: "Build the tile.",
-      },
-    ]);
+    await expect(listSkills(partialFetcher as typeof fetch, "https://example.test")).resolves.toEqual([]);
   });
 
   it("loads structured skill content", async () => {

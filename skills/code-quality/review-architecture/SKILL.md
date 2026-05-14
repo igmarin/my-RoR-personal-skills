@@ -33,6 +33,11 @@ If verification reveals it is not genuine, downgrade it or remove it entirely.
 If no source files were provided or read, do not invent High findings. Return an
 architecture review checklist or assumptions block instead, and say code-level
 confirmation is required before reporting findings.
+SECRET SAFETY: code-level evidence must never reproduce secrets, tokens, API
+keys, passwords, private keys, session cookies, or credential values. If a file
+contains a hard-coded secret, report only the file/path, symbol name, credential
+type, and a redacted fingerprint such as `[REDACTED_API_KEY]`; do not quote the
+literal value.
 ```
 
 ## Core Process
@@ -49,7 +54,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 4. Inspect controller size and orchestration.
 5. Read every concern, helper, and presenter: does it do one coherent thing, or does it mix auditing + notifications + emails + external API calls? Mixed concerns are High or Medium severity depending on blast radius. **Treat any concern used by only one class as a candidate for deletion — inline it instead.**
 6. Check whether abstractions clarify the design or only move code around.
-7. **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count.
+7. **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count. Redact any credential-like values found during verification.
 
 ### Severity Levels
 
@@ -114,7 +119,7 @@ Fix: keep only `AuditLog.create!` in the callback; move Slack/mailer to an expli
    **Risk:** Controller runs a 5-step domain workflow. Partial state on failure; untestable without HTTP.
    **Improvement:** Extract to Orders::CreateOrder.call(params). Controller handles response/redirect only.
    ```
-5. **High-severity verification**: For every High finding, state the concrete code-level evidence read. If code-level confirmation is missing, downgrade or remove the finding. Never use representative file paths or fabricated line numbers as evidence.
+5. **High-severity verification**: For every High finding, state the concrete code-level evidence read, but redact any secret-like literal before writing the finding. Use evidence like `app/services/payments/client.rb references ENV["PAYMENT_API_KEY"] inside a model callback`; never quote the actual key, token, password, cookie, private key, or credential value. If code-level confirmation is missing, downgrade or remove the finding. Never use representative file paths or fabricated line numbers as evidence.
 6. **Completeness**: For each finding include severity, affected files or area, why the structure is risky, and the smallest credible improvement. Then list open assumptions and recommended next refactor steps.
 7. **Language**: Must be in English unless explicitly requested otherwise.
 

@@ -33,15 +33,10 @@ ALWAYS identify the leaked language or ownership conflict before proposing struc
 
 ## Core Process
 
-Use this skill when the main problem is not syntax or style, but unclear domain boundaries.
-
 **Core principle:** Fix context leakage before adding more patterns.
 
 ### When to Use
 
-- The repo appears to mix multiple business concepts under one model or service namespace.
-- Teams are debating ownership, boundaries, or where a rule belongs.
-- A Rails architecture review reveals cross-domain coupling.
 - **Next step:** Chain to `model-domain` when a context is clear enough to model tactically, or to `refactor-code` when boundaries need incremental extraction.
 
 ### Review Order
@@ -77,10 +72,6 @@ rg 'invoice|Invoice|Billing' app/models app/services app/jobs
 - Splitting into new contexts before the business language is stable enough to name them clearly.
 - Mistaking a large Rails namespace for a bounded context without checking whether it has a single, coherent set of rules and an identifiable owner.
 
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md) includes a worked leakage example (Fleet/Billing context boundaries).
-
 ## Output Style
 
 1. **Finding Format**: For each finding include:
@@ -89,9 +80,15 @@ rg 'invoice|Invoice|Billing' app/models app/services app/jobs
    - **Leaked term / ownership conflict**
    - **Why the current boundary is risky**
    - **Smallest credible improvement**
-   Include the ownership direction when it matters. For Fleet/Billing invoice leakage, use this exact direction: `Fleet::Vehicle` must not own the invoice generation trigger; Billing owns when invoices are created. Fleet should emit or expose the vehicle business fact, not directly decide invoice creation.
+   Include the ownership direction when it matters (e.g. which context should own invoice-generation triggers when Fleet and Billing are both involved).
 2. **Structure**: Write findings first, then list open questions and recommended next skills.
 3. **Language**: Must be in English unless explicitly requested otherwise.
+
+## Extended Resources
+
+Load only when a concrete boundary-leakage example is needed:
+
+- [EXAMPLES.md](./EXAMPLES.md) — Billing/Fleet leakage example with smallest credible fix.
 
 ## Integration
 

@@ -45,6 +45,17 @@ Use this skill when a bug report exists but the right reproduction path and fix 
 5. **Define the smallest fix path:** Name the likely files and the narrowest behavior change that should make the spec pass.
 6. **Hand off:** Continue through `plan-tests` -> `write-tests` -> implementation skill.
 
+### Canonical Request-Boundary Example
+
+When the report is an order creation failure visible through `POST /orders`, default to the request boundary first:
+
+- **First failing spec:** `spec/requests/orders/create_spec.rb`
+- **Command:** `bundle exec rspec spec/requests/orders/create_spec.rb`
+- **Expected RED:** response is not `422` with `"Out of stock"` yet, or the service raises instead of returning a handled error.
+- **Smallest fix path:** `Orders::CreateOrder` handles the stock guard and returns `{ success: false, error: "Out of stock" }` without creating the order.
+
+Do not replace this with a pricing, model-only, or controller-only example unless the bug report points there.
+
 ### Boundary Guide
 
 See [BOUNDARY_GUIDE.md](./BOUNDARY_GUIDE.md) for the full bug-shape → spec-type mapping and layer diagnosis tips.
@@ -72,6 +83,7 @@ See [BOUNDARY_GUIDE.md](./BOUNDARY_GUIDE.md) for the full bug-shape → spec-typ
    - **First failing spec to add**
    - **Smallest safe fix path**
    - **Follow-up skills**
+   - **Exact command to run before the fix**
 2. **Skeleton spec**: Provide a skeleton failing spec to run before implementing the fix.
    ```ruby
    # spec/requests/orders/create_spec.rb

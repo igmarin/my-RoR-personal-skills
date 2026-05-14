@@ -116,8 +116,15 @@ After implementing feedback, decide whether to request a re-review:
 
 ## Output Style
 
-1. **Format**: Direct responses using technical arguments. State what was checked and why you agree or disagree.
-2. **Language**: Must be in English unless explicitly requested otherwise.
+When responding to review feedback, output:
+
+1. **Scope** — State that the user received review feedback on their own Rails code; if the task is asking you to give a review instead, use `code-review`.
+2. **Feedback table** — For each reviewer point, include: restated technical requirement, code checked, classification, decision, and response.
+3. **Verification evidence** — Name the exact file, method, line, spec, or behavior checked before agreeing, implementing, or pushing back.
+4. **Reasoned pushback** — When a suggestion is incorrect, use the pushback structure: reviewer concern, codebase constraint/evidence, and alternative or no-change rationale. Never push back without technical evidence.
+5. **Implementation order** — List fixes one item at a time, with relevant spec after each logic change and full-suite regression check before re-review.
+6. **Re-review decision** — State whether re-review is mandatory, recommended, or unnecessary based on Critical fixes, logic changes, architecture changes, or cosmetic-only work.
+7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

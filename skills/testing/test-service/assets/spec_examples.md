@@ -2,19 +2,34 @@
 
 Service object testing patterns for test-service skill.
 
+Before implementation, report the proof:
+
+```markdown
+- First command: `bundle exec rspec spec/services/users/sync_service_spec.rb`
+- Expected RED: `NameError: uninitialized constant Users::SyncService`
+- GREEN rerun: `bundle exec rspec spec/services/users/sync_service_spec.rb`
+```
+
 1) Unit test for service object
 
+```ruby
 # frozen_string_literal: true
 RSpec.describe Users::SyncService, type: :unit do
   describe '.call' do
-    it 'returns success and creates records' do
-      user = build(:user)
-      result = Users::SyncService.call(user: user)
+    subject(:result) { described_class.call(user: user) }
+
+    let(:user) { build(:user) }
+
+    it 'returns success' do
       expect(result[:success]).to be true
+    end
+
+    it 'returns synced count' do
       expect(result[:response]).to include(:synced_count)
     end
   end
 end
+```
 
 2) Error handling spec
 

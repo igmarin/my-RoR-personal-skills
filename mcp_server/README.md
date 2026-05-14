@@ -63,7 +63,7 @@ mcp_server/
 **Service objects:**
 
 - **`McpSkills::ResourceRegistry`** — scans the repo for published docs and workflows. Single source of truth for the resource set.
-- **`McpSkills::ResourceDiscovery`** — resolves the published topology for root `build/`, nested `skills/`, root `workflows/`, and `docs/`.
+- **`McpSkills::ResourceDiscovery`** — resolves the published topology for nested `skills/`, root `workflows/`, and `docs/`.
 - **`McpSkills::SkillResourceBuilder`** — maps a workflow directory path to `MCP::Resource` objects with `file://` URIs and a configurable name prefix.
 - **`McpSkills::DocResourceBuilder`** — builds `doc/` resources for markdown files anywhere under `docs/`.
 - **`McpSkills::SkillCatalog`** — builds structured skill metadata from discovered `SKILL.md` files.
@@ -372,7 +372,7 @@ Tests are written with Minitest: each file validates real behavior of a service 
 
 ## Auto-discovery of new skills
 
-`ResourceRegistry` uses explicit topology discovery for `build/SKILL.md`, `skills/*/*/SKILL.md`, `workflows/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published workflow or doc file in those locations, it appears in `resources/list` on the next server start. Published skills become available through `list_skills` and `use_skill` without any server code changes.
+`ResourceRegistry` uses explicit topology discovery for `skills/*/*/SKILL.md`, `workflows/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published workflow or doc file in those locations, it appears in `resources/list` on the next server start. Published skills become available through `list_skills` and `use_skill` without any server code changes.
 
 ---
 

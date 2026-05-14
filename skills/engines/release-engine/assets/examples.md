@@ -8,6 +8,7 @@ Load [release_checklist.md](release_checklist.md) when you need a comprehensive 
 - Pre-release validation steps
 - Gem build and testing verification
 - RubyGems publishing checklist
+- A visible note in the final artifact that this checklist informed the quality gates
 
 ## Using the Release Notes Template
 
@@ -15,3 +16,4 @@ Load [release_notes_template.md](release_notes_template.md) when drafting GitHub
 - Structured summary format
 - Highlights and breaking changes section
 - Upgrade steps for host applications
+- Verification status and asset usage notes

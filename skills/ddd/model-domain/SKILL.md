@@ -69,10 +69,11 @@ When using this skill, return for each domain concept:
 1. **Domain concept** — name from the ubiquitous language
 2. **Recommended modeling choice** — entity, value object, service, etc.
 3. **Suggested Rails home** — file path
-4. **Invariant or ownership reason** — why this boundary
+4. **Invariant or ownership reason** — name the rule that must stay true and the exact object or boundary responsible for enforcing it.
 5. **Patterns to avoid** — what not to reach for
-6. **Next skill to chain** — `generate-tasks`, `plan-tests`, etc.
-7. **Language** — Must be in English unless explicitly requested otherwise.
+6. **Test handoff** — For every concept that may become code, name the `plan-tests` or `write-tests` follow-up before implementation; do not include implementation code unless the user explicitly moves from modeling into build work.
+7. **Next skill to chain** — `generate-tasks`, `plan-tests`, etc.
+8. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

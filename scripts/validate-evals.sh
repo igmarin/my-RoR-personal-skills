@@ -68,9 +68,7 @@ while IFS= read -r scenario_dir; do
         if data.fetch("target_type") == "workflow"
           File.join(root, "workflows", target_name, "SKILL.md")
         else
-          candidates = Dir[File.join(root, "skills", "*", target_name, "SKILL.md")]
-          candidates << File.join(root, "build", "SKILL.md") if target_name == "build"
-          candidates.first
+          Dir[File.join(root, "skills", "*", target_name, "SKILL.md")].first
         end
 
       abort "target SKILL.md not found for #{target_name}" unless File.file?(target_path)

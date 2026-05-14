@@ -18,8 +18,11 @@ module PricingCalculator
 
     private
 
-    def should_calculate? = @order.plan&.active?
-    def compute_result(_price) = nil
+    def should_calculate? = @order.present? && @order.plan&.active?
+
+    def compute_result(_price)
+      raise NotImplementedError, "#{self.class}#compute_result must be implemented"
+    end
   end
 end
 ```
@@ -34,6 +37,7 @@ module PricingCalculator
     private
 
     def should_calculate? = false
+    def compute_result(_price) = nil
   end
 end
 ```

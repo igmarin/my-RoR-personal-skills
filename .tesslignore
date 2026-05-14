@@ -1,6 +1,10 @@
 # Tracked source for Tessl-native scenarios. The publish workflow flattens this
 # into root evals/ so every direct child is a runnable scenario.
 tessl-evals/
+lean-ctx/
+plans/
+for-openai.md
+docs/lessons-learned-from-tessl.md
 
 # Hosted MCP Worker implementation. It is distributed through Cloudflare,
 # Smithery, and Glama, not through the Tessl tile.

@@ -98,7 +98,7 @@ Keep the main sections business-facing.
 
 **Create in issue tracker:**
 - Verify the target project/board details first.
-- Confirm required fields: project, issue type, sprint, status behavior, epic, labels, components.
+- Confirm required fields from the tracker create-metadata endpoint or equivalent field-discovery source: project, issue type, sprint, status behavior, epic, labels, components.
 - Create issues **only after** the plan is considered approved enough.
 - Use whatever integration the user has (API, MCP, UI); do not assume credentials in the repo.
 - Validate **one** issue before bulk-creating if the sprint field or workflow behavior is uncertain.
@@ -137,7 +137,8 @@ When asked to draft tickets, your output MUST include:
 5. **Sequencing note** — Call out which tickets must happen before dependent client or follow-up tickets.
 6. **Assumptions** — State assumptions about tracker, sprint, labels, components, or missing plan details.
 7. **Creation boundary** — If not creating issues, explicitly state that the output is draft-only. If creating issues, report created issue keys and any skipped fields.
-8. **Language** — Must be in English unless explicitly requested otherwise.
+8. **Create-in-tracker readiness** — Even in draft-only mode, include an explicit checklist for what must be verified before creation: target project/board, tracker create-metadata endpoint or equivalent field source, required field names, integration path, credentials availability outside the repo, explicit user approval state, one-issue validation when uncertain, and default initial status/no status-on-create behavior.
+9. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

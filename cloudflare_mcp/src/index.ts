@@ -42,7 +42,7 @@ function serverCard() {
 const skillMetadataSchema = z.object({
   name: z.string().describe("Stable skill name, for example code-review."),
   path: z.string().describe("Repository path to the skill's SKILL.md file."),
-  category: z.string().describe("Top-level skill category such as testing, api, engines, or build."),
+  category: z.string().describe("Top-level skill category such as testing, api, or engines."),
   description: z.string().describe("Short routing description from the skill frontmatter."),
 });
 
@@ -81,14 +81,14 @@ const TOOL_REGISTRY = {
       properties: {
         skill_name: {
           type: "string",
-          description: "The directory name of the skill, such as code-review, write-tests, or build.",
+          description: "The directory name of the skill, such as code-review or write-tests.",
         },
       },
       required: ["skill_name"],
       additionalProperties: false,
     },
     runtimeInputSchema: {
-      skill_name: z.string().describe("Skill name, for example code-review, write-tests, or build."),
+      skill_name: z.string().describe("Skill name, for example code-review or write-tests."),
     },
     outputSchema: {
       type: "object",

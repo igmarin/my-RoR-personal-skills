@@ -1,5 +1,16 @@
 # Strategy + Factory + Null Object — RSpec Examples
 
+## Component RED/GREEN Proof
+
+For each component, show the focused command and checkpoint before moving on:
+
+```markdown
+- Component: Factory
+- First command: `bundle exec rspec spec/services/pricing_calculator/factory_spec.rb`
+- Expected RED: missing dispatch/fallback behavior or uninitialized component constant
+- GREEN rerun: `bundle exec rspec spec/services/pricing_calculator/factory_spec.rb` passes
+```
+
 ## Factory Spec (all dispatch branches)
 
 ```ruby
@@ -39,6 +50,14 @@ RSpec.describe PricingCalculator::NullService do
   it 'always returns nil' do
     expect(described_class.new(order).calculate).to be_nil
   end
+
+  context 'when the order is nil' do
+    let(:order) { nil }
+
+    it 'still returns nil' do
+      expect(described_class.new(order).calculate).to be_nil
+    end
+  end
 end
 ```
 
@@ -55,6 +74,11 @@ RSpec.describe PricingCalculator::StandardPricingService do
 
     context 'when plan is inactive' do
       before { order.plan.update!(active: false) }
+      it { expect(described_class.new(order).calculate).to be_nil }
+    end
+
+    context 'when plan is nil' do
+      before { order.update!(plan: nil) }
       it { expect(described_class.new(order).calculate).to be_nil }
     end
   end

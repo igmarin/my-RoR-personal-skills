@@ -55,7 +55,13 @@ When a task arrives, identify the matching skill from the tables below and **nam
 
 ### Skill Priority
 
-When multiple skills could apply: TDD → Planning → Domain discovery → Process (refactor-code) → Domain implementation (rails-\*, ruby-\*). Use plan-tests when the first failing spec is not obvious.
+When multiple skills could apply, state this priority rule explicitly in the answer before routing:
+
+```text
+Priority: TDD → Planning → Domain discovery → Process/refactor → Domain implementation.
+```
+
+Use `plan-tests` when the first failing spec is not obvious.
 
 **Key disambiguation signals:**
 - `review-architecture` vs `code-review`: use architecture-review when the question is about system shape, service boundaries, or design patterns; use code-review when the subject is a concrete PR, file, or changeset.
@@ -63,6 +69,20 @@ When multiple skills could apply: TDD → Planning → Domain discovery → Proc
 - `load-context` before any other code-producing skill in an unfamiliar or existing codebase.
 
 **Fallback for ambiguous requests:** If no clear skill match, default to `load-context` to load codebase context, then re-evaluate based on findings.
+
+### Multi-Concern PR Review Chains
+
+When a request names several changed areas, do not route only to `code-review`. Decompose the changeset and name the ordered chain:
+
+| Changed area | Add this review skill |
+|--------------|-----------------------|
+| Controllers, models, services, jobs, or tests | `code-review` |
+| Migrations or schema changes | `review-migration` |
+| Authorization, authentication, secrets, uploads, redirects, or input handling | `security-check` |
+| Engine namespace, dummy app, install generator, host integration, or release surface | `review-engine` |
+| Boundary, orchestration, callback, or abstraction concerns | `review-architecture` |
+
+Start with `load-context` for an existing PR or unfamiliar codebase, then run the specialized review skills in risk order: security/data-loss first, migrations second, architecture/engine boundaries third, general code review last.
 
 ### Typical Workflows
 
@@ -74,6 +94,8 @@ skills/context/load-context → **[CHECK: context loaded]** → skills/workflows
 **Feature (standard):** skills/context/load-context → **[CHECK: context loaded]** → skills/planning/create-prd → **[CHECK: PRD approved]** → skills/planning/generate-tasks → **[CHECK: tasks complete]** → skills/workflows/tdd-workflow
 
 **Bug fix:** skills/testing/triage-bug → **[GATE: reproduction spec fails]** → skills/workflows/tdd-workflow → fix → verify passes
+
+**Multi-concern PR review:** skills/context/load-context → skills/code-quality/security-check *(if auth/input/secrets touched)* → skills/infrastructure/review-migration *(if schema touched)* → skills/engines/review-engine *(if engine touched)* → skills/code-quality/review-architecture *(if boundaries touched)* → skills/code-quality/code-review
 
 ## Extended Resources
 

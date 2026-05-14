@@ -4,7 +4,7 @@
 
 **Rails Agent Skills turns AI coding assistants into disciplined Rails collaborators.**
 
-It is a curated library of **42 public Rails agent skills** and **5 callable workflows** that teach AI tools how to plan, test, implement, document, and review Rails work using production-minded conventions.
+It is a curated library of **41 public Rails agent skills** and **5 callable workflows** that teach AI tools how to plan, test, implement, document, and review Rails work using production-minded conventions.
 
 The project is built around one non-negotiable rule:
 
@@ -51,7 +51,7 @@ That TDD gate is encoded directly into the skills and workflows, so agents do no
 
 | Area | Purpose |
 |------|---------|
-| `skills/` and `build/` | 42 public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
+| `skills/` | 41 public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
 | `workflows/` | 5 callable workflows that chain skills into full development loops. |
 | `docs/` | Public documentation, architecture, workflow guides, skill catalog, and evaluation policy. |
 | `mcp_server/` | Official Ruby MCP server exposing docs, workflows, and `use_skill`. |
@@ -157,7 +157,7 @@ See [docs/workflow-guide.md](docs/workflow-guide.md) and [docs/workflows/](docs/
 
 ## Skill Catalog
 
-The library contains 42 public skills organized by Rails development concern.
+The library contains 41 public skills organized by Rails development concern.
 
 | Category | Examples |
 |----------|----------|
@@ -169,7 +169,7 @@ The library contains 42 public skills organized by Rails development concern.
 | APIs | `generate-api-collection`, `implement-graphql`, `integrate-api-client`, `version-api` |
 | Engines | `create-engine`, `test-engine`, `document-engine`, `release-engine`, `upgrade-engine` |
 | Infrastructure | `review-migration`, `optimize-performance`, `seed-database` |
-| Orchestration | `skill-router`, `build` |
+| Orchestration | `skill-router` |
 
 Use [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) for the complete catalog and [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) for skill chaining.
 

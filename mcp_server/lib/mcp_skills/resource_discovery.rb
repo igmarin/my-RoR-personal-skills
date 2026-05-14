@@ -5,7 +5,6 @@ module McpSkills
   class ResourceDiscovery
     EXCLUDED_DIRS = %w[skill-template rails-agent-skills mcp_server].freeze
     SKILL_PATTERNS = [
-      'build/SKILL.md',
       'skills/*/*/SKILL.md',
       '.tessl/tiles/*/*/*/SKILL.md'
     ].freeze

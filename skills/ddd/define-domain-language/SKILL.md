@@ -34,16 +34,7 @@ ALWAYS flag overloaded or conflicting terms before recommending modeling changes
 
 ## Core Process
 
-Use this skill when the domain language is fuzzy, overloaded, or inconsistent.
-
 **Core principle:** Agree on business language before choosing models, services, or boundaries.
-
-### When to Use
-
-- The user uses multiple words for what might be the same business concept.
-- A feature or bug discussion is blocked by unclear naming.
-- You need a glossary before doing boundary review or Rails modeling.
-- **Next step:** Chain to `review-domain-boundaries` when the glossary reveals multiple contexts, or to `model-domain` when the main problem is tactical modeling in Rails.
 
 ### Process
 
@@ -55,12 +46,17 @@ Use this skill when the domain language is fuzzy, overloaded, or inconsistent.
 3. **Choose canonical terms:** Prefer the clearest business term; keep aliases only as migration notes or search hints.
 4. **Define each term:** Write one short definition, expected invariants, and related concepts.
 5. **Flag ambiguity:** List terms that need user confirmation or that likely indicate multiple bounded contexts.
-6. **Hand off:** Continue with `review-domain-boundaries`, `model-domain`, or `create-prd` / `generate-tasks` depending on the workflow stage.
+6. **Hand off:** Refer to the Integration table below to select the appropriate next skill based on what the glossary reveals.
 
-## Extended Resources
+### Inline Example: Resolving Customer vs. Client vs. Account
 
-- [EXAMPLES.md](EXAMPLES.md) for a full worked glossary scenario (Customer/Client/Account resolution), the step-by-step resolution process, migration path guidance, and common mistakes.
-- [assets/examples.md](assets/examples.md) for JSON glossary entries and schema validation notes.
+The codebase uses `Customer`, `Client`, and `Account` interchangeably. After collecting usages:
+
+- **Customer** — person who places an order (Sales context). Canonical term chosen.
+- **Client** — alias used in legacy billing code; map to `Customer` with a migration note.
+- **Account** — overloaded: means login credentials in Auth context *and* billing record in Finance context. Flag as two distinct concepts requiring a bounded-context split.
+
+Result: one canonical term (`Customer`) replaces two aliases, and one overloaded term (`Account`) is split before any model changes are made.
 
 ## Output Style
 
@@ -78,6 +74,14 @@ When using this skill, return:
    |----------------|---------|------------|-----------|----------|
    | Shipment | Parcel, Package | Physical goods sent to a customer address | Must reference a valid Order | Fulfillment |
 3. **Language**: Must be in English unless explicitly requested otherwise.
+
+## Extended Resources
+
+Load only when the task needs examples or a reusable glossary schema:
+
+- [EXAMPLES.md](./EXAMPLES.md) — Rails naming-inconsistency example and resolved glossary.
+- [assets/examples.md](./assets/examples.md) — JSON glossary entry example.
+- [assets/glossary_schema.json](./assets/glossary_schema.json) — Optional schema for persisted glossary entries.
 
 ## Integration
 

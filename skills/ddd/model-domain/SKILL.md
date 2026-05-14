@@ -42,9 +42,9 @@ modeling into build work.
 ### Modeling Order
 
 1. **List domain concepts:** Entities, values, policies, workflows, and events from the ubiquitous language.
-2. **Identify invariants:** Decide which object or boundary must keep each rule true.
-3. **Choose the aggregate entry point:** Name the object that guards state transitions and consistency.
-4. **Place behavior:** Keep behavior on the entity/aggregate when cohesive; extract a domain service only when behavior spans multiple concepts cleanly.
+2. **Identify invariants:** Ask: what must always be true after any state change? What breaks if two callers mutate the same state simultaneously? Decide which object or boundary must keep each rule true.
+3. **Choose the aggregate entry point:** Name the object that guards state transitions and consistency. Ask: is there exactly one place a caller must go to change this state?
+4. **Place behavior:** Keep behavior on the entity/aggregate when cohesive; extract a domain service only when behavior spans multiple concepts cleanly. Ask: does moving this out clarify ownership, or just spread it?
 5. **Pick Rails homes:** Choose the simplest location that matches the boundary and repo conventions.
 6. **Verify with tests:** Hand off to `plan-tests` and `write-tests` before implementation.
 
@@ -53,7 +53,6 @@ modeling into build work.
 | Mistake | Reality |
 |---------|----------|
 | Turning every concept into a service | Many behaviors belong naturally on entities or value objects |
-| Creating repositories for all reads and writes | ActiveRecord already provides a strong default persistence boundary |
 | Treating aggregates as folder names only | Aggregates exist to protect invariants, not to look architectural |
 | Adding domain events for one local callback | Events justify their cost only when multiple downstream consumers exist |
 | Pattern choice justified only with "DDD says so" | The reason must be an invariant, ownership boundary, or clear coordination need |
@@ -62,22 +61,32 @@ modeling into build work.
 
 ## Extended Resources
 
-- [assets/examples.md](assets/examples.md)
-- [assets/modeling_template.md](assets/modeling_template.md)
+- [assets/examples.md](assets/examples.md) — Full worked examples for multi-aggregate domains; consult when the current problem involves more than one aggregate or a non-trivial context boundary.
+- [assets/modeling_template.md](assets/modeling_template.md) — Blank output template for a single domain concept; use this as a starting point when producing structured modeling output.
 
 ## Output Style
 
-When using this skill, return for each domain concept:
+For each domain concept, return a compact entry covering:
 
 1. **Domain concept** — name from the ubiquitous language
 2. **Recommended modeling choice** — entity, value object, service, etc.
 3. **Suggested Rails home** — file path
-4. **Invariant or ownership reason** — name the rule that must stay true and the exact object or boundary responsible for enforcing it.
+4. **Invariant or ownership reason** — the rule that must stay true and the exact object responsible for enforcing it
 5. **Patterns to avoid** — what not to reach for
-6. **Test handoff** — For every concept that may become code, name both required follow-ups before implementation: `plan-tests` to choose the first failing spec, then `write-tests` to write and verify it. Do not include implementation code unless the user explicitly moves from modeling into build work.
-   State the first behavior to test, the likely spec type, and that implementation is deferred.
-7. **Next skill to chain** — `generate-tasks`, `plan-tests`, etc.
-8. **Language** — Must be in English unless explicitly requested otherwise.
+6. **Test handoff** — first behavior to verify, likely spec type, and that implementation is deferred until `plan-tests` and `write-tests` complete
+7. **Next skill to chain** — e.g. `generate-tasks`, `plan-tests`
+
+### Inline Example — Order aggregate
+
+**Domain concept:** Order | **Modeling choice:** Aggregate root | **Rails home:** `app/models/order.rb`
+
+**Invariant:** An Order must never transition from `cancelled` back to `active`, and its total must always reflect current line items. `Order` is the single entry point; no external caller may mutate line items or status directly.
+
+**Avoid:** Do not extract an `OrderService` just to hold `place` and `cancel` — that behavior belongs on the aggregate. Do not introduce `OrderRepository` unless a non-ActiveRecord persistence backend is required.
+
+**Test handoff:** First behavior — `Order#cancel` raises when already cancelled. Spec type: unit model spec (`spec/models/order_spec.rb`). Implementation deferred until `plan-tests` selects this spec and `write-tests` writes it.
+
+**Next:** `plan-tests` to select the first failing spec for `Order#cancel`.
 
 ## Integration
 

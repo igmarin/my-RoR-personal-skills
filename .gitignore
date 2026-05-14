@@ -1,4 +1,5 @@
 .DS_Store
+docs/lessons-learned-from-tessl.md
 .agents/skills/*
 .github/skills/*
 # Claude Code internal state (worktrees, plans, session data)

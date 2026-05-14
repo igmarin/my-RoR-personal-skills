@@ -15,7 +15,7 @@ metadata:
 
 **Core principle:** Every API surface (Rails app or engine) has a single API collection file that stays in sync with its endpoints.
 
-## Quick Reference
+## Rules at a Glance
 
 | Aspect | Rule |
 |--------|------|
@@ -26,6 +26,7 @@ metadata:
 | Variables | Use `{{base_url}}` for the base URL so the collection works across environments |
 | Per request | method, URL, headers, body, **description**, and **test scripts** (e.g. `pm.response.to.have.status(200)`) |
 | Folders | Group related endpoints into folders using nested `item` arrays |
+| Exception | GraphQL endpoints — use **implement-graphql** instead |
 
 ## HARD-GATE
 
@@ -44,15 +45,17 @@ EXCEPTION: GraphQL endpoints — use implement-graphql instead.
 1. Create or open the corresponding API collection JSON file.
 2. Group related endpoints into folders using nested `item` arrays.
 3. Use `{{base_url}}` for the base URL.
-4. Add method, URL, headers, body, description, and test scripts.
-5. Confirm the JSON is syntactically valid.
+4. Add method, URL, headers, body, description, and test scripts for each request.
+5. Validate the JSON is syntactically correct:
+   - Run `python -m json.tool collection.json` or `jq . collection.json` — both print errors on invalid JSON.
+   - If invalid: fix the reported error, then re-run the command until it exits cleanly.
 6. Verify the collection can be imported into a compatible API client (e.g. Postman) without errors.
-7. Confirm all new or changed endpoints are represented and that `{{base_url}}` (or equivalent) is used consistently.
+7. Confirm all new or changed endpoints are represented and that `{{base_url}}` is used consistently.
 
-## Extended Resources
+## Collection Structure (Postman v2.1)
 
-**Collection Structure (Postman v2.1)**
 Ensure the collection includes the `info` block, folders (nested `item` arrays), and `event` scripts:
+
 ```json
 {
   "info": {
@@ -90,20 +93,18 @@ Ensure the collection includes the `info` block, folders (nested `item` arrays),
 }
 ```
 
-**Common Mistakes**
+## Common Mistakes
+
 | Mistake | Reality |
-|---------|---------|
+|---------|----------|
 | Missing Content-Type or body for POST/PUT | Include headers and example body so the request works out of the box |
-| Skipping validation after generation | Always verify the JSON is well-formed and imports correctly before committing (see HARD-GATE) |
+| Skipping validation after generation | Run `jq .` or `python -m json.tool` and fix any errors before committing (see HARD-GATE) |
 
-- [EXAMPLES.md](./EXAMPLES.md)
+## Extended Resources
 
-## Output Style
+Load only when a concrete collection example is needed:
 
-1. Ensure the JSON is perfectly valid.
-2. Ensure descriptions and basic tests are present.
-3. Use environment variables like `{{base_url}}`.
-4. Language — Must be in English unless explicitly requested otherwise.
+- [EXAMPLES.md](./EXAMPLES.md) — Postman v2.1 multi-endpoint collection example.
 
 ## Integration
 

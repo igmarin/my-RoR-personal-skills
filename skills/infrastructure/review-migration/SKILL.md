@@ -85,6 +85,7 @@ change_column_default :orders, :status, from: nil, to: 'pending'
 ```
 
 **Type change rollout pattern:**
+
 ```text
 1. Add the new typed column as nullable.
 2. Dual-write old and new columns from application code.

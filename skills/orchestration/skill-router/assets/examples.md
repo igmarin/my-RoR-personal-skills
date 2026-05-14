@@ -2,6 +2,8 @@
 
 Extended routing examples covering common, ambiguous, and edge-case scenarios. Each example shows the user prompt, skill match rationale, and the full workflow chain.
 
+Active responses must put `Next skill: ...` first. When multiple skills may apply, put one concise priority/chain statement immediately after it, before analysis or implementation.
+
 ---
 
 ## Single-Skill Routes (Clear Intent)
@@ -79,6 +81,8 @@ Extended routing examples covering common, ambiguous, and edge-case scenarios. E
 > **Chain:** `load-context` → `security-check` (if auth/input handling touched) → `review-migration` (migration) → `review-architecture` (service/model boundary) → `code-review` (controller + model + tests)
 >
 > **Next skill: skills/context/load-context**
+>
+> **Priority: security-check > review-migration > review-architecture > code-review; Chain: load-context then security-check, review-migration, review-architecture, code-review.**
 
 ### 7b. Multi-Concern Engine PR
 

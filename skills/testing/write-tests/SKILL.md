@@ -133,7 +133,7 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 14. **Minimal factories** — Use only explicit attributes needed for the behavior; prefer traits for optional states and `build` / `build_stubbed` unless persistence is required. Do not hide business-meaningful defaults in the factory.
 15. **Multiple related assertions** — Use `aggregate_failures` when one behavior needs several related expectations, and show it in the produced spec when relevant.
 16. **Timestamp assertions** — Never assert `updated_at` unless time is frozen and the timestamp change is the behavior under test.
-17. **Self-audit** — Before returning, include a short checklist confirming no `it`/`specify` descriptions contain "and", every `let!` is justified, shared examples are actually included, and factories use the least-persistent setup that proves the behavior.
+17. **Self-audit** — Before returning, include a short checklist confirming no `it`/`specify` descriptions contain "and", every `let!` is justified, any referenced shared examples are actually included, and factories use the least-persistent setup that proves the behavior.
 18. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration

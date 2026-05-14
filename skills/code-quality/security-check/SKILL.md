@@ -124,6 +124,7 @@ Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user cont
    ## File Handling, Network Calls & Background Job Inputs
    ## Secrets, Logging & Operational Exposure
    ```
+
    Do not omit a category because the prompt is brief. If a category has no reproduced issue, write "No issues found" and state what evidence would be needed to verify it.
 2. **Finding details**: Each finding carries:
    - **Severity:** **High** or **Medium** (not "Critical")

@@ -37,7 +37,7 @@ ALWAYS identify the matching skill and name it explicitly as the next skill to u
 Triages and decomposes any Ruby on Rails request into ordered sub-tasks, then delegates to the correct specialized skill. Enforces the Tests Gate Implementation mandate across all code-producing work.
 
 When a task arrives, identify the matching skill from the tables below and **name it explicitly as the next skill to use** before responding further.
-In an active response, make the routing statement the first substantive line before analysis or implementation. For reference artifacts, show at least one concrete active-response example using `Next skill: ...`.
+In an active response, make the routing statement, such as `Next skill: skills/context/load-context`, the first substantive line before analysis or implementation. When multiple skills may apply, immediately follow the routing line with one concise priority/chain statement, such as `Priority: security-check > review-migration; Chain: security-check then review-migration`, before any analysis or implementation. For reference artifacts, show at least one concrete active-response example using this routing-first, priority/chain-second ordering.
 
 ### Core Skills (Most Common)
 
@@ -56,7 +56,7 @@ In an active response, make the routing statement the first substantive line bef
 
 ### Skill Priority
 
-When multiple skills could apply, state this priority rule explicitly in the answer before routing:
+When multiple skills could apply, state this priority rule immediately after the routing statement:
 
 ```text
 Priority: TDD → Planning → Domain discovery → Process/refactor → Domain implementation.
@@ -107,12 +107,22 @@ skills/context/load-context → **[CHECK: context loaded]** → skills/workflows
 ## Output Style
 
 1. **Routing statement**: Clearly state the next skill being invoked as the first substantive line of the response.
+
    ```text
    Next skill: skills/context/load-context
 
    This is a feature request with unclear scope. I'll start by loading the codebase context, then create a PRD.
    ```
-   Put this routing statement before any deeper analysis. If multiple skills apply, first state the priority rule, then list the ordered chain.
+
+   Put this routing statement before any deeper analysis. If multiple skills apply, immediately follow it with one concise priority/chain statement before analysis or implementation:
+
+   ```text
+   Next skill: skills/context/load-context
+   Priority: security-check > review-migration > code-review; Chain: load-context then security-check, review-migration, code-review.
+
+   This PR spans authorization, schema changes, and general Rails behavior, so I will load context first and then review in risk order.
+   ```
+
 2. **Language**: Generated artifacts (YARD docs, Postman collections, READMEs) and output MUST be in English unless explicitly requested otherwise.
 
 ## Integration

@@ -6,6 +6,10 @@ export type TileManifest = {
   skills: Record<string, SkillSpec>;
 };
 
+export type WorkflowManifest = {
+  workflows: Record<string, SkillSpec>;
+};
+
 export type SkillMetadata = {
   name: string;
   path: string;
@@ -14,6 +18,17 @@ export type SkillMetadata = {
 };
 
 export type SkillContent = SkillMetadata & {
+  content: string;
+};
+
+export type WorkflowMetadata = {
+  name: string;
+  path: string;
+  description: string;
+  keywords: string;
+};
+
+export type WorkflowContent = WorkflowMetadata & {
   content: string;
 };
 
@@ -158,6 +173,87 @@ export async function loadSkill(
     path,
     category: categoryFromPath(path),
     description: extractSkillDescription(content),
+    content,
+  };
+}
+
+function extractKeywords(markdown: string): string {
+  const match = markdown.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return "";
+
+  const lines = match[1].split("\n");
+  const keywordsIndex = lines.findIndex((line) => line.trimStart().startsWith("keywords:"));
+  if (keywordsIndex === -1) return "";
+
+  return lines[keywordsIndex].replace(/^\s*keywords:\s*/, "").trim();
+}
+
+export async function loadWorkflowManifest(
+  fetcher: Fetcher = fetch,
+  rawBase = DEFAULT_RAW_BASE,
+): Promise<WorkflowManifest> {
+  const response = await fetcher(buildRawUrl(rawBase, "workflows.json"));
+  if (!response.ok) {
+    throw new Error(`Unable to load workflows.json: ${response.status}`);
+  }
+
+  return (await response.json()) as WorkflowManifest;
+}
+
+export async function listWorkflows(
+  fetcher: Fetcher = fetch,
+  rawBase = DEFAULT_RAW_BASE,
+): Promise<WorkflowMetadata[]> {
+  const manifest = await loadWorkflowManifest(fetcher, rawBase);
+
+  const workflows = await Promise.all(
+    Object.entries(manifest.workflows)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(async ([name, spec]) => {
+        try {
+          const response = await fetcher(buildRawUrl(rawBase, spec.path));
+          if (!response.ok) {
+            throw new Error(`Unable to load ${spec.path}: ${response.status}`);
+          }
+
+          const text = await response.text();
+          return {
+            name,
+            path: spec.path,
+            description: extractSkillDescription(text),
+            keywords: extractKeywords(text),
+          };
+        } catch (error) {
+          console.warn(`Skipping unavailable workflow '${name}':`, error);
+          return null;
+        }
+      }),
+  );
+
+  return workflows.filter((w): w is WorkflowMetadata => w !== null);
+}
+
+export async function loadWorkflow(
+  workflowName: string,
+  fetcher: Fetcher = fetch,
+  rawBase = DEFAULT_RAW_BASE,
+): Promise<WorkflowContent | null> {
+  const manifest = await loadWorkflowManifest(fetcher, rawBase);
+  const normalized = normalizeSkillName(workflowName);
+  const spec = manifest.workflows[normalized];
+  if (!spec) return null;
+
+  const response = await fetcher(buildRawUrl(rawBase, spec.path));
+  if (!response.ok) {
+    throw new Error(`Unable to load ${spec.path}: ${response.status}`);
+  }
+
+  const content = await response.text();
+  return {
+    name: normalized,
+    path: spec.path,
+    description: extractSkillDescription(content),
+    keywords: extractKeywords(content),
     content,
   };
 }

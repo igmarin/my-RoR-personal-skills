@@ -749,12 +749,12 @@ The next two runs reinforced the same point about samples versus verdicts.
 
 Run `019e26f4-d556-772c-a3e9-6b7a4595bc4d`, labeled `v6-observed-output-response-contract-3x`, landed at `96.32%` with all `41/41` scenario scores present. It was not a new best, but it produced useful target evidence:
 
-- `create-service-object` moved from `89.0` to `100.0` after the response contract explicitly forbade raw ActiveRecord objects in `response`.
+- `create-service-object` moved from `89.0` to `100.0` after the response contract explicitly forbade ORM model instances in `response`.
 - `apply-stack-conventions` moved only from `74.5` to `77.0`; the model still used hypothetical RED/GREEN comments instead of observed terminal output.
 - `refactor-code` slipped from `89.0` to `88.0`; the same expected-output problem remained.
 - `generate-tasks` fell to `52.0`, even though it was not the edited target in that pass.
 
-The next patch followed the full-folder-context caveat. `generate-tasks` had a companion template, and the failure was that the model summarized the task file instead of emitting the actual checklist. The patch updated both the entrypoint and `TASK_TEMPLATES.md`. The same pass tightened `apply-stack-conventions` and `refactor-code` to require copied terminal-output blocks instead of comment annotations.
+The next patch followed the full-folder-context caveat. `generate-tasks` had a companion template, and the failure was that the model summarized the task file instead of emitting the actual checklist. The patch updated both the entrypoint and `TASK_TEMPLATES.md`. The same pass tightened `apply-stack-conventions` and `refactor-code` to require observed run-output evidence instead of comment annotations.
 
 Run `019e26f9-ade8-71b5-b5f8-a6213acc7e49`, labeled `v6-full-checklist-terminal-proof-3x`, was not a new best either; it sat at `95.3%` with `40/41` scenario scores available. But it confirmed the target direction:
 
@@ -770,6 +770,81 @@ The lesson is uncomfortable but useful:
 > A patch can be locally correct and still fail as a release-candidate sample.
 
 At this score range, the right question is not only "did the average go up?" It is also "did the intended target move, and did unrelated variance dominate the run?" If the target moved and unrelated skills collapsed, the patch may still be worth keeping, but it needs another sample before becoming release evidence.
+
+The release-candidate cleanup made that lesson more concrete. The best measured candidate for this pass was still run `019e26ec-d7e8-70d4-a921-10fff675164f`, labeled `v6-sub90-anchor-pass-3x`, at `97.12%`. Later runs produced real local wins, but they were not better release evidence.
+
+That distinction matters because "this patch helped the target skill" and "this tree should ship" are different claims. A release candidate needs a stable aggregate sample, not only an attractive local delta. When the local win comes with unrelated collapse elsewhere, the responsible move is to keep the learning, clean the release surface, and re-measure the cleaned state.
+
+```mermaid
+flowchart TD
+    A[Protected 41-skill baseline\n019e2433... 96.4%] --> B[Candidate anchor pass\n019e26ec... 97.12%]
+    B --> C{Did it beat baseline\nwithout broad collapse?}
+    C -- Yes --> D[Protect as current release-candidate state]
+    B --> E[Observed-output response-contract run\n019e26f4... 96.32%]
+    E --> F[Local target win\ncreate-service-object 100.0]
+    E --> G[Aggregate below candidate\nnot release evidence]
+    B --> H[Full-checklist terminal-proof run\n019e26f9... 95.3% interim]
+    H --> I[Local target wins\ngenerate-tasks and refactor-code]
+    H --> J[Unrelated collapse\ncreate-prd and setup-environment]
+    F --> K[Keep as lesson]
+    I --> K
+    G --> L[Remove noisy patch from release surface]
+    J --> L
+    L --> M[Run cleanup confirmation eval]
+```
+
+This is an article-quality lesson because it generalizes beyond this repository:
+
+- Local target wins are useful debugging evidence, not automatic release-candidate evidence.
+- A noisy follow-up run can teach exactly what to try later while still being the wrong tree to ship.
+- Cleanup commits are part of eval discipline. They preserve the measured candidate instead of letting optimistic experiments silently become the release surface.
+- The lessons article and optimization plan need to change after every eval decision, even when the decision is "do not keep this patch."
+
+The cleanup confirmation run made the next step sharper. Run `019e2a91-4d52-730c-92b0-c259ab25ce31`, labeled `v6-release-candidate-cleanup-3x`, scored all `41/41` scenarios at `96.17%`. That is close to the protected baseline, but still below `96.4%`, so it should not be accepted as the release candidate.
+
+The useful part of the failed confirmation was the individual qualification table. The low-tail failures were specific:
+
+- `generate-tasks` needed the actual checklist artifact, not a summary table.
+- `refactor-code` needed stronger language against planned-output labels such as "Required output" and "Expected final output."
+- `implement-calculator-pattern` needed separate RED/GREEN proof per component and full variant coverage across NullService and concrete services.
+- `write-tests` needed concrete RED failure messages instead of placeholder proof templates.
+- `create-engine` needed explicit `bundle exec rake` and a fuller host-app contract.
+
+That changed the cleanup strategy from "restore the candidate and confirm" to "repair the sub-90 skills using their own scorer reasons." This is a good example of why individual skill qualification matters: the aggregate told us the cleaned state was not good enough, but the per-skill rubric told us exactly where the next safe edits were.
+
+The follow-up run validated that shift. Run `019e2a9d-3b4a-7198-af60-b01837e8498d`, labeled `v6-sub90-repair-after-cleanup-3x`, scored `97.3%` across `41/41` scenarios. That beats both the protected `96.4%` baseline and the earlier `97.12%` candidate.
+
+The movement shows why looking at individual skill qualification was worth it:
+
+- `generate-tasks` recovered from `69.0` to `96.0` when the skill again required the actual checklist artifact instead of a summary.
+- `implement-calculator-pattern` moved from `76.0` to `100.0` after the per-component RED/GREEN and variant-context requirements were made explicit.
+- `create-engine` moved from `89.0` to `98.0` after the missing `bundle exec rake` and host-app contract categories were promoted into Output Style.
+- `refactor-code` and `write-tests` improved only slightly and remained below `90.0`, which means their failures are narrower evidence-label problems rather than broad missing-process problems.
+
+The next tiny patch therefore targeted only the remaining evidence-label misses: require observed RED/GREEN labels in `apply-stack-conventions`, forbid "must produce 0 failures" style planned evidence in `refactor-code`, and forbid `e.g.` RED failure examples in `write-tests`.
+
+The final follow-up, run `019e2aa9-ef05-768a-8773-0be3d662e99d` labeled `v6-evidence-label-sub90-followup-3x`, completed at `97.45%`. That became the new best score in the cleanup pass.
+
+It also showed the tradeoff clearly:
+
+- `refactor-code` improved from `86.5` to `91.33`.
+- `write-tests` improved from `88.0` to `97.67`.
+- `apply-stack-conventions` fell from `88.0` to `80.66`.
+
+The aggregate result justifies keeping the patch for now, but the remaining low tail is not "solved." `apply-stack-conventions` needs its own future pass, because the evidence-label wording that helped refactor/test artifacts did not transfer cleanly to stack-convention artifacts.
+
+The next pass widened slightly from sub-90 to sub-94, but only where the individual scorer reasons were concrete. This is important: "try to lift tricky skills" does not mean "rewrite all low-scoring skills." It means read the qualification and patch the missing behavior that is both visible and generally useful.
+
+The sub-94 scorer reasons were all small contract problems:
+
+- `apply-stack-conventions` needed an explicit layer-isolation section that names view/Turbo, Stimulus, and Tailwind checks or marks them not applicable.
+- `review-domain-boundaries` needed the Fleet/Billing example direction stated directly: Billing owns invoice-generation triggers; Fleet owns vehicle state.
+- `refactor-code` still needed to block planned verification labels such as "required exit condition."
+- `setup-environment` needed to keep the canonical database setup command intact.
+- `code-review` needed to distinguish real diff findings from simulated review examples.
+- `skill-router` needed to label fallback routing explicitly.
+
+This is the pattern to preserve for future tricky skills: use the individual rubric as a product-quality lens, then make the smallest instruction change that would also help a real agent do better work.
 
 ## Rubrics Reveal Missing Product Decisions
 

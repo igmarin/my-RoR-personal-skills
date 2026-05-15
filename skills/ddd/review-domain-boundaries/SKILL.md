@@ -45,6 +45,7 @@ ALWAYS identify the leaked language or ownership conflict before proposing struc
 2. **Name the contexts:** Group flows and rules by business capability, not by current folder names alone.
 3. **Find leakage:** Look for terms, validations, workflows, or side effects crossing context boundaries.
 4. **Check ownership:** Decide which context should own invariants, transitions, and external side effects.
+   - For Fleet/Billing examples, Billing owns invoice generation triggers and invoice side effects; Fleet owns vehicle state and availability. Flag `Fleet::Vehicle` triggering invoice generation as leakage into Billing, not the reverse.
 5. **Propose the smallest credible improvement:** Rename, extract, isolate, or wrap before attempting large reorganizations.
 
 ### Detecting Leakage
@@ -80,7 +81,7 @@ rg 'invoice|Invoice|Billing' app/models app/services app/jobs
    - **Leaked term / ownership conflict**
    - **Why the current boundary is risky**
    - **Smallest credible improvement**
-   Include the ownership direction when it matters (e.g. which context should own invoice-generation triggers when Fleet and Billing are both involved).
+   Include the ownership direction when it matters (e.g. Billing should own invoice-generation triggers; Fleet should not trigger invoices from `Fleet::Vehicle`).
 2. **Structure**: Write findings first, then list open questions and recommended next skills.
 3. **Language**: Must be in English unless explicitly requested otherwise.
 

@@ -36,6 +36,9 @@ For each component (Factory → BaseService → NullService → Concrete):
 2. Run it — verify it fails because the component does not exist yet
 3. Implement the component — minimum code to make the spec pass
 4. Run again — confirm green, then proceed to the next component
+Each component gets its own RED command/output and GREEN command/output before
+the next component starts. Do not collapse NullService and concrete services
+into a single verification step.
 ```
 
 ## Core Process
@@ -154,7 +157,7 @@ price = PricingCalculator::Factory.for(order).calculate
 ```
 
 **6. Tests (RSpec)**
-Each spec suite must cover: inactive plan, nil plan, each named variant, and unknown variant. Mirror the same context structure across all concrete services.
+Each spec suite must cover: inactive plan, nil plan, each named variant, and unknown variant. Mirror the same context structure across Factory, NullService, and every concrete service. If a concrete service should not handle an unknown variant, assert that it returns nil through the guard rather than calculating.
 
 **Pitfalls**
 | Pitfall | Fix |
@@ -181,6 +184,8 @@ Each spec suite must cover: inactive plan, nil plan, each named variant, and unk
    - Concrete services: missing variant-specific strategy behavior
 6. **Green checkpoint per component** — After each component implementation, show the focused rerun and confirm it passes before moving to the next component.
 7. **Variant coverage** — Factory, NullService, and every concrete service spec must show named variants, inactive plan, nil plan, and unknown variant contexts, or explicitly explain why a context does not apply.
+   - NullService specs must include nil plan, inactive plan, and unknown variant contexts.
+   - Every concrete service spec must include its matching named variant, inactive plan, nil plan, and unknown variant contexts.
 8. **Full verification** — End with the calculator spec directory command and the broader service/spec suite command when available.
 9. Language — Must be in English unless explicitly requested otherwise.
 

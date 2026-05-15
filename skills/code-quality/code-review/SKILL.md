@@ -29,7 +29,7 @@ metadata:
 
 ```text
 After green tests + linters pass + YARD + doc updates:
-1. Self-review the full branch diff using the Review Order below.
+1. Self-review the actual full branch diff using the Review Order below.
 2. Fix Critical items; resolve or ticket Suggestion items.
 3. Only then open the PR.
 generate-tasks must include a "Code review before merge" task.
@@ -44,6 +44,7 @@ When **reviewing** Rails code, analyze it against the following areas. When **wr
 ### Review Order
 
 Work through the diff in this sequence. Detailed criteria: [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md).
+Ground every finding in a real changed file/line from the branch diff. If the task does not provide a diff or file contents, say that no concrete findings can be made yet and list the exact diff/files needed.
 
 Configuration → Routing → Controllers → Views → Models → Associations → Queries → Migrations → Validations → I18n → Sessions → Security → Caching → Jobs → Tests
 
@@ -97,6 +98,7 @@ Group findings by severity. See [assets/examples.md](./assets/examples.md) for J
 
    **Actions required:** <one line per severity level found — e.g. Critical -> block merge>
    ```
+   Findings must come from an actual diff or provided file contents. Do not present a simulated PR review as if it were a completed review of real code.
 2. **Tagging**: Tag (Area) from Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Cover **≥4** distinct areas if applicable.
 3. **Generate-tasks handoff** — Always include a `Code review before merge` task or task-list line, even when the user did not ask for a full task breakdown. If a full task list is out of scope, add a short handoff note with that exact task title.
 4. **Re-review trigger** — State whether Critical fixes, more than three Suggestion fixes, architecture changes, query changes, auth changes, or migration changes require a re-diff before PR approval.

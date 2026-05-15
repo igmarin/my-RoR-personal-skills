@@ -53,7 +53,7 @@ quadruplets or separate follow-up tasks.
 5. **Draft Tasks:** Construct the sequential task list incorporating at least 3 TDD task groups (write spec, run fail, implement, run pass), followed by YARD, documentation updates, and a code review gate. Each TDD implementation sub-task line must name the exact file path (e.g., `spec/...`, `app/...`, `config/...`); documentation and review tasks should include relevant paths where applicable.
 6. **Save:** Save the output as `tasks-[feature-name].md` in `/tasks/`. Use the same `[feature-name]` as the PRD if one was provided.
 7. **Verify Checkpoint:** Re-read the saved file and confirm all required elements from the Output Style are present.
-8. **Final Artifact:** Include the full checklist content in the final answer or `answer.md`; do not only describe that the checklist was created.
+8. **Final Artifact:** Include the full `tasks-[feature-name].md` checklist content in the response or `answer.md`; do not only describe the file or summarize it in a table.
 
 ## Extended Resources (Progressive Disclosure)
 

@@ -19,7 +19,7 @@ metadata:
 
 | Scenario | Primary Skill |
 |----------|---------------|
-| Unfamiliar codebase / ambiguity | `load-context` |
+| Fallback: unfamiliar codebase / ambiguity | `load-context` |
 | Planning a feature | `create-prd` then `generate-tasks` |
 | Choosing where to start testing | `plan-tests` |
 | Reviewing code | `code-review` |
@@ -69,7 +69,7 @@ Use `plan-tests` when the first failing spec is not obvious.
 - `plan-tests` vs `write-tests`: use tdd-slices when the challenge is *which* test to write first; use write-tests when the challenge is *how* to write or improve a test.
 - `load-context` before any other code-producing skill in an unfamiliar or existing codebase.
 
-**Fallback for ambiguous requests:** If no clear skill match, default to `load-context` to load codebase context, then re-evaluate based on findings.
+**Fallback for ambiguous requests:** If no clear skill match, label this explicitly as `Fallback: load-context`, load codebase context, then re-evaluate based on findings.
 
 ### Multi-Concern PR Review Chains
 

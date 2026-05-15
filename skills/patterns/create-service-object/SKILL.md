@@ -26,7 +26,6 @@ metadata:
 | Scope | Return data only (no HTTP); single responsibility per service |
 | SQL | `sanitize_sql` for any dynamic queries |
 | Shared logic | Extract validators to class-only services (Pattern 3) |
-| Response data | Serialize domain data; do not return raw ActiveRecord objects in `response` |
 
 ## HARD-GATE
 
@@ -47,7 +46,7 @@ See write-tests for the full gate cycle.
 1. **Write Spec (Test-First):** Create the RSpec file at `spec/services/<module_name>/<service_name>_spec.rb`. Write tests covering success and error paths for `.call`. Run it to ensure it fails.
 2. **Define Service Skeleton:** Create the file at `app/services/<module_name>/<service_name>.rb` with the correct module namespace.
 3. **Select Pattern:** Decide if this is a standard `.call → new.call` service, a batch processor, a static class-only helper, or an orchestrator (≤20 lines).
-4. **Implement Contract:** Implement `self.call` and `#call` methods. Ensure the response strictly returns `{ success: true, response: { ... } }` or `{ success: false, response: { error: { message: '...' } } }`. The `response` payload must contain serialized primitives or value hashes, not raw ActiveRecord model instances.
+4. **Implement Contract:** Implement `self.call` and `#call` methods. Ensure the response strictly returns `{ success: true, response: { ... } }` or `{ success: false, response: { error: { message: '...' } } }`.
 5. **Handle Errors and Logging:** Catch `StandardError` (and domain exceptions). Use `Rails.logger.error` to log both the message and backtrace. Use UPPER_SNAKE_CASE constants for error messages.
 6. **Add Documentation:** Add YARD tags to `self.call` and every public method.
 7. **Write Module README:** Generate `app/services/<module_name>/README.md` explaining the domain context.
@@ -125,7 +124,7 @@ Every service-object task produces these artifacts:
 4. **Error message constants** — user-facing failure strings live in `UPPER_SNAKE_CASE` constants at the top of the class, never inline inside a `rescue`.
 5. **Module README** — at `app/services/<module_name>/README.md`. Required even for single-service modules.
 6. **Spec file** — at `spec/services/<module_name>/<service_name>_spec.rb` written and failing BEFORE the implementation (see HARD-GATE).
-7. **Response contract proof** — Specs must assert only `success:` and `response:` top-level keys, and must not assert raw ActiveRecord objects inside `response`. Use IDs, attributes, or value hashes instead.
+7. **Response contract proof** — Specs must assert the `success:` and `response:` top-level keys and the meaningful payload shape for the service.
 8. **Stateless pattern decision** — State whether instance state is required. If not, use the class-only Pattern 3 shape with no `initialize` and no instance variables.
 9. **Language** — YARD, README, and error messages in English unless the user requests otherwise.
 

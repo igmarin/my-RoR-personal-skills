@@ -110,7 +110,7 @@ Current verified state:
 - Prefer "main plus proven PR wins" over "PR plus regression fixes."
 - Ignore `personal-evals/` for this plan; this is Tessl-only.
 - Root `evals/` remains generated and untracked.
-- Treat `docs/lessons-learned-from-tessl.md` as a living lessons-learned article. After each eval iteration, update it with any durable learning about skill design, Tessl behavior, scoring tradeoffs, batching, regression handling, or prompt/output patterns.
+- Treat `plans/lessons-learned-from-tessl.md` as a living lessons-learned article. After each eval iteration, update it with any durable learning about skill design, Tessl behavior, scoring tradeoffs, batching, regression handling, or prompt/output patterns.
 
 ## Current Retained Worktree Changes
 
@@ -241,7 +241,7 @@ Batch verification:
 
 ## Mandatory Lessons-Learned Checkpoint
 
-- File: `docs/lessons-learned-from-tessl.md`
+- File: `plans/lessons-learned-from-tessl.md`
 - Purpose: reusable essay/article material for Tessl feedback and a future Medium post.
 - Requirement: after every Tessl eval that informs a keep/revert/patch decision, update this document before closing the iteration.
 - Update cadence: after every completed eval iteration, partial eval used as evidence, or batch decision.
@@ -293,7 +293,7 @@ Use the kept-half run `019e22b9-bc3f-77be-9bf8-f91717b2beb9` as the input signal
   - `ruby scripts/validate-tessl-evals.rb`: passed
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
 - [x] Run a full with-context Tessl eval for the low-tail batch:
   - Command: `tessl eval run . --variant with-context --label low-tail-evidence-led-batch`
   - Run ID: `019e22d8-b5b8-717b-8d5a-40f87bd5a9fd`
@@ -338,7 +338,7 @@ Final low-tail run notes:
   - `ruby scripts/validate-tessl-evals.rb`: passed
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
 - [ ] Run a full with-context Tessl eval for the anchor patch:
   - Command: `tessl eval run . --variant with-context --label anchor-auth-calculator-output-proof`
   - Run ID: `019e22e5-22d3-72fd-b999-db73e1f51892`
@@ -382,7 +382,7 @@ Single Tessl runs are useful for fast iteration, but release decisions should no
   - `ruby scripts/validate-tessl-evals.rb`: passed
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
 - [x] Run a Sonnet 3x confidence eval for the stable-anchor patch pass:
   - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label stable-anchor-proof-layout-3x`
   - Run ID: `019e22fa-90e6-717e-8c43-caee18cfe2bc`
@@ -426,7 +426,7 @@ Use run `019e22fa-90e6-717e-8c43-caee18cfe2bc` as the protected state. Do not to
   - `ruby scripts/validate-tessl-evals.rb`: passed
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
 - [x] Run a Sonnet 3x confidence eval for the low-tail patch:
   - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label post-93-low-tail-release-plan-3x`
   - Run ID: `019e2353-e579-716e-bf0d-2a499addfe11`
@@ -452,7 +452,7 @@ Use run `019e22fa-90e6-717e-8c43-caee18cfe2bc` as the protected state. Do not to
   - `ruby scripts/validate-tessl-evals.rb`: passed
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
 - [x] Run a Sonnet 3x confidence eval for companion-resource alignment:
   - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label companion-resource-alignment-3x`
   - Run ID: `019e2379-e774-7675-b361-c29a598dbe0f`
@@ -509,7 +509,7 @@ Hypothesis: correlated RED/GREEN proof failures can be stabilized by aligning `S
   - `ruby scripts/validate-tessl-evals.rb`: passed
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
 - [x] Run Sonnet 3x confidence eval for the six-skill expansion:
   - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label six-skill-proof-support-3x`
   - Run ID: `019e2401-7e2a-7429-9a25-7e47173af474`
@@ -537,7 +537,7 @@ Hypothesis: correlated RED/GREEN proof failures can be stabilized by aligning `S
   - `ruby scripts/validate-tessl-evals.rb`: passed
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
 - [x] Run Sonnet 3x confidence eval for the `write-tests` follow-up:
   - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label write-tests-proof-examples-3x`
   - Run ID: `019e2413-132f-77da-b0e5-edb98eecbc90`
@@ -585,7 +585,7 @@ Hypothesis: after the new best run, the next useful six-skill batch should targe
   - `ruby scripts/validate-tessl-evals.rb`: passed
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
 - [x] Run Sonnet 3x confidence eval for the low-tail rubric alignment batch:
   - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label low-tail-rubric-alignment-3x`
   - Run ID: `019e2423-6260-723c-b243-c4cdc8567b6e`
@@ -621,7 +621,7 @@ Decision: remove the root-level `build` skill from the published tile. It was or
 - [x] Remove active references:
   - Updated `AGENTS.md`, `README.md`, `docs/index.md`, `docs/README.md`, and `docs/reference/skill-catalog.md`.
   - Updated `mcp_server/README.md` topology wording.
-  - Updated `docs/lessons-learned-from-tessl.md` to show 41 publishable skills and explain that historical `build` score notes refer to the earlier 42-skill surface.
+  - Updated `plans/lessons-learned-from-tessl.md` to show 41 publishable skills and explain that historical `build` score notes refer to the earlier 42-skill surface.
 - [x] Remove discovery/tooling special cases:
   - Updated MCP resource discovery and catalog category logic.
   - Updated MCP Ruby tests and fixtures.
@@ -631,7 +631,7 @@ Decision: remove the root-level `build` skill from the published tile. It was or
   - `ruby scripts/validate-tessl-evals.rb`: passed for 41 publishable skills
   - `./scripts/validate-plugins.sh`: passed
   - `git diff --check`: passed
-  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `docs/lessons-learned-from-tessl.md`
+  - `tessl skill lint tile.json`: valid tile; expected orphan warning for local article `plans/lessons-learned-from-tessl.md`
   - `bundle exec ruby -Itest test/resource_discovery_test.rb` from `mcp_server/`: passed
   - `npm test` from `cloudflare_mcp/`: passed
 - [x] Run the first Sonnet 3x confidence eval for the 41-skill surface:
@@ -657,7 +657,7 @@ Decision: remove the root-level `build` skill from the published tile. It was or
 
 ## Post-Baseline Low-Tail Optimization
 
-Objective: continue toward `98%+` without broad churn. The active 41-skill protected baseline is still run `019e2433-e7fa-7179-9303-96f47dae26ad` at `96.4%`; any new patch must beat that and update `docs/lessons-learned-from-tessl.md`.
+Objective: continue toward `98%+` without broad churn. The active 41-skill protected baseline is still run `019e2433-e7fa-7179-9303-96f47dae26ad` at `96.4%`; any new patch must beat that and update `plans/lessons-learned-from-tessl.md`.
 
 - [x] Review potential moderation wording before further eval work:
   - Replaced `whitelist`/`blacklist`-style wording with `allowlist` where it appeared in active skill/support docs.
@@ -730,9 +730,9 @@ Objective: continue toward `98%+` without broad churn. The active 41-skill prote
     - `generate-tasks`: `52.0`, despite no direct edit in that pass.
   - Decision: do not treat this as a new best because it is below the protected `96.4%` baseline and below the current measured best `97.12%`. Keep the `create-service-object` response-contract lesson as valid evidence, but verify with another run before release-candidate decisions.
 - [x] Patch full-checklist and terminal-proof misses:
-  - `generate-tasks`: forbid summary-only answers and require the full checklist artifact in `answer.md`; update `TASK_TEMPLATES.md` so Task `0.0` contains the branch checkout command directly.
-  - `apply-stack-conventions`: require copied terminal-output blocks for RED/GREEN proof, not Ruby comments or `# =>` annotations.
-  - `refactor-code`: require terminal-output evidence blocks and forbid `# =>` annotations as substitutes.
+  - `generate-tasks`: forbid checklist summaries and require the complete task artifact; update `TASK_TEMPLATES.md` so Task `0.0` contains the branch checkout command directly.
+  - `apply-stack-conventions`: require observed run-output evidence for RED/GREEN proof instead of Ruby comment annotations.
+  - `refactor-code`: require observed run-output evidence instead of expected-output annotations.
 - [x] Run Sonnet 3x eval after full-checklist / terminal-proof patch:
   - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label v6-full-checklist-terminal-proof-3x`
   - Run ID: `019e26f9-ade8-71b5-b5f8-a6213acc7e49`
@@ -746,10 +746,131 @@ Objective: continue toward `98%+` without broad churn. The active 41-skill prote
     - `create-prd`: `40.0`
     - `setup-environment`: `80.0`
   - Decision: not a new best and not a release-candidate signal. Treat this as evidence that the full-checklist and terminal-proof patches helped their targets, but the eval remains too noisy to decide release status from this sample.
-- [x] Update `docs/lessons-learned-from-tessl.md` for this iteration:
+- [x] Update `plans/lessons-learned-from-tessl.md` for this iteration:
   - Capture that the route from `96.4%` to `97.22%` and `97.12%` was driven by evidence contracts, not broad rewrites.
   - Capture that a partial `98%+` run can collapse back under `98%` when the remaining scenarios land.
   - Capture that sub-90 work remains possible, but likely requires repeated samples and narrow anchor patches rather than batch editing.
+
+## Release-Candidate Cleanup
+
+Objective: return the committed release-candidate surface to the measured `v6-sub90-anchor-pass-3x` state while keeping the later noisy runs as lessons, not release evidence.
+
+- [x] Confirm starting tree and branch state:
+  - `git status --short --branch`: clean `improve-quality` branch before cleanup.
+  - `HEAD`, `main`, and `origin/main` all pointed at `52bde11`.
+  - `plans/lessons-learned-from-tessl.md` is the tracked lessons artifact for this cleanup pass.
+- [x] Preserve the release-candidate anchors from run `019e26ec-d7e8-70d4-a921-10fff675164f`:
+  - `review-migration`: keep explicit lock/table-rewrite and type-change rollout evidence.
+  - `review-engine`: keep namespace and destructive-migration audit command requirements.
+  - `refactor-code`: keep adapter/facade/wrapper decision and observed-output language.
+- [x] Revert post-candidate noisy experiment wording:
+  - `create-service-object`: removed the unconfirmed ORM-instance response-payload ban while preserving the normal `success:` / `response:` contract proof.
+  - `generate-tasks`: removed checklist-summary/full-artifact pressure and restored the direct Task `0.0` template change to the parent task plus branch-checkout sub-task shape.
+  - `apply-stack-conventions`: removed copied-output/comment-annotation proof wording while keeping visible RED/GREEN proof requirements.
+  - `refactor-code`: removed copied-output/comment-annotation wording while keeping actual observed command-output evidence requirements.
+- [x] Keep the later runs as lessons only:
+  - `019e26f4-d556-772c-a3e9-6b7a4595bc4d` showed a `create-service-object` target win but fell below the current measured best.
+  - `019e26f9-ade8-71b5-b5f8-a6213acc7e49` showed target movement but included unrelated `create-prd` and `setup-environment` collapse.
+- [ ] Confirm the cleaned state:
+  - Run static gates and moderation scan.
+  - Run `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label v6-release-candidate-cleanup-3x`.
+  - Accept only if the cleaned state beats the protected `96.4%` 41-skill baseline and avoids unrelated collapse similar to `019e26f9`.
+
+### Cleanup Confirmation Result
+
+- [x] Run cleanup confirmation eval:
+  - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label v6-release-candidate-cleanup-3x`
+  - Run ID: `019e2a91-4d52-730c-92b0-c259ab25ce31`
+  - Result while scored: `41/41`, average `96.17%` (`status=pending` in Tessl JSON, but all scenarios have scores)
+  - Decision: reject the cleaned state as a release candidate because it is below the protected `96.4%` 41-skill baseline.
+  - Low-tail results:
+    - `generate-tasks`: `69.0`
+    - `implement-calculator-pattern`: `76.0`
+    - `refactor-code`: `82.0`
+    - `write-tests`: `87.0`
+    - `create-engine`: `89.0`
+- [x] Inspect individual skill scorer reasons before further edits:
+  - `generate-tasks`: answer summarized the tasks table instead of including the actual checklist, missing `Relevant Files`, `Guidance Used`, `Instructions for Completing Tasks`, and direct branch checkout command.
+  - `refactor-code`: answer used `Required output` / `Expected final output` instead of observed evidence.
+  - `implement-calculator-pattern`: NullService and concrete services lacked separate RED/GREEN checkpoints and full nil/inactive/unknown variant coverage.
+  - `write-tests`: RED proof was a placeholder template, and time-dependent `let` setup could be evaluated inside `travel_to`.
+  - `create-engine`: answer omitted `bundle exec rake`, did not make narrow purpose explicit enough, and omitted some host-app contract categories.
+- [x] User approved widening scope to tasks below `90%` and reviewing individual skill qualification.
+- [x] Patch sub-90 cleanup run lows:
+  - `generate-tasks`: restore full checklist artifact requirement and direct Task `0.0` checkout command in `TASK_TEMPLATES.md`.
+  - `refactor-code`: explicitly forbid `Required output`, `Expected output`, and `Expected final output` substitutes; require **Observed output** for actual run evidence.
+  - `implement-calculator-pattern`: require per-component RED/GREEN proof and full NullService/concrete service variant contexts.
+  - `write-tests`: require concrete RED failure messages, not placeholder templates, and self-audit time-dependent lazy setup.
+  - `create-engine`: require narrow purpose, full host-app contract categories, `bundle exec rake`, dummy app, routes, and grep verification checkpoints.
+- [ ] Run static validation after the sub-90 repair patch.
+- [x] Run static validation after the sub-90 repair patch:
+  - `git diff --check`: passed
+  - `ruby scripts/validate-tessl-evals.rb`: passed
+  - `./scripts/validate-plugins.sh`: passed
+  - `tessl skill lint tile.json`: valid tile; existing orphan warning for `docs/workflow-template.md`
+- [x] Run Sonnet 3x eval after the sub-90 repair patch:
+  - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label v6-sub90-repair-after-cleanup-3x`
+  - Run ID: `019e2a9d-3b4a-7198-af60-b01837e8498d`
+  - Result while scored: `41/41`, average `97.3%` (`status=pending` in Tessl JSON, but all scenarios have scores)
+  - Decision: keep this patch as the new best cleanup-era result. It beats both the protected `96.4%` 41-skill baseline and the `97.12%` `v6-sub90-anchor-pass-3x` candidate.
+  - Target movement from the rejected cleanup run:
+    - `generate-tasks`: `69.0 -> 96.0`
+    - `implement-calculator-pattern`: `76.0 -> 100.0`
+    - `create-engine`: `89.0 -> 98.0`
+    - `refactor-code`: `82.0 -> 86.5`
+    - `write-tests`: `87.0 -> 88.0`
+  - Remaining sub-90 lows:
+    - `refactor-code`: `86.5`
+    - `apply-stack-conventions`: `88.0`
+    - `write-tests`: `88.0`
+- [x] Inspect remaining sub-90 individual scorer reasons:
+  - `apply-stack-conventions`: concrete RED/GREEN lines existed, but scorer still treated some proof as illustrative rather than observed.
+  - `refactor-code`: answer still used "must produce 0 failures" style planned evidence instead of **Observed output**.
+  - `write-tests`: RED proof still used illustrative `e.g.` failure examples rather than concrete messages.
+- [x] Patch remaining evidence-label lows:
+  - `apply-stack-conventions`: require **Observed RED output** and **Observed GREEN output** labels, no illustrative `e.g.` verification evidence.
+  - `refactor-code`: forbid "must produce 0 failures" / "must still report 0 failures" evidence substitutes.
+  - `write-tests`: forbid `e.g.` RED failure messages and make shared-example avoidance explicit.
+- [ ] Run static validation after the remaining evidence-label patch.
+- [x] Run static validation after the remaining evidence-label patch:
+  - `git diff --check`: passed
+  - `ruby scripts/validate-tessl-evals.rb`: passed
+  - `./scripts/validate-plugins.sh`: passed
+  - `tessl skill lint tile.json`: valid tile; existing orphan warning for `docs/workflow-template.md`
+- [x] Run Sonnet 3x eval after the remaining evidence-label patch:
+  - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label v6-evidence-label-sub90-followup-3x`
+  - Run ID: `019e2aa9-ef05-768a-8773-0be3d662e99d`
+  - Final status: `completed`
+  - Result: `41/41`, average `97.45%`
+  - Decision: keep this patch as the new best cleanup pass result. It beats the protected `96.4%` baseline, the earlier `97.12%` candidate, and the `97.3%` sub-90 repair run.
+  - Target movement from `019e2a9d-3b4a-7198-af60-b01837e8498d`:
+    - `refactor-code`: `86.5 -> 91.33`
+    - `write-tests`: `88.0 -> 97.67`
+    - `apply-stack-conventions`: `88.0 -> 80.66`
+  - Interpretation: the evidence-label wording helped `refactor-code` and `write-tests` but hurt `apply-stack-conventions`. Keep for now because the aggregate set a new best, but do not use this as proof that the `apply-stack-conventions` wording is solved.
+  - Remaining sub-90 low:
+    - `apply-stack-conventions`: `80.66`
+
+## Sub-94 Tricky Low-Tail Pass
+
+Objective: try to move the remaining low-tail skills toward `94%+` without broad rewrites. Use individual skill qualification from run `019e2aa9-ef05-768a-8773-0be3d662e99d`, not aggregate guessing.
+
+- [x] Inspect sub-94 scorer reasons from run `019e2aa9-ef05-768a-8773-0be3d662e99d`:
+  - `apply-stack-conventions`: `80.66`; missing explicit layer-isolation section and view/Stimulus/Tailwind isolation coverage.
+  - `review-domain-boundaries`: `90.67`; Fleet/Billing ownership example direction was not directly demonstrated.
+  - `refactor-code`: `91.33`; still allowed `required exit condition` / planned verification language and did not restate the stop condition strongly enough.
+  - `setup-environment`: `93.33`; database setup command was split instead of `rails db:create db:migrate db:seed`.
+  - `code-review`: `93.67`; scorer treated the answer as a simulated PR instead of grounded review of a real branch diff.
+  - `skill-router`: `93.67`; fallback behavior existed but was not explicitly labeled as fallback.
+- [x] Patch sub-94 scorer-mapped gaps:
+  - `apply-stack-conventions`: require a dedicated **Layer isolation** section covering model/query, service, controller/request, view/Turbo, Stimulus, and Tailwind, with "not applicable" for unchanged layers.
+  - `review-domain-boundaries`: clarify Billing owns invoice-generation triggers while Fleet owns vehicle state/availability.
+  - `refactor-code`: forbid `required exit condition` language and require the characterization-test stop condition before refactor steps.
+  - `setup-environment`: keep `rails db:create db:migrate db:seed` as the default database setup command unless a split is justified.
+  - `code-review`: require findings to be grounded in an actual diff or provided files; no simulated PR findings as completed review evidence.
+  - `skill-router`: label ambiguous-routing fallback as `Fallback: load-context`.
+- [ ] Run static validation after sub-94 patch.
+- [ ] Run Sonnet 3x eval after sub-94 patch.
 
 - [ ] Use multi-agent evals only for model-sensitivity analysis after Sonnet stabilizes:
   - `claude:claude-sonnet-4-6`

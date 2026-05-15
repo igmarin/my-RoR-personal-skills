@@ -165,10 +165,12 @@ end
 
 ## Output Style
 
-1. Use idiomatic Rails engine patterns.
-2. Outline structure and host-app contract early.
-3. Ensure configuration points are documented.
-4. Language — Must be in English unless explicitly requested otherwise.
+1. **Narrow purpose** — State the engine's narrow purpose, chosen engine type, and small public API before listing files.
+2. **Structure** — Use idiomatic Rails engine patterns and include the recommended `lib/`, `app/`, `config/`, `db/`, and `spec/dummy` or `test/dummy` shape.
+3. **Host-app contract** — Outline mount route, initializer, migrations, credentials, background jobs, and assets. Mark any item "not applicable" instead of omitting it.
+4. **Configuration surface** — Ensure configuration points are documented and centralized in one `.configure` block or equivalent adapter surface.
+5. **Verification checkpoints** — Include `ls spec/dummy` or `ls test/dummy`, `bundle exec rake` inside the engine, integration specs, routes check inside the dummy app, and grep checks for hard-coded host constants and migration auto-apply patterns.
+6. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

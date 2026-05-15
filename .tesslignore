@@ -5,6 +5,7 @@ lean-ctx/
 plans/
 for-openai.md
 docs/lessons-learned-from-tessl.md
+docs/workflow-template.md
 
 # Hosted MCP Worker implementation. It is distributed through Cloudflare,
 # Smithery, and Glama, not through the Tessl tile.

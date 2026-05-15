@@ -1,5 +1,4 @@
 .DS_Store
-docs/lessons-learned-from-tessl.md
 .agents/skills/*
 .github/skills/*
 # Claude Code internal state (worktrees, plans, session data)
@@ -23,7 +22,6 @@ lean-ctx/
 .windsurf/
 # Personal and internal files (Hidden from Tessl)
 personal-evals/
-plans/
 skills/**/README.md
 workflows/README.md
 CHANGELOG.md

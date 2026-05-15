@@ -1,15 +1,19 @@
 ---
-name: engine-workflow
+name: engine
 license: MIT
 description: >
   Complete Rails engine development workflow. Orchestrates scaffolding engine structure and generating
   mountable namespaces → testing → code review and dependency auditing → release.
   Use when creating, extracting, or maintaining Rails engines. Trigger: create engine,
   extract engine, engine release, engine testing, mountable engine, gem extraction.
-keywords: rails, engine, workflow, gem, release, testing, extraction
 metadata:
   version: 1.0.0
   user-invocable: "true"
+  entry_point: "Invoke when creating, extracting, or maintaining Rails engines"
+  phases: "Phase 1: Engine Authoring, Phase 2: Testing Setup, Phase 3: Implementation & Review, Phase 4: Documentation & Release"
+  hard_gates: "Engine Structure Check, Tests Run, Isolation Before Integration"
+  dependencies: "create-engine, test-engine, review-engine, upgrade-engine, document-engine, release-engine"
+  keywords: rails, engine, workflow, gem, release, testing, extraction
 ---
 # Engine Workflow
 
@@ -145,7 +149,7 @@ Not sure?          → skill-router
 
 | Predecessor | This Skill | Successor |
 |-------------|------------|-----------|
-| create-prd (engine requirements) | engine-workflow | tdd-workflow (engine features) |
-| None (extract existing) | engine-workflow | Host app integration |
+| create-prd (engine requirements) | engine | tdd (engine features) |
+| None (extract existing) | engine | Host app integration |
 
-**From AGENTS.md:** This is the engine development workflow. Chain to tdd-workflow for feature development within the engine.
+**From AGENTS.md:** This is the engine development workflow. Chain to tdd for feature development within the engine.

@@ -115,11 +115,15 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 ### Workflow Skills (Orchestrators)
 | Skill | Use when... |
 |-------|-------------|
-| `tdd-workflow` | Full TDD feature cycle: test → implement → review → PR |
-| `review-workflow` | Systematic PR review: review → deep dive → response |
-| `setup-workflow` | New project setup: context → onboarding → CI/CD |
-| `quality-workflow` | Pre-PR quality check: conventions → refactor → docs |
-| `engine-workflow` | Engine development: author → test → review → release |
+| `tdd` | Full TDD feature cycle: test → implement → review → PR |
+| `review` | Systematic PR review: review → deep dive → response |
+| `setup` | New project setup: context → onboarding → CI/CD |
+| `quality` | Pre-PR quality check: conventions → refactor → docs |
+| `engine` | Engine development: author → test → review → release |
+| `bug-fix` | Bug resolution: triage → reproduce → fix → verify |
+| `graphql` | GraphQL API: domain modeling → schema → TDD → security |
+| `migration` | Database migration: plan → test → staging → production |
+| `background-job` | Background job: design → TDD → retry config → monitoring |
 
 ## Skill Priority
 
@@ -150,13 +154,13 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 `define-domain-language` → `implement-graphql` → *TDD Feature Loop* → `security-check`
 
 **New engine:**
-`engine-workflow` (or atomic: `create-engine` → **[GATE: engine specs]** → implement → `document-engine`)
+`engine` (or atomic: `create-engine` → **[GATE: engine specs]** → implement → `document-engine`)
 
 **Project setup:**
-`setup-workflow` (context → onboarding → CI/CD)
+`setup` (context → onboarding → CI/CD)
 
 **Quality before PR:**
-`quality-workflow` (conventions → refactor → docs)
+`quality` (conventions → refactor → docs)
 
 **Refactoring:**
 `refactor-code` → **[GATE: characterization tests pass]** → refactor → verify tests still pass

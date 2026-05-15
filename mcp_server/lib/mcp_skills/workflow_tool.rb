@@ -18,7 +18,7 @@ module McpSkills
       properties: {
         'workflow_name' => {
           type: 'string',
-          description: 'The directory name of the workflow (e.g. "tdd-workflow", "review-workflow")'
+          description: 'The directory name of the workflow (e.g. "tdd", "review", "bug-fix", "graphql")'
         }
       },
       required: ['workflow_name']

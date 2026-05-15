@@ -10,7 +10,7 @@ module McpSkills
     tool_name 'list_workflows'
     title 'List Rails Workflows'
     description 'Discover available Rails Agent Workflows before loading one with use_workflow. ' \
-                'Returns names, paths, descriptions, and keywords only; it does not return full workflow bodies. ' \
+                'Returns names (without -workflow suffix), paths, descriptions, and keywords only; it does not return full workflow bodies. ' \
                 'This tool is read-only and has no repository side effects.'
 
     input_schema(

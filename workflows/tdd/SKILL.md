@@ -1,11 +1,15 @@
 ---
-name: tdd-workflow
+name: tdd
 license: MIT
 description: >
   Orchestrates the full Rails test-driven development cycle: generates a failing spec first, implements minimal code to pass, refactors, then produces YARD documentation and a self-reviewed PR. Use when practicing test-driven development, red-green-refactor, TDD workflow, writing tests before code, adding tests first, or building a Rails feature where specs must gate implementation.
 metadata:
   version: 1.0.0
   user-invocable: "true"
+  entry_point: "Invoke when practicing test-driven development or building Rails features where specs must gate implementation"
+  phases: "Phase 1: Context & Test Design, Phase 2: Implementation, Phase 3: Iterate, Phase 4: Finish"
+  hard_gates: "Test Feedback, Proposal Checkpoint, Implementation Verification, Quality Check"
+  dependencies: "load-context, plan-tests, write-tests, write-yard-docs, code-review"
   keywords: rails, tdd, workflow, feature, implementation, testing, orchestration
 ---
 # TDD Workflow

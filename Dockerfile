@@ -15,6 +15,9 @@ WORKDIR /app
 # Copy only Gemfiles first to leverage Docker cache
 COPY --chown=mcp:mcp mcp_server/Gemfile mcp_server/Gemfile.lock ./mcp_server/
 
+# Update system gems with known vulnerabilities (CVE-2026-33210, CVE-2026-42246)
+RUN gem update json net-imap --no-document
+
 # Install build dependencies as virtual package, bundle install, then remove build deps
 RUN apk add --no-cache --virtual .build-deps build-base && \
     cd mcp_server && \

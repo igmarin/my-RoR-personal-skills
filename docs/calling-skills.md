@@ -58,3 +58,67 @@ tessl eval run .
 
 **When to use:**
 Use the CLI method when setting up a new project, configuring CI/CD pipelines, or when you need to pin your workspace to a specific release tag of a skill for reproducible results.
+
+---
+
+## Using Workflows
+
+Workflows are orchestrated multi-step processes that chain multiple skills together. They are the primary way to execute complex Rails development tasks with built-in quality gates and TDD enforcement.
+
+### MCP Workflow Usage
+
+When connected via MCP, workflows are discovered and executed using two dedicated tools:
+
+**Discover available workflows:**
+```text
+list_workflows
+```
+Returns metadata for all 9 workflows: tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job
+
+**Load and execute a specific workflow:**
+```text
+use_workflow(workflow_name: "tdd")
+```
+Returns the full workflow instructions with phases, hard gates, and skill chaining
+
+**Example MCP interaction:**
+- User: "I need to implement a new feature following TDD best practices"
+- Agent: Calls `list_workflows` → identifies `tdd` workflow → calls `use_workflow("tdd")` → executes the full TDD cycle with gates
+
+### Chat Command Workflow Usage
+
+In environments that support chat commands, you can invoke workflows directly:
+
+**Cursor / Windsurf:**
+```text
+@tdd Implement the user authentication feature
+```
+
+**Gemini CLI:**
+```text
+/activate_workflow tdd
+```
+
+### Available Workflows
+
+| Workflow | Purpose | When to Use |
+|----------|---------|-------------|
+| **tdd** | Full TDD feature cycle | Implementing new features with test-first discipline |
+| **quality** | Code quality sweep | Pre-PR quality checks, refactoring, documentation |
+| **review** | Systematic PR review | Code review, security audits, architecture review |
+| **setup** | Project setup and CI/CD | New project setup, environment configuration |
+| **engine** | Rails engine development | Creating, testing, and releasing Rails engines |
+| **bug-fix** | Bug resolution | Fixing reported bugs with TDD discipline |
+| **graphql** | GraphQL API development | Building GraphQL APIs with domain modeling |
+| **migration** | Database migration | Safe database schema changes and deployment |
+| **background-job** | Background job implementation | Robust async processing with retry strategies |
+
+### Workflow Advantages
+
+Compared to ad-hoc skill chaining, workflows provide:
+
+- **Hard Gates:** Enforced checkpoints (e.g., "tests must pass before implementation")
+- **TDD Enforcement:** Built-in test-first discipline for code changes
+- **Consistent Structure:** Standardized phases and error recovery
+- **Integration Points:** Clear predecessor/successor relationships
+- **Production Readiness:** Security checks, monitoring, and deployment guidance

@@ -59,11 +59,11 @@ This directory contains **reference guides** describing each stage. For **execut
 
 | Stage Doc | Callable Skill | Status |
 |-----------|----------------|--------|
-| [development.md](development.md) | [`tdd-workflow`](../../workflows/tdd-workflow/SKILL.md) | Active |
-| [review.md](review.md) | [`review-workflow`](../../workflows/review-workflow/SKILL.md) | Active |
-| [setup.md](setup.md) | [`setup-workflow`](../../workflows/setup-workflow/SKILL.md) | Active |
-| [quality.md](quality.md) | [`quality-workflow`](../../workflows/quality-workflow/SKILL.md) | Active |
-| [engines.md](engines.md) | [`engine-workflow`](../../workflows/engine-workflow/SKILL.md) | Active |
+| [development.md](development.md) | [`tdd`](../../workflows/tdd/SKILL.md) | Active |
+| [review.md](review.md) | [`review`](../../workflows/review/SKILL.md) | Active |
+| [setup.md](setup.md) | [`setup`](../../workflows/setup/SKILL.md) | Active |
+| [quality.md](quality.md) | [`quality`](../../workflows/quality/SKILL.md) | Active |
+| [engines.md](engines.md) | [`engine`](../../workflows/engine/SKILL.md) | Active |
 | [discovery.md](discovery.md) | *(none — linear, no orchestration needed)* | Doc only |
 | [planning.md](planning.md) | *(none — linear, no orchestration needed)* | Doc only |
 
@@ -75,12 +75,14 @@ This directory contains **reference guides** describing each stage. For **execut
 
 | Situation | Workflow | Quick Entry |
 |-----------|----------|-------------|
-| **Bug fix** | [Bug Fix Loop](development.md#bug-fix-loop) | `triage-bug` → Fix → Test |
+| **Bug fix** | [`bug-fix`](../../workflows/bug-fix/SKILL.md) | `triage-bug` → reproduce test → fix → verify |
 | **Refactoring** | [Refactor Safely](quality.md#refactor-code) | `refactor-code` → characterization tests → extract |
 | **Performance** | [Performance Optimization](development.md#performance) | `optimize-performance` |
-| **GraphQL** | [GraphQL Feature](development.md#graphql) | `implement-graphql` |
+| **GraphQL** | [`graphql`](../../workflows/graphql/SKILL.md) | domain modeling → schema → TDD → security |
 | **Authorization** | [Authorization Setup](development.md#authorization) | `implement-authorization` |
 | **External API** | [API Integration](development.md#external-api-integration) | `integrate-api-client` |
+| **Database migration** | [`migration`](../../workflows/migration/SKILL.md) | plan → test → staging → production |
+| **Background job** | [`background-job`](../../workflows/background-job/SKILL.md) | design → TDD → retry config → monitoring |
 
 ---
 

@@ -38,7 +38,7 @@ Load the skill that best matches the current task. The bootstrap skill `skill-ro
 | **Patterns** | `skills/patterns/` | `create-service-object`, `implement-calculator-pattern`, `write-yard-docs` |
 | **Context** | `skills/context/` | `load-context`, `setup-environment` |
 | **Orchestration** | `skills/orchestration/` | `skill-router` |
-| **Workflows** | `workflows/` | `tdd-workflow`, `review-workflow`, `setup-workflow`, `quality-workflow`, `engine-workflow` |
+| **Workflows** | `workflows/` | `tdd`, `review`, `setup`, `quality`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job` |
 
 ## Non-Negotiable Workflow Rule
 
@@ -56,20 +56,24 @@ Do not write implementation code before the test exists and fails. Every skill t
 
 | Goal | Workflow Skill | Atomic Skills |
 |------|---------------|---------------|
-| Implement feature with TDD | `workflows/tdd-workflow` | Full orchestrated cycle |
-| Review PR systematically | `workflows/review-workflow` | Review → deep dive → response |
-| Set up project / CI/CD | `workflows/setup-workflow` | Context → onboarding → CI/CD |
-| Quality check before PR | `workflows/quality-workflow` | Conventions → refactor → docs |
-| Build Rails engine | `workflows/engine-workflow` | Author → test → review → release |
+| Implement feature with TDD | `workflows/tdd` | Full orchestrated cycle |
+| Review PR systematically | `workflows/review` | Review → deep dive → response |
+| Set up project / CI/CD | `workflows/setup` | Context → onboarding → CI/CD |
+| Quality check before PR | `workflows/quality` | Conventions → refactor → docs |
+| Build Rails engine | `workflows/engine` | Author → test → review → release |
+| Fix reported bug | `workflows/bug-fix` | Triage → reproduce → fix → verify |
+| Build GraphQL API | `workflows/graphql` | Domain modeling → schema → TDD → security |
+| Database migration | `workflows/migration` | Plan → test → staging → production |
+| Background job | `workflows/background-job` | Design → TDD → retry config → monitoring |
 | Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` | Planning only |
 
 ### TDD Feature Loop (Recommended)
 
-The default daily workflow — orchestrated by `tdd-workflow`:
+The default daily workflow — orchestrated by `tdd`:
 
 ```
 skills/context/load-context
-  → workflows/tdd-workflow (orchestrates below)
+  → workflows/tdd (orchestrates below)
     → skills/testing/plan-tests
     → skills/testing/write-tests
     → [GATE: test feedback OK]
@@ -80,7 +84,7 @@ skills/context/load-context
     → PR
 ```
 
-For a full feature from scratch: `skills/context/load-context` → `skills/planning/create-prd` → `skills/planning/generate-tasks` → `workflows/tdd-workflow`.
+For a full feature from scratch: `skills/context/load-context` → `skills/planning/create-prd` → `skills/planning/generate-tasks` → `workflows/tdd`.
 
 See `docs/workflow-guide.md` for all workflow variants (bug fix, GraphQL, engine, migration, refactor, etc.).
 

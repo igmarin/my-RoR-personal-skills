@@ -4,7 +4,7 @@
 
 **Rails Agent Skills turns AI coding assistants into disciplined Rails collaborators.**
 
-It is a curated library of **41 public Rails agent skills** and **5 callable workflows** that teach AI tools how to plan, test, implement, document, and review Rails work using production-minded conventions.
+It is a curated library of **41 public Rails agent skills** and **9 callable workflows** that teach AI tools how to plan, test, implement, document, and review Rails work using production-minded conventions.
 
 The project is built around one non-negotiable rule:
 
@@ -52,7 +52,7 @@ That TDD gate is encoded directly into the skills and workflows, so agents do no
 | Area | Purpose |
 |------|---------|
 | `skills/` | 41 public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
-| `workflows/` | 5 callable workflows that chain skills into full development loops. |
+| `workflows/` | 9 callable workflows that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
 | `docs/` | Public documentation, architecture, workflow guides, skill catalog, and evaluation policy. |
 | `mcp_server/` | Official Ruby MCP server exposing docs, workflows, and `use_skill`. |
 | `tessl-evals/` | Tessl-native eval scenarios for publishable skills in `tile.json`. |
@@ -122,6 +122,39 @@ See [mcp_server/README.md](mcp_server/README.md) for host-specific MCP configura
 
 When configuring MCP in external tools, use absolute paths for `cwd` and `BUNDLE_GEMFILE`. Relative paths and `~` are a common cause of gem-loading and timeout failures.
 
+### Using Workflows via MCP
+
+Workflows are the primary way to orchestrate multi-step Rails development tasks. When connected via MCP, agents can automatically discover and execute workflows using two tools:
+
+**1. Discover available workflows:**
+```text
+Agent calls: list_workflows
+Returns: 9 workflows with metadata (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job)
+```
+
+**2. Load and execute a specific workflow:**
+```text
+Agent calls: use_workflow(workflow_name: "tdd")
+Returns: Full workflow instructions with phases, gates, and skill chaining
+```
+
+**Example usage in MCP:**
+- User: "I need to implement a new feature with TDD"
+- Agent: Calls `list_workflows` → discovers `tdd` workflow → calls `use_workflow("tdd")` → executes full TDD cycle
+
+**Available workflows:**
+- **tdd**: Full TDD feature cycle (test → implement → review → PR)
+- **quality**: Code quality sweep (conventions → refactor → docs)
+- **review**: Systematic PR review (review → deep dive → response)
+- **setup**: Project setup and CI/CD configuration
+- **engine**: Rails engine development lifecycle
+- **bug-fix**: Bug triage and resolution with TDD
+- **graphql**: GraphQL API development with domain modeling
+- **migration**: Safe database migration deployment
+- **background-job**: Robust background job implementation
+
+Workflows enforce hard gates (like "tests must pass before implementation") and include TDD enforcement, making them more reliable than ad-hoc skill chaining.
+
 ## Daily Workflow
 
 Depending on your environment (MCP vs. Chat Commands), you can orchestrate your daily Rails work using these common loops. For explicit control in Cursor or Windsurf, prepend these with `@` (e.g., `@load-context`). In MCP, simply describe the goal and the agent will load them automatically.
@@ -145,7 +178,22 @@ create-prd -> generate-tasks -> TDD feature loop
 
 **For a bug:**
 ```text
-triage-bug -> plan-tests -> [failing reproduction spec] -> [minimal fix] -> code-review
+bug-fix (triage -> reproduce test -> fix -> verify)
+```
+
+**For a GraphQL API:**
+```text
+graphql (domain modeling -> schema design -> TDD -> security review)
+```
+
+**For a database migration:**
+```text
+migration (plan -> test -> staging -> production deployment)
+```
+
+**For a background job:**
+```text
+background-job (design -> TDD -> retry config -> monitoring)
 ```
 
 **For a Rails engine:**

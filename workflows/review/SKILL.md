@@ -1,12 +1,16 @@
 ---
-name: review-workflow
+name: review
 license: MIT
 description: >
   Multi-pass Rails code review workflow that identifies bugs, security vulnerabilities, and architectural issues; assigns severity levels (Critical, Suggestion, Nice-to-have); and generates actionable review comments with a mandatory re-review loop for Critical findings. Use for full PR review workflows, multi-pass security or architecture audits, or implementing and verifying responses to review feedback. Trigger: review this PR, full code review, multi-pass review, audit security vulnerabilities, review architecture, respond to review feedback, implement review fixes.
-keywords: rails, review, audit, security, architecture, workflow, pr, feedback
 metadata:
   version: 1.0.0
   user-invocable: "true"
+  entry_point: "Invoke when conducting full PR review, multi-pass security/architecture audit, or implementing review feedback"
+  phases: "Phase 1: Systematic Review, Phase 2: Deep Dive, Phase 3: Respond"
+  hard_gates: "Security Check, Architecture Check, Findings Assessment, Re-review for Critical"
+  dependencies: "code-review, security-check, review-architecture, respond-to-review"
+  keywords: rails, review, audit, security, architecture, workflow, pr, feedback
 ---
 # Review Workflow
 
@@ -84,9 +88,29 @@ Orchestrates systematic code review with optional deep dives for security/archit
 
 **If Critical findings:**
 1. **skills/code-quality/respond-to-review** — Evaluate and implement fixes
+
+### TDD Enforcement for Critical Fixes
+
+**Before implementing any code fix:**
+1. **testing/plan-tests** — Choose the best test to reproduce the Critical issue
+2. **testing/write-tests** — Write failing test that reproduces the Critical finding
+3. **Test Verification** — Confirm test FAILS for the right reason (reproduces the issue)
+4. **Fix Proposal** — Propose minimal fix to address the root cause
+5. **User Approval** — Wait for explicit confirmation
+6. **Implement Fix** — Apply minimal code change
+7. **Verify PASS** — Confirm test now PASSES (issue is resolved)
+8. **Regression Check** — Run full test suite to ensure no new issues
+
+**HARD GATE — Fix Verification:**
+- Reproduction test EXISTS and FAILS before fix (confirms issue)
+- Reproduction test PASSES after fix (confirms resolution)
+- Full test suite PASSES (no regressions)
+- If test fails: Fix is incomplete or incorrect, revise and re-test
+
 2. **Validation checkpoint** — For each Critical item, confirm a corresponding code change exists before marking resolved:
    - List each Critical finding by ID
    - For each: identify the changed file and line, verify the fix addresses the root cause
+   - Confirm reproduction test exists and passes
    - Only mark resolved when the change is present and correct
 3. **Re-review mandatory** — Return to Phase 1 (code-review)
 4. Repeat until all Critical items are resolved

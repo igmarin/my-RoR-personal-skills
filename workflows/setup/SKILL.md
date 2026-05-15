@@ -1,5 +1,5 @@
 ---
-name: setup-workflow
+name: setup
 license: MIT
 description: >
   Complete Rails project setup workflow. Installs dependencies via Bundler, configures database
@@ -9,10 +9,14 @@ description: >
   development environment, or wiring up CI/CD for a Ruby on Rails app. Trigger: setup project,
   new Rails app, configure CI/CD, dev environment setup, rails new, Gemfile setup, .ruby-version,
   Ruby on Rails project bootstrap.
-keywords: rails, setup, onboarding, ci/cd, workflow, devops, configuration
 metadata:
   version: 1.0.0
   user-invocable: "true"
+  entry_point: "Invoke when starting new Rails project, setting up dev environment, or configuring CI/CD"
+  phases: "Phase 1: Context & Onboarding, Phase 2: CI/CD Configuration, Phase 3: Environment Validation"
+  hard_gates: "Environment Check, CI/CD Configuration, Environment Validation"
+  dependencies: "load-context, setup-environment"
+  keywords: rails, setup, onboarding, ci/cd, workflow, devops, configuration
 ---
 # Setup Workflow
 
@@ -163,7 +167,7 @@ act push  # GitHub Actions local runner (optional)
 
 | Predecessor | This Skill | Successor |
 |-------------|------------|-----------|
-| None (entry point) | setup-workflow | tdd-workflow (start developing) |
-| None (entry point) | setup-workflow | create-prd (plan features first) |
+| None (entry point) | setup | tdd (start developing) |
+| None (entry point) | setup | create-prd (plan features first) |
 
-**From AGENTS.md:** This is the setup workflow. For development, chain to tdd-workflow.
+**From AGENTS.md:** This is the setup workflow. For development, chain to tdd.

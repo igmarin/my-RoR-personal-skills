@@ -53,7 +53,7 @@ The word "and" in an `it` / `specify` description signals two behaviors in one e
 When driving new behaviour with RSpec, follow this sequence:
 
 1. **Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system). See table below for guidance.
-2. **Run it and confirm the failure message** — the error should be about missing code, not a setup problem.
+2. **Run it and confirm the failure message** — show the concrete RED failure class/message for the first spec. Do not leave this as a placeholder template and do not use illustrative `e.g.` failure examples in the final artifact.
 3. **Implement the minimum code** to make the spec pass.
 4. **Refactor** — clean up duplication and naming while keeping the suite green.
 5. **Verify** — run the full relevant spec file, then the suite, before committing.
@@ -128,12 +128,18 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 9. **`subject(:result) { ... }`** for service / PORO specs invoking `.call`.
 10. **`travel_to` / `freeze_time`** for any time-dependent assertion — never set past `Time.now` or stub `Time.current` directly.
 11. **External boundaries mocked** at the class-method level (`allow(SomeClient).to receive(:method)`); ActiveRecord finders are NEVER mocked.
-12. **TDD failure proof** — State the smallest spec type chosen, the command run, and the observed or expected failing message proving missing behavior rather than broken setup.
+12. **TDD failure proof** — State the smallest spec type chosen, the command run, and the concrete observed failing message proving missing behavior rather than broken setup. Do not return only a RED proof template with placeholders, and do not write `e.g.` before the failure message.
 13. **Verification proof** — After implementation, state the passing focused rerun, the full relevant spec file, and the broader suite command when available.
 14. **Minimal factories** — Use only explicit attributes needed for the behavior; prefer traits for optional states and `build` / `build_stubbed` unless persistence is required. Do not hide business-meaningful defaults in the factory.
 15. **Multiple related assertions** — Use `aggregate_failures` when one behavior needs several related expectations, and show it in the produced spec when relevant.
 16. **Timestamp assertions** — Never assert `updated_at` unless time is frozen and the timestamp change is the behavior under test.
-17. **Self-audit** — Before returning, include a short checklist confirming no `it`/`specify` descriptions contain "and", every `let!` is justified, any referenced shared examples are actually included, and factories use the least-persistent setup that proves the behavior.
+17. **Self-audit** — Before returning, include a short checklist confirming:
+   - No `it`/`specify` descriptions contain "and".
+   - Every `let!` is justified by a must-exist-before-action constraint.
+   - Referenced shared examples are actually included.
+   - Shared examples are avoided when each context needs different setup.
+   - Factories use the least-persistent setup that proves the behavior.
+   - Time-dependent records are created before `travel_to` when the original timestamp matters.
 18. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration

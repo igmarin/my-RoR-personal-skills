@@ -36,8 +36,9 @@ ALL new code MUST have its test written and validated BEFORE implementation.
 The final artifact must show the test proof before implementation code.
 For each layer, repeat the same spec command after implementation and show
 the GREEN result line, not only an arrow or planned verification.
-Use copied terminal-output blocks for RED/GREEN proof. Do not express proof as
-Ruby comments, `# =>` annotations, or hypothetical expected output.
+Use **Observed RED output** and **Observed GREEN output** labels for proof
+copied from a run; do not present illustrative comments or "e.g." examples as
+verification evidence.
 See write-tests for the full gate cycle.
 ```
 
@@ -59,6 +60,10 @@ For a typical feature, compose stack patterns in this order:
 6. **Tailwind** — apply utility classes to the view; extract repeated patterns into partials or Stimulus targets
 
 Each step should remain testable in isolation before wiring to the next layer.
+In the final artifact, make this explicit in a **Layer isolation** section:
+name the focused spec or check for model/query, service, controller/request,
+view/Turbo, Stimulus, and Tailwind. If a layer is not changed, mark it "not
+applicable"; do not silently omit view, Stimulus, or Tailwind isolation.
 
 ### Key Code Patterns
 
@@ -133,11 +138,11 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 When applying stack conventions, your output MUST include:
 
 1. **Stack decisions** — State which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
-2. **Tests-first proof before implementation** — Put this section before any implementation code. For each layer, include the actual spec code written or updated, the exact command (`bundle exec rspec spec/[path]_spec.rb`), and the observed RED output proving the feature is absent rather than misconfigured. Put RED proof in a terminal-output block copied from the run; do not use hypothetical `Expected RED:`, Ruby comments, or `# =>` annotations as a substitute.
-3. **Layer isolation** — State how model/query, service, controller, view, Stimulus, and Tailwind changes remain independently testable before wiring them together.
+2. **Tests-first proof before implementation** — Put this section before any implementation code. For each layer, include the actual spec code written or updated, the exact command (`bundle exec rspec spec/[path]_spec.rb`), and the **Observed RED output** proving the feature is absent rather than misconfigured. Do not use placeholder or illustrative `e.g.` failure lines.
+3. **Layer isolation** — Include a dedicated section stating how model/query, service, controller/request, view/Turbo, Stimulus, and Tailwind changes remain independently testable before wiring them together. Name the focused spec/check for each changed layer; mark unchanged layers "not applicable" instead of omitting them.
 4. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
 5. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
-6. **Verification** — For every layer, repeat the focused spec command after implementation and show the observed GREEN result line in a terminal-output block, e.g. `1 example, 0 failures`. Then list Rails specs, system tests, linting, and any browser/manual checks run.
+6. **Verification** — For every layer, repeat the focused spec command after implementation and show the **Observed GREEN output** result line from that run. Then list Rails specs, system tests, linting, and any browser/manual checks run.
 7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration

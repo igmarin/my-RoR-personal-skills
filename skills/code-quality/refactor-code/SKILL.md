@@ -68,6 +68,7 @@ RSpec.describe "Orders#create current behavior", type: :request do
 end
 ```
 Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code. If it fails, stop and fix the characterization test or current behavior mismatch before refactoring.
+In the output, state this stop condition explicitly before the first refactor step: if the characterization spec fails, do not continue.
 
 ### 3. Choose the smallest safe slice
 Good first moves include: renaming unclear methods, isolating duplicated logic behind a shared object, or wrapping external integrations before moving call sites. Add narrow seams before deleting old code paths.
@@ -101,7 +102,8 @@ Run verification after every refactoring step:
 5. ONLY claim completion with evidence from the last test run — report the last line of output (e.g. "5 examples, 0 failures").
 
 Report test run output at EACH step — not only at the end. At least two separate evidence entries at different sequence points are required.
-Copy verification evidence as terminal-output blocks from the run. Do not express verification as `# =>` comments or expected-output annotations.
+Use an **Observed output** label only for output copied from an actual run. Never label planned or desired results as "Required output", "Expected output", or "Expected final output".
+Do not write "required exit condition", "must produce 0 failures", or "must still report 0 failures" as evidence; run the command and paste the observed final line, or state that verification has not been run yet.
 **Forbidden claims:** "Should work now", "Looks correct", "I'm confident" — run the tests and report evidence instead.
 
 ## Extended Resources (Progressive Disclosure)
@@ -124,7 +126,7 @@ When asked to refactor, your output MUST include:
 4. **Adhere to SRP** — Ensure the extracted object has a Single Responsibility.
 5. **YARD Documentation** — Include YARD tags for all public methods in the extracted object.
 6. **Compatibility shims (required when public interface changes)** — For each shim, state: (a) what the shim is, (b) why it exists, (c) the specific condition under which it will be removed. If no public interface changes, state "No compatibility shims needed — public interface unchanged."
-7. **Verification evidence** — Follow Verification Protocol after each step — report actual command output evidence mid-sequence AND at the end as terminal-output blocks. Do not substitute expected output, required output, planned output, `# =>` annotations, or "must show 0 failures" language for observed evidence copied from the actual run.
+7. **Verification evidence** — Follow Verification Protocol after each step — report actual command output evidence mid-sequence AND at the end under **Observed output**. Do not substitute expected output, required output, planned output, "Expected final output", "required exit condition", "must produce 0 failures", "must still report 0 failures", or "must show 0 failures" language for observed evidence from the actual run.
 8. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration

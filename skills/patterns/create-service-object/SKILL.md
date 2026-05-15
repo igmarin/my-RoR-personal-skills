@@ -26,6 +26,7 @@ metadata:
 | Scope | Return data only (no HTTP); single responsibility per service |
 | SQL | `sanitize_sql` for any dynamic queries |
 | Shared logic | Extract validators to class-only services (Pattern 3) |
+| Response data | Serialize domain data; do not return raw ActiveRecord objects in `response` |
 
 ## HARD-GATE
 

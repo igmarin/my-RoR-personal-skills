@@ -846,6 +846,18 @@ The sub-94 scorer reasons were all small contract problems:
 
 This is the pattern to preserve for future tricky skills: use the individual rubric as a product-quality lens, then make the smallest instruction change that would also help a real agent do better work.
 
+Run `019e2aba-c51b-746c-895a-eaa015635bf1`, labeled `v6-sub94-tricky-lowtail-3x`, validated that approach with a new best `97.7%` result. The most important movement was `apply-stack-conventions`, which jumped from `80.66` to `97.66` after the layer-isolation requirement was made explicit. That confirmed the failure was not a general stack-convention problem; it was an artifact-shape problem.
+
+Other patched skills behaved as expected:
+
+- `review-domain-boundaries` moved to `95.0` after the Fleet/Billing ownership direction was made explicit.
+- `setup-environment` moved to `99.0` after the database setup command shape was preserved.
+- `code-review` moved to `94.33` after the real-diff grounding requirement was clarified.
+- `refactor-code` improved slightly to `92.33`, but remains tricky.
+- `skill-router` stayed effectively flat at `93.66`, so fallback labeling may not be the main remaining limiter.
+
+The new low tail shifted away from stack conventions. The next candidates, if the loop continues, are `implement-hotwire`, `refactor-code`, `skill-router`, and `plan-tickets`.
+
 ## Rubrics Reveal Missing Product Decisions
 
 The eval criteria often expose ambiguity in the skill itself.

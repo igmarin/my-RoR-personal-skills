@@ -870,7 +870,29 @@ Objective: try to move the remaining low-tail skills toward `94%+` without broad
   - `code-review`: require findings to be grounded in an actual diff or provided files; no simulated PR findings as completed review evidence.
   - `skill-router`: label ambiguous-routing fallback as `Fallback: load-context`.
 - [ ] Run static validation after sub-94 patch.
-- [ ] Run Sonnet 3x eval after sub-94 patch.
+- [x] Run static validation after sub-94 patch:
+  - `git diff --check`: passed
+  - `ruby scripts/validate-tessl-evals.rb`: passed
+  - `./scripts/validate-plugins.sh`: passed
+  - `tessl skill lint tile.json`: valid tile; existing orphan warning for `docs/workflow-template.md`
+- [x] Run Sonnet 3x eval after sub-94 patch:
+  - Command: `tessl eval run . --variant with-context --agent=claude:claude-sonnet-4-6 --runs 3 --label v6-sub94-tricky-lowtail-3x`
+  - Run ID: `019e2aba-c51b-746c-895a-eaa015635bf1`
+  - Final status: `completed`
+  - Result: `41/41`, average `97.7%`
+  - Decision: keep this patch as the new best measured result.
+  - Patched-skill results:
+    - `apply-stack-conventions`: `80.66 -> 97.66`
+    - `review-domain-boundaries`: `90.67 -> 95.0`
+    - `refactor-code`: `91.33 -> 92.33`
+    - `setup-environment`: `93.33 -> 99.0`
+    - `code-review`: `93.67 -> 94.33`
+    - `skill-router`: `93.67 -> 93.66`
+  - Remaining sub-94 lows:
+    - `implement-hotwire`: `91.67`
+    - `refactor-code`: `92.33`
+    - `skill-router`: `93.66`
+    - `plan-tickets`: `93.67`
 
 - [ ] Use multi-agent evals only for model-sensitivity analysis after Sonnet stabilizes:
   - `claude:claude-sonnet-4-6`

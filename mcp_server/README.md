@@ -254,6 +254,54 @@ Use a versioned image tag when you need repeatable installs:
 
 ---
 
+## Docker Security Hardening
+
+The Docker image includes the following security measures:
+
+- **Non-root user:** The container runs as `mcp` (UID 1000) instead of root. All application files are owned by this user.
+- **Minimal attack surface:** Build dependencies (`build-base`) are installed as a virtual package and removed after `bundle install`, keeping the final image lean.
+- **Base image:** Uses `ruby:4.0.4-alpine` for a minimal footprint.
+- **OCI labels:** Includes standard OCI metadata labels alongside the MCP ownership label.
+
+### CI/CD Security Pipeline
+
+The Docker publish workflow (`.github/workflows/docker-publish.yml`) includes:
+
+| Step | Tool | Purpose |
+|------|------|---------|
+| Vulnerability scan | [Trivy](https://github.com/aquasecurity/trivy) | Fails the build on HIGH/CRITICAL vulnerabilities |
+| SBOM generation | [Syft](https://github.com/anchore/syft) (via `anchore/sbom-action`) | Produces an SPDX JSON software bill of materials |
+| Image signing | [cosign](https://github.com/sigstore/cosign) | Signs release images with keyless Sigstore signing |
+| Scan artifacts | GitHub Actions artifacts | SARIF scan results uploaded for review |
+
+Trivy scans run after every image push. The SBOM and scan results are uploaded as workflow artifacts. Image signing occurs only on tagged releases.
+
+---
+
+## Cloudflare Worker Security
+
+The Cloudflare MCP worker (`cloudflare_mcp/`) includes:
+
+- **Rate limiting:** Configurable via `RATE_LIMIT_MAX_REQUESTS` and `RATE_LIMIT_WINDOW_SECONDS` environment variables (default: 60 requests per 60 seconds).
+- **Environment separation:** Production and staging environments with independent configuration.
+- **Dependency auditing:** `npm audit` runs in CI before deployment.
+- **TypeScript type checking:** Enforced in CI before deployment.
+- **Deployment gating:** The worker only deploys after all security checks and tests pass.
+
+### Cloudflare Dashboard Security Settings
+
+The following settings should be configured manually in the Cloudflare dashboard for the worker domain:
+
+1. **Bot Fight Mode** — Enable under Security → Bots to block known malicious bots.
+2. **Block AI bots** — Enable the "AI Scrapers and Crawlers" toggle under Security → Bots to prevent unauthorized AI training crawlers.
+3. **AI Labyrinth** — Enable under Security → Bots to trap and waste resources of unauthorized AI bots.
+4. **Security.txt** — Configure a `security.txt` file under Security → Settings that includes:
+   - Contact email for reporting vulnerabilities
+   - Preferred language
+   - Policy link (if applicable)
+
+---
+
 ## Official MCP Registry
 
 This server is published to the official MCP Registry as:

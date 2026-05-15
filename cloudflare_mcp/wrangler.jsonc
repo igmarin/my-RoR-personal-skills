@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "rails-agent-skills-mcp",
   "main": "src/index.ts",
-  "compatibility_date": "2026-05-11",
+  "compatibility_date": "2026-05-15",
   "compatibility_flags": ["nodejs_compat"],
   "durable_objects": {
     "bindings": [
@@ -19,6 +19,27 @@
     }
   ],
   "vars": {
-    "RAW_BASE": "https://raw.githubusercontent.com/igmarin/rails-agent-skills/main"
+    "RAW_BASE": "https://raw.githubusercontent.com/igmarin/rails-agent-skills/main",
+    "RATE_LIMIT_MAX_REQUESTS": "60",
+    "RATE_LIMIT_WINDOW_SECONDS": "60"
+  },
+  // Security headers applied to all responses
+  "env": {
+    "production": {
+      "vars": {
+        "RAW_BASE": "https://raw.githubusercontent.com/igmarin/rails-agent-skills/main",
+        "RATE_LIMIT_MAX_REQUESTS": "60",
+        "RATE_LIMIT_WINDOW_SECONDS": "60",
+        "ENVIRONMENT": "production"
+      }
+    },
+    "staging": {
+      "vars": {
+        "RAW_BASE": "https://raw.githubusercontent.com/igmarin/rails-agent-skills/main",
+        "RATE_LIMIT_MAX_REQUESTS": "120",
+        "RATE_LIMIT_WINDOW_SECONDS": "60",
+        "ENVIRONMENT": "staging"
+      }
+    }
   }
 }

@@ -282,7 +282,7 @@ Trivy scans run after every image push. The SBOM and scan results are uploaded a
 
 The Cloudflare MCP worker (`cloudflare_mcp/`) includes:
 
-- **Rate limiting:** Configurable via `RATE_LIMIT_MAX_REQUESTS` and `RATE_LIMIT_WINDOW_SECONDS` environment variables (default: 60 requests per 60 seconds).
+- **Rate limiting (configuration only):** `RATE_LIMIT_MAX_REQUESTS` and `RATE_LIMIT_WINDOW_SECONDS` environment variables are defined in `wrangler.jsonc` (default: 60 requests per 60 seconds). **These vars are not yet enforced in worker code** — application-level rate limiting middleware must be implemented to read and apply them. They serve as the configuration foundation for a future implementation.
 - **Environment separation:** Production and staging environments with independent configuration.
 - **Dependency auditing:** `npm audit` runs in CI before deployment.
 - **TypeScript type checking:** Enforced in CI before deployment.

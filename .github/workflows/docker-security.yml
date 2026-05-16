@@ -34,6 +34,7 @@ jobs:
         uses: aquasecurity/trivy-action@v0.33.0
         with:
           image-ref: rails-agent-skills-mcp:${{ github.sha }}
+          version: v0.70.0
           format: sarif
           output: trivy-results.sarif
           severity: CRITICAL,HIGH
@@ -49,6 +50,7 @@ jobs:
         uses: aquasecurity/trivy-action@v0.33.0
         with:
           image-ref: rails-agent-skills-mcp:${{ github.sha }}
+          version: v0.70.0
           format: table
           exit-code: '1'
           severity: CRITICAL,HIGH

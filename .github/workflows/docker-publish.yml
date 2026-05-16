@@ -64,6 +64,7 @@ jobs:
         uses: aquasecurity/trivy-action@v0.33.0
         with:
           image-ref: igmarin/rails-agent-skills-mcp@${{ needs.build-and-push.outputs.image-digest }}
+          version: v0.70.0
           format: 'table'
           exit-code: '1'
           severity: 'HIGH,CRITICAL'
@@ -74,6 +75,7 @@ jobs:
         uses: aquasecurity/trivy-action@v0.33.0
         with:
           image-ref: igmarin/rails-agent-skills-mcp@${{ needs.build-and-push.outputs.image-digest }}
+          version: v0.70.0
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'HIGH,CRITICAL'

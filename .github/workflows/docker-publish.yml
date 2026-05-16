@@ -69,6 +69,7 @@ jobs:
           exit-code: '1'
           severity: 'HIGH,CRITICAL'
           ignore-unfixed: true
+          trivyignores: .trivyignore
 
       - name: Run Trivy scanner (SARIF output)
         if: always()
@@ -80,6 +81,7 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'HIGH,CRITICAL'
           ignore-unfixed: true
+          trivyignores: .trivyignore
 
       - name: Upload Trivy SARIF to GitHub Security tab
         if: always() && hashFiles('trivy-results.sarif') != ''

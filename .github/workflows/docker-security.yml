@@ -39,6 +39,7 @@ jobs:
           output: trivy-results.sarif
           severity: CRITICAL,HIGH
           ignore-unfixed: true    # Skip CVEs with no fix (e.g. glibc, gnutls28)
+          trivyignores: .trivyignore
 
       - name: Upload Trivy SARIF to GitHub Security tab
         if: always() && hashFiles('trivy-results.sarif') != ''
@@ -55,6 +56,7 @@ jobs:
           exit-code: '1'
           severity: CRITICAL,HIGH
           ignore-unfixed: true
+          trivyignores: .trivyignore
 
   runtime-hardening-check:
     name: Runtime Hardening Smoke Test

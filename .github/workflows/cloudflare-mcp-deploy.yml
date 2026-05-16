@@ -4,11 +4,15 @@ on:
   push:
     branches: [main]
     paths:
+      - 'skills/**'
+      - 'workflows/**'
       - 'cloudflare_mcp/**'
       - '.github/workflows/cloudflare-mcp-deploy.yml'
   pull_request:
     branches: [main]
     paths:
+      - 'skills/**'
+      - 'workflows/**'
       - 'cloudflare_mcp/**'
       - '.github/workflows/cloudflare-mcp-deploy.yml'
   workflow_dispatch:

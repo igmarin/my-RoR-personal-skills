@@ -61,7 +61,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.33.0
         with:
           image-ref: igmarin/rails-agent-skills-mcp@${{ needs.build-and-push.outputs.image-digest }}
           format: 'table'
@@ -71,7 +71,7 @@ jobs:
 
       - name: Run Trivy scanner (SARIF output)
         if: always()
-        uses: aquasecurity/trivy-action@v0.31.0
+        uses: aquasecurity/trivy-action@v0.33.0
         with:
           image-ref: igmarin/rails-agent-skills-mcp@${{ needs.build-and-push.outputs.image-digest }}
           format: 'sarif'

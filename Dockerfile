@@ -1,4 +1,4 @@
-FROM ruby:3.4.9-slim-bookworm
+FROM ruby:4.0.4-alpine
 
 LABEL io.modelcontextprotocol.server.name="io.github.igmarin/rails-agent-skills-mcp" \
       org.opencontainers.image.title="Rails Agent Skills MCP" \
@@ -11,19 +11,18 @@ LABEL io.modelcontextprotocol.server.name="io.github.igmarin/rails-agent-skills-
 WORKDIR /app
 
 # Create non-root user — WORKDIR must exist first (owned by root, intentional)
-RUN groupadd -g 1000 mcp && useradd -u 1000 -g mcp -M -s /sbin/nologin mcp
+RUN addgroup -g 1000 mcp && adduser -u 1000 -G mcp -s /sbin/nologin -D mcp
 
 # Copy only Gemfiles first to leverage Docker cache
 COPY --chown=mcp:mcp mcp_server/Gemfile mcp_server/Gemfile.lock ./mcp_server/
 
 # Install build deps, bundle install, then clean up in one layer
-RUN apt-get update -qq && \
-    apt-get install -y --no-install-recommends build-essential && \
+RUN apk add --no-cache --virtual .build-deps build-base && \
     cd mcp_server && \
     bundle config set --local without 'development test' && \
     bundle install --no-cache && \
-    apt-get purge -y --auto-remove build-essential && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    apk del .build-deps && \
+    rm -rf /tmp/* /var/tmp/*
 
 # Copy the entire repository so skills, docs, and workflows are available to the MCP server
 COPY --chown=mcp:mcp . .

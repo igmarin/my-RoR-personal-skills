@@ -20,7 +20,7 @@ jobs:
       image-tags: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -54,12 +54,14 @@ jobs:
   security-scan:
     needs: build-and-push
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@v0.31.0
         with:
           image-ref: igmarin/rails-agent-skills-mcp@${{ needs.build-and-push.outputs.image-digest }}
           format: 'table'
@@ -69,19 +71,19 @@ jobs:
 
       - name: Run Trivy scanner (SARIF output)
         if: always()
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@v0.31.0
         with:
           image-ref: igmarin/rails-agent-skills-mcp@${{ needs.build-and-push.outputs.image-digest }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'HIGH,CRITICAL'
+          ignore-unfixed: true
 
-      - name: Upload Trivy scan results
+      - name: Upload Trivy SARIF to GitHub Security tab
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          name: trivy-security-scan
-          path: trivy-results.sarif
+          sarif_file: trivy-results.sarif
 
   sbom:
     needs: build-and-push
@@ -90,7 +92,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Generate SBOM with Syft
         uses: anchore/sbom-action@v0.24.0
@@ -106,7 +108,7 @@ jobs:
           path: sbom.spdx.json
 
   sign:
-    needs: build-and-push
+    needs: [build-and-push, security-scan]
     if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
     runs-on: ubuntu-latest
     steps:
@@ -135,11 +137,17 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Install mcp-publisher
         run: |
-          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+          OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+          ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
+          TARBALL="mcp-publisher_${OS}_${ARCH}.tar.gz"
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/${TARBALL}" -o "${TARBALL}"
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/checksums.txt" -o checksums.txt
+          grep "${TARBALL}" checksums.txt | sha256sum --check
+          tar xz mcp-publisher < "${TARBALL}"
           chmod +x mcp-publisher
 
       - name: Set server metadata version

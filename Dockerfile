@@ -16,8 +16,9 @@ RUN addgroup -g 1000 mcp && adduser -u 1000 -G mcp -s /sbin/nologin -D mcp
 # Copy only Gemfiles first to leverage Docker cache
 COPY --chown=mcp:mcp mcp_server/Gemfile mcp_server/Gemfile.lock ./mcp_server/
 
-# Install build deps, bundle install, then clean up in one layer
+# Install build deps, patch vulnerable default gems, bundle install, then clean up in one layer
 RUN apk add --no-cache --virtual .build-deps build-base && \
+    gem update json net-imap --no-document && \
     cd mcp_server && \
     bundle config set --local without 'development test' && \
     bundle install --no-cache && \

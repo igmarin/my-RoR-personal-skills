@@ -31,6 +31,7 @@ That TDD gate is encoded directly into the skills and workflows, so agents do no
 > [![Official MCP Registry](https://img.shields.io/badge/MCP%20Registry-Official-1f6feb)](https://registry.modelcontextprotocol.io/?q=io.github.igmarin%2Frails-agent-skills-mcp)
 > [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-igmarin%2Frails--agent--skills--mcp-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/igmarin/rails-agent-skills-mcp)
 > [![Cloudflare Worker](https://img.shields.io/badge/Cloudflare%20Worker-Streamable%20HTTP-F38020?logo=cloudflare&logoColor=white)](https://rails-agent-skills-mcp.ismael-marin.workers.dev/health)
+> [![skills.sh](https://img.shields.io/badge/skills.sh-igmarin-black)](https://www.skills.sh/igmarin/rails-agent-skills)
 > [![Glama](https://img.shields.io/badge/Glama-Connect-000?logo=glama&logoColor=fff)](https://glama.ai/mcp/connectors/dev.workers.ismael-marin.rails-agent-skills-mcp/ruby-on-rails-mcp-skills)
 > [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills?label=release)](https://github.com/igmarin/rails-agent-skills/tags)
 > [![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills)
@@ -79,6 +80,7 @@ The recommended way for autonomous usage is through the MCP server. MCP keeps th
 | Smithery | Discovering and connecting through Smithery's MCP gateway | [Smithery listing](https://smithery.ai/servers/ismael-marin/rails-agent-skills) |
 | Local Ruby/Bundler | Local development, debugging, and repository checkout workflows | [mcp_server/README.md](mcp_server/README.md) |
 | GitHub CLI skills | Installing selected skills into a specific agent host | [GitHub CLI install](#install-selected-skills-with-github-cli) |
+| skills.sh | Registering and adding the entire library to your workspace | [skills.sh install](#install-with-skillssh) |
 
 ### MCP Quick Start
 
@@ -298,6 +300,15 @@ When contributing skills, workflows, docs, or MCP behavior:
 - Do not add tickets unless the user asks for ticket generation.
 - Do not commit generated root `evals/` output.
 - Keep public docs consistent with `tile.json`, `server.json`, and the latest release tag.
+
+## Install With skills.sh
+
+Requires [skills.sh](https://www.skills.sh/) CLI.
+
+```bash
+# Add the library to your workspace
+npx skills add igmarin/rails-agent-skills
+```
 
 ## Acknowledgments
 

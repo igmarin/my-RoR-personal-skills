@@ -8,7 +8,7 @@ Rails Agent Skills can be invoked in three distinct ways depending on the enviro
 |--------|--------|----------|-------------------|
 | **MCP `use_skill`** | Autonomous tool call by the agent | Autonomous, multi-step agent workflows where the LLM dynamically loads context | High |
 | **Chat Commands** | `@skill-name` or `/skill-name` | Explicitly forcing the agent to follow a specific skill's instructions immediately | Low (Human-directed) |
-| **CLI (`gh skill` / `tessl`)** | `gh skill install ...` | Local installation, pinning versions, or running CI/CD evaluations | Manual setup/execution |
+| **CLI (`gh skill` / `tessl` / `skills.sh`)** | `gh skill install ...` or `npx skills add ...` | Local installation, pinning versions, or running CI/CD evaluations | Manual setup/execution |
 
 ---
 
@@ -39,7 +39,7 @@ Use this when you know exactly which workflow you want to follow and want to byp
 
 ---
 
-### 3. CLI (`gh skill` / `tessl`)
+### 3. CLI (`gh skill` / `tessl` / `skills.sh`)
 
 For manual installation, version pinning, or evaluation, you can interact with the skills directly via the terminal.
 
@@ -48,6 +48,12 @@ For manual installation, version pinning, or evaluation, you can interact with t
 ```bash
 # Install a specific skill for the current project
 gh skill install igmarin/rails-agent-skills code-review --scope project
+```
+
+*Installing via skills.sh:*
+```bash
+# Add the entire library to your workspace
+npx skills add igmarin/rails-agent-skills
 ```
 
 *Evaluating via Tessl:*
